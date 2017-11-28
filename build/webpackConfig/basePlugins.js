@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
-const StyleLintFormatter = require('stylelint-formatter-pretty');
-const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
+import webpack from 'webpack';
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import StyleLintPlugin from 'stylelint-webpack-plugin';
+import StyleLintFormatter from 'stylelint-formatter-pretty';
+import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 
 module.exports = (context) => {
     const plugins = [
@@ -18,7 +18,7 @@ module.exports = (context) => {
         }),
 
         new ExtractTextPlugin({
-            filename: `css/[name].[contenthash:8].css`
+            filename: 'css/[name].[contenthash:8].css',
         }),
 
         new webpack.optimize.CommonsChunkPlugin({
@@ -32,7 +32,6 @@ module.exports = (context) => {
             hash: false,
             inject: true,
         }),
-
     ];
 
     if (context.env.NODE_ENV === 'production') {
