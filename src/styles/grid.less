@@ -1,0 +1,70 @@
+.g-grid-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.g-grid-row {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .grid-col {
+        box-sizing: border-box;
+        display: flex;
+        flex: 1;
+
+        &.grid-col-reset {
+            flex: inherit;
+        }
+
+        &.grid-col-2 {
+            flex: inherit;
+            flex-basis: 20%;
+        }
+
+        &.grid-col-3 {
+            flex: inherit;
+            flex-basis: 30%;
+        }
+
+        &.grid-col-4 {
+            flex: inherit;
+            flex-basis: 40%;
+        }
+
+        &.grid-col-6 {
+            flex: inherit;
+            flex-basis: 60%;
+        }
+
+        &.grid-col-8 {
+            flex: inherit;
+            flex-basis: 80%;
+        }
+
+        &.grid-col-9 {
+            flex: inherit;
+            flex-basis: 90%;
+        }
+
+        &.grid-col-10 {
+            flex: inherit;
+            flex-basis: 100%;
+        }
+
+        &.grid-col-basis200 {
+            flex: inherit;
+            flex-basis: 200px;
+        }
+    }
+}
+
+.f-flex-justify-end {
+    justify-content: flex-end;
+}

@@ -1,8 +1,8 @@
 module.exports = {
     plugins: {
         'postcss-pxtorem': {
-            rootValue: 16,
-            propList: ['width', 'height'],
+            rootValue: 75,
+            propList: ['*', '!font', '!font-size'],
         },
         // 'postcss-import': {},
         // 'postcss-cssnext': {
@@ -10,4 +10,3 @@ module.exports = {
         // },
     },
 };
-
