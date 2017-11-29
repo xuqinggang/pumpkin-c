@@ -4,8 +4,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
 import StyleLintFormatter from 'stylelint-formatter-pretty';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
+import path from 'path';
 
-module.exports = (context) => {
+export default (context) => {
     const plugins = [
         new StyleLintPlugin({
             syntax: 'less',

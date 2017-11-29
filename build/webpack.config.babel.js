@@ -2,6 +2,7 @@ import baseConfig from './webpackConfig/baseConfig';
 import path from 'path';
 import basePlugins from './webpackConfig/basePlugins';
 import baseRules from './webpackConfig/baseRules';
+import baseExtraLib from './webpackConfig/baseExtraLib';
 
 const resolve = dir => path.resolve(__dirname, '..', dir);
 const env = process.env;
@@ -46,6 +47,7 @@ export default {
     module: {
         rules: [
             ...baseRules(context),
+            ...baseExtraLib(context),
         ],
 
     },

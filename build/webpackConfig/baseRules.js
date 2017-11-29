@@ -18,6 +18,7 @@ module.exports = (context) => {
                 fallback: 'style-loader',
                 use: [
                     'css-loader',
+                    'postcss-loader',
                 ]
             })
         },
@@ -27,6 +28,7 @@ module.exports = (context) => {
                 fallback: 'style-loader',
                 use: [
                     'css-loader',
+                    'postcss-loader',
                     'less-loader',
                 ],
             })
