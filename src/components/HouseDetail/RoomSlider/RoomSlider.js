@@ -21,31 +21,32 @@ class RoomSlider extends Component {
                 {
                     text: '03卧室',
                     img: 'http://pic1.58cdn.com.cn/anjuke_58/9b170cddcfabe731a9a99a6c2b0cdf48?w=640&h=480&crop=1',
-                }
-            ];
-        }
+                },
+            ],
+        };
     }
     renderSliderImg() {
         const sliderImgArr = this.state.sliderImgArr || [];
-        sliderImgArr.map((imgInfo) => {
+        return sliderImgArr.map((imgInfo, index) => {
             return (
-            )
+                <div key={index} className={`${classPrefix}-item`}>
+                    <img 
+                        className={`${classPrefix}-img`}
+                        src={imgInfo.img} 
+                        alt=""
+                    />
+                </div>
+            );
         });
     }
     render() {
         return (
             <div className={classPrefix}>
-                <ReactSwipe className="carousel" swipeOptions={{continuous: false}}>
-                    <ul>
-                        <li>
-                            <img 
-                                src="http://pic1.58cdn.com.cn/anjuke_58/9b170cddcfabe731a9a99a6c2b0cdf48?w=640&h=480&crop=1" 
-                                alt=""/>
-                        </li>
-                    </ul>
+                <ReactSwipe className="carousel" swipeOptions={{ continuous: false }}>
+                    { this.renderSliderImg() }
                 </ReactSwipe>
             </div>
-        )
+        );
     }
 }
 

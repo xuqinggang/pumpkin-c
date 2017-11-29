@@ -56,7 +56,7 @@ export default {
     plugins: [
         ...basePlugins(context),
     ],
-
+    devtool: 'inline-source-map',
     devServer: {
         port: baseConfig.dev.port,
         host: baseConfig.dev.host,
