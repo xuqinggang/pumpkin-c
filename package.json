@@ -45,11 +45,13 @@
     "classnames": "^2.2.5",
     "history": "^4.7.2",
     "prop-types": "^15.5.10",
-    "react": "^16.1.1",
+    "react": "^16.2.0",
     "react-dom": "^16.1.1",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
+    "react-swipe": "^5.1.0",
     "react-tap-event-plugin": "^3.0.2",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "swipe-js-iso": "^2.0.4"
   }
 }

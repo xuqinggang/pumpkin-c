@@ -41,6 +41,7 @@ export default {
             views: resolve('src/views'),
             styles: resolve('src/styles'),
             routes: resolve('src/routes'),
+            lib: resolve('src/lib'),
         },
     },
 

@@ -34,15 +34,15 @@ module.exports = (context) => {
             })
         },
         //js rules
-        {
-            test: /\.js$/,
-            loader: 'eslint-loader',
-            enforce: 'pre',
-            include: includePaths,
-            options: {
-                formatter: eslintFriendlyFormatter,
-            },
-        },
+        // {
+        //     test: /\.js$/,
+        //     loader: 'eslint-loader',
+        //     enforce: 'pre',
+        //     include: includePaths,
+        //     options: {
+        //         formatter: eslintFriendlyFormatter,
+        //     },
+        // },
         {
             test: /\.js$/,
             include: includePaths,
