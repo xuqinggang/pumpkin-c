@@ -1,0 +1,14 @@
+// 使用@import (reference)导入lib.less，作用:不添加导入的样式到编译输出中，只引用
+
+.font-size(@target) {
+    font-size: @target / 2 * 1px;
+    [data-dpr="1"] & {
+        font-size: @target / 2 * 1px;
+    }
+    [data-dpr="2"] & {
+        font-size: @target * 1px;
+    }
+    [data-dpr="3"] & {
+        font-size: @target * 1.5px;
+    }
+}
