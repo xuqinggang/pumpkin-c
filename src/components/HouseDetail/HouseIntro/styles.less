@@ -1,0 +1,31 @@
+@import (reference) '~styles/lib.less';
+
+.m-houseintro {
+    .font-size(28);
+
+    &-title {
+    }
+
+    &-intro {
+        .intro-text {
+            display: -webkit-box;
+            width: 658px;
+            max-height: 178px;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            color: #999;
+
+            &.text-expand {
+                max-height: inherit;
+                -webkit-box-orient: inherit;
+                -webkit-line-clamp: inherit;
+            }
+        }
+    }
+
+    &-expandbtn {
+        margin-top: 30px;
+        color: #e08235;
+    }
+}

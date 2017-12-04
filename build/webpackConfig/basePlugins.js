@@ -8,11 +8,11 @@ import path from 'path';
 
 export default (context) => {
     const plugins = [
-        new StyleLintPlugin({
-            syntax: 'less',
-            files: 'src/**/*.l?(e|c)ss',
-            formatter: StyleLintFormatter,
-        }),
+        // new StyleLintPlugin({
+        //     syntax: 'less',
+        //     files: 'src/**/*.l?(e|c)ss',
+        //     formatter: StyleLintFormatter,
+        // }),
 
         new webpack.ProvidePlugin({
             React: 'react',

@@ -1,8 +1,31 @@
 .m-roomslider {
-    &-item {
-        display: inline-block;
+    &-item-img {
+        // display: inline-block;
     }
+
+    &-list-text {
+        white-space: nowrap;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &-item-text {
+        display: inline-block;
+        margin-right: 60px;
+
+        &.text-active {
+            color: #f38d39;
+        }
+    }
+
     &-img {
         width: 100%;
+    }
+
+    &-text {
     }
 }
