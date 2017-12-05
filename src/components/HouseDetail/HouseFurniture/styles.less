@@ -1,0 +1,60 @@
+@import (reference) '~styles/lib.less';
+
+.m-sliderfurniture {
+    position: relative;
+    float: left;
+    width: 100%;
+    padding-left: 11px;
+    box-sizing: border-box;
+    &-list {
+        display: inline-block;
+        width: 728px;
+    }
+
+    &-item {
+        display: inline-block;
+        width: 182px;
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    &-icon {
+        .font-size(60);
+    }
+
+    &-text {
+        margin-top: 14px;
+        color: #999;
+        .font-size(24);
+    }
+}
+
+.m-scrollfurniture {
+    padding-left: 40px;
+    margin-bottom: 56px;
+    &-item {
+        position: relative;
+        line-height: 40px;
+        padding: 0 15px 15px;
+        margin-right: 68px;
+        color: #999;
+        .font-size(28);
+
+        &.item-active {
+            color: #000;
+
+            &::after {
+                content: '';
+                display: inline-block;
+                width: 32px;
+                height: 8px;
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                border-radius: 22px;
+                background: #f38d39;
+                transform: translate(-50%, 0);
+            }
+        }
+    }
+}

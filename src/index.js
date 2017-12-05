@@ -5,6 +5,7 @@ import routes from 'routes';
 
 // 全局样式
 import 'styles/index';
+import 'pumpkin-font-c';
 
 injectTapEventPlugin();
 
