@@ -1,31 +1,48 @@
+@import (reference) '~styles/lib.less';
+
 .m-roomslider {
+    background: #fbfbfb;
+    &-list-slider {
+        width: 100%;
+        height: 388px;
+    }
     &-item-img {
+        .img {
+            width: 100%;
+            height: 388px;
+            vertical-align: top;
+        }
         // display: inline-block;
     }
 
     &-list-text {
-        white-space: nowrap;
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
+        padding-left: 30px;
+        // white-space: nowrap;
+        // overflow-x: scroll;
+        // -webkit-overflow-scrolling: touch;
 
-        &::-webkit-scrollbar {
-            display: none;
-        }
+        // &::-webkit-scrollbar {
+        //     display: none;
+        // }
     }
 
     &-item-text {
         display: inline-block;
         margin-right: 60px;
+        color: #999;
 
         &.text-active {
             color: #f38d39;
         }
-    }
 
-    &-img {
-        width: 100%;
-    }
+        // &:first-child {
+        //     padding-left: 30px;
+        // }
 
-    &-text {
+        .text {
+            line-height: 28px;
+            padding: 25px 0 30px;
+            .font-size(28);
+        }
     }
 }

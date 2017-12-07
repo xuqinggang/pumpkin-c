@@ -151,9 +151,10 @@
 
         }
         function slide(to, direction) {
-            console.log('slide', to, direction)
+            if (!slides) return ;
+            // console.log('slide', to, direction, scrollElementPos, slides)
             var tmpSlide = slides[to];
-            var tmpLeftToView = tmpSlide.getBoundingClientRect().left;
+            var tmpLeftToView = tmpSlide && tmpSlide.getBoundingClientRect().left;
             if (tmpSlide && tmpLeftToView > 0 && Math.abs(tmpLeftToView) <= viewportWidth) {
                 return;
             }
@@ -162,25 +163,27 @@
             if (direction) {
                 verifyIndex = to + 1;
                 if (verifyIndex >= slidesLength) {
-                    slideDistance = Math.round(canScrollDelta + scrollElementPos);
+                    // console.log('verifyIndex', verifyIndex, canScrollDelta , scrollElementPos)
+                    slideDistance = Math.round(canScrollDelta);
                 } else {
                     childSlide = slides[verifyIndex];
                     leftToView = childSlide.getBoundingClientRect().left;
                     slideDistance = Math.round(leftToView - viewportWidth);
                 }
+                // console.log('slide translate', slideDistance)
                 slideDistance = slideDistance % 2 == 0 ? slideDistance : slideDistance + 1;
                 translate(scrollElement, -slideDistance, 300);
                 scrollElementPos = -slideDistance;
                 return ;
             } else {
                 verifyIndex = to - 1;
-                console.log('xxx', verifyIndex)
+                // console.log('xxx', verifyIndex)
                 if (verifyIndex < 0) {
                     slideDistance = 0;
                 } else {
                     childSlide = slides[verifyIndex];
                     rightToView = childSlide.getBoundingClientRect().right;
-                    console.log('rightToView', rightToView)
+                    // console.log('rightToView', rightToView)
                     slideDistance = Math.round(scrollElementPos - rightToView);
                 }
                 slideDistance = slideDistance % 2 == 0 ? slideDistance : slideDistance + 1;
@@ -292,7 +295,7 @@
 
             },
             start: function(event) {
-                console.log('touch start');
+                // console.log('touch start');
                 if (!isEnableScroll()) {
                     return;
                 }
@@ -321,7 +324,7 @@
             },
             move: function(event) {
                 event.preventDefault();
-                console.log('touch move');
+                // console.log('touch move');
                 // ensure swiping with one touch and not pinching
                 if ( event.touches.length > 1 || event.scale && event.scale !== 1) return;
 
@@ -335,13 +338,13 @@
                     y: touches.pageY - start.y,
                     time: +new Date(),
                 };
-console.log('start.x', start.x, touches.pageX)
+                // console.log('start.x', start.x, touches.pageX)
                 // determine if scrolling test has run - one time test
                 if ( typeof isScrolling == 'undefined') {
                     isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
                 }
                 ishorScroll = Math.abs(delta.x) > Math.abs(delta.y);
-                console.log('ishorScroll', ishorScroll)
+                // console.log('ishorScroll', ishorScroll)
                 if (ishorScroll) {
                     // prevent native scrolling
 
@@ -369,7 +372,7 @@ console.log('start.x', start.x, touches.pageX)
                     let endDistance = Math.round(delta.x / resistanceLevel + scrollElementPos);
                     endDistance = endDistance % 2 == 0 ? endDistance : endDistance + 1;
                     distance = endDistance;
-                    console.log('endDistance', endDistance, delta.x, resistanceLevel, scrollElementPos)
+                    // console.log('endDistance', endDistance, delta.x, resistanceLevel, scrollElementPos)
                     // if (Math.abs(endDistance) >= Math.abs(distance)) {
                     //     distance = endDistance;
                     // }
@@ -431,7 +434,7 @@ console.log('start.x', start.x, touches.pageX)
                 //       !index && delta.x > 0 ||                      // if first slide and slide amt is greater than 0
                 //       (index == slides.length - 1 && delta.x < 0 && Math.abs(delta.x) > 125);    // or if last slide and slide amt is less than 0
                 if (isPastEndBounds || (Math.abs(scrollElementPos + slideDistance) > canScrollDelta && direction)) {
-                    console.log('isPastEndBounds', isPastEndBounds)
+                    // console.log('isPastEndBounds', isPastEndBounds)
                     translate(scrollElement, -canScrollDelta, speed);
                     scrollElementPos = -canScrollDelta;
                     return ;

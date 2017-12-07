@@ -9,43 +9,38 @@ const IntroTextMap = {
     constructType: '建筑类型',
     openYear: '建筑年代',
     greenRate: '绿化率',
+    propertyType: '物业类型',
 };
 
-class CommunityIntro extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            intro: {
-                constructType: '塔板结合',
-                openYear: '1972',
-                greenRate: '33%',
-            }
-        };
-    }
-    renderIntro() {
-        const communityIntro = this.state.intro;
-        return Object.keys(communityIntro).map((introType, index) => {
-            return (
-                <li>
-                    <span className={`${classPrefix}-item-value f-display-block`}>{communityIntro[introType]}</span>
-                    <span className={`${classPrefix}-item-type f-display-block`}>{IntroTextMap[introType]}</span>
-                </li>
-            )
-        })
-    }
-    render() {
-        const { className } = this.props;
-        return (
-            <div className={`${classPrefix} ${className}`}>
-                <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>小区介绍</h1>
-                <ul className={`${classPrefix}-intro g-grid-row f-flex-justify-between`}>
-                    {
-                        this.renderIntro()
-                    }
-                </ul>
-            </div>
-        )
-    }
-}
+// this.state = {
+//     intro: {
+//         constructType: '塔板结合',
+//         openYear: '1972',
+//         greenRate: '33%',
+//     };
+// };
 
-export default CommunityIntro;
+export default function CommunityIntro(props) {
+    const { className, communityIntroData } = props;
+    console.log('communityIntroData', communityIntroData)
+
+    const introChildren = Object.keys(communityIntroData).map((introType, index) => {
+        return (
+            <li key={index}>
+                <span className={`${classPrefix}-item-value f-display-block`}>{communityIntroData[introType]}</span>
+                <span className={`${classPrefix}-item-type f-display-block`}>{IntroTextMap[introType]}</span>
+            </li>
+        );
+    });
+
+    return (
+        <div className={`${classPrefix} ${className}`}>
+            <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>小区介绍</h1>
+            <ul className={`${classPrefix}-intro g-grid-row f-flex-justify-between`}>
+                {
+                    introChildren
+                }
+            </ul>
+        </div>
+    )
+}

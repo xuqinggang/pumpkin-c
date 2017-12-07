@@ -12,9 +12,6 @@ export default class Scroll extends Component {
     componentDidMount() {
         this.scrollIns = ScrollWrapper(this.scrollEle);
     }
-    handleTestClick = () => {
-        this.scrollIns.slide(1, false);
-    }
     componentWillReceiveProps(nextProps) {
         const { activeIndex } = nextProps;
         if (activeIndex !== undefined) {
@@ -31,7 +28,6 @@ export default class Scroll extends Component {
                 <div className="react-scroll-container">
                     { children }
                 </div>
-                <button onClick={this.handleTestClick}>test</button>
             </div>
         );
     }

@@ -6,49 +6,47 @@ import './styles.less';
 
 const classPrefix = 'm-roommateinfo';
 
-class RoommateInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            roommates: [
-                {
-                    roomNumber: 1,
-                    gender: 'FEMALE',
-                },
-                {
-                    roomNumber: 1,
-                    gender: 'MALE',
-                },
-                {
-                    roomNumber: 1,
-                    gender: null,
-                },
-            ],
-        };
-    }
-    renderRoommateInfo() {
-        const roommates = this.state.roommates;
-        const newRoommatesArr = divideArray(roommates, 3);
-        console.log(newRoommatesArr)
-        return newRoommatesArr.map((roommateRow, index) => {
+// this.state = {
+//     roommates: [
+//         {
+//             roomNumber: 1,
+//             gender: 'FEMALE',
+//         },
+//         {
+//             roomNumber: 1,
+//             gender: 'MALE',
+//         },
+//         {
+//             roomNumber: 1,
+//             gender: null,
+//         },
+//     ],
+// };
+
+export default function RoommateInfo(props) {
+    const { className, roomateInfoArrData } = props;
+    // 将室友数组，每三个划分一行
+    const newRoommatesArr = divideArray(roomateInfoArrData, 3);
+
+    let rommateInfoChildren = null;
+    if (newRoommatesArr && newRoommatesArr.length) {
+        rommateInfoChildren = newRoommatesArr.map((roommateRow, index) => {
             return <RoommateRow key={index} roommates={roommateRow} />
-        })
+        });
     }
-    render() {
-        const { className } = this.props;
-        return (
-            <div className={`${classPrefix} ${className}`}>
-                <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>室友信息</h1>
-                <div className={`${classPrefix}-info`}>
-                    {
-                        this.renderRoommateInfo()
-                    }
-                </div>
+    return (
+        <div className={`${classPrefix} ${className}`}>
+            <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>室友信息</h1>
+            <div className={`${classPrefix}-info`}>
+                {
+                    rommateInfoChildren
+                }
             </div>
-        );
-    }
+        </div>
+    );
 }
 
+// 室友信息，一行三个室友
 function RoommateRow(props) {
     const { roommates } = props;
     return (
@@ -73,5 +71,3 @@ function RoommateRow(props) {
         ) : null
     );
 }
-
-export default RoommateInfo;

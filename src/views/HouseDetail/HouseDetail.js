@@ -1,44 +1,140 @@
+import './styles.less';
 import React, { Component } from 'react';
 import HeadShared from 'components/HouseDetail/HeadShared/HeadShared';
 import RoomSlider from 'components/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/HouseDetail/HouseProfile/HouseProfile';
+import HouseBrief from 'components/HouseDetail/HouseBrief/HouseBrief';
+import HouseTags from 'components/HouseDetail/HouseTags/HouseTags';
+import HouseFurniture from 'components/HouseDetail/HouseFurniture/HouseFurniture';
 import HouseIntro from 'components/HouseDetail/HouseIntro/HouseIntro';
 import HouseTraffic from 'components/HouseDetail/HouseTraffic/HouseTraffic';
 import ApartmentIntro from 'components/HouseDetail/ApartmentIntro/ApartmentIntro';
 import RoommateInfo from 'components/HouseDetail/RoommateInfo/RoommateInfo';
 import CommunityIntro from 'components/HouseDetail/CommunityIntro/CommunityIntro';
-import Service from 'lib/Service';
+// Shared
+import ContactButler from 'Shared/ContactButler/ContactButler';
+// ajax
+import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
-import './styles.less';
+import Animate from 'rc-animate';
+
+
+const classPrefix = 'g-housedetail';
 
 export default class HouseDetail extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false,
+            houseDetailData: {},
+        };
+    } 
+
     handleTouchTap() {
-        console.log('handleTouchTap')
     }
-    handleClick() {
-        console.log('handleClick')
-    }
+
+    // handleClick = () => {
+    //     this.setState({
+    //         show: true,
+    //     });
+    // }
+
     componentDidMount() {
-        Service.get('/v1/rentUnits/11')
-            .then((data) => {
-                console.log('data', data)
+        ajaxInitHouseDetail()
+            .then((houseDetailData) => {
+                this.setState({
+                    houseDetailData,
+                })
             })
     }
+
     render() {
+        const { 
+            // 头部slider轮播图
+            sliderImgArr,
+            // house头部,title,付款数据
+            houseProfileData,
+            // house tags
+            houseTagsArrData,
+            // house brief
+            houseBriefArrData,
+            // 家具slider
+            furnitureSliderArrData,
+            // 房源介绍
+            houseIntroStr,
+            // 公寓介绍相关信息
+            apartmentIntroData,
+            // 室友相关信息
+            roomateInfoArrData,
+            // 小区相关信息
+            communityIntroData,
+            // 管家信息
+            contactButlerData,
+        } = this.state.houseDetailData;
+
+        const style = {
+            display: this.state.show ? 'block' : 'none',
+            marginTop: '20px',
+            width: '200px',
+            height: '200px',
+            backgroundColor: 'red',
+        };
+        console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
         return (
-            <div className="test" onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
+            <div className="test" onTouchTap={this.handleTouchTap}>
                 <HeadShared />
                 <hr className="u-housedetail-partline"/>
-                <RoomSlider />
+                {
+                    // <RoomSlider sliderImgArr={sliderImgArr || []} />
+                    // <HouseProfile
+                    //     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
+                    //     houseProfileData={houseProfileData || {}}
+                    // />
+                    //     <HouseTags
+                    //         className={`g-housedetail-module-padding ${classPrefix}-housetags`}
+                    //         houseTagsArrData={houseTagsArrData || []}
+                    //     />
+                    //     <HouseBrief
+                    //         houseBriefArrData={houseBriefArrData || []}
+                    //         className={`${classPrefix}-housebrief`}
+                    //     />
+                }
                 {
                     // <HouseProfile />
-                    //     <HouseIntro className="g-housedetail-module-padding" />
-                    //     <HouseTraffic />
-                    //     <ApartmentIntro className="g-housedetail-module-padding" />
-                    //     <RoommateInfo className="g-housedetail-module-padding" />
-                    //     <CommunityIntro className="g-housedetail-module-padding" />
+                    <HouseTraffic />
                 }
-                HouseDetail
+                {
+                    // <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
+                    // <HouseIntro
+                    //     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
+                    //     houseIntroStr={houseIntroStr}
+                    // />
+                    //     <ApartmentIntro
+                    //         className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
+                    //         apartmentIntroData={apartmentIntroData || {}}
+                    //     />
+                    //     <RoommateInfo
+                    //         className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
+                    //         roomateInfoArrData={roomateInfoArrData || []}
+                    //     />
+                    //     <CommunityIntro
+                    //         className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
+                    //         communityIntroData={communityIntroData || {}}
+                    //     />
+                }
+                <button style={{fontSize: '50px'}} onClick={this.handleClick}>adsf</button>
+                <Animate
+                    component=""
+                    transitionName="fade"
+                >
+                    {
+                        this.state.show ? 
+                            <div key="1" style={style}/> : null
+                    }
+                </Animate>
+                {
+                    // <ContactButler contactButlerData={contactButlerData || {}} />
+                }
             </div>
         );
     }

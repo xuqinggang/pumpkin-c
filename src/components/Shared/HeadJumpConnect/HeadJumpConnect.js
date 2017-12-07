@@ -12,7 +12,7 @@ export default function() {
             render() {
                 return (
                     <div className={ classnames(classPrefix, 'g-tophead', 'g-grid-row') }>
-                        <span className={`${classPrefix}-jumpbtn grid-col grid-col-reset`}>--</span>
+                        <span className={`${classPrefix}-jumpbtn grid-col grid-col-reset icon-back`}></span>
                         <div className={`${classPrefix}-other grid-col f-flex-justify-end`}>
                             <WrappedCom />
                         </div>

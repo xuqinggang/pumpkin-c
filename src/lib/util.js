@@ -1,4 +1,5 @@
 export function divideArray(array, limit) {
+    if (!array || (array && 0 === array.length)) return [];
     const newArray = [];
     let cutPt = 0;
     let endPt = limit;

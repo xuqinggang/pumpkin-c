@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
 
-import FURNITUREMAPICON from './furnitureMapIcon';
+import FurnitureMapIcon from './FurnitureMapIcon';
 
 import './styles.less';
 
@@ -16,74 +16,38 @@ const roomKeyMapName = {
 const classSliderPrefix = 'm-sliderfurniture';
 const classScrollPrefix = 'm-scrollfurniture';
 
-const furniture = {
-    publicFurniture: [
-        {
-            furniture: ["BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE"],
-        },
-    ],
-    bedrooms: [
-        {
-            number: 1,
-            furniture: ["BED", "WARDROBE"],
-        },
-        {
-            number: 2,
-            furniture: ["BED", "WARDROBE"],
-        },
-    ],
-    livingRooms: [
-        {
-            number: 1,
-            furniture: ["BED", "WARDROBE"],
-        },
-        {
-            number: 1,
-            furniture: ["BED", "WARDROBE"],
-        },
-    ],
-};
+// const furnitureArr = [
+//     {
+//         text: '公共空间',
+//         furniture: ["BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE"],
+//     },
+// ];
 
 export default class HouseFurniture extends Component {
-    static initGeneFurnitureData(furniture) {
-        const scrollList = [];
-        const sliderList = [];
-        Object.keys(furniture).map((roomKey, index) => {
-            const roomsFurniture = furniture[roomKey];
-
-            roomsFurniture && roomsFurniture.map((roomFurnitureItem, index) => {
-                // 生成滑动列表元素
-                let roomName = roomKeyMapName[roomKey];
-                if (roomName) {
-                    if (roomFurnitureItem.number) {
-                        roomName = `0${roomFurnitureItem.number}${roomName}`;
-                    }
-                    scrollList.push(roomName);
-                }
-
-                sliderList.push(roomFurnitureItem.furniture);
-            });
-        });
-
-        return {
-            scrollList,
-            sliderList,
-        }
-    }
     constructor(props) {
         super(props);
         this.state = {
             activeIndex: 0,
         };
+    }
 
-        const { scrollList, sliderList } = HouseFurniture.initGeneFurnitureData(furniture);
+    initGeneFurnitureData(furnitureArr) {
+        if (this.scrollList && this.scrollList.length > 0) {
+            return;
+        }
+        const scrollList = [];
+        const sliderList = [];
+        furnitureArr.forEach((furnitureItem) => {
+            scrollList.push(furnitureItem.text);
+            sliderList.push(furnitureItem.furniture);
+        });
         this.scrollList = scrollList;
         this.sliderList = sliderList;
     }
 
-
     // 渲染家具swipe
-    renderMultiSliderFurniture(furniture) {
+    renderMultiSliderFurniture() {
+        console.log('this.sliderList', this.sliderList)
         const slideFurnitureList = this.sliderList && this.sliderList.map((furnitureArr, index) => {
             return <SlideFurniture key={index} furniture={furnitureArr} />
         });
@@ -91,7 +55,9 @@ export default class HouseFurniture extends Component {
         if (slideFurnitureList && slideFurnitureList.length) {
             return (
                 <ReactSwipe
+                    key={slideFurnitureList.length}
                     className="carousel" 
+                    ref={reactswipe => this.reactswipe = reactswipe} 
                     swipeOptions={{ continuous: false, callback: this.onSliderChange }}
                 >
                     {slideFurnitureList}
@@ -105,7 +71,6 @@ export default class HouseFurniture extends Component {
     // 渲染家具滚动slider
     // todo:optimize
     renderScrollFurniture() {
-        console.log('scrollList', this.scrollList)
         const { activeIndex }  = this.state;
         const scrollFurnitureList =  this.scrollList && this.scrollList.map((item, index) => {
             const itemClass = classnames(`f-display-inlineblock ${classScrollPrefix}-item`, {
@@ -126,7 +91,10 @@ export default class HouseFurniture extends Component {
         if (scrollFurnitureList && scrollFurnitureList.length) {
             return (
                 <div className={`${classScrollPrefix}`}>
-                    <Scroll activeIndex={activeIndex}>
+                    <Scroll 
+                        key={scrollFurnitureList.length}
+                        activeIndex={activeIndex}
+                    >
                         {
                             scrollFurnitureList
                         }
@@ -145,14 +113,21 @@ export default class HouseFurniture extends Component {
     }
 
     handleScrollTap = (index) => {
-        this.setState({
-            activeIndex: index,
-        });
+        const { activeIndex } = this.state;
+        if (index !== activeIndex) {
+            this.setState({
+                activeIndex: index,
+            });
+        }
+
+        this.reactswipe.slide(index, 300);
     }
 
     render() {
-
-        const swipeChildren = this.renderMultiSliderFurniture(furniture);
+        const { furnitureSliderArrData } = this.props;
+        console.log('furnitureSliderArrData', furnitureSliderArrData)
+        this.initGeneFurnitureData(furnitureSliderArrData);
+        const swipeChildren = this.renderMultiSliderFurniture();
         const scrollChildren = this.renderScrollFurniture();
 
         return (
@@ -169,11 +144,11 @@ export default class HouseFurniture extends Component {
     }
 }
 
+// 家具slider面板
 function SlideFurniture(props) {
     const { furniture } = props;
-    console.log('SlideFurniture', furniture);
     const furnitureList = furniture && furniture.map((item, index) => {
-        const furnitureItem = FURNITUREMAPICON[item];
+        const furnitureItem = FurnitureMapIcon[item];
         if (furnitureItem) {
             return (
                 <li key={index} className={`${classSliderPrefix}-item`}>
