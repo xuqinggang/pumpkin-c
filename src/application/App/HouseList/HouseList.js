@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import HeadShared from 'components/HouseDetail/HeadShared/HeadShared';
-import HouseLists from 'components/HouseList/HouseLists/HouseLists';
+import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
 import Service from 'lib/Service';
 import './styles.less';
 

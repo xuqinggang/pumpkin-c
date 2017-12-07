@@ -1,16 +1,16 @@
 import './styles.less';
 import React, { Component } from 'react';
-import HeadShared from 'components/HouseDetail/HeadShared/HeadShared';
-import RoomSlider from 'components/HouseDetail/RoomSlider/RoomSlider';
-import HouseProfile from 'components/HouseDetail/HouseProfile/HouseProfile';
-import HouseBrief from 'components/HouseDetail/HouseBrief/HouseBrief';
-import HouseTags from 'components/HouseDetail/HouseTags/HouseTags';
-import HouseFurniture from 'components/HouseDetail/HouseFurniture/HouseFurniture';
-import HouseIntro from 'components/HouseDetail/HouseIntro/HouseIntro';
-import HouseTraffic from 'components/HouseDetail/HouseTraffic/HouseTraffic';
-import ApartmentIntro from 'components/HouseDetail/ApartmentIntro/ApartmentIntro';
-import RoommateInfo from 'components/HouseDetail/RoommateInfo/RoommateInfo';
-import CommunityIntro from 'components/HouseDetail/CommunityIntro/CommunityIntro';
+import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
+import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
+import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
+import HouseTags from 'components/App/HouseDetail/HouseTags/HouseTags';
+import HouseFurniture from 'components/App/HouseDetail/HouseFurniture/HouseFurniture';
+import HouseIntro from 'components/App/HouseDetail/HouseIntro/HouseIntro';
+import HouseTraffic from 'components/App/HouseDetail/HouseTraffic/HouseTraffic';
+import ApartmentIntro from 'components/App/HouseDetail/ApartmentIntro/ApartmentIntro';
+import RoommateInfo from 'components/App/HouseDetail/RoommateInfo/RoommateInfo';
+import CommunityIntro from 'components/App/HouseDetail/CommunityIntro/CommunityIntro';
 // Shared
 import ContactButler from 'Shared/ContactButler/ContactButler';
 // ajax
