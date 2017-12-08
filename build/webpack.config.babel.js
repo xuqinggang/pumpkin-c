@@ -16,7 +16,9 @@ const context = {
 
 export default {
     entry: {
-        app: resolve('src/index.js'),
+        index: resolve('src/application/App/index.js'),
+        map: resolve('src/application/Map/map.js'),
+        
         vendors: [
             'react',
             'redux',
@@ -24,13 +26,14 @@ export default {
             'react-redux',
             'react-router',
             'prop-types',
+            'react-tap-event-plugin',
         ],
     },
 
     output: {
         publicPath: baseConfig.prod.publicPath,
         path: resolve(baseConfig.prod.distPath),
-        filename: '[name].[chunkhash:8].js',
+        filename: 'js/[name].[chunkhash:8].js',
     },
 
     resolve: {
@@ -38,9 +41,11 @@ export default {
         alias: {
             Shared: resolve('src/components/Shared'),
             components: resolve('src/components'),
-            views: resolve('src/views'),
+            App: resolve('src/application/App'),
+            Map: resolve('src/application/Map'),
+            // views: resolve('src/views'),
             styles: resolve('src/styles'),
-            routes: resolve('src/routes'),
+            // routes: resolve('src/routes'),
             lib: resolve('src/lib'),
         },
     },
@@ -56,7 +61,9 @@ export default {
     plugins: [
         ...basePlugins(context),
     ],
+
     devtool: 'inline-source-map',
+
     devServer: {
         port: baseConfig.dev.port,
         host: baseConfig.dev.host,

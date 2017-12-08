@@ -70,6 +70,8 @@ export default class HouseDetail extends Component {
             communityIntroData,
             // 管家信息
             contactButlerData,
+            // 周边及交通,经纬度
+            houseTrafficData,
         } = this.state.houseDetailData;
 
         const style = {
@@ -99,20 +101,17 @@ export default class HouseDetail extends Component {
                     //         className={`${classPrefix}-housebrief`}
                     //     />
                 }
-                {
-                    // <HouseProfile />
-                    <HouseTraffic />
-                }
+                <HouseIntro
+                    className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
+                    houseIntroStr={houseIntroStr}
+                />
+                <HouseTraffic className={`${classPrefix}-housetraffic`} houseTrafficData={houseTrafficData || {}} />
+                <ApartmentIntro
+                    className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
+                    apartmentIntroData={apartmentIntroData || {}}
+                />
                 {
                     // <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
-                    // <HouseIntro
-                    //     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
-                    //     houseIntroStr={houseIntroStr}
-                    // />
-                    //     <ApartmentIntro
-                    //         className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
-                    //         apartmentIntroData={apartmentIntroData || {}}
-                    //     />
                     //     <RoommateInfo
                     //         className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
                     //         roomateInfoArrData={roomateInfoArrData || []}

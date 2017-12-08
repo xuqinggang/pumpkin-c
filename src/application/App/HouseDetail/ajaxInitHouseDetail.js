@@ -15,6 +15,10 @@ export default function ajaxInitHouseDetail() {
 
                 // 室友相关信息
                 roomMates,
+
+                // 经纬度
+                lon,
+                lat,
             } = houseDetailData;
 
             // RoomSlider轮播图数据和家具轮播数据
@@ -38,6 +42,12 @@ export default function ajaxInitHouseDetail() {
             // ContactButler管家信息
             const contactButlerData = genContactButler(houseDetailData);
 
+            // HouseTraffic周边及交通 经纬度
+            const houseTrafficData = {
+                lon,
+                lat,
+            };
+
             console.log('sliderImgArr', sliderImgArr, houseProfileData, communityIntroData);
 
             return {
@@ -53,6 +63,7 @@ export default function ajaxInitHouseDetail() {
                 roomateInfoArrData: roomMates,
                 communityIntroData,
                 contactButlerData,
+                houseTrafficData,
             };
         });
 }

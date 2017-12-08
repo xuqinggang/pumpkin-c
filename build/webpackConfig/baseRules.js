@@ -5,9 +5,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = (context) => {
     const includePaths = [
         path.resolve(context.rootDir, './src/'),
-        // path.resolve(context.rootDir, './node_modules/kui'),
-        // path.resolve(context.rootDir, './node_modules/kz-frame'),
-        // path.resolve(context.rootDir, './node_modules/kz-ds'),
     ];
 
     return [

@@ -12,3 +12,23 @@ export function divideArray(array, limit) {
     };
     return newArray;
 }
+
+// 解析url
+export function parseUrl(url) {
+    const rt = {
+        query: {},
+    };
+    const arr = url.split('?');
+    const queryStr = arr[1];
+    if (arr && queryStr) {
+        const queryArr = queryStr.split('&');
+        queryArr.forEach((queryItem) => {
+            const [key, val] = queryItem.split('=');
+            if (key) {
+                rt.query[key] = val;
+            }
+        })
+    }
+
+    return rt;
+}
