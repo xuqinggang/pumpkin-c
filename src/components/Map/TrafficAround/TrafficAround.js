@@ -34,6 +34,9 @@ const trafficMapInfo = {
 const classPrefix = 'm-trafficaround';
 const aroundBtnClass = 'm-arroundbtn';
 
+// 保存上一次点击的marker text文字
+let lastMarkerTextDom = null;
+
 // 设置中心marker样式
 function setCenterMarker(lnglatArr, mapIns) {
     // 自定义点标记内容
@@ -57,22 +60,24 @@ function setCenterMarker(lnglatArr, mapIns) {
         clickable: true,
     });
 
-    AMap.event.addListener(marker, 'click', function() {
-        var markerSpan = document.createElement("span");
-        markerSpan.innerHTML = "123";
-        markerContent.appendChild(markerSpan);
-        marker.setContent(markerContent);
-    });
+    // AMap.event.addListener(marker, 'click', function() {
+    //     var markerSpan = document.createElement("span");
+    //     markerSpan.innerHTML = "123";
+    //     markerContent.appendChild(markerSpan);
+    //     marker.setContent(markerContent);
+    // });
 }
 
 function bindMarkerClick(marker) {
-
     AMap.event.addListener(marker, 'click', function() {
-        console.log('markerContent', marker.name, marker.getContent());
-        // var markerSpan = document.createElement("span");
-        // markerSpan.innerHTML = "123";
-        // markerContent.appendChild(markerSpan);
-        // marker.setContent(markerContent);
+        if (lastMarkerTextDom) {
+            lastMarkerTextDom.style.display = 'none';
+        }
+
+        const markContentDom = marker.getContent();
+        const markerTextDom = markContentDom.querySelector('.marker-text-wrap');
+        markerTextDom.style.display = 'inline-block';
+        lastMarkerTextDom = markerTextDom;
     });
 }
 
@@ -85,6 +90,7 @@ class TrafficAround extends Component {
         if (pos) {
             this.centerLnglatArr = pos.split(',');
         }
+
         // 房源经纬度
         this.centerLnglatArr = [116.39,39.9];
         
@@ -106,7 +112,6 @@ class TrafficAround extends Component {
             })
         }
         this.lastTrafficName = trafficName;
-        console.log('searchNearBy', trafficName, this.lastTrafficName);
 
         if (trafficInfoItem.markers.length) {
             trafficInfoItem.markers.forEach((marker) => {
@@ -132,13 +137,7 @@ class TrafficAround extends Component {
                     const len = pois.length;
                     for (let i = 0; i < len; i ++) {
                         const position = [pois[i].location.lng, pois[i].location.lat];
-                        const marker = new AMap.Marker({
-                            position: position,
-                            map: this.mapIns,
-                            content: markContent,
-                        });
-                        marker.name = pois[i].name;
-                        // console.log('marker.name', marker.name,  pois[i].name);
+
                         const markContent = document.createElement('div');
                         markContent.className = 'marker-content';
                         const markerIcon = document.createElement("span");
@@ -152,6 +151,12 @@ class TrafficAround extends Component {
                         
                         markContent.appendChild(markerIcon);
                         markContent.appendChild(markerTextWrap);
+
+                        const marker = new AMap.Marker({
+                            position: position,
+                            map: this.mapIns,
+                            content: markContent,
+                        });
 
                         // 给mark绑定点击事件
                         bindMarkerClick(marker);
@@ -235,18 +240,19 @@ class ArroundBtn extends Component {
                             className={`f-display-inlineblock f-vertical-middle ${trafficInfo.iconClass} ${aroundBtnClass}-icon`}
                         >
                         </span>
-                            {
-                                trafficName === activeTraffice ?
-                                    <span className={`f-display-inlineblock f-vertical-middle ${aroundBtnClass}-text`}>
-                                        {trafficInfo.text}
-                                    </span>
-                                    : null
-                            }
+                        {
+                            trafficName === activeTraffice ?
+                                <span className={`f-display-inlineblock f-vertical-middle ${aroundBtnClass}-text`}>
+                                    {trafficInfo.text}
+                                </span>
+                                : null
+                        }
                     </div>
                 </li>
             );
         });
     }
+
     render() {
         return (
             <div className={`${aroundBtnClass}`}>
