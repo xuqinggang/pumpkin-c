@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --config ./build/webpack.config.babel.js --history-api-fallback",
     "build": "rm -rf dist && cross-env NODE_ENV=production webpack --config ./build/webpack.config.babel.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "cross-env NODE_ENV=production ./node_modules/.bin/babel-node ./server/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -42,8 +43,14 @@
     "webpack-dev-server": "^2.5.1"
   },
   "dependencies": {
+    "babel-cli": "^6.26.0",
     "classnames": "^2.2.5",
     "history": "^4.7.2",
+    "http-proxy": "^1.16.2",
+    "koa": "^2.4.1",
+    "koa-logger": "^3.1.0",
+    "koa-router": "^7.3.0",
+    "koa-static": "^4.0.2",
     "prop-types": "^15.5.10",
     "pumpkin-font-c": "^1.0.2",
     "rc-animate": "^2.4.1",
