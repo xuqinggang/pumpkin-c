@@ -1,6 +1,6 @@
 FROM private-registry.sohucs.com/nangua/nangua_front_node:v8.9.3
 
-ADD ./ /pumpkin-b/
+ADD ./ /pumpkin-c/
 
 # RUN export PATH=$PATH:/opt/kuaizhan/bin && \
 RUN    cd /pumpkin-c/ && \
