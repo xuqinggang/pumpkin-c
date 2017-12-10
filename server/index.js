@@ -18,6 +18,7 @@ import httpProxy from 'http-proxy';
 
 const proxy = httpProxy.createProxyServer();
 const serverRouter = new Router();
+const router = new Router();
 
 const app = new Koa();
 
@@ -38,6 +39,10 @@ serverRouter.all(/\/v1/, (ctx) => {
         },
     });
 });
+router.get('/ping', function (ctx, next) {
+    ctx.body = 'pong';
+  // ctx.router available
+});
 
 //错误处理中间件
 app.use(errorHandleMiddle());
@@ -48,6 +53,9 @@ koaConf(app);
 
 app.use(KoaStatic('dist'));
 app.use(serverRouter.routes());
+
+app.use(router.routes())
+    .use(router.allowedMethods());
 
 // routerConf(app);
 app.listen(config.port, function(err) {
