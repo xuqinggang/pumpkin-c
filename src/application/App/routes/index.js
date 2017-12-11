@@ -1,3 +1,4 @@
+import React from 'react';
 import { Router, Switch, Route } from 'react-router';
 import HouseDetail from 'App/HouseDetail/HouseDetail';
 import HouseList from 'App/HouseList/HouseList';
