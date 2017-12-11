@@ -13,9 +13,8 @@ export default (context) => {
         //     files: 'src/**/*.l?(e|c)ss',
         //     formatter: StyleLintFormatter,
         // }),
-
-        new webpack.ProvidePlugin({
-            React: 'react',
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(context.env),
         }),
 
         new ExtractTextPlugin({
@@ -48,7 +47,7 @@ export default (context) => {
             cache: true,
             minify: { //压缩HTML文件  
                 removeComments: true, //移除HTML中的注释
-                collapseWhitespace: false //删除空白符与换行符
+                collapseWhitespace: true //删除空白符与换行符
             },
         }),
 
@@ -61,17 +60,17 @@ export default (context) => {
             cache: true,
             minify: { //压缩HTML文件  
                 removeComments: true, //移除HTML中的注释
-                collapseWhitespace: false //删除空白符与换行符
+                collapseWhitespace: true //删除空白符与换行符
             },
         }),
         
     ];
 
-    // if (context.env.NODE_ENV === 'production') {
-    //     plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-    //         compress: true,
-    //     }));
-    // }
+    if (context.env === 'production') {
+        plugins.unshift(new webpack.optimize.UglifyJsPlugin({
+            compress: true,
+        }));
+    }
 
     return plugins;
 };
