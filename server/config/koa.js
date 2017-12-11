@@ -6,12 +6,12 @@
 'use strict'
 
 // import path from 'path';
-import logger from 'koa-logger';
+const logger = require('koa-logger');
 // import json from 'koa-json';
 // import bodyParser from 'koa-bodyparser';
-import conf from './env';
+const conf = require('./env');
 
-export default function(app) {
+module.exports = function(app) {
     if(conf.env === 'dev'){
         // app.use(responseTime());
         app.use(logger());
