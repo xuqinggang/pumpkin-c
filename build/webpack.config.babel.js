@@ -5,8 +5,7 @@ import baseRules from './webpackConfig/baseRules';
 import baseExtraLib from './webpackConfig/baseExtraLib';
 
 const resolve = dir => path.resolve(__dirname, '..', dir);
-const env = process.env;
-env.NODE_ENV = env.NODE_ENV || 'dev';
+const env = process.env.NODE_ENV || 'production';
 
 const context = {
     env,
@@ -20,6 +19,7 @@ export default {
         map: resolve('src/application/Map/map.js'),
         
         vendors: [
+            'babel-polyfill',
             'react',
             'redux',
             'react-dom',
