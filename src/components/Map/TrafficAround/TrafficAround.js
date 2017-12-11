@@ -43,9 +43,8 @@ function setCenterMarker(lnglatArr, mapIns) {
     var markerContent = document.createElement("div");
 
     // 点标记中的图标
-    var markerImg = document.createElement("img");
-    markerImg.className = `${classPrefix}-center-img`;
-    markerImg.src = "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png";
+    var markerImg = document.createElement("span");
+    markerImg.className = 'marker-center-img';
     markerContent.appendChild(markerImg);
 
     // 点标记中的文本

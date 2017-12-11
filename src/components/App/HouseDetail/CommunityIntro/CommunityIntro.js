@@ -7,8 +7,8 @@ const classPrefix = 'm-communityintro';
 
 const IntroTextMap = {
     constructType: '建筑类型',
-    openYear: '建筑年代',
     greenRate: '绿化率',
+    openYear: '建筑年代',
     propertyType: '物业类型',
 };
 
