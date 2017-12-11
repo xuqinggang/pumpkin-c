@@ -83,7 +83,7 @@ export default class HouseDetail extends Component {
         };
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
         return (
-            <div className="test" onTouchTap={this.handleTouchTap}>
+            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 {
                     // <HeadShared />
                 }
@@ -101,6 +101,7 @@ export default class HouseDetail extends Component {
                     houseBriefArrData={houseBriefArrData || []}
                     className={`${classPrefix}-housebrief`}
                 />
+                <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
                 <HouseIntro
                     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
                     houseIntroStr={houseIntroStr}
@@ -110,7 +111,6 @@ export default class HouseDetail extends Component {
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
                 />
-                <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
                 <RoommateInfo
                     className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
                     roomateInfoArrData={roomateInfoArrData || []}
