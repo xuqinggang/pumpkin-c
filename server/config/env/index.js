@@ -5,7 +5,7 @@
  */
 'use strict'
 
-import path from 'path';
+const path = require('path');
 
 const config = {
     env: process.env.NODE_ENV || 'dev',
@@ -14,4 +14,4 @@ const config = {
     //mongodb配置
 };
 
-export default config;
+module.exports = config;

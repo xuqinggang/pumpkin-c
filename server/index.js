@@ -5,16 +5,16 @@
  */
 'use strict';
 
-import Koa from 'koa';
-import KoaStatic from 'koa-static';
-import Router from 'koa-router';
+const Koa = require ('koa');
+const KoaStatic = require('koa-static');
+const Router = require('koa-router');
 
-import path from 'path';
+const path = require('path');
 // import logger from './util/log';
-import errorHandleMiddle from './middleware/error.middleware';
-import config from './config/env';
-import koaConf from './config/koa';
-import httpProxy from 'http-proxy';
+const errorHandleMiddle = require('./middleware/error.middleware');
+const config = require('./config/env');
+const koaConf = require('./config/koa');
+const httpProxy = require('http-proxy');
 
 const proxy = httpProxy.createProxyServer();
 const serverRouter = new Router();
@@ -72,4 +72,4 @@ app.on('error', (err, ctx) => {
 		console.error('error', err)
         ctx.logger.error({ url: ctx.req.url }, err);
 	}
-})
+});

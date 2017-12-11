@@ -48,6 +48,7 @@ export default class BottomDialog extends Component {
     // 事件处理程序-遮罩点击事件
     handleMaskTouchTap = (e) => {
         this.closePotal();
+        // e.preventDefault();
         // e.stopPropagation();
         // const { modal } = this.props;
         // // 非模态框

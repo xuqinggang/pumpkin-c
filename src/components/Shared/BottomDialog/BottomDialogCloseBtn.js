@@ -9,7 +9,7 @@ export default class BottomDialogCloseBtn extends Component {
         closePotal: PropTypes.func,
     };
 
-    handleCloseTouchTap = () => {
+    handleCloseTouchTap = (e) => {
         this.context.closePotal();
     }
 

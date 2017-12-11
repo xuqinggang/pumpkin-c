@@ -15,13 +15,15 @@ export default class ContactButler extends Component {
         };
     }
 
-    handleConcatTap = () => {
+    handleConcatTap = (e) => {
+        // e.preventDefault();
         this.setState({
             show: true,
-        })
+        });
     }
     
-    handleNoContactTap = () => {
+    handleNoContactTap = (e) => {
+        // e.preventDefault();
         this.setState({
             show: false,
         });

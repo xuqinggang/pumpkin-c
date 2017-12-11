@@ -24,4 +24,4 @@ const errorHandleMiddle = () => (
     }
 );
 
-export default errorHandleMiddle;
+module.exports = errorHandleMiddle;
