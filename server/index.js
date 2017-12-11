@@ -11,7 +11,7 @@ const Router = require('koa-router');
 
 const path = require('path');
 // import logger from './util/log';
-const errorHandleMiddle from './middleware/error.middleware';
+const errorHandleMiddle = require('./middleware/error.middleware');
 const config = require('./config/env');
 const koaConf = require('./config/koa');
 const httpProxy = require('http-proxy');

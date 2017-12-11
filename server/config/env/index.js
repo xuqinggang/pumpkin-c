@@ -5,7 +5,7 @@
  */
 'use strict'
 
-const path = reuqire('path');
+const path = require('path');
 
 const config = {
     env: process.env.NODE_ENV || 'dev',
