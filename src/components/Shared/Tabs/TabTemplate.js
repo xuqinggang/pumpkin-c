@@ -4,16 +4,16 @@ import classnames from 'classnames';
 
 import './styles.less';
 
-const TabTemplate = ({children, selected}) => {
+const TabTemplate = ({children, isSelected, contentItemClass}) => {
 	const templateStyle = {};
-	if(!selected) {
+	if(!isSelected) {
 		templateStyle.width = 0;
 		templateStyle.height = 0;
 		templateStyle.overflow = 'hidden';
 	}
 
-	const contentClassName = classnames('content-item', {
-		'content-item-active': selected,
+	const contentClassName = classnames('content-item', contentItemClass, {
+		'active': isSelected,
 	});
 
 	return (
@@ -25,7 +25,7 @@ const TabTemplate = ({children, selected}) => {
 
 TabTemplate.PropTypes = {
 	children: PropTypes.node,
-	selected: PropTypes.bool,
+	isSelected: PropTypes.bool,
 };
 
 export default TabTemplate;

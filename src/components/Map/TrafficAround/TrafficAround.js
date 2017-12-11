@@ -92,7 +92,7 @@ class TrafficAround extends Component {
         }
 
         // 房源经纬度
-        this.centerLnglatArr = [116.39,39.9];
+        // this.centerLnglatArr = [116.39,39.9];
         
         // 保存每次点击前的上一次点击的trafficName
         this.lastTrafficName = '';

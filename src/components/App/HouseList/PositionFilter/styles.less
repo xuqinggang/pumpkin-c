@@ -1,0 +1,41 @@
+@import (reference) '~styles/lib.less';
+
+@ptClass = 'm-ptfilter';
+
+.m-ptfilter {
+    line-height: 80px;
+    background-color: #fff;
+    height: 800px;
+    .font-size(28);
+
+    &-nav {
+        background-color: #f8f8f8;
+        flex-basis: 260px;
+    }
+    
+    &-content {
+        background-color: #fff;
+        // & > &-item {
+        //     background: red;               
+        // }
+        .m-ptfilter-nav {
+            flex-basis: 100%;
+        }
+        .m-ptfilter-nav-item {
+            &.active {
+                color: #f38d39;
+                width: 214px;
+            }
+        }
+    }
+
+    &-nav-item {
+        &.active {
+            background-color: #fff;
+        }
+    }
+
+    &-content-item {
+        width: 100%;
+    }
+}

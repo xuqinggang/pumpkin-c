@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
+import './styles.less';
+
 const classPrefix = 'm-headJump';
 
 export default function() {
@@ -9,11 +11,23 @@ export default function() {
             constructor(props) {
                 super(props);
             }
+
+            handleBackBtnTap = () => {
+                if (WrappedCom.handleJump) {
+                    WrappedCom.handleJump();
+                    return;
+                }
+            }
+
             render() {
                 return (
-                    <div className={ classnames(classPrefix, 'g-tophead', 'g-grid-row') }>
-                        <span className={`${classPrefix}-jumpbtn grid-col grid-col-reset icon-back`}></span>
-                        <div className={`${classPrefix}-other grid-col f-flex-justify-end`}>
+                    <div className={ classnames(classPrefix, 'g-grid-row') }>
+                        <span
+                            onTouchTap={this.handleBackBtnTap}
+                            className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
+                        >
+                        </span>
+                        <div className={`${classPrefix}-other grid-col`}>
                             <WrappedCom />
                         </div>
                     </div>

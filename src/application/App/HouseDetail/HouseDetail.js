@@ -1,6 +1,6 @@
 import './styles.less';
 import React, { Component } from 'react';
-import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+// import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
 import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
@@ -84,23 +84,23 @@ export default class HouseDetail extends Component {
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
         return (
             <div className="test" onTouchTap={this.handleTouchTap}>
-                <HeadShared />
-                <hr className="u-housedetail-partline"/>
                 {
-                    // <RoomSlider sliderImgArr={sliderImgArr || []} />
-                    // <HouseProfile
-                    //     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
-                    //     houseProfileData={houseProfileData || {}}
-                    // />
-                    //     <HouseTags
-                    //         className={`g-housedetail-module-padding ${classPrefix}-housetags`}
-                    //         houseTagsArrData={houseTagsArrData || []}
-                    //     />
-                    //     <HouseBrief
-                    //         houseBriefArrData={houseBriefArrData || []}
-                    //         className={`${classPrefix}-housebrief`}
-                    //     />
+                    // <HeadShared />
                 }
+                <hr className="u-housedetail-partline" />
+                <RoomSlider sliderImgArr={sliderImgArr || []} />
+                <HouseProfile
+                    className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
+                    houseProfileData={houseProfileData || {}}
+                />
+                <HouseTags
+                    className={`g-housedetail-module-padding ${classPrefix}-housetags`}
+                    houseTagsArrData={houseTagsArrData || []}
+                />
+                <HouseBrief
+                    houseBriefArrData={houseBriefArrData || []}
+                    className={`${classPrefix}-housebrief`}
+                />
                 <HouseIntro
                     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
                     houseIntroStr={houseIntroStr}
@@ -110,29 +110,29 @@ export default class HouseDetail extends Component {
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
                 />
+                <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
+                <RoommateInfo
+                    className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
+                    roomateInfoArrData={roomateInfoArrData || []}
+                />
+                <CommunityIntro
+                    className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
+                    communityIntroData={communityIntroData || {}}
+                />
+                <ContactButler contactButlerData={contactButlerData || {}} />
                 {
-                    // <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
-                    //     <RoommateInfo
-                    //         className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
-                    //         roomateInfoArrData={roomateInfoArrData || []}
-                    //     />
-                    //     <CommunityIntro
-                    //         className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
-                    //         communityIntroData={communityIntroData || {}}
-                    //     />
+                    // <button style={{fontSize: '50px'}} onClick={this.handleClick}>adsf</button>
                 }
-                <button style={{fontSize: '50px'}} onClick={this.handleClick}>adsf</button>
-                <Animate
-                    component=""
-                    transitionName="fade"
-                >
-                    {
-                        this.state.show ? 
-                            <div key="1" style={style}/> : null
-                    }
-                </Animate>
                 {
-                    // <ContactButler contactButlerData={contactButlerData || {}} />
+                    // <Animate
+                    //     component=""
+                    //     transitionName="fade"
+                    // >
+                    //     {
+                    //         this.state.show ? 
+                    //             <div key="1" style={style}/> : null
+                    //     }
+                    // </Animate>
                 }
             </div>
         );
