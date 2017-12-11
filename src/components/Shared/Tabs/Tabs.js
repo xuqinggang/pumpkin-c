@@ -11,7 +11,8 @@ import TabTemplate from './TabTemplate.js'
 
 import './styles.less';
 
-const classPrefix = 'm-tabs';
+const horizonPrefix = 'm-tabs';
+const verticalPrefix = 'm-tabs-vertical';
 
 class Tabs extends Component {
 
@@ -60,7 +61,8 @@ class Tabs extends Component {
 		});
 		
 		return tabs;
-	}
+    }
+
 	// 由外组件更新时才会调用此方法
 	componentWillReceiveProps(nextProps) {
 		if('activeIndex' in nextProps) {
@@ -88,23 +90,25 @@ class Tabs extends Component {
 	renderTabNavAndContent() {
 		const tabs = this.getTabs();
 		// 每一个tab的平均宽度%
-		const tabContent = [];
+        const tabContent = [];
+
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
 		const tabNav = tabs.map((tab, index) => {
 			tabContent.push(tab.props.children ? 
 				createElement(TabTemplate, {
 					key: tab.props.order || index,
-					selected: this.state.selectedIndex === index,
+                    isSelected: this.state.selectedIndex === index,
+                    contentItemClass: tab.props.contentItemClass,
 				}, tab.props.children) : undefined);
 			
 			return cloneElement(tab, {
 				key: tab.props.order || index,
 				index: index, // 组件的索引
-				selected: this.state.selectedIndex === index,
+				isSelected: this.state.selectedIndex === index,
 				onTouchTab: this.handleTouchTab,
 			});
-
 		});
+
 		return {
 			tabContent,
 			tabNav
@@ -112,15 +116,20 @@ class Tabs extends Component {
 	}
 
 	render() {
-		const tabNavAndContent = this.renderTabNavAndContent();
+        const { className,
+            navClassName,
+            contentClassName,
+        } = this.props;
+        const tabNavAndContent = this.renderTabNavAndContent();
+        const classPrefix = verticalPrefix;
 		return (
-			<div className={`${classPrefix}`}>
-                <ul className={`${classPrefix}-nav`}>
+			<div className={`${classPrefix} ${className}`}>
+                <ul className={`${classPrefix}-nav ${navClassName}`}>
                     {
                         tabNavAndContent.tabNav
                     }
                 </ul>
-				<div className={`${classPrefix}-content`}>
+				<div className={`${classPrefix}-content ${contentClassName}`}>
                     { 
                         tabNavAndContent.tabContent
                     }

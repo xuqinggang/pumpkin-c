@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
+import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
+
 import Service from 'lib/Service';
 import './styles.less';
 
@@ -23,6 +25,7 @@ export default class HouseList extends Component {
                 <HeadShared />
                 <hr className="u-housedetail-partline"/>
                 <HouseLists />
+                <PositionFilter />
             </div>
         );
     }

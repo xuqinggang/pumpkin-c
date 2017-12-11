@@ -12,7 +12,7 @@ class Tab extends Component {
 		index: PropTypes.number,
 		className: PropTypes.string,
 		onTouchTab: PropTypes.func,
-		selected: PropTypes.bool,
+		isSelected: PropTypes.bool,
 		width: PropTypes.string,
 		label: PropTypes.node,
 		tab: PropTypes.node,
@@ -30,13 +30,23 @@ class Tab extends Component {
 	render() {
 		const {
 			label,
-			width,
+            navItemClass,
+            width,
+            isSelected,
 		} = this.props;
-		return(
-			<li className="nav-item" onTouchTap={this.handleTouchTap} style={{width:width}}>
+
+        const itemClass = classnames('nav-item', navItemClass, {
+            active: isSelected,
+        });
+
+		return (
+            <li className={itemClass}
+                onTouchTap={this.handleTouchTap}
+                style={{width:width}}
+            >
 				{label}
 			</li>
-		)
+		);
 	}
 }
 
