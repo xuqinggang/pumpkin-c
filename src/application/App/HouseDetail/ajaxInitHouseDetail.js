@@ -91,10 +91,10 @@ function genCommunityIntro(houseDetailData) {
     } = houseDetailData;
 
     return {
-        constructType,
-        propertyType,
-        greenRate: greenRate ? `${greenRate}%` : '无数据',
-        openYear,
+        constructType: constructType || '暂无',
+        propertyType: propertyType || '暂无',
+        greenRate: greenRate ? `${greenRate}%` : '暂无',
+        openYear: openYear || '暂无',
     };
 }
 
@@ -192,12 +192,9 @@ function genRoomSlider(houseDetailData) {
     const livingRooms = houseDetailData.livingRooms;
     const bathrooms = houseDetailData.bathrooms;
     const kitchens = houseDetailData.kitchens;
-
+    
+    // 顺序: 卧室 户型图 客厅 卫生间 厨房
     stuffData(bedrooms, '卧');
-    stuffData(livingRooms, '客厅');
-    stuffData(bathrooms, '卫生间');
-    stuffData(kitchens, '厨房');
-
     // 户型图
     if (houseDetailData.houseTypeImg) {
         sliderImgArr.push(
@@ -213,6 +210,9 @@ function genRoomSlider(houseDetailData) {
             },
         );
     }
+    stuffData(livingRooms, '客厅');
+    stuffData(bathrooms, '卫生间');
+    stuffData(kitchens, '厨房');
 
     // 向家具轮播填充数据 
     function stuffRoomFurniture(text, furniture = []) {
@@ -224,13 +224,21 @@ function genRoomSlider(houseDetailData) {
 
     // 填充数据
     function stuffData(rooms, roomType) {
-        if (rooms && rooms.length) {
+        const roomsLength = rooms && rooms.length;
+        if (roomsLength) {
             rooms.forEach((room, index) => {
                 // room text
-                const text = `0${room.number}${roomType}`;
+                let text = roomType;
+                // 某种房屋类型存在多个room时，添加room序号
+                if (roomsLength > 1) {
+                    text = `0${room.number}${text}`;
+                }
 
                 // 生成房间的furniture
-                stuffRoomFurniture(text, room.furniture);
+                // room存在furniture才push
+                if (room.furniture && room.furniture.length) {
+                    stuffRoomFurniture(text, room.furniture);
+                }
 
                 // 轮播图Item信息
                 const sliderImgItem = {
