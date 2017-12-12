@@ -10,7 +10,7 @@ const routes = (history) => {
                 {
                     // <Route exact path="/" component={App} />
                 }
-                <Route exact path="/" component={HouseDetail} />
+                <Route exact path="/detail/:rentUnitId" component={HouseDetail} />
                 <Route exact path="/list" component={HouseList} />
             </Switch>
         </Router>

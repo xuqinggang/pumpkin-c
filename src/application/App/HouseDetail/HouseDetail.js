@@ -28,7 +28,8 @@ export default class HouseDetail extends Component {
             show: false,
             houseDetailData: {},
         };
-    } 
+        this.rentUnitId = props.match.params.rentUnitId;
+    }
 
     handleTouchTap() {
     }
@@ -40,11 +41,11 @@ export default class HouseDetail extends Component {
     // }
 
     componentDidMount() {
-        ajaxInitHouseDetail()
+        ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
                     houseDetailData,
-                })
+                });
             })
     }
 
@@ -57,7 +58,7 @@ export default class HouseDetail extends Component {
             // house tags
             houseTagsArrData,
             // house brief
-            houseBriefArrData,
+            houseBriefData,
             // 家具slider
             furnitureSliderArrData,
             // 房源介绍
@@ -92,13 +93,14 @@ export default class HouseDetail extends Component {
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
                     houseProfileData={houseProfileData || {}}
+                    houseTrafficData={houseTrafficData || {}}
                 />
                 <HouseTags
                     className={`g-housedetail-module-padding ${classPrefix}-housetags`}
                     houseTagsArrData={houseTagsArrData || []}
                 />
                 <HouseBrief
-                    houseBriefArrData={houseBriefArrData || []}
+                    houseBriefData={houseBriefData || {}}
                     className={`${classPrefix}-housebrief`}
                 />
                 <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />

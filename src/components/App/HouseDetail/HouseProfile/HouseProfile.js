@@ -15,16 +15,30 @@ const payTypeMapName = {
 };
 
 export default function HouseProfile(props) {
-    const { className, houseProfileData } = props;
+    const { className, houseProfileData, houseTrafficData } = props;
     const { title, location } = houseProfileData;
+
+    // 经纬度
+    const { lon, lat } = houseTrafficData;
+    const pos = `${lon},${lat}`;
+
+    function handleJumpMapTap() {
+        window.location.href = `/map.html?pos=${pos}`;
+    }
+    
     return (
         <div className={`${classPrefix} ${className}`}>
             <HouseProfileHead
                 houseProfileHeadData={houseProfileData.houseProfileHeadData || {}}
             />
             <h2 className={`${classPrefix}-title`}>{title}</h2>
-            <div className={`${classPrefix}-location`}>
-                <span className="location-text">{location}</span>
+            <div className={`${classPrefix}-location`} onTouchTap={handleJumpMapTap}>
+                <span
+                    className="f-display-inlineblock f-vertical-middle f-singletext-ellipsis location-text"
+                >
+                    {location}
+                </span>
+                <span className="f-display-inlineblock f-vertical-middle icon-next location-icon"></span>
             </div>
         </div>
     )
@@ -88,10 +102,12 @@ class HouseProfileHead extends Component {
                     </span>
                 </div>
                 {
-                    apartmentName ? 
-                        <span className="f-display-inlineblock head-apartname">
-                            {apartmentName}
-                        </span>
+                    apartmentName ?
+                        <div className="f-display-inlineblock head-apartname-wrap">
+                            <span className="f-display-inlineblock f-singletext-ellipsis head-apartname">
+                                {apartmentName}
+                            </span>
+                        </div>
                         : null
                 }
                 <PayTypeComp
@@ -131,11 +147,11 @@ function PayTypeComp(props) {
 
     return (
         <BottomDialog show={show} className={`${payTypeClass}`}>
-            <BottomDialog.Header className={`${payTypeClass}-head g-grid-row f-flex-justify-between`}>
+            <BottomDialog.Header className={`${payTypeClass}-head g-grid-row f-flex-justify-between f-flex-align-center`}>
                 <span className="f-display-inlineblock f-vertical-middle head-title">
                     付款方式
                 </span>
-                <BottomDialog.CloseBtn className="f-vertical-middle" />
+                <BottomDialog.CloseBtn className={`f-vertical-middle head-icon`} />
             </BottomDialog.Header>
             <BottomDialog.Body className={`${payTypeClass}-body`}>
                     { renderPayTypeBody() }

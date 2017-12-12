@@ -76,6 +76,7 @@ export default class PositionFilter extends Component {
                         contentItemClass={`${ptClass}-content-item`}
                     >
                         <Tabs defaultActiveIndex={-1}
+                            className={ptClass}
                             navClassName={`${ptClass}-nav`}
                             contentClassName={`${ptClass}-content`}
                         >
@@ -94,11 +95,37 @@ export default class PositionFilter extends Component {
                                 contentItemClass={`${ptClass}-content-item`}
                             >
                                 child2
-                            </Tab>                            
+                            </Tab>
                         </Tabs>
                     </Tab>
-                    <Tab label="456" order={1} className={`${ptClass}-item`}>
-                        456
+                    <Tab
+                        label="456"
+                        order={1}
+                        navItemClass={`${ptClass}-nav-item`}
+                        contentItemClass={`${ptClass}-content-item`}
+                    >
+                        <Tabs defaultActiveIndex={-1}
+                            className={ptClass}
+                            navClassName={`${ptClass}-nav`}
+                            contentClassName={`${ptClass}-content`}
+                        >
+                            <Tab
+                                label="child3"
+                                order={0}
+                                navItemClass={`${ptClass}-nav-item`}
+                                contentItemClass={`${ptClass}-content-item`}
+                            >
+                                child3
+                            </Tab>                            
+                            <Tab
+                                label="child4"
+                                order={0}
+                                navItemClass={`${ptClass}-nav-item`}
+                                contentItemClass={`${ptClass}-content-item`}
+                            >
+                                child4
+                            </Tab>
+                        </Tabs>
                     </Tab>
                 </Tabs>
             </div>

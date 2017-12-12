@@ -204,7 +204,7 @@ class RoomSlider extends Component {
     render() {
         const { activeIndex } = this.state;
         const { sliderImgArr } = this.props;
-        // console.log('RoomSlider render', sliderImgArr);
+        console.log('RoomSlider render', sliderImgArr);
         return (
             <div className={classPrefix}>
                 <ReactSwipe
