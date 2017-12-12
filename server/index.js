@@ -5,10 +5,10 @@
  */
 'use strict';
 
-const Koa = require ('koa');
+const Koa = require('koa');
+const fs = require('fs');
 const KoaStatic = require('koa-static');
 const Router = require('koa-router');
-
 const path = require('path');
 // import logger from './util/log';
 const errorHandleMiddle = require('./middleware/error.middleware');
@@ -29,8 +29,8 @@ const app = new Koa();
 // 	await next()
 // });
 
+// 代理访问v1接口
 serverRouter.all(/\/v1/, (ctx) => {
-    console.log('v1');
     ctx.respond = false;
     proxy.web(ctx.req, ctx.res, {
         target: 'http://10.23.64.8',
@@ -39,23 +39,30 @@ serverRouter.all(/\/v1/, (ctx) => {
         },
     });
 });
-router.get('/ping', function (ctx, next) {
+
+router.get('/ping', function(ctx, next) {
     ctx.body = 'pong';
   // ctx.router available
+});
+
+var html = fs.readFileSync(path.resolve('./dist/index.html'));
+router.get('*', function(ctx, next) {
+    ctx.type = 'html';
+    ctx.body = html;
 });
 
 //错误处理中间件
 app.use(errorHandleMiddle());
 
 // koa基本配置
-
 koaConf(app);
 
-app.use(KoaStatic('dist'));
+// 代理接口 router
 app.use(serverRouter.routes());
+// 静态资源文件 router
+app.use(KoaStatic('dist'));
 
-app.use(router.routes())
-    .use(router.allowedMethods());
+app.use(router.routes());
 
 // routerConf(app);
 app.listen(config.port, function(err) {
