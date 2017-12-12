@@ -33,7 +33,7 @@ export default function ajaxInitHouseDetail(rentUnitId) {
             const houseTagsArrData = genHouseTags(houseDetailData);
 
             // HouseBrief数据
-            const houseBriefArrData = genHouseBrief(houseDetailData);
+            const houseBriefData = genHouseBrief(houseDetailData);
 
             // ApartmentIntro公寓相关信息
             const apartmentIntroData = genApartmentIntro(houseDetailData);
@@ -57,7 +57,7 @@ export default function ajaxInitHouseDetail(rentUnitId) {
                 furnitureSliderArrData,
                 houseProfileData,
                 houseTagsArrData,
-                houseBriefArrData,
+                houseBriefData,
                 // HouseIntro房源介绍相关信息
                 houseIntroStr: intro,
                 apartmentIntroData,
@@ -181,7 +181,15 @@ function genHouseBrief(houseDetailData) {
         livingRoomCount,
     } = houseDetailData;
 
-    return [`${area}m²`, `${bedroomCount}卧${livingRoomCount}厅`, `${floor}/${totalFloor}层`, `${HouseDetailMap[direct]}`];
+    return {
+        area,
+        bedroomCount,
+        livingRoomCount,
+        floor,
+        totalFloor,
+        direct: `${HouseDetailMap[direct]}`,
+    };
+    // return [`${area}m²`, `${bedroomCount}卧${livingRoomCount}厅`, `${floor}/${totalFloor}层`, `${HouseDetailMap[direct]}`];
 }
 
 

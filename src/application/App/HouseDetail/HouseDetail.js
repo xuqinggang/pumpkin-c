@@ -58,7 +58,7 @@ export default class HouseDetail extends Component {
             // house tags
             houseTagsArrData,
             // house brief
-            houseBriefArrData,
+            houseBriefData,
             // 家具slider
             furnitureSliderArrData,
             // 房源介绍
@@ -100,7 +100,7 @@ export default class HouseDetail extends Component {
                     houseTagsArrData={houseTagsArrData || []}
                 />
                 <HouseBrief
-                    houseBriefArrData={houseBriefArrData || []}
+                    houseBriefData={houseBriefData || {}}
                     className={`${classPrefix}-housebrief`}
                 />
                 <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
