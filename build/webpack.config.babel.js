@@ -13,7 +13,7 @@ const context = {
     rootDir: resolve('./'),
 };
 
-export default {
+const webpackConf = {
     entry: {
         index: resolve('src/application/App/index.js'),
         map: resolve('src/application/Map/map.js'),
@@ -62,11 +62,15 @@ export default {
         ...basePlugins(context),
     ],
 
-    devtool: 'inline-source-map',
-
     devServer: {
         port: baseConfig.dev.port,
         host: baseConfig.dev.host,
         proxy: baseConfig.dev.proxy,
     },
 };
+
+if (context.env !== 'production') {
+    webpackConf.devtool = 'inline-source-map';
+}
+
+export default webpackConf;

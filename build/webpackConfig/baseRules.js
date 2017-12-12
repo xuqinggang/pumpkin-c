@@ -17,7 +17,7 @@ module.exports = (context) => {
                     'css-loader',
                     'postcss-loader',
                 ]
-            })
+            }),
         },
         {
             test: /\.less$/,
@@ -28,7 +28,7 @@ module.exports = (context) => {
                     'postcss-loader',
                     'less-loader',
                 ],
-            })
+            }),
         },
         //js rules
         // {
