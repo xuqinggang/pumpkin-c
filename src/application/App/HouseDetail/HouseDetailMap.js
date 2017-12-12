@@ -12,12 +12,12 @@ export default {
     INDIVIDUAL_HEATER: '独立供暖',
     AVAILABLE: '随时入住',
     ELEVATOR: '有电梯',
-    HOUSEKEEPING: '免费家政清理',
+    HOUSEKEEPING: '免费保洁',
     ELECTRONIC_LOCKER: '智能门锁',
     PAY_MONTHLY: '支出月付',
     SHORT_TERM: '支持短租',
-    CENTRALIZED: '集中式公寓',
-    QUEENSIZEBED: '加大双人床',
+    CENTRALIZED: '集中式',
+    // QUEENSIZEBED: '加大双人床',
 
     //direct 
     EAST: '朝东',

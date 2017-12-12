@@ -1,8 +1,10 @@
 import Service from 'lib/Service';
 import HouseDetailMap from './HouseDetailMap';
 
-export default function ajaxInitHouseDetail() {
-    return Service.get('/v1/rentUnits/21')
+export default function ajaxInitHouseDetail(rentUnitId) {
+    // if (rentUnitId == undefined) { return; }
+
+    return Service.get(`/v1/rentUnits/${rentUnitId}`)
         .then((data) => {
             if (200 !== data.code) {
                 return;
@@ -65,7 +67,11 @@ export default function ajaxInitHouseDetail() {
                 contactButlerData,
                 houseTrafficData,
             };
-        });
+        })
+        .catch((err) => {
+            console.log('err', err);
+            return {};
+        })
 }
 
 function genContactButler(houseDetailData) {
@@ -92,9 +98,9 @@ function genCommunityIntro(houseDetailData) {
 
     return {
         constructType: constructType || '暂无',
-        propertyType: propertyType || '暂无',
         greenRate: greenRate ? `${greenRate}%` : '暂无',
         openYear: openYear || '暂无',
+        propertyType: propertyType || '暂无',
     };
 }
 
@@ -192,9 +198,17 @@ function genRoomSlider(houseDetailData) {
     const livingRooms = houseDetailData.livingRooms;
     const bathrooms = houseDetailData.bathrooms;
     const kitchens = houseDetailData.kitchens;
+
+    // 公共空间家具
+    const publicFurniture = houseDetailData.publicFurniture;
+
+    // 向公共空间，填充家具 
+    stuffRoomFurniture('公共空间', publicFurniture);
+    
     
     // 顺序: 卧室 户型图 客厅 卫生间 厨房
     stuffData(bedrooms, '卧');
+
     // 户型图
     if (houseDetailData.houseTypeImg) {
         sliderImgArr.push(
@@ -209,17 +223,69 @@ function genRoomSlider(houseDetailData) {
                 aboveImgLength,
             },
         );
+
+        aboveImgLength++;
+        activeIndex++; 
     }
+
     stuffData(livingRooms, '客厅');
-    stuffData(bathrooms, '卫生间');
+    stuffBathRoomsData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
 
+
+    return {
+        sliderImgArr,
+        furnitureSliderArrData,
+    };
+    
     // 向家具轮播填充数据 
     function stuffRoomFurniture(text, furniture = []) {
         furnitureSliderArrData.push({
             text,
             furniture,
         });
+    }
+
+    // 卫生间，如果存在多个卫生间，则将卫生间合并，且最多五张图片
+    // 并将多个卫生间的家具合并
+    function stuffBathRoomsData(rooms, roomType) {
+        const MAXCOUNT = 5;
+        let imgCount = 0;
+        const roomsLength = rooms && rooms.length;
+        const bathRoomFurnitureArr = [];
+        if (roomsLength) {
+            // room text
+            let text = roomType;
+
+            // 轮播图Item信息
+            const sliderImgItem = {
+                text,
+                // 累计该item前所有item的img和
+                aboveImgLength,
+            };
+            let imgInfo = [];
+
+            rooms.forEach((room, index) => {
+                const roomImages = room.images;
+
+                if (roomImages && roomImages.length) {
+                    roomImages.forEach((imageUrl, index) => {
+                        if (imgCount >= MAXCOUNT) { return; }
+                        aboveImgLength++;
+                        imgCount++;
+
+                        imgInfo.push({
+                            img: imageUrl,
+                            activeIndex,
+                        });
+                    });
+                }
+            });
+
+            sliderImgItem.imgInfo = imgInfo;
+            sliderImgArr.push(sliderImgItem);
+            activeIndex++; 
+        }
     }
 
     // 填充数据
@@ -229,14 +295,17 @@ function genRoomSlider(houseDetailData) {
             rooms.forEach((room, index) => {
                 // room text
                 let text = roomType;
+
                 // 某种房屋类型存在多个room时，添加room序号
                 if (roomsLength > 1) {
                     text = `0${room.number}${text}`;
+                } else if (roomType === '卧' && roomsLength === 1) {
+                    text = `${text}室`;
                 }
 
                 // 生成房间的furniture
-                // room存在furniture才push
-                if (room.furniture && room.furniture.length) {
+                // room存在furniture才push，只有卧室填充家具
+                if (roomType === '卧' && room.furniture && room.furniture.length) {
                     stuffRoomFurniture(text, room.furniture);
                 }
 
@@ -266,9 +335,4 @@ function genRoomSlider(houseDetailData) {
             });
         }
     }
-
-    return {
-        sliderImgArr,
-        furnitureSliderArrData,
-    };
 }
