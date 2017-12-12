@@ -3,7 +3,6 @@ import HouseDetailMap from './HouseDetailMap';
 
 export default function ajaxInitHouseDetail(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
-
     return Service.get(`/v1/rentUnits/${rentUnitId}`)
         .then((data) => {
             if (200 !== data.code) {
@@ -189,9 +188,7 @@ function genHouseBrief(houseDetailData) {
         totalFloor,
         direct: `${HouseDetailMap[direct]}`,
     };
-    // return [`${area}m²`, `${bedroomCount}卧${livingRoomCount}厅`, `${floor}/${totalFloor}层`, `${HouseDetailMap[direct]}`];
 }
-
 
 function genRoomSlider(houseDetailData) {
     // sliderImgArr数组第一级元素的位置是当前activeIndex的值

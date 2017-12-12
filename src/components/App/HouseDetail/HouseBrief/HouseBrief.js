@@ -21,7 +21,7 @@ export default function HouseBrief(props) {
                     <b className="bold">{houseBriefData.floor}</b>/{houseBriefData.totalFloor}层
                 </li>
                 <li className={`${classPrefix}-item grid-col grid-col-25 f-flex-justify-center`}>
-                    <b className="bold">{houseBriefData.direct}</b>
+                    {houseBriefData.direct}
                 </li>
             </ul>
         </div>
