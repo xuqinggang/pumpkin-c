@@ -5,9 +5,10 @@
     bottom: 54px;
     left: 50%;
     padding: 18px 46px;
-    background-color: #f38d39;
     border-radius: 67px;
+    box-shadow: 0 8px 30px 0 rgba(0,0,0,0.23);
     color: #fff;
+    background-color: #f38d39;
     transform: translate(-50%, 0);
     font-family: PingFangSC-Medium;
     z-index: 90;
@@ -51,8 +52,21 @@
     }
 
     &-footer {
+        position: relative;
         text-align: center;
         font-size: 0px;
+
+        &::after {
+            content: '';
+            display: inline-block;
+            width: 1px;
+            height: 48px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background-color: #eaeaea;
+            transform: translate(-50%, -50%);
+        }
 
         .line {
             width: 520px;

@@ -90,7 +90,7 @@ class HouseProfileHead extends Component {
         return (
             <div className={`${classPrefix}-head g-grid-row f-flex-justify-between f-flex-align-center`}>
                 <div>
-                    <h1 className="f-display-inlineblock f-vertical-middle head-price">￥{selectedPrice}月</h1>
+                    <h1 className="f-display-inlineblock f-vertical-middle head-price">￥{selectedPrice}/月</h1>
                     <span
                         className="f-display-inlineblock  f-vertical-middle head-paytype-wrap"
                         onTouchTap={this.handleSelectPayTypeTouchTap}

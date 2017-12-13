@@ -109,6 +109,7 @@ function genApartmentIntro(houseDetailData) {
 
 function genHouseProfile(houseDetailData) {
     const {
+        // 合租(SHARED)整租(WHOLE)
         rentalType = 'SHARED',
         apartment,
         bedroomCount,
@@ -117,6 +118,7 @@ function genHouseProfile(houseDetailData) {
         districtName,
         // 小区
         blockName,
+        bedrooms,
         subwayLine = 'xxx',
         subwayStation = 'xxx',
         subwayDistance = 'xxx',
@@ -139,15 +141,20 @@ function genHouseProfile(houseDetailData) {
             }
 
             payTypeData[payType] = {
-                price: pricePay || 'xxx',
-                deposit: houseDetailData[`deposit${payType}`] || 'xxx',
+                price: pricePay,
+                deposit: houseDetailData[`deposit${payType}`],
             };
         }
     });
 
     // title location ------------
-    const title = `${HouseDetailMap[rentalType]}·${blockName}${bedroomCount}卧${livingRoomCount}厅`;
+    let title = `${HouseDetailMap[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
     const location = `${districtName}-${blockName}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
+    // 合租的话，标题添加 '-01卧室'
+    if (rentalType === 'SHARED') {
+        const number = (bedrooms && bedrooms[0].number) || 0;
+        title = `${title}·0${number}卧室`;
+    }
 
     // return
     return {
