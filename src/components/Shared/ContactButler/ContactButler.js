@@ -63,6 +63,6 @@ export default class ContactButler extends Component {
                     </BottomDialog.Footer>
                 </BottomDialog>
             ]
-        )
+        );
     }
 }

@@ -11,7 +11,7 @@ export default function HouseTraffic(props) {
     if (!lon || !lat) return null;
     const pos = `${lon},${lat}`;
     // 目前房源位置图片
-    const curHousePtImg = `//restapi.amap.com/v3/staticmap?location=${pos}&zoom=17&scale=1&traffic=1&size=690*388&labels=%E6%88%BF%E6%BA%90,2,1,30,0xFFFFFF,0xFF0000:${pos}&markers=large,0xFF0000,A:${pos}&key=94989938b48570eb626c27fbe88df72f`;
+    const curHousePtImg = `//restapi.amap.com/v3/staticmap?location=${pos}&zoom=17&scale=1&traffic=1&size=690*388&markers=large,0xFF0000,A:${pos}&key=94989938b48570eb626c27fbe88df72f`;
 
     return (
         <div className={`${classPrefix} ${className}`}>

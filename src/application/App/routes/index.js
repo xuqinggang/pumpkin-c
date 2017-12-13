@@ -8,13 +8,13 @@ const routes = (history) => {
         <Router history={history}>
             <Switch>
                 {
-                    // <Route exact path="/" component={App} />
+                    // <Route exact path="/" component={HouseList} />
                 }
                 <Route exact path="/detail/:rentUnitId" component={HouseDetail} />
                 <Route exact path="/list" component={HouseList} />
             </Switch>
         </Router>
-    )
-}
+    );
+};
 
 export default routes;

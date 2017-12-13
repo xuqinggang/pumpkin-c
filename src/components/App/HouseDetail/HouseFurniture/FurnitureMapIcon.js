@@ -24,7 +24,7 @@ const equipMap = {
         className: 'icon-tv',
     },
     WIFI: {
-        text: '网络',
+        text: 'WIFI',
         className: 'icon-wifi',
     },
     COOKER: {

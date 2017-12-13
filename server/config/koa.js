@@ -12,11 +12,8 @@ const logger = require('koa-logger');
 const conf = require('./env');
 
 module.exports = function(app) {
-    if(conf.env === 'dev'){
-        // app.use(responseTime());
-        app.use(logger());
-    }
-
+    // app.use(responseTime());
+    app.use(logger());
     // app.use(bodyParser());
     // app.use(json());
 }

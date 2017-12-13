@@ -23,9 +23,9 @@ const TabTemplate = ({children, isSelected, contentItemClass}) => {
 	)
 }
 
-TabTemplate.PropTypes = {
-	children: PropTypes.node,
-	isSelected: PropTypes.bool,
+TabTemplate.propTypes = {
+    children: PropTypes.node,
+    isSelected: PropTypes.bool,
 };
 
 export default TabTemplate;
