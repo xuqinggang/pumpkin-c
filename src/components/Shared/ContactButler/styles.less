@@ -21,9 +21,9 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    bottom: inherit;
     transform: translate(-50%, -50%);
     width: 580px;
-    height: 404px;
     border-radius: 20px;
 
     &-img {
@@ -71,13 +71,12 @@
         .line {
             width: 520px;
             height: 1px;
-            border: none;
-            background-color: #eaeaea;
+            border-top: 1px solid #eaeaea;
         }
 
         .text {
             width: 50%;
-            padding: 30px 0;
+            line-height: 108px;
             text-align: center;
             color: #f38d39;
             .font-size(34);
