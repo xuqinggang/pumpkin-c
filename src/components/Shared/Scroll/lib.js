@@ -51,7 +51,6 @@
         // var continuous = options.continuous = options.continuous !== undefined ? options.continuous : true;
 
         function setup() {
-
             // cache slides
             slides = Array.prototype.slice.call(scrollElement.children, 0);
 
@@ -103,13 +102,23 @@
 
             // container.style.visibility = 'visible';
         }
+
         function outerWidth(elem) {
+            var marginRightVal = 0, marginLeftVal = 0;
             var offsetWidth = elem.getBoundingClientRect().width;
-            var numberReg = /\d+/;
-            var marginRightVal = parseInt(/\d+/.exec(attrStyle(elem, 'marginRight'))[0], 10);
-            var marginLeftVal = parseInt(/\d+/.exec(attrStyle(elem, 'marginLeft'))[0], 10);
+            var rigthRegRt = /\d+/.exec(attrStyle(elem, 'marginRight'));
+            var leftRegRt = /\d+/.exec(attrStyle(elem, 'marginLeft'));
+
+            if (rigthRegRt) {
+                marginRightVal = parseInt(rigthRegRt[0], 10);
+            }
+
+            if (leftRegRt) {
+                marginLeftVal = parseInt(leftRegRt[0] ,10);
+            }
             return offsetWidth + marginRightVal + marginLeftVal;
         }
+
         function attrStyle(elem, attr) {
             if (elem.style[attr]) {
                 //若样式存在于html中,优先获取
@@ -127,29 +136,26 @@
                 return null;
             }
         }
+
         function isEnableScroll() {
             return 0 <= canScrollDelta;
         }
-        function prev() {
 
+        function prev() {
             if (continuous) slide(index-1);
             else if (index) slide(index-1);
-
         }
 
         function next() {
-
             if (continuous) slide(index+1);
             else if (index < slides.length - 1) slide(index+1);
-
         }
 
         function circle(index) {
-
             // a simple positive modulo using slides.length
             return (slides.length + (index % slides.length)) % slides.length;
-
         }
+
         function slide(to, direction) {
             if (!slides) return ;
             // console.log('slide', to, direction, scrollElementPos, slides)
@@ -216,7 +222,6 @@
         }
 
         function animate(from, to, speed) {
-
             // if not an animation, just reposition
             if (!speed) {
 
@@ -247,7 +252,6 @@
                 element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
 
             }, 4);
-
         }
 
         // setup auto slideshow
@@ -257,14 +261,11 @@
         function begin() {
             clearTimeout(interval);
             interval = setTimeout(next, delay);
-
         }
 
         function stop() {
-
             delay = 0;
             clearTimeout(interval);
-
         }
 
 

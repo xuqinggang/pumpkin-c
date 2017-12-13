@@ -57,7 +57,7 @@ export default class ContactButler extends Component {
                         <a href={`tel:${tel}`} className={`f-display-inlineblock ${dialogPrefix}-tel`}>{tel}</a>
                     </BottomDialog.Body>
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
-                        <hr className="f-display-inlineblock line" />
+                        <div className="f-display-inlineblock line" />
                         <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
                         <a href={`tel:${tel}`} className="f-display-inlineblock text">立即联系</a>
                     </BottomDialog.Footer>

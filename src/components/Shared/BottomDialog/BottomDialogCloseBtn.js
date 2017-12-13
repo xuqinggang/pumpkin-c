@@ -16,10 +16,12 @@ export default class BottomDialogCloseBtn extends Component {
     render() {
         const { className } = this.props;
         return (
-            <span className={`${classPrefix} ${className}`}>
+            <span
+                className={`${classPrefix} ${className}`}
+                onTouchTap={this.handleCloseTouchTap}
+            >
                 <i
                     className={`icon-big-close ${classPrefix}-closeicon`}
-                    onTouchTap={this.handleCloseTouchTap}
                 />
             </span>
         )

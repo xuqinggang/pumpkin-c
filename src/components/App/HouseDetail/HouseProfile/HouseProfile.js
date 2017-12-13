@@ -147,11 +147,17 @@ function PayTypeComp(props) {
 
     return (
         <BottomDialog show={show} className={`${payTypeClass}`}>
-            <BottomDialog.Header className={`${payTypeClass}-head g-grid-row f-flex-justify-between f-flex-align-center`}>
-                <span className="f-display-inlineblock f-vertical-middle head-title">
-                    付款方式
-                </span>
-                <BottomDialog.CloseBtn className={`f-vertical-middle head-icon`} />
+            <BottomDialog.Header className={`${payTypeClass}-head`}>
+                <ul className="g-grid-row f-flex-justify-between f-flex-align-center">
+                    <li>
+                        <span className="f-display-inlineblock f-vertical-middle head-title">
+                            付款方式
+                        </span>
+                    </li>
+                    <li>
+                        <BottomDialog.CloseBtn className={`f-vertical-middle head-icon`} />
+                    </li>
+                </ul>
             </BottomDialog.Header>
             <BottomDialog.Body className={`${payTypeClass}-body`}>
                     { renderPayTypeBody() }
@@ -178,10 +184,10 @@ function PayTypeItem(props) {
             className={itemClass}
             onTouchTap={handlePayTypeTouchTap}
         >
-            <div className="g-grid-row f-flex-justify-between">
-                <span className="text">{payTypeMapName[payType]}</span>
-                <span className="price">¥{payData.price} / 月</span>
-            </div>
+            <ul className="g-grid-row f-flex-justify-between">
+                <li className="text">{payTypeMapName[payType]}</li>
+                <li className="price">¥{payData.price} / 月</li>
+            </ul>
             <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit}元</span>
         </div>
     )

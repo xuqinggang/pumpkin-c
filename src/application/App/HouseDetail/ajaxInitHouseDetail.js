@@ -252,10 +252,12 @@ function genRoomSlider(houseDetailData) {
     
     // 向家具轮播填充数据 
     function stuffRoomFurniture(text, furniture = []) {
-        furnitureSliderArrData.push({
-            text,
-            furniture,
-        });
+        if (furniture.length) {
+            furnitureSliderArrData.push({
+                text,
+                furniture,
+            });
+        }
     }
 
     // 卫生间，如果存在多个卫生间，则将卫生间合并，且最多五张图片
