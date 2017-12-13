@@ -2,7 +2,7 @@ module.exports = {
     plugins: {
         'postcss-pxtorem': {
             rootValue: 75,
-            propList: ['*', '!font', '!font-size'],
+            propList: ['*', '!font', '!font-size', '!border'],
         },
         // 'postcss-import': {},
         'postcss-cssnext': {
