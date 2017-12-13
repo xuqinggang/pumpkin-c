@@ -10,8 +10,10 @@ export default function HouseTraffic(props) {
     const { lon, lat } = houseTrafficData;
     if (!lon || !lat) return null;
     const pos = `${lon},${lat}`;
+    // 中心点图片url
+    const markerImgUrl = 'http://pic.kuaizhan.com/g3/a8/2f/cc39-9739-4af0-8142-6b440a6ff6fa15?id=1.png';
     // 目前房源位置图片
-    const curHousePtImg = `//restapi.amap.com/v3/staticmap?location=${pos}&zoom=17&scale=1&traffic=1&size=690*388&markers=large,0xFF0000,A:${pos}&key=94989938b48570eb626c27fbe88df72f`;
+    const curHousePtImg = `//restapi.amap.com/v3/staticmap?location=${pos}&zoom=17&scale=1&traffic=1&size=690*388&markers=-1,${markerImgUrl},0:${pos}&key=94989938b48570eb626c27fbe88df72f`;
 
     return (
         <div className={`${classPrefix} ${className}`}>

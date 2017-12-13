@@ -40,7 +40,7 @@
         var scrollElement = container.children[0];
         var slides, slidePos, direction, slidesLength, scrollElementWidth = 0, viewportWidth, scrollElementPos = 0;
         // 可以滚动的距离
-        var canScrollDelta;
+        var canScrollDelta = 0;
         var activeIndex = 0;
         // 是否超过边界
         var isPastStartBounds, isPastEndBounds;
@@ -53,6 +53,8 @@
         function setup() {
             // cache slides
             slides = Array.prototype.slice.call(scrollElement.children, 0);
+            slidesLength = slides.length;
+            if (!slidesLength) return;
 
             // 滚动容器的宽度 
             slides.forEach(function (slide, index) {
@@ -61,7 +63,6 @@
             scrollElementWidth = Math.round(scrollElementWidth);
             scrollElementWidth = scrollElementWidth % 2 == 0 ? scrollElementWidth : scrollElementWidth + 1;
             scrollElement.style.width = scrollElementWidth + 'px';
-            slidesLength = slides.length;
 
             // set continuous to false if only one slide
             // continuous = slides.length < 2 ? false : options.continuous;
@@ -138,7 +139,7 @@
         }
 
         function isEnableScroll() {
-            return 0 <= canScrollDelta;
+            return 0 < canScrollDelta && slidesLength > 0;
         }
 
         function prev() {
@@ -492,14 +493,17 @@
                 scrollElement.addEventListener('otransitionend', events, false);
                 scrollElement.addEventListener('transitionend', events, false);
             }
-
             // set resize event on window
-            window.addEventListener('resize', events, false);
-
+            // window.addEventListener('resize', function() {
+            //     console.log('123');
+            //     var spanDom = document.createElement('span');
+            //     spanDom.innerHTML = 'resize';
+            //     document.body.appendChild(spanDom)
+            // }, false);
         } else {
-
-            window.onresize = function () { setup(); }; // to play nice with old IE
-
+            // window.onresize = function () { 
+            //     setup(); 
+            // }; // to play nice with old IE
         }
 
         // expose the Swipe API
@@ -572,7 +576,6 @@
 
                 // removed event listeners
                 if (browser.addEventListener) {
-
                     // remove current event listeners
                     scrollElement.removeEventListener('touchstart', events, false);
                     scrollElement.removeEventListener('webkitTransitionEnd', events, false);
@@ -589,4 +592,3 @@
         };
     };
 }));
-
