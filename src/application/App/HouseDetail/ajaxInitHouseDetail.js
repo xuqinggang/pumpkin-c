@@ -1,7 +1,7 @@
 import Service from 'lib/Service';
 import HouseDetailMap from './HouseDetailMap';
 
-export default function ajaxInitHouseDetail(rentUnitId) {
+export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
     return Service.get(`/v1/rentUnits/${rentUnitId}`)
         .then((data) => {
