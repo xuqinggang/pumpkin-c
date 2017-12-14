@@ -75,11 +75,11 @@ class Tabs extends Component {
 
 	handleTouchTab = (activeIndex) => {
 		const prevIndex = this.state.selectedIndex;
-		if(this.state.selectedIndex !== activeIndex) {
+		if(prevIndex !== activeIndex) {
 			this.setState({
 				selectedIndex: activeIndex,
 				prevIndex
-			})
+			});
 		}
 		this.props.onChange({
 				selectedIndex: activeIndex,
@@ -91,15 +91,17 @@ class Tabs extends Component {
 		const tabs = this.getTabs();
 		// 每一个tab的平均宽度%
         const tabContent = [];
-
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
 		const tabNav = tabs.map((tab, index) => {
-			tabContent.push(tab.props.children ? 
-				createElement(TabTemplate, {
-					key: tab.props.order || index,
-                    isSelected: this.state.selectedIndex === index,
-                    contentItemClass: tab.props.contentItemClass,
-				}, tab.props.children) : undefined);
+            if (tab.props.children) {
+                tabContent.push(
+                    createElement(TabTemplate, {
+                        key: tab.props.order || index,
+                        isSelected: this.state.selectedIndex === index,
+                        contentItemClass: tab.props.contentItemClass,
+                    }, tab.props.children)
+                );
+            }
 			
 			return cloneElement(tab, {
 				key: tab.props.order || index,
@@ -120,11 +122,22 @@ class Tabs extends Component {
             navClassName,
             contentClassName,
         } = this.props;
+
+        const {
+            selectedIndex,
+            prevIndex,
+        } = this.state;
+
         const tabNavAndContent = this.renderTabNavAndContent();
+
         const classPrefix = verticalPrefix;
+        const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
+            active: selectedIndex != prevIndex,
+        });
+
 		return (
 			<div className={`${classPrefix} ${className}`}>
-                <ul className={`${classPrefix}-nav ${navClassName}`}>
+                <ul className={ulClass}>
                     {
                         tabNavAndContent.tabNav
                     }

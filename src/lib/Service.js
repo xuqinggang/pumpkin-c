@@ -1,5 +1,14 @@
 const Service = {};
+Service.baseConfig = {
+    urlPrefix: '/bj/nangua/api',
+};
 Service.reqServer = (url, paramters, type = 'GET') => {
+    const {
+        urlPrefix,
+    } = Service.baseConfig;
+    if (urlPrefix) {
+        url = urlPrefix + url;
+    }
     const promise = new Promise((resolve, reject) => {
         const xmlHttp = new XMLHttpRequest();
         // 请求参数
@@ -22,14 +31,18 @@ Service.reqServer = (url, paramters, type = 'GET') => {
         // 接收请求
         xmlHttp.onload = () => {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                const result = JSON.parse(xmlHttp.responseText);
-                console.debug(`回调success:server:url=${url} [result]=`, result);
-                if (result && result.code === 200) {
-                    resolve(result);
-                } else {
-                    const errRt = JSON.parse(xmlHttp.responseText);
-                    console.error(`回调error:server:url=${url} [errRt]=`, errRt);
-                    reject(errRt);
+                try {
+                    const result = JSON.parse(xmlHttp.responseText);
+                    console.debug(`回调success:server:url=${url} [result]=`, result);
+                    if (result && result.code === 200) {
+                        resolve(result);
+                    } else {
+                        const errRt = JSON.parse(xmlHttp.responseText);
+                        console.error(`回调error:server:url=${url} [errRt]=`, errRt);
+                        reject(errRt);
+                    }
+                } catch(err) {
+                    reject(err);
                 }
             } else {
                 reject('服务器错误码:' + xmlHttp.status);
