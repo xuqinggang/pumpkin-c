@@ -17,7 +17,7 @@ Service.baseConfig = {
 };
 
 injectTapEventPlugin();
-console.log('12344');
+
 render(
     routes(createHistory()),
     document.getElementById('root'),
