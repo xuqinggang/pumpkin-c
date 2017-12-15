@@ -128,7 +128,7 @@ class TrafficAround extends Component {
                 pageIndex: 1
             });
 
-            placeSearch.searchNearBy(trafficInfoItem.key, [116.39, 39.9], 2000, (status, result) => {
+            placeSearch.searchNearBy(trafficInfoItem.key, this.centerLnglatArr, 2000, (status, result) => {
                 console.log('result', result);
                 if (status === 'complete' && result.info === 'OK') {
                     //附近数据

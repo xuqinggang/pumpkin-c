@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import BottomDialog from 'Shared/BottomDialog';
+import Config from 'config/config';
+
 
 import './styles.less';
 
@@ -23,7 +25,7 @@ export default function HouseProfile(props) {
     const pos = `${lon},${lat}`;
 
     function handleJumpMapTap() {
-        window.location.href = `/map.html?pos=${pos}`;
+        window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
     }
     
     return (

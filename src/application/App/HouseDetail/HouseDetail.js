@@ -29,7 +29,6 @@ export default class HouseDetail extends Component {
             houseDetailData: {},
         };
         console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
-        this.rentUnitId = props.match.params.rentUnitId;
     }
 
     handleTouchTap() {
@@ -43,6 +42,7 @@ export default class HouseDetail extends Component {
 
     componentDidMount() {
         console.log('this.props', this.props, this.props.match);
+        this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
@@ -85,6 +85,7 @@ export default class HouseDetail extends Component {
             backgroundColor: 'red',
         };
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
+
         return (
             <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 {

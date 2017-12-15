@@ -10,8 +10,15 @@ export default {
                 },
             },
         },
+        pathPrefix: '/',
+        publicPath: '/',
     },
-    prod: {
+    test: {
+        pathPrefix: '/',
+        publicPath: '/bj/nangua/',
+        distPath: './dist',
+    },
+    production: {
         pathPrefix: '/',
         publicPath: '/bj/nangua/',
         distPath: './dist',
