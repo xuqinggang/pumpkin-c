@@ -9,7 +9,7 @@ const env = process.env.NODE_ENV || 'production';
 
 const context = {
     env,
-    pathPrefix: baseConfig.prod.pathPrefix,
+    pathPrefix: baseConfig.production.pathPrefix,
     rootDir: resolve('./'),
 };
 
@@ -31,8 +31,8 @@ const webpackConf = {
     },
 
     output: {
-        publicPath: baseConfig.prod.publicPath,
-        path: resolve(baseConfig.prod.distPath),
+        publicPath: baseConfig.production.publicPath,
+        path: resolve(baseConfig.production.distPath),
         filename: 'js/[name].[chunkhash:8].js',
     },
 
