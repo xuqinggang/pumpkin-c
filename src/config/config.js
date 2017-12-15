@@ -1,5 +1,5 @@
 const config = {
-    ajaxUrlPrefix: '/bj/nangua',
+    urlPrefix: '/bj/nangua',
     routerPrefix: '/:cityName/nangua',
 };
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import Config from 'config/config';
 
 import './styles.less';
 
@@ -27,6 +28,6 @@ export default function HouseTraffic(props) {
     );
 
     function handleJumpPageTap() {
-        window.location.href = `/map.html?pos=${pos}`;
+        window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
     }
 }

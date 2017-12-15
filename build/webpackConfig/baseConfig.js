@@ -13,7 +13,7 @@ export default {
     },
     prod: {
         pathPrefix: '/',
-        publicPath: '/',
+        publicPath: '/bj/nangua/',
         distPath: './dist',
     },
 };
