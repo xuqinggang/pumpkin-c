@@ -18,7 +18,7 @@ const config = {
         distPath: './dist',
     },
     production: {
-        publicPath: '/bj/nangua/',
+        publicPath: '//static-1252921496.file.myqcloud.com/pumpkin-c/',
         distPath: './dist',
     },
 };
