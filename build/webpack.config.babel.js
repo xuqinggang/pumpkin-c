@@ -1,4 +1,4 @@
-import baseConfig from './webpackConfig/baseConfig';
+import baseConfigFun from './webpackConfig/baseConfig';
 import path from 'path';
 import basePlugins from './webpackConfig/basePlugins';
 import baseRules from './webpackConfig/baseRules';
@@ -9,9 +9,11 @@ const env = process.env.NODE_ENV || 'production';
 
 const context = {
     env,
-    pathPrefix: baseConfig.production.pathPrefix,
     rootDir: resolve('./'),
 };
+
+// 根据不同环境生成不同配置项
+const baseConfig = baseConfigFun(context);
 
 const webpackConf = {
     entry: {
@@ -31,8 +33,8 @@ const webpackConf = {
     },
 
     output: {
-        publicPath: baseConfig.production.publicPath,
-        path: resolve(baseConfig.production.distPath),
+        publicPath: baseConfig.publicPath,
+        path: resolve(baseConfig.distPath),
         filename: 'js/[name].[chunkhash:8].js',
     },
 
@@ -64,9 +66,9 @@ const webpackConf = {
     ],
 
     devServer: {
-        port: baseConfig.dev.port,
-        host: baseConfig.dev.host,
-        proxy: baseConfig.dev.proxy,
+        port: baseConfig.port,
+        host: baseConfig.host,
+        proxy: baseConfig.proxy,
         // contentBase: resolve('dist'),
     },
 };

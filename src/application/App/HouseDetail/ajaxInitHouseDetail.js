@@ -241,7 +241,7 @@ function genRoomSlider(houseDetailData) {
     }
 
     stuffData(livingRooms, '客厅');
-    stuffBathRoomsData(bathrooms, '卫生间');
+    stuffData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
 
 
