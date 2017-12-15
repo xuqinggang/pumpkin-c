@@ -2,6 +2,7 @@ import React from 'react';
 import { Router, Switch, Route } from 'react-router';
 import HouseDetail from 'App/HouseDetail/HouseDetail';
 import HouseList from 'App/HouseList/HouseList';
+import Config from 'config/config';
 
 const routes = (history) => {
     return (
@@ -10,8 +11,8 @@ const routes = (history) => {
                 {
                     // <Route exact path="/" component={HouseList} />
                 }
-                <Route exact path="/bj/nangua/detail/:rentUnitId" component={HouseDetail} />
-                <Route exact path="/list" component={HouseList} />
+                <Route exact path={`${Config.routerPrefix}/detail/:rentUnitId`} component={HouseDetail} />
+                <Route exact path={`${Config.routerPrefix}/list`} component={HouseList} />
             </Switch>
         </Router>
     );

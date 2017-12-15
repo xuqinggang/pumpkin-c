@@ -3,7 +3,7 @@ import HouseDetailMap from './HouseDetailMap';
 
 export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
-    return Service.get(`/v1/rentUnits/${rentUnitId}`)
+    return Service.get(`/api/v1/rentUnits/${rentUnitId}`)
         .then((data) => {
             if (200 !== data.code) {
                 return;

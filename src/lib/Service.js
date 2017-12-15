@@ -1,7 +1,5 @@
 const Service = {};
-Service.baseConfig = {
-    urlPrefix: '/bj/nangua/api',
-};
+
 Service.reqServer = (url, paramters, type = 'GET') => {
     const {
         urlPrefix,
