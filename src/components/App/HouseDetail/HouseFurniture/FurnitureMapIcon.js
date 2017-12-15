@@ -41,7 +41,7 @@ const equipMap = {
     },
     VENTILATOR: {
         text: '油烟机',
-        className: 'icon-kitchen-ventilator',
+        className: 'icon-lampblack-machine',
     },
     MICROWAVE: {
         text: '微波炉',
