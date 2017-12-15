@@ -67,6 +67,7 @@ const webpackConf = {
         port: baseConfig.dev.port,
         host: baseConfig.dev.host,
         proxy: baseConfig.dev.proxy,
+        // contentBase: resolve('dist'),
     },
 };
 

@@ -28,6 +28,7 @@ export default class HouseDetail extends Component {
             show: false,
             houseDetailData: {},
         };
+        console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
         this.rentUnitId = props.match.params.rentUnitId;
     }
 
@@ -41,6 +42,7 @@ export default class HouseDetail extends Component {
     // }
 
     componentDidMount() {
+        console.log('this.props', this.props, this.props.match);
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
