@@ -1,3 +1,4 @@
+import React from 'react';
 import { render } from 'react-dom';
 import injectTapEventPlugin from "react-tap-event-plugin";
 import createHistory from 'history/createBrowserHistory';
@@ -12,12 +13,11 @@ import 'pumpkin-font-c';
 
 // Server配置ajax url前缀
 Service.baseConfig = {
-    urlPrefix: '/bj/nangua',
+    urlPrefix: Config.urlPrefix,
 };
 
-
 injectTapEventPlugin();
-
+console.log('12344');
 render(
     routes(createHistory()),
     document.getElementById('root'),

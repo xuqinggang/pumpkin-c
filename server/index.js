@@ -9,18 +9,26 @@ const Koa = require('koa');
 const fs = require('fs');
 const KoaStatic = require('koa-static');
 const Router = require('koa-router');
+const mount = require('koa-mount');
 const path = require('path');
+const httpProxy = require('http-proxy');
 // import logger from './util/log';
 const errorHandleMiddle = require('./middleware/error.middleware');
 const config = require('./config/env');
 const koaConf = require('./config/koa');
-const httpProxy = require('http-proxy');
+
+const routerConf = require('./routes');
 
 const proxy = httpProxy.createProxyServer();
 // const serverRouter = new Router();
-const router = new Router();
 
 const app = new Koa();
+
+//错误处理中间件
+app.use(errorHandleMiddle());
+
+// koa基本配置
+koaConf(app);
 
 // log记录
 // router use : this.logger.error('msg')
@@ -40,31 +48,16 @@ const app = new Koa();
 //     });
 // });
 
-router.get('/ping', function(ctx, next) {
-    ctx.body = 'pong';
-  // ctx.router available
-});
-
-var html = fs.readFileSync(path.resolve('./dist/index.html'));
-router.get('*', function(ctx, next) {
-    ctx.type = 'html';
-    ctx.body = html;
-});
-
-//错误处理中间件
-app.use(errorHandleMiddle());
-
-// koa基本配置
-koaConf(app);
 
 // 代理接口 router
 // app.use(serverRouter.routes());
+
 // 静态资源文件 router
-app.use(KoaStatic('dist'));
+app.use(mount('/bj/nangua', KoaStatic('dist')));
 
-app.use(router.routes());
+// router配置
+routerConf(app);
 
-// routerConf(app);
 app.listen(config.port, function(err) {
     if (err) {
         console.log('error: ', err);
