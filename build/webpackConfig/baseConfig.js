@@ -1,26 +1,29 @@
-export default {
+const config = {
     dev: {
         port: 8888,
         host: '10.0.120.35',
         proxy: {
             '/bj/nangua/api/v1': {
-                target: 'http://10.23.64.8',
+                target: 'http://10.10.120.180',
                 headers: {
-                    host: 'api.nanguazufang.com',
+                    host: 'm.nangua.test.cn',
                 },
             },
         },
-        pathPrefix: '/',
         publicPath: '/',
+        distPath: './dist',
     },
     test: {
-        pathPrefix: '/',
         publicPath: '/bj/nangua/',
         distPath: './dist',
     },
     production: {
-        pathPrefix: '/',
         publicPath: '/bj/nangua/',
         distPath: './dist',
     },
 };
+
+export default (context) => {
+    const env = context.env;
+    return config[env];
+}
