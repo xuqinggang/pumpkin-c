@@ -1,4 +1,5 @@
 import Service from 'lib/Service';
+
 const Map = {
     districts: {
         first: 'district',
@@ -99,7 +100,7 @@ export function ajaxInitPositionData(cityId = 1) {
 }
 
 function _ajaxDistricts(cityId) {
-    return Service.get(`/v1/common/districts?cityId=${cityId}`)
+    return Service.get(`/api/v1/common/districts?cityId=${cityId}`)
         .then((data) => {
             if (data.code == 200) {
                 const districtsArr = data.data.districts;
@@ -112,7 +113,7 @@ function _ajaxDistricts(cityId) {
 }
 
 function _ajaxSubways(cityId) {
-    return Service.get(`/v1/common/subways?cityId=${cityId}`)
+    return Service.get(`/api/v1/common/subways?cityId=${cityId}`)
         .then((data) => {
             if (data.code == 200) {
                 const subwaysArr = data.data.subways;
@@ -126,4 +127,3 @@ function _ajaxSubways(cityId) {
             throw new Error(err);
         })
 }
-

@@ -17,7 +17,7 @@ const koaConf = require('./config/koa');
 const httpProxy = require('http-proxy');
 
 const proxy = httpProxy.createProxyServer();
-const serverRouter = new Router();
+// const serverRouter = new Router();
 const router = new Router();
 
 const app = new Koa();
@@ -30,15 +30,15 @@ const app = new Koa();
 // });
 
 // 代理访问v1接口
-serverRouter.all(/\/v1/, (ctx) => {
-    ctx.respond = false;
-    proxy.web(ctx.req, ctx.res, {
-        target: 'http://10.23.64.8',
-        headers: {
-            host: 'test.api.nanguazufang.cn',
-        },
-    });
-});
+// serverRouter.all(/\/v1/, (ctx) => {
+//     ctx.respond = false;
+//     proxy.web(ctx.req, ctx.res, {
+//         target: 'http://10.23.64.8',
+//         headers: {
+//             host: 'test.api.nanguazufang.cn',
+//         },
+//     });
+// });
 
 router.get('/ping', function(ctx, next) {
     ctx.body = 'pong';
@@ -58,7 +58,7 @@ app.use(errorHandleMiddle());
 koaConf(app);
 
 // 代理接口 router
-app.use(serverRouter.routes());
+// app.use(serverRouter.routes());
 // 静态资源文件 router
 app.use(KoaStatic('dist'));
 

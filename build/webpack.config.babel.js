@@ -45,6 +45,7 @@ const webpackConf = {
             Map: resolve('src/application/Map'),
             // views: resolve('src/views'),
             styles: resolve('src/styles'),
+            config: resolve('src/config'),
             // routes: resolve('src/routes'),
             lib: resolve('src/lib'),
         },
