@@ -1,4 +1,14 @@
+import path from 'path';
+
+const env = process.env.NODE_ENV || 'production';
+
 const config = {
+    // 各环境公共的配置
+    common: {
+        env: env,
+        distPath: './dist',
+        rootDir: path.resolve(__dirname, '..'),
+    },
     dev: {
         port: 8888,
         host: '10.0.120.35',
@@ -11,19 +21,16 @@ const config = {
             },
         },
         publicPath: '/',
-        distPath: './dist',
     },
     test: {
         publicPath: '/bj/nangua/',
-        distPath: './dist',
+        // 手动设置test测试环境的变量为生产环境
+        env: 'production',
     },
     production: {
         publicPath: '//static-1252921496.file.myqcloud.com/pumpkin-c/',
-        distPath: './dist',
     },
 };
 
-export default (context) => {
-    const env = context.env;
-    return config[env];
-}
+
+export default Object.assign({}, config.common, config[env]);
