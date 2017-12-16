@@ -9,24 +9,28 @@ const trafficMapInfo = {
         text: '附近地铁',
         iconClass: 'icon-subway',
         key: '地铁',
+        zoom: 14,
         markers: [],
     },
     bus: {
         text: '附近公交',
         iconClass: 'icon-bus',
         key: '公交',
+        zoom: 15,
         markers: [],
     },
     sport: {
         text: '运动场所',
         iconClass: 'icon-entertainment',
         key: '运动',
+        zoom: 14,
         markers: [],
     },
     life: {
         text: '品质生活',
         iconClass: 'icon-life',
         key: '休闲 生活',
+        zoom: 15,
         markers: [],
     },
 };
@@ -67,6 +71,7 @@ function setCenterMarker(lnglatArr, mapIns) {
     // });
 }
 
+// 绑定地图显示的marker点击事件
 function bindMarkerClick(marker) {
     AMap.event.addListener(marker, 'click', function() {
         if (lastMarkerTextDom) {
@@ -85,19 +90,20 @@ class TrafficAround extends Component {
         super(props);
         const urlInfo = parseUrl(window.location.href);
         const pos = urlInfo.query.pos;
+
+        // 房源经纬度
         this.centerLnglatArr = [];
         if (pos) {
             this.centerLnglatArr = pos.split(',');
         }
 
-        // 房源经纬度
         // this.centerLnglatArr = [116.39,39.9];
         
         // 保存每次点击前的上一次点击的trafficName
         this.lastTrafficName = '';
     }
 
-    searchNearBy(trafficName) {
+    searchNearBy(trafficName, zoom = 15) {
         const trafficInfoItem = trafficMapInfo[trafficName];
         if (!trafficInfoItem) return ;
         
@@ -123,7 +129,7 @@ class TrafficAround extends Component {
             //实例化PlaceSearch
             let placeSearch = new AMap.PlaceSearch({ //构造地点查询类
                 pageSize: 8,
-                zoom: 15,
+                zoom: zoom,
                 continuousZoomEnable: true,
                 pageIndex: 1
             });
@@ -185,10 +191,12 @@ class TrafficAround extends Component {
     }
 
     onBtnTap = (trafficName) => {
+        const zoom = trafficMapInfo[trafficName].zoom || 15;
         // 恢复到地图原本中心位置
         this.mapIns.setCenter(this.centerLnglatArr);
+        this.mapIns.setZoom(zoom);
 
-        this.searchNearBy(trafficName);
+        this.searchNearBy(trafficName, zoom);
     };
 
     render() {

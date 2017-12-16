@@ -22,21 +22,36 @@ class HouseIntro extends Component {
     }
 
     render() {
-        const { className, houseIntroStr } = this.props;
+        const { className } = this.props;
         const { isExpand } = this.state;
+        let houseIntroStr = this.props.houseIntroStr;
+
         const textClass = classnames(`intro-text`, {
             'text-expand': isExpand,
         });
+
+        const isExpandBtnShow = houseIntroStr && houseIntroStr.length > 150;
+        if (isExpandBtnShow && !isExpand) {
+            houseIntroStr = houseIntroStr.substr(0, 150) + '...';
+        }
+
         return (
             <div className={`${classPrefix} ${className}`}>
                 <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>房源介绍</h1>
                 <div className={`${classPrefix}-intro`}>
                     <p className={textClass}>{houseIntroStr}</p>
-                    <span onTouchTap={this.handleExpandTap} className={`${classPrefix}-expandbtn f-display-inlineblock`}>
-                        {
-                            !isExpand ? '展开' : '收起'
-                        }
-                    </span>
+                    {
+                        isExpandBtnShow ? 
+                            <span
+                                onTouchTap={this.handleExpandTap}
+                                className={`${classPrefix}-expandbtn f-display-inlineblock`}
+                            >
+                                {
+                                    !isExpand ? '展开' : '收起'
+                                }
+                            </span>
+                            : null
+                    }
                 </div>
             </div>
         )
