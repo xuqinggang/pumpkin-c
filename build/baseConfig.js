@@ -8,6 +8,7 @@ const config = {
         env: env,
         distPath: './dist',
         rootDir: path.resolve(__dirname, '..'),
+        includePaths: path.resolve(__dirname, '../src'),
     },
     dev: {
         port: 8888,
