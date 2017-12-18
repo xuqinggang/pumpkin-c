@@ -39,6 +39,11 @@ const webpackBaseConf = {
     },
 
     resolve: {
+        // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口 
+        mainFields: ['jsnext:main','main'],
+        // 配置模块库（通常是指node_modules）所在的位置
+        // 默认的配置会采用向上递归搜索的方式去寻找node_modules，但通常项目目录里只有一个node_modules在项目根目录，为了减少搜索我们直接写明node_modules的全路径：
+        modules: [resolve('node_modules')],
         extensions: ['.css', '.less', '.js', '.jsx', '.json'],
         alias: {
             Shared: resolve('src/components/Shared'),
@@ -118,7 +123,8 @@ const webpackBaseConf = {
                 include: includePaths,
                 loaders: [
                     {
-                        loader: 'babel-loader',
+                        // babel编译过程很耗时，好在babel-loader提供缓存编译结果选项，在重启webpack时不需要创新编译而是复用缓存结果减少编译流程。babel-loader缓存机制默认是关闭的
+                        loader: 'babel-loader?cacheDirectory',
                     },
                 ],
             },

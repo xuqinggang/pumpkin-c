@@ -6,6 +6,7 @@ import path from 'path';
 import webpackBaseConf from './webpack.config.base';
 import baseConfig from './baseConfig';
 
+
 const webpackDevConf = webpackMerge(webpackBaseConf, {
 
     output: {
@@ -15,6 +16,7 @@ const webpackDevConf = webpackMerge(webpackBaseConf, {
     devtool: 'inline-source-map',
 
     devServer: {
+        hot: true,
         port: baseConfig.port,
         host: baseConfig.host,
         proxy: baseConfig.proxy,
@@ -52,6 +54,10 @@ const webpackDevConf = webpackMerge(webpackBaseConf, {
         // 代码中注入变量
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(baseConfig.env),
+        }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin({
+            // Options...
         }),
     ]
 });

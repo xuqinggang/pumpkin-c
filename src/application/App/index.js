@@ -10,7 +10,6 @@ import routes from './routes';
 import 'styles/index';
 import 'pumpkin-font-c';
 
-
 // Server配置ajax url前缀
 Service.baseConfig = {
     urlPrefix: Config.urlPrefix,

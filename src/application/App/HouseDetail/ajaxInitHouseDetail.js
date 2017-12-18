@@ -149,7 +149,11 @@ function genHouseProfile(houseDetailData) {
 
     // title location ------------
     let title = `${HouseDetailMap[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
-    const location = `${districtName}-${blockName}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
+    let location = '';
+    if (subwayLine != null && subwayDistance != null) {
+        location = `${districtName}-${blockName}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
+    }
+
     // 合租的话，标题添加 '-01卧室'
     if (rentalType === 'SHARED') {
         const number = (bedrooms && bedrooms[0].number) || 0;
