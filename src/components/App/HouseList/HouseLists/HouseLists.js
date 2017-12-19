@@ -1,45 +1,122 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { rentalUnitShape } from 'base/propTypes';
+import { getDocHeight } from 'lib/util';
+import { rentalTypeMap, directMap } from 'base/infoMap';
 import './styles.less';
 
 const listClassPrefix = 'm-houselists';
 const itemClassPrefix = 'm-houseitem';
 
-export default function HouseLists(props) {
-    return (
-        <div className={`${listClassPrefix}`}>
-            <HouseItem />
-        </div>
-    );
+export default class HouseLists extends Component {
+    componentDidMount() {
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const reserveSize = 50;
+            const scrollTop = window.pageYOffset || window.screenY;
+            if (scrollTop > lastScrollTop) {
+                // 向下滚动
+                if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
+                    this.props.onSrcollBottom();
+                }
+            }
+            lastScrollTop = scrollTop;
+        });
+    }
+    render() {
+        return (
+            <div className={`${listClassPrefix}`}>
+                {
+                    this.props.rentalUnitList.map((rentalUnit, index) => (
+                        <HouseItem key={index} {...rentalUnit} />
+                    ))
+                }
+                {
+                    this.props.loading
+                    ? <div>加载中...</div>
+                    : null
+                }
+            </div>
+        );
+    }
 }
 
-function HouseItem(props) {
+HouseLists.propTypes = {
+    rentalUnitList: PropTypes.arrayOf(rentalUnitShape),
+    onSrcollBottom: PropTypes.func,
+    loading: PropTypes.bool,
+};
+
+HouseLists.defaultProps = {
+    rentalUnitList: [],
+    onSrcollBottom: () => {},
+    loading: false,
+};
+
+function HouseItem(
+    {
+        tags,
+        imgUrl,
+        floor,
+        totalFloor,
+        area,
+        rentalType,
+        address,
+        blockName,
+        bedroomCount,
+        direct,
+        price,
+    }) {
     return (
-        <a href="" className={`${itemClassPrefix} g-grid-row f-flex-justify-center`}>
-            <img className={`${itemClassPrefix}-img`} src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3484344818,2921211808&fm=11&gp=0.jpg" alt="" />
+        <a
+            href=""
+            className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
+        >
+            <div className={`${itemClassPrefix}-img-wrap`}>
+                <img className={`${itemClassPrefix}-img`} src={imgUrl} alt="房源图片" />
+            </div>
             <div className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                 <h1 className="intro-title" >
-                    双榆树小区-3居室-南
+                    {blockName}-{bedroomCount}居室-{directMap[direct]}
                 </h1>
                 <div className="intro-brief g-grid-row f-flex-justify-between">
                     <div>
                         <div className="intro-tags">
-                            <span className="f-display-inlineblock tags-item">整租</span>
-                            <span className="f-display-inlineblock tags-item">90㎡</span>
-                            <span className="f-display-inlineblock tags-item">1/6层</span>
+                            <span
+                                className="f-display-inlineblock tags-item"
+                            >
+                                {rentalTypeMap[rentalType]}
+                            </span>
+                            <span className="f-display-inlineblock tags-item">
+                                {area}㎡
+                            </span>
+                            <span className="f-display-inlineblock tags-item">
+                                {floor}/{totalFloor}层
+                            </span>
                         </div>
-                        <span className="f-display-inlineblock intro-pt">距离10号线知春里站500m</span>
+                        <div className="f-display-inlineblock intro-pt">{address}</div>
                     </div>
                     <div className="intro-price">
-                        <span>¥5000</span>
+                        <span className="intro-price-wrap">
+                            <span>¥</span>
+                            <span className="intro-price-value">{price}</span>
+                        </span>
                         <span>/月</span>
                     </div>
                 </div>
                 <div>
-                    <span className="u-houselist-tag-round">随时入住</span>
-                    <span className="u-houselist-tag-round">近地铁</span>
-                    <span className="u-houselist-tag-round">位置安静</span>
+                    {
+                        tags.map(tag => (
+                            <span
+                                key={tag}
+                                className="u-houselist-tag-round"
+                            >{tag}</span>
+                        ))
+                    }
                 </div>
             </div>
         </a>
-    )
+    );
 }
+
+HouseItem.propTypes = rentalUnitShape;
