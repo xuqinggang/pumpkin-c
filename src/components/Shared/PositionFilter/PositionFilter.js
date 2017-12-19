@@ -6,6 +6,7 @@ import './styles.less';
 // test data
 // const positionData = {
 //     area: {
+//         text: '区域',
 //         itemArr: [
 //             {
 //                 text: '不限'
@@ -85,6 +86,7 @@ export default class PositionFilter extends Component {
                                     {
                                         ptFilterItemData.itemArr.map((firstItem, index) => {
                                             return (
+                                                // 第二级别 item
                                                 <Tab
                                                     label={firstItem.text}
                                                     key={index}
@@ -92,7 +94,12 @@ export default class PositionFilter extends Component {
                                                     navItemClass={`${ptClass}-nav-item`}
                                                     contentItemClass={`${ptClass}-content-item`}
                                                 >
-                                                    <ThridItemList thridItemArr={firstItem.itemArr} />
+                                                    {
+                                                        //第三级内容 列表list
+                                                        firstItem.itemArr && firstItem.itemArr.length ?
+                                                            <ThridItemList thridItemArr={firstItem.itemArr} />
+                                                            : null
+                                                    }
                                                 </Tab>
                                             );
                                         })
