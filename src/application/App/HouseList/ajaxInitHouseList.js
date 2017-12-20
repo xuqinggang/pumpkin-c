@@ -4,7 +4,7 @@ const Map = {
     districts: {
         first: 'district',
         second: 'circle',
-        text: '区域'
+        text: '区域',
     },
     subways: {
         first: 'subway',
@@ -115,7 +115,7 @@ function _ajaxDistricts(cityId) {
 function _ajaxSubways(cityId) {
     return Service.get(`/api/v1/common/subways?cityId=${cityId}`)
         .then((data) => {
-            if (data.code == 200) {
+            if (data.code === 200) {
                 const subwaysArr = data.data.subways;
                 return {
                     type: 'subways',

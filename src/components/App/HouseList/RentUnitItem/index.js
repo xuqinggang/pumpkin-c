@@ -1,59 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { rentalUnitShape } from 'base/propTypes';
-import { getDocHeight } from 'lib/util';
+import React from 'react';
+import { rentUnitShape } from 'base/propTypes';
 import { rentalTypeMap, directMap } from 'base/infoMap';
-import './styles.less';
+import defaultImage from './images/nangua.png';
+import './style.less';
 
-const listClassPrefix = 'm-houselists';
 const itemClassPrefix = 'm-houseitem';
 
-export default class HouseLists extends Component {
-    componentDidMount() {
-        let lastScrollTop = 0;
-        window.addEventListener('scroll', () => {
-            const reserveSize = 50;
-            const scrollTop = window.pageYOffset || window.screenY;
-            if (scrollTop > lastScrollTop) {
-                // 向下滚动
-                if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
-                    this.props.onSrcollBottom();
-                }
-            }
-            lastScrollTop = scrollTop;
-        });
-    }
-    render() {
-        return (
-            <div className={`${listClassPrefix}`}>
-                {
-                    this.props.rentalUnitList.map((rentalUnit, index) => (
-                        <HouseItem key={index} {...rentalUnit} />
-                    ))
-                }
-                {
-                    this.props.loading
-                    ? <div>加载中...</div>
-                    : null
-                }
-            </div>
-        );
-    }
-}
-
-HouseLists.propTypes = {
-    rentalUnitList: PropTypes.arrayOf(rentalUnitShape),
-    onSrcollBottom: PropTypes.func,
-    loading: PropTypes.bool,
-};
-
-HouseLists.defaultProps = {
-    rentalUnitList: [],
-    onSrcollBottom: () => {},
-    loading: false,
-};
-
-function HouseItem(
+function RentUnitItem(
     {
         tags,
         imgUrl,
@@ -73,7 +26,7 @@ function HouseItem(
             className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
         >
             <div className={`${itemClassPrefix}-img-wrap`}>
-                <img className={`${itemClassPrefix}-img`} src={imgUrl} alt="房源图片" />
+                <img className={`${itemClassPrefix}-img`} src={imgUrl || defaultImage} alt="房源图片" />
             </div>
             <div className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                 <h1 className="intro-title" >
@@ -119,4 +72,6 @@ function HouseItem(
     );
 }
 
-HouseItem.propTypes = rentalUnitShape;
+RentUnitItem.propTypes = rentUnitShape.isRequired;
+
+export default RentUnitItem;

@@ -61,3 +61,13 @@ export function shallowEqual(objA, objB) {
 
     return true 
 }
+
+export const isValidValue = value => (!(value == null || value === ''));
+
+export const getDocHeight = () => {
+    const body = document.body;
+    const html = document.documentElement;
+
+    return Math.max(body.scrollHeight, body.offsetHeight,
+        html.clientHeight, html.scrollHeight, html.offsetHeight);
+};
