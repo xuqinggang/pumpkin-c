@@ -42,29 +42,93 @@ export default class PositionFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // 第二级item选中索引
+            secondItemSelectedIndex: -1,
+
+            // 第三级item选中索引
             thirdItemSelectedIndex: -1,
         };
+        // 第一级item选中索引
+        this.firstItemSelectedIndex = 0;
+
+        // ex: {
+        //    districts: {
+        //      second: { id: 123, text: '' }
+        //      third: { id: 555, text: '' }
+        //    }
+        // }
+        this._initPositionData(props.positionFilterData);
     }
 
-    componentDidMount() {
+    _initPositionData(positionFilterData) {
+        this.positionData = {};
+        if (positionFilterData) {
+            this.positionTypeArr = Object.keys(positionFilterData);
+            this.positionType = this.positionTypeArr[0];
+            this.positionTypeArr.forEach((positionTypeItem) => {
+                this.positionData[positionTypeItem] = {};
+            })
+        }
     }
 
-    onThridItemTap = (item) => {
-        console.log('item', item);
+    // 回调函数-位置筛选 change
+    onPositionFilterChange = (positionType, positionData) => {
+        console.log('positionType positionData', positionType, positionData);
+    }
+
+    // 回调函数-第三级item点击
+    onThirdItemTap = (ptData) => {
+        this.positionData[this.positionType].third = ptData;
+        this.onPositionFilterChange(this.positionType, this.positionData);
+    }
+
+    // 回调函数-第二级item点击
+    // ptData: 点击item信息: ex: { id:123, text:'' }
+    onSecondItemTap = (index, event, ptData) => {
+        this.positionData[this.positionType].second = ptData;
+
+        if (index == 0) {
+            this.onPositionFilterChange(this.positionType, this.positionData);
+        }
+    }
+
+    // 每点击第一级item，要将之前点击的第二，三级item取消掉
+    // ptType: string,所点击的位置类型。ex: 'districts' or 'subways' or 'arround'
+    onFirstItemTap = (index, event, ptType) => {
+        if (this.firstItemSelectedIndex == index) return;
+
+        this.firstItemSelectedIndex = index;
+        this.positionType = ptType;
+
+        this.setState({
+            secondItemSelectedIndex: -1,
+            thirdItemSelectedIndex: -1,
+        });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this._initPositionData(nextProps.positionFilterData);
     }
 
     renderChildren() {
         const {
             positionFilterData,
         } = this.props;
-        console.log('positionFilterData',positionFilterData);
+
+        const {
+            secondItemSelectedIndex,
+            thirdItemSelectedIndex,
+        } = this.state;
+
         if (!positionFilterData) return;
+
         return (
             <Tabs
                 defaultActiveIndex={0}
                 className={ptClass}
                 navClassName={`${ptClass}-nav`}
                 contentClassName={`${ptClass}-content`}
+                onChange={this.onFirstItemTap}
             >
                 {
                     Object.keys(positionFilterData).map((ptKey, index) => {
@@ -72,6 +136,7 @@ export default class PositionFilter extends Component {
                         return (
                             <Tab
                                 label={ptFilterItemData.text}
+                                passData={ptKey}
                                 key={index}
                                 order={index}
                                 navItemClass={`${ptClass}-nav-item`}
@@ -79,9 +144,11 @@ export default class PositionFilter extends Component {
                             >
                                 <Tabs
                                     defaultActiveIndex={-1}
+                                    activeIndex={secondItemSelectedIndex}
                                     className={ptClass}
                                     navClassName={`${ptClass}-nav`}
                                     contentClassName={`${ptClass}-content`}
+                                    onChange={this.onSecondItemTap}
                                 >
                                     {
                                         ptFilterItemData.itemArr.map((firstItem, index) => {
@@ -90,6 +157,7 @@ export default class PositionFilter extends Component {
                                                 <Tab
                                                     label={firstItem.text}
                                                     key={index}
+                                                    passData={{id: firstItem.id, text: firstItem.text}}
                                                     order={index}
                                                     navItemClass={`${ptClass}-nav-item`}
                                                     contentItemClass={`${ptClass}-content-item`}
@@ -97,7 +165,10 @@ export default class PositionFilter extends Component {
                                                     {
                                                         //第三级内容 列表list
                                                         firstItem.itemArr && firstItem.itemArr.length ?
-                                                            <ThridItemList thridItemArr={firstItem.itemArr} />
+                                                            <ThirdItemList thirdItemArr={firstItem.itemArr}
+                                                                selectItemIndex={thirdItemSelectedIndex}
+                                                                onChange={this.onThirdItemTap}
+                                                            />
                                                             : null
                                                     }
                                                 </Tab>
@@ -124,38 +195,53 @@ export default class PositionFilter extends Component {
 }
 
 // 第三级列表组件
-class ThridItemList extends Component {
+class ThirdItemList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            thridItemArr: props.thridItemArr,
+            thirdItemArr: props.thirdItemArr,
+            selectItemIndex: -1,
             selectItemId: null,
-        }
+        };
     }
 
-    onThridItemTap = (item) => {
+    onThirdItemTap = (index, item) => {
+        this.props.onChange(item);
+
         this.setState({
-            selectItemId: item.id,
+            selectItemIndex: index,
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if ('selectItemIndex' in nextProps) {
+            if (nextProps.selectItemIndex !== this.state.selectItemIndex) {
+                this.setState({
+                    selectItemIndex: nextProps.selectItemIndex,
+                });
+            }
+        }
     }
 
     render() {
         const {
-            thridItemArr,
+            thirdItemArr,
             selectItemId,
+            selectItemIndex,
         } = this.state;
 
         return (
-            thridItemArr && thridItemArr.length ? (
-                <ul className={`${ptClass}-thrid-list`}>
+            thirdItemArr && thirdItemArr.length ? (
+                <ul className={`${ptClass}-third-list`}>
                     {
-                        thridItemArr.map((item, index) => {
-                            const isSelected = selectItemId === item.id;
+                        thirdItemArr.map((item, index) => {
+                            const isSelected = selectItemIndex === index;
                             return (
-                                <ThridItem
+                                <ThirdItem
                                     info={item}
                                     key={index}
-                                    onThridItemTap={this.onThridItemTap}
+                                    index={index}
+                                    onThirdItemTap={this.onThirdItemTap}
                                     isSelected={isSelected}
                                 />
                             );
@@ -168,16 +254,17 @@ class ThridItemList extends Component {
     }
 }
 
-function ThridItem(props) {
+function ThirdItem(props) {
     const {
         info,
-        onThridItemTap,
+        onThirdItemTap,
         isSelected,
+        index,
     } = props;
 
     function handleTouchTap(e) {
-        if (onThridItemTap) {
-            onThridItemTap(info);
+        if (onThirdItemTap) {
+            onThirdItemTap(index, info);
         }
     }
 

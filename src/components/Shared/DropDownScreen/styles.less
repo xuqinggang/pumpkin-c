@@ -1,0 +1,42 @@
+@import (reference) '~styles/lib.less';
+
+.m-dropscreen {
+    display: inline-block;
+    position: relative;
+
+    &-label {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 28px 0;
+        line-height: 1;
+        vertical-align: middle;
+        .font-size(28);
+
+        &.active {
+            color: #f38d39;
+        }
+    }
+
+    &-icon {
+        display: inline-block;
+        vertical-align: middle;
+        color: #d8d8d8;
+        .font-size(16);
+
+        &.active {
+            color: #f38d39;
+            transform: rotateX(180deg);
+        }
+    }
+
+    &-screen {
+        position: absolute;
+        top: 100%;
+        visibility: hidden;
+        height: 0;
+        z-index: 1001;
+        overflow: hidden;
+        transition: height 0.6s ease 0s;
+        background: rgba(0, 0, 0, 0.40);
+    }
+}

@@ -311,6 +311,8 @@ function genRoomSlider(houseDetailData) {
         const roomsLength = rooms && rooms.length;
         if (roomsLength) {
             rooms.forEach((room, index) => {
+                const roomImages = room.images;
+                if (roomImages && roomImages.length === 0) return;
                 // room text
                 let text = roomType;
 
@@ -335,16 +337,13 @@ function genRoomSlider(houseDetailData) {
                 };
 
                 let imgInfo = [];
-                const roomImages = room.images;
-                if (roomImages && roomImages.length) {
-                    imgInfo = roomImages.map((imageUrl, index) => {
-                        aboveImgLength++;
-                        return {
-                            img: imageUrl,
-                            activeIndex,
-                        };
-                    });
-                }
+                imgInfo = roomImages.map((imageUrl, index) => {
+                    aboveImgLength++;
+                    return {
+                        img: imageUrl,
+                        activeIndex,
+                    };
+                });
                 sliderImgItem.imgInfo = imgInfo;
 
                 // push

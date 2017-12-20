@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
-import Service from 'lib/Service';
-import { ajaxInitPositionData } from './ajaxInitHouseList';
+import Filter from 'components/App/HouseList/Filter/Filter';
+// import HouseTypeFilter from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
+// import MoreFilter from 'components/App/HouseList/MoreFilter/MoreFilter';
+// import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
+// import PositionFilter from 'Shared/PositionFilter/PositionFilter';
 
+// import MoneyFilter from 'Shared/MoneyFilter/MoneyFilter';
+
+import Service from 'lib/Service';
 import './styles.less';
+
+const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends Component {
     constructor(props) {
@@ -24,13 +32,18 @@ export default class HouseList extends Component {
     }
 
     componentDidMount() {
-        ajaxInitPositionData()
-            .then((positionFilterData) => {
-                this.setState({
-                    positionFilterData,
-                });
-                console.log('positionData', positionFilterData);
-            })
+    }
+
+    onMonenySlider = (data) => {
+        this.setState({
+            leftValue: data.currentValue0,
+            rightValue: data.currentValue1,
+        });
+        console.log('onMonenySlider', data);
+    }
+
+    onFilterConfirm = (data) => {
+        console.log('onFilterConfirm', data);
     }
 
     render() {
@@ -44,6 +57,19 @@ export default class HouseList extends Component {
                 <HeadShared />
                 <hr className="u-housedetail-partline"/>
                 <HouseLists />
+                {
+                    // <PositionFilter positionFilterData={positionFilterData} />
+                }
+                {
+                    // <MoneyFilter />
+                }
+                {
+                    // <MoreFilter />
+                }
+                <Filter 
+                    className={`${houselistClassPrefix}-filter`}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
             </div>
         );
     }

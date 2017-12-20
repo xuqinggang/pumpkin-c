@@ -47,15 +47,24 @@ export default class MoneyFilter extends Component {
     }
 
     onMonenySlider = (rangeValueObj) => {
+        const rangeValueArr = [rangeValueObj.currentValue0, rangeValueObj.currentValue1];
         this.setState({
-            rangeValueArr: [rangeValueObj.currentValue0, rangeValueObj.currentValue1],
+            rangeValueArr,
         });
+
+        if (this.props.onFilterChange) {
+            this.props.onFilterChange(rangeValueArr);
+        }
     }
 
     onMonenyRangeListTap = (rangeValueArr) => {
         this.setState({
             rangeValueArr,
-        })
+        });
+
+        if (this.props.onFilterChange) {
+            this.props.onFilterChange(rangeValueArr);
+        }
     }
 
     render() {

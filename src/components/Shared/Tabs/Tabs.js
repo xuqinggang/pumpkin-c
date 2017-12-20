@@ -73,7 +73,8 @@ class Tabs extends Component {
 		}
 	}
 
-	handleTouchTab = (activeIndex) => {
+    handleTouchTab = (activeIndex, event, passData) => {
+        console.log('passData', passData)
 		const prevIndex = this.state.selectedIndex;
 		if(prevIndex !== activeIndex) {
 			this.setState({
@@ -81,10 +82,8 @@ class Tabs extends Component {
 				prevIndex
 			});
 		}
-		this.props.onChange({
-				selectedIndex: activeIndex,
-				prevIndex
-		});
+
+        this.props.onChange(activeIndex, event, passData);
 	}
 
 	renderTabNavAndContent() {

@@ -13,7 +13,6 @@ const Map = {
     },
 };
 
-
 function stuffDataToPosition(itemArr, type, positionData) {
     let firstItemsArr = itemArr && itemArr.map((item, index) => {
         // 第一级的item
