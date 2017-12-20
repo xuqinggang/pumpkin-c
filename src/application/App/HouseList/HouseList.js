@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
+
+// 业务组件
 import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
-// import HouseTypeFilter from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
-// import MoreFilter from 'components/App/HouseList/MoreFilter/MoreFilter';
-// import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
-// import PositionFilter from 'Shared/PositionFilter/PositionFilter';
-
-// import MoneyFilter from 'Shared/MoneyFilter/MoneyFilter';
 
 import Service from 'lib/Service';
 import './styles.less';
@@ -18,58 +14,34 @@ export default class HouseList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            positionFilterData: null,
-        };
+        this.filterParams = null;
     }
 
     handleTouchTap() {
-        console.log('handleTouchTap')
+        console.log('App HouseList handleTouchTap')
     }
 
     handleClick() {
-        console.log('handleClick')
+        console.log('App HouseList handleClick')
     }
 
-    componentDidMount() {
-    }
-
-    onMonenySlider = (data) => {
-        this.setState({
-            leftValue: data.currentValue0,
-            rightValue: data.currentValue1,
-        });
-        console.log('onMonenySlider', data);
-    }
-
-    onFilterConfirm = (data) => {
-        console.log('onFilterConfirmxxx', data);
+    onFilterConfirm = (filterParams) => {
+        this.filterParams = filterParams;
+        console.log('filterParams', filterParams);
     }
 
     render() {
-        const {
-            positionFilterData,
-        } = this.state;
-        console.log('render state', positionFilterData);
+        console.log('App HouseLists render');
 
         return (
-            <div className="test" onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
+            <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
                 <HeadShared />
                 <hr className="u-housedetail-partline"/>
-                <HouseLists />
-                {
-                    // <PositionFilter positionFilterData={positionFilterData} />
-                }
-                {
-                    // <MoneyFilter />
-                }
-                {
-                    // <MoreFilter />
-                }
                 <Filter 
                     className={`${houselistClassPrefix}-filter`}
                     onFilterConfirm={this.onFilterConfirm}
                 />
+                <HouseLists />
             </div>
         );
     }

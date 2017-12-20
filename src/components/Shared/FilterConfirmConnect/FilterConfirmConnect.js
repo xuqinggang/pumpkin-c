@@ -39,7 +39,6 @@ export default function() {
             }
 
             componentWillReceiveProps() {
-                console.log('componentWillReceiveProps')
                 this.setState({
                     isClear: false,
                 });

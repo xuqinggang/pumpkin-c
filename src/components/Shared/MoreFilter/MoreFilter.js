@@ -23,7 +23,6 @@ export default class MoreFilter extends Component {
     }
 
     genTagsData(tagsObj, type) {
-        console.log('type genTagsData', tagsObj, type)
         // 每次触发筛选操作，都要清空
         this.tags[type] = [];
 

@@ -41,18 +41,17 @@ export default class Filter extends Component {
     handleFilterShowTap = (type) => {
         const preStates = this.state;
         const newStates = {};
+
         Object.keys(preStates).forEach((stateIndex) => {
             newStates[stateIndex] = false;
         })
         newStates[`${type}Show`] = !this.state[`${type}Show`];
+
         this.setState(newStates);
     }
 
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionType, positionData) => {
-        console.log('onFilterPositionConfirm', positionData, positionType);
-
-        this.handleFilterShowTap('position');
         if (!positionType || !positionData) return;
 
         Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
@@ -77,6 +76,9 @@ export default class Filter extends Component {
         });
 
         this.props.onFilterConfirm(this.filterParams);
+
+        // 隐藏弹层
+        this.handleFilterShowTap('position');
     }
 
     onFilterMoneyConfirm = (filterMoneyArr) => {
@@ -92,10 +94,10 @@ export default class Filter extends Component {
             this.filterParams.priceInfo = { floor: filterMoneyArr[0], ceil: filterMoneyArr[1] };
         }
 
-        console.log('onFilterMoneyConfirm', filterMoneyArr);
-        this.handleFilterShowTap('rent');
-
         this.props.onFilterConfirm(this.filterParams);
+
+        // 隐藏弹层
+        this.handleFilterShowTap('rent');
     }
 
     onFilterHouseTypeConfirm = (filterHouseTypeObj) => {
@@ -114,11 +116,11 @@ export default class Filter extends Component {
 
             this.filterParams[`${houseType}Rooms`] = houseTypeValArr;
         });
-
-        console.log('onFilterhouseTypeConfirm', filterHouseTypeObj);
-        this.handleFilterShowTap('houseType');
-
+    
         this.props.onFilterConfirm(this.filterParams);
+
+        // 隐藏弹层
+        this.handleFilterShowTap('houseType');
     }
 
     onFilterMoreConfirm = (filterMoreObj) => {
@@ -148,10 +150,10 @@ export default class Filter extends Component {
             this.filterParams[paramsKey] = moreValArr;
         });
 
-        console.log('onFilterMoreConfirm', filterMoreObj);
-        this.handleFilterShowTap('more');
-
         this.props.onFilterConfirm(this.filterParams);
+
+        // 隐藏弹层
+        this.handleFilterShowTap('more');
     }
 
     render() {

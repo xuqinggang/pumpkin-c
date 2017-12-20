@@ -8,19 +8,6 @@ export default function HouseLists(props) {
     return (
         <div className={`${listClassPrefix}`}>
             <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
-            <HouseItem />
         </div>
     );
 }

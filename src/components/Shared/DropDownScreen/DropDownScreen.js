@@ -19,6 +19,7 @@ export default class DropDownScreen extends Component {
     handleHeadTap = (e) => {
         e.stopPropagation();
         e.preventDefault();
+
         if (this.isfirst) {
             this.isfirst = false;
             const headRectInfo = e.target.getBoundingClientRect();
@@ -26,21 +27,16 @@ export default class DropDownScreen extends Component {
             this.reduceLeft = headRectInfo.left;
             this._setScreenDomLeft();
         }
-        console.log('handleHeadTap, ', this.state.show);
+
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
         }
-        // if (!this.isScreenShow) {
-        //     this._setScreenDomShow(true);
-        // } else {
-        //     this._setScreenDomShow(false);
-        // }
     }
 
     handleScreenTap = (e) => {
-        console.log('DropDownScreen');
         e.stopPropagation();
         e.preventDefault();
+
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
         }
@@ -48,6 +44,7 @@ export default class DropDownScreen extends Component {
     
     _setScreenDomShow(isShow) {
         if (!this.screenDom) return;
+
         if (isShow) {
             this.isScreenShow = true;
             this.screenDom.style.visibility = 'visible';

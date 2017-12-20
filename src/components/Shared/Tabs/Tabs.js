@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+
 import TabTemplate from './TabTemplate.js'
 
 import './styles.less';
@@ -15,7 +16,6 @@ const horizonPrefix = 'm-tabs';
 const verticalPrefix = 'm-tabs-vertical';
 
 class Tabs extends Component {
-
 	// props 类型验证
 	static propTypes = {
 		className: PropTypes.string,
@@ -73,7 +73,6 @@ class Tabs extends Component {
 	}
 
     handleTouchTab = (activeIndex, event, passData) => {
-        console.log('passData', passData)
 		const prevIndex = this.state.selectedIndex;
 		if(prevIndex !== activeIndex) {
 			this.setState({
@@ -87,8 +86,10 @@ class Tabs extends Component {
 
 	renderTabNavAndContent() {
 		const tabs = this.getTabs();
+
 		// 每一个tab的平均宽度%
         const tabContent = [];
+
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
 		const tabNav = tabs.map((tab, index) => {
 
@@ -130,11 +131,9 @@ class Tabs extends Component {
         } = this.state;
 
         const tabNavAndContent = this.renderTabNavAndContent();
-
         const { tabContent, tabNav } = tabNavAndContent;
 
         const classPrefix = verticalPrefix;
-        console.log('tabs selectedIndex', selectedIndex, prevIndex)
         const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
             active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });
