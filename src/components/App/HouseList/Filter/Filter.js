@@ -59,11 +59,11 @@ export default class Filter extends Component {
             if (ptType == positionType) {
                 // 根据位置类型对应的数据
                 const ptDataByType = positionData[positionType];
-                if (ptDataByType.second) {
+                if (ptDataByType.second && ptDataByType.second.id != -1) {
                     this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
                 }
 
-                if (ptDataByType.third) {
+                if (ptDataByType.third && ptDataByType.third.id != -1) {
                     this.filterParams[paramsKeyArr[1]] = ptDataByType.third.id;
                 }
                 return;
