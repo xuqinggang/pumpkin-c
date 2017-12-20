@@ -66,6 +66,16 @@ export default class MoneyFilter extends Component {
             this.props.onFilterChange(rangeValueArr);
         }
     }
+    componentWillReceiveProps(nextProps) {
+        // 是否清空
+        if ('isClear' in nextProps) {
+            if (nextProps.isClear) {
+                this.setState({
+                    rangeValueArr: [0, 20000],
+                });
+            }
+        };
+    }
 
     render() {
         const {

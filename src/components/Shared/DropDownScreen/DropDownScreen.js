@@ -26,6 +26,7 @@ export default class DropDownScreen extends Component {
             this.reduceLeft = headRectInfo.left;
             this._setScreenDomLeft();
         }
+        console.log('handleHeadTap, ', this.state.show);
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
         }
@@ -35,8 +36,18 @@ export default class DropDownScreen extends Component {
         //     this._setScreenDomShow(false);
         // }
     }
+
+    handleScreenTap = (e) => {
+        console.log('DropDownScreen');
+        e.stopPropagation();
+        e.preventDefault();
+        if (this.props.onTouchTap) {
+            this.props.onTouchTap(this.props.type);
+        }
+    }
     
     _setScreenDomShow(isShow) {
+        if (!this.screenDom) return;
         if (isShow) {
             this.isScreenShow = true;
             this.screenDom.style.visibility = 'visible';
@@ -60,7 +71,6 @@ export default class DropDownScreen extends Component {
 
     componentWillReceiveProps(nextProps) {
         if ('show' in nextProps) {
-            this._setScreenDomShow(nextProps.show);
             this.setState({
                 show: nextProps.show,
             });
@@ -84,6 +94,8 @@ export default class DropDownScreen extends Component {
         const {
             show,
         } = this.state;
+
+        this._setScreenDomShow(show);
 
         const iconClass = classnames('icon-pull-down', `${dropClass}-icon`, {
             active: show,

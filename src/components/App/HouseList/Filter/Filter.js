@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
+
 // 四种筛选组件
 import PositionFilterWrap from 'Shared/PositionFilterWrap/PositionFilterWrap';
 import MoneyFilterWrap from 'Shared/MoneyFilterWrap/MoneyFilterWrap';
-import MoreFilter from 'Shared/MoreFilter/MoreFilter';
-import HouseTypeFilter from 'Shared/HouseTypeFilter/HouseTypeFilter';
+import MoreFilterWrap from 'Shared/MoreFilterWrap/MoreFilterWrap';
+import HouseTypeFilterWrap from 'Shared/HouseTypeFilterWrap/HouseTypeFilterWrap';
 
 import './styles.less';
 
 const filterClass = 'm-filter';
+
+const ptTypeMapParamsKey = {
+    districts: ['districtId', 'circleId'],
+    subways: ['subwayId', 'stationId'],
+};
 
 export default class Filter extends Component {
     constructor(props) {
@@ -20,6 +26,15 @@ export default class Filter extends Component {
             houseTypeShow: false,
             moreShow: false,
         };
+
+        // 筛选器参数
+        this.filterParams = {};
+    }
+
+    _clearFilterParams(paramType) {
+        if (this.filterParams[paramType]) {
+            delete this.filterParams[paramType];
+        }
     }
 
     // 回调函数-弹层是否展现
@@ -34,14 +49,109 @@ export default class Filter extends Component {
     }
 
     // 回调函数-筛选数据确定回调函数
-    onFilterConfirm = (type, filterData) => {
-        this.setState({
-            [`${type}Show`]: false,
+    onFilterPositionConfirm = (positionType, positionData) => {
+        console.log('onFilterPositionConfirm', positionData, positionType);
+
+        this.handleFilterShowTap('position');
+        if (!positionType || !positionData) return;
+
+        Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
+            const paramsKeyArr = ptTypeMapParamsKey[ptType];
+            if (ptType == positionType) {
+                // 根据位置类型对应的数据
+                const ptDataByType = positionData[positionType];
+                if (ptDataByType.second) {
+                    this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
+                }
+
+                if (ptDataByType.third) {
+                    this.filterParams[paramsKeyArr[1]] = ptDataByType.third.id;
+                }
+                return;
+
+            } else {
+                paramsKeyArr && paramsKeyArr.forEach((paramKey) => {
+                    this._clearFilterParams(paramKey);
+                });
+            }
         });
 
-        if (this.props.onFilterConfirm) {
-            this.props.onFilterConfirm(type, filterData);
+        this.props.onFilterConfirm(this.filterParams);
+    }
+
+    onFilterMoneyConfirm = (filterMoneyArr) => {
+        if (!filterMoneyArr) {
+            this._clearFilterParams('priceInfo');
+            return;
         }
+
+        // 20000标志着不限
+        if (filterMoneyArr[1] == 20000) {
+            this.filterParams.priceInfo = { floor: filterMoneyArr[0] }
+        } else {
+            this.filterParams.priceInfo = { floor: filterMoneyArr[0], ceil: filterMoneyArr[1] };
+        }
+
+        console.log('onFilterMoneyConfirm', filterMoneyArr);
+        this.handleFilterShowTap('rent');
+
+        this.props.onFilterConfirm(this.filterParams);
+    }
+
+    onFilterHouseTypeConfirm = (filterHouseTypeObj) => {
+        if (!filterHouseTypeObj) {
+            this._clearFilterParams('sharedRooms');
+            this._clearFilterParams('wholeRooms');
+            return;
+        }
+
+        Object.keys(filterHouseTypeObj).forEach((houseType) => {
+            const houseTypeValArr = filterHouseTypeObj[houseType];
+            if (!houseTypeValArr.length) {
+                this._clearFilterParams(`${houseType}Rooms`);
+                return;
+            }
+
+            this.filterParams[`${houseType}Rooms`] = houseTypeValArr;
+        });
+
+        console.log('onFilterhouseTypeConfirm', filterHouseTypeObj);
+        this.handleFilterShowTap('houseType');
+
+        this.props.onFilterConfirm(this.filterParams);
+    }
+
+    onFilterMoreConfirm = (filterMoreObj) => {
+        const  keyMapParamsKey = {
+            area: 'areaInfo',
+            direction: 'directs',
+            feature: 'tags',
+            floor: 'floorInfo',
+        };
+
+        // 如果筛选被清空，需要清空filterParams相应的数据
+        if (!filterMoreObj) {
+            Object.keys(keyMapParamsKey).forEach((key) => {
+                const paramsKey = keyMapParamsKey[key];
+                this._clearFilterParams(paramsKey);
+            });
+            return;
+        }
+
+        Object.keys(filterMoreObj).forEach((key) => {
+            const moreValArr = filterMoreObj[key];
+            const paramsKey = keyMapParamsKey[key];
+            if (!moreValArr.length) {
+                this._clearFilterParams(paramsKey);
+                return;
+            }
+            this.filterParams[paramsKey] = moreValArr;
+        });
+
+        console.log('onFilterMoreConfirm', filterMoreObj);
+        this.handleFilterShowTap('more');
+
+        this.props.onFilterConfirm(this.filterParams);
     }
 
     render() {
@@ -66,7 +176,7 @@ export default class Filter extends Component {
                         label="位置"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <PositionFilterWrap type="position" onFilterConfirm={this.onFilterConfirm}/>
+                        <PositionFilterWrap type="position" onFilterConfirm={this.onFilterPositionConfirm}/>
                     </DropDownScreen>
                 </li>
                 <li>
@@ -77,7 +187,10 @@ export default class Filter extends Component {
                         type="rent"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoneyFilterWrap type="rent" onFilterConfirm={this.handleFilterChange} />
+                        <MoneyFilterWrap
+                            type="rent"
+                            onFilterConfirm={this.onFilterMoneyConfirm}
+                        />
                     </DropDownScreen>
                 </li>
                 <li>
@@ -88,7 +201,10 @@ export default class Filter extends Component {
                         label="房型"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <HouseTypeFilter />
+                        <HouseTypeFilterWrap 
+                            type="houseType"
+                            onFilterConfirm={this.onFilterHouseTypeConfirm}
+                        />
                     </DropDownScreen>
                 </li>
                 <li>
@@ -98,7 +214,10 @@ export default class Filter extends Component {
                         label="更多"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoreFilter />
+                        <MoreFilterWrap
+                            type="more"
+                            onFilterConfirm={this.onFilterMoreConfirm}
+                        />
                     </DropDownScreen>
                 </li>
             </ul>

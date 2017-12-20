@@ -43,7 +43,7 @@ export default class HouseList extends Component {
     }
 
     onFilterConfirm = (data) => {
-        console.log('onFilterConfirm', data);
+        console.log('onFilterConfirmxxx', data);
     }
 
     render() {

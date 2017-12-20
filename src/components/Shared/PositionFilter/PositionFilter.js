@@ -61,6 +61,13 @@ export default class PositionFilter extends Component {
     }
 
     _initPositionData(positionFilterData) {
+        // positionData，
+        // ex: {
+        //     districts: {
+        //         second: { id: 123, text: '' },
+        //         third: { id: 444, text: '' }
+        //     }
+        // }
         this.positionData = {};
         if (positionFilterData) {
             this.positionTypeArr = Object.keys(positionFilterData);
@@ -71,14 +78,23 @@ export default class PositionFilter extends Component {
         }
     }
 
+    handleTap = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    }
     // 回调函数-位置筛选 change
     onPositionFilterChange = (positionType, positionData) => {
-        console.log('positionType positionData', positionType, positionData);
+        if (this.props.onFilterConfirm) {
+            this.props.onFilterConfirm(positionType, positionData);
+        }
     }
 
     // 回调函数-第三级item点击
-    onThirdItemTap = (ptData) => {
+    onThirdItemTap = (index, ptData) => {
         this.positionData[this.positionType].third = ptData;
+        this.setState({
+            thirdItemSelectedIndex: index,
+        });
         this.onPositionFilterChange(this.positionType, this.positionData);
     }
 
@@ -86,7 +102,9 @@ export default class PositionFilter extends Component {
     // ptData: 点击item信息: ex: { id:123, text:'' }
     onSecondItemTap = (index, event, ptData) => {
         this.positionData[this.positionType].second = ptData;
-
+        this.setState({
+            secondItemSelectedIndex: index,
+        });
         if (index == 0) {
             this.onPositionFilterChange(this.positionType, this.positionData);
         }
@@ -185,7 +203,7 @@ export default class PositionFilter extends Component {
     }
     render() {
         return (
-            <div>
+            <div onTouchTap={this.handleTap}>
                 {
                     this.renderChildren()
                 }
@@ -206,7 +224,7 @@ class ThirdItemList extends Component {
     }
 
     onThirdItemTap = (index, item) => {
-        this.props.onChange(item);
+        this.props.onChange(index, item);
 
         this.setState({
             selectItemIndex: index,

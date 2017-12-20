@@ -47,7 +47,7 @@ class Tabs extends Component {
 		}
 		this.state = {
 			selectedIndex: activeIndex,
-			prevIndex: activeIndex,
+			prevIndex: -1,
 		}
 	}
 
@@ -68,7 +68,6 @@ class Tabs extends Component {
 		if('activeIndex' in nextProps) {
 			this.setState({
 				selectedIndex: nextProps.activeIndex,
-				prevIndex: this.state.selectedIndex,
 			});
 		}
 	}
@@ -135,6 +134,7 @@ class Tabs extends Component {
         const { tabContent, tabNav } = tabNavAndContent;
 
         const classPrefix = verticalPrefix;
+        console.log('tabs selectedIndex', selectedIndex, prevIndex)
         const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
             active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });

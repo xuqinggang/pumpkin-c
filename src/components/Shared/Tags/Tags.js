@@ -28,9 +28,9 @@ export default class Tags extends Component {
 
     handleTagTap = (index) => {
         const preStates = this.state;
-        let newStates = {};
+        let newStates = Object.assign({}, preStates);
 
-        // 如果选中了，属性unique为true的，则把其余选中的都取消掉
+        // 如果选中了，属性为unique设置为true，把其余选中的都取消掉设置为false
         if (this.tagsArr[index].unique) {
             Object.keys(preStates).forEach((stateIndex) =>{
                 newStates[stateIndex] = false;
@@ -45,7 +45,25 @@ export default class Tags extends Component {
             newStates[index] = !this.state[index];
         }
 
+        if (this.props.onChange) {
+            this.props.onChange(newStates);
+        }
+
         this.setState(newStates);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // 是否清空
+        if ('isClear' in nextProps) {
+            if (nextProps.isClear) {
+                const preStates = this.state;
+                let newStates = {};
+                Object.keys(preStates).forEach((stateIndex) =>{
+                    newStates[stateIndex] = false;
+                });
+                this.setState(newStates);
+            }
+        };
     }
 
     renderTags(tagsArr) {

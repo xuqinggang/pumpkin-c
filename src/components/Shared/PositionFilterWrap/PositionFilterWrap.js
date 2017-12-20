@@ -29,7 +29,9 @@ export default class PositionFilterWrap extends Component {
         } = this.state;
 
         return (
-            <PositionFilter positionFilterData={positionFilterData} />
+            <PositionFilter positionFilterData={positionFilterData} 
+                onFilterConfirm={this.props.onFilterConfirm}
+            />
         )
     }
 }
