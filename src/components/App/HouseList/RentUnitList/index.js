@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rentUnitShape } from 'base/propTypes';
+import { rentUnitShape, pagerShape } from 'base/propTypes';
 import { getDocHeight } from 'lib/util';
 import RentUnitPlaceHolder from '../RentUnitPlaceHolder';
 import RentUnitItem from '../RentUnitItem';
@@ -26,7 +26,10 @@ export default class RentUnitList extends Component {
         if (scrollTop > this.lastScrollTop) {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
-                this.props.onLoadMore();
+                const { curPage, totalPage } = this.props.pager;
+                if (curPage < totalPage) {
+                    this.props.onLoadMore();
+                }
             }
         }
         this.lastScrollTop = scrollTop;
@@ -40,7 +43,7 @@ export default class RentUnitList extends Component {
                     ))
                 }
                 {
-                    this.props.loading
+                    this.props.loading || this.props.isFetchCrash
                     ? <RentUnitPlaceHolder />
                     : null
                 }
@@ -53,10 +56,17 @@ RentUnitList.propTypes = {
     list: PropTypes.arrayOf(rentUnitShape),
     onLoadMore: PropTypes.func,
     loading: PropTypes.bool,
+    isFetchCrash: PropTypes.bool,
+    pager: pagerShape,
 };
 
 RentUnitList.defaultProps = {
     list: [],
     onLoadMore: () => {},
     loading: false,
+    isFetchCrash: false,
+    pager: {
+        curPage: 1,
+        totalPage: 1,
+    },
 };

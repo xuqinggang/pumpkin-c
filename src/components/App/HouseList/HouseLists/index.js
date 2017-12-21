@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rentUnitShape } from 'base/propTypes';
+import { rentUnitShape, pagerShape } from 'base/propTypes';
 import RentUnitList from '../RentUnitList';
 import RentUnitsSuggest from '../RentUnitsSuggest';
 import SingnalLessNote from '../SingnalLessNote';
@@ -13,15 +13,31 @@ export default class HouseLists extends Component {
         return (
             <div className={clsPrefix}>
                 {
-                    this.props.singnalLess
+                    (this.props.fetchFor === 'RESET' && !this.props.isFetchCrash)
+                    || (this.props.fetchFor === 'LOADMORE')
+                        ? <RentUnitList
+                            {...this.props.rentUnitList}
+                            loading={this.props.isLoading}
+                            isFetchCrash={this.props.isFetchCrash}
+                        />
+                        : null
+                }
+                {
+                    this.props.fetchFor === 'RESET' && this.props.isFetchCrash
                     ? <SingnalLessNote />
                     : null
                 }
                 {
-                    ((!this.props.singnalLess && this.props.rentUnitList.list.length > 0)
-                    || this.props.rentUnitList.loading)
-                    ? <RentUnitList {...this.props.rentUnitList} />
-                    : <RentUnitsSuggest {...this.props.suggestRentUnitList} />
+                    (
+                        this.props.fetchFor === 'RESET'
+                        // 成功请求数据
+                        && !this.props.isFetchCrash
+                        && !this.props.isLoading
+                        // 请求列表数目为0
+                        && this.props.rentUnitList.list.length === 0
+                    )
+                    ? <RentUnitsSuggest {...this.props.suggestRentUnitList} />
+                    : null
                 }
             </div>
         );
@@ -31,23 +47,26 @@ export default class HouseLists extends Component {
 HouseLists.propTypes = {
     rentUnitList: PropTypes.shape({
         onLoadMore: PropTypes.func,
-        loading: PropTypes.bool,
         list: PropTypes.arrayOf(rentUnitShape),
+        pager: pagerShape,
     }),
     suggestRentUnitList: PropTypes.shape({
         list: PropTypes.arrayOf(rentUnitShape),
     }),
-    singnalLess: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    isFetchCrash: PropTypes.bool,
+    fetchFor: PropTypes.oneOf(['RESET', 'LOADMORE']),
 };
 
 HouseLists.defaultProps = {
     rentUnitList: {
         onLoadMore: () => {},
-        loading: false,
         list: [],
     },
     suggestRentUnitList: {
         list: [],
     },
-    singnalLess: false,
+    isLoading: false,
+    isFetchCrash: false,
+    fetchFor: 'RESET',
 };
