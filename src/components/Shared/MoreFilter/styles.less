@@ -1,0 +1,53 @@
+@import (reference) '~styles/lib.less';
+
+.m-morefilter {
+    padding: 40px 0 0 22px;
+
+    &-title {
+        margin-bottom: 40px;
+        font-family: PingFangSC-Medium;
+        .font-size(40);
+    }
+
+    &-item {
+        line-height: 1;
+        .font-size(28);
+        margin-right: 30px;
+    }
+
+    &-direction {
+        margin-bottom: 70px;
+
+        .direction-item {
+            width: 115px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &-feature {
+        margin-bottom: 78px;
+
+        .feature-item {
+            width: inherit;
+            margin-bottom: 32px;
+            padding: 16px 20px;
+
+            &:nth-child(4n) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &-area {
+        margin-bottom: 70px;
+
+        .area-item {
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

@@ -1,7 +1,6 @@
 import webpack from 'webpack';
-import ExtractTextPlugin from "extract-text-webpack-plugin";
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import webpackMerge from 'webpack-merge';
-import path from 'path';
 
 import webpackBaseConf from './webpack.config.base';
 import baseConfig from './baseConfig';

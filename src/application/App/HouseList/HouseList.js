@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
+
+// 业务组件
 import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
-import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
-import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
-import { ajaxInitPositionData } from './ajaxInitHouseList';
+import HouseLists from 'components/App/HouseList/HouseLists';
+import Filter from 'components/App/HouseList/Filter/Filter';
+
+import fetchRentUnitList from './fetchRentUnitList';
 
 import Service from 'lib/Service';
+import getCurrentPosition from 'lib/geolocation';
 import './styles.less';
+getCurrentPosition();
+const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends Component {
     constructor(props) {
@@ -13,37 +19,117 @@ export default class HouseList extends Component {
 
         this.state = {
             positionFilterData: null,
-        };
-    }
-    handleTouchTap() {
-        console.log('handleTouchTap')
-    }
 
-    handleClick() {
-        console.log('handleClick')
+            filter: {},
+            pager: {
+                curPage: 1,
+                totalPage: 1,
+            },
+
+            rentUnitList: [],
+            suggestRentUnitList: [],
+            fetching: false,
+            isFetchCrash: false,
+
+            fetchFor: 'RESET', // 页面重置类型的数据请求，整个列表变化
+        };
+
+        this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
     componentDidMount() {
-        ajaxInitPositionData()
-            .then((positionFilterData) => {
+        this.handleFetchList('RESET');
+    }
+
+    handleFetchList(fetchFor) {
+        if (this.state.fetching) {
+            return;
+        }
+
+        let { curPage, totalPage } = this.state.pager;
+        if (fetchFor === 'LOADMORE') {
+            curPage += 1;
+        }
+        if (fetchFor === 'RESET') {
+            curPage = 1;
+            totalPage = 1;
+        }
+
+        this.setState({
+            fetchFor,
+            ...(fetchFor === 'RESET' ? {rentUnitList: []} : {}),
+
+            fetching: true,
+        });
+
+        fetchRentUnitList({ filter: this.state.filter, pager: { curPage, totalPage } })
+            .then((res) => {
+                let rentUnitList = [];
+                if (fetchFor === 'LOADMORE') {
+                    rentUnitList = this.state.rentUnitList.concat(res.data.rentUnitList);
+                }
+                if (fetchFor === 'RESET') {
+                    rentUnitList = res.data.rentUnitList;
+                }
+
                 this.setState({
-                    positionFilterData,
+                    fetching: false,
+                    isFetchCrash: res.fetch.type === 'CRASH',
+                    rentUnitList,
+                    suggestRentUnitList: res.data.suggestRentUnitList,
+                    pager: {
+                        ...res.data.pager,
+                        ...(res.fetch.type === 'SUCCESS'
+                            ? {}
+                            : { curPage: this.state.pager.curPage }
+                        ),
+                    },
                 });
-                console.log('positionData', positionFilterData);
-            })
+            });
+    }
+
+    onFilterConfirm = (filter) => {
+        this.setState({
+            filter,
+        }, () => {
+            this.handleFetchList('RESET');
+        });
+    }
+
+    handleLoadMore() {
+        this.handleFetchList('LOADMORE');
+    }
+
+    handleTouchTap() {
+        console.log('App HouseList handleTouchTap')
+    }
+
+    handleClick() {
+        console.log('App HouseList handleClick')
     }
 
     render() {
-        const {
-            positionFilterData,
-        } = this.state;
-        console.log('render state', positionFilterData);
         return (
-            <div className="test" onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
+            <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
                 <HeadShared />
                 <hr className="u-housedetail-partline"/>
-                <HouseLists />
-                <PositionFilter positionFilterData={positionFilterData} />
+                <Filter
+                    className={`${houselistClassPrefix}-filter`}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
+                <HouseLists
+                    rentUnitList={{
+                        pager: this.state.pager,
+                        list: this.state.rentUnitList,
+                        onLoadMore: this.handleLoadMore,
+                    }}
+                    suggestRentUnitList={{
+                        list: this.state.suggestRentUnitList,
+                    }}
+                    isFetchCrash={this.state.isFetchCrash}
+                    fetchFor={this.state.fetchFor}
+                    isLoading={this.state.fetching}
+                />
             </div>
         );
     }

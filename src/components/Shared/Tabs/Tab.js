@@ -23,7 +23,7 @@ class Tab extends Component {
 
 	handleTouchTap = (event) => {
 		if(this.props.onTouchTab) {
-			this.props.onTouchTab(this.props.index, event, this)
+			this.props.onTouchTab(this.props.index, event, this.props.passData);
 		}
 	}
 

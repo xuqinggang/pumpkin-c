@@ -13,9 +13,7 @@ const routes = (history) => {
                     // <Route exact path="/" component={HouseList} />
                 }
                 <Route exact path={`/:cityName/nangua/detail/:rentUnitId`} component={HouseDetail} />
-                {
-                    // <Route exact path="/list" component={HouseList} />
-                }
+                <Route exact path="/:cityName/nangua/list" component={HouseList} />
             </Switch>
         </Router>
     );

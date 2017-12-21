@@ -69,8 +69,8 @@ Service.reqServer = (url, paramters, type = 'GET') => {
             xmlHttp.send(null);
         } else if (type === 'PUT' || type === 'POST') {
             xmlHttp.open(type, url, true);
-            xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xmlHttp.send(reqData);
+            xmlHttp.setRequestHeader('Content-type', 'application/json');
+            xmlHttp.send(JSON.stringify(paramters));
         }
         console.info(`请求server: type=${type} url=${url}`);
     });

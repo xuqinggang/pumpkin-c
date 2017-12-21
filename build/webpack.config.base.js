@@ -48,6 +48,8 @@ const webpackBaseConf = {
         alias: {
             Shared: resolve('src/components/Shared'),
             components: resolve('src/components'),
+            application: resolve('src/application'),
+            base: resolve('src/base'),
             App: resolve('src/application/App'),
             Map: resolve('src/application/Map'),
             styles: resolve('src/styles'),
