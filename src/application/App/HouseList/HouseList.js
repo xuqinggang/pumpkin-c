@@ -56,7 +56,6 @@ export default class HouseList extends Component {
 
         let { curPage, totalPage } = this.state.pager;
         if (fetchFor === 'LOADMORE') {
-            if (curPage === totalPage) return;
             curPage += 1;
         }
         if (fetchFor === 'RESET') {
@@ -66,6 +65,7 @@ export default class HouseList extends Component {
 
         this.setState({
             fetchFor,
+            ...(fetchFor === 'RESET' ? {rentUnitList: []} : {}),
 
             fetching: true,
         });
@@ -79,12 +79,18 @@ export default class HouseList extends Component {
                 if (fetchFor === 'RESET') {
                     rentUnitList = res.data.rentUnitList;
                 }
+
                 this.setState({
                     fetching: false,
                     isFetchCrash: res.fetch.type === 'CRASH',
                     rentUnitList,
+                    suggestRentUnitList: res.data.suggestRentUnitList,
                     pager: {
                         ...res.data.pager,
+                        ...(res.fetch.type === 'SUCCESS'
+                            ? {}
+                            : { curPage: this.state.pager.curPage }
+                        ),
                     },
                 });
             });
@@ -121,12 +127,16 @@ export default class HouseList extends Component {
                 />
                 <HouseLists
                     rentUnitList={{
+                        pager: this.state.pager,
                         list: this.state.rentUnitList,
-                        loading: this.state.fetching || this.state.isFetchCrash,
                         onLoadMore: this.handleLoadMore,
                     }}
-                    suggestRentUnitList={{ list: this.state.suggestRentUnitList }}
-                    singnalLess={this.state.fetchFor === 'RESET' && this.state.isFetchCrash}
+                    suggestRentUnitList={{
+                        list: this.state.suggestRentUnitList,
+                    }}
+                    isFetchCrash={this.state.isFetchCrash}
+                    fetchFor={this.state.fetchFor}
+                    isLoading={this.state.fetching}
                 />
             </div>
         );

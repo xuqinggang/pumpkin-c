@@ -13,3 +13,8 @@ export const rentUnitShape = PropTypes.shape({
     direct: PropTypes.string,
     price: PropTypes.number,
 });
+
+export const pagerShape = PropTypes.shape({
+    curPage: PropTypes.number,
+    totalPage: PropTypes.number,
+});
