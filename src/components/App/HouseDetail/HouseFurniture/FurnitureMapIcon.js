@@ -37,7 +37,7 @@ const equipMap = {
     },
     REFRIGIRATER: {
         text: '冰箱',
-        className: 'icon-Refrigerator',
+        className: 'icon-refrigerator',
     },
     VENTILATOR: {
         text: '油烟机',
