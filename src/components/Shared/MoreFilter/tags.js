@@ -18,7 +18,7 @@ const directionTagsArr = [
     },
     {
         text: '南北',
-        value: 'SOUTHNORTH',
+        value: 'NORTHSOUTH',
     },
 ];
 
