@@ -8,9 +8,7 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 import fetchRentUnitList from './fetchRentUnitList';
 
 import Service from 'lib/Service';
-import getCurrentPosition from 'lib/geolocation';
 import './styles.less';
-getCurrentPosition();
 const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends Component {
@@ -89,6 +87,7 @@ export default class HouseList extends Component {
     }
 
     onFilterConfirm = (filter) => {
+        console.log('filter', filter);
         this.setState({
             filter,
         }, () => {

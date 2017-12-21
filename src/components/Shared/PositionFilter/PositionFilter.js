@@ -48,15 +48,10 @@ export default class PositionFilter extends Component {
             // 第三级item选中索引
             thirdItemSelectedIndex: -1,
         };
+
         // 第一级item选中索引
         this.firstItemSelectedIndex = 0;
 
-        // ex: {
-        //    districts: {
-        //      second: { id: 123, text: '' }
-        //      third: { id: 555, text: '' }
-        //    }
-        // }
         this._initPositionData(props.positionFilterData);
     }
 
@@ -74,7 +69,7 @@ export default class PositionFilter extends Component {
             this.positionType = this.positionTypeArr[0];
             this.positionTypeArr.forEach((positionTypeItem) => {
                 this.positionData[positionTypeItem] = {};
-            })
+            });
         }
     }
 
@@ -101,12 +96,22 @@ export default class PositionFilter extends Component {
     // 回调函数-第二级item点击
     // ptData: 点击item信息: ex: { id:123, text:'' }
     onSecondItemTap = (index, event, ptData) => {
+        console.log('index, event, ptData', index, event, ptData, this.positionType);
         this.positionData[this.positionType].second = ptData;
         this.setState({
             secondItemSelectedIndex: index,
         });
+
         if (index == 0) {
             this.onPositionFilterChange(this.positionType, this.positionData);
+            return;
+        }
+
+        // 如果点击是附近类型，则其第二级item全部，可以出发filterChange
+        if (this.positionType === 'around') {
+            this.onPositionFilterChange(this.positionType, this.positionData);
+            console.log('this.positionType', this.positionType);
+            return;
         }
     }
 
@@ -125,7 +130,9 @@ export default class PositionFilter extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this._initPositionData(nextProps.positionFilterData);
+        if (!this.positionType) {
+            this._initPositionData(nextProps.positionFilterData);
+        }
     }
 
     renderChildren() {

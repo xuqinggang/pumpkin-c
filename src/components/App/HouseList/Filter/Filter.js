@@ -12,9 +12,11 @@ import './styles.less';
 
 const filterClass = 'm-filter';
 
+// 位置类型对应接口参数key
 const ptTypeMapParamsKey = {
     districts: ['districtId', 'circleId'],
     subways: ['subwayId', 'stationId'],
+    around: ['nearByInfo'],
 };
 
 export default class Filter extends Component {
@@ -52,6 +54,7 @@ export default class Filter extends Component {
 
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionType, positionData) => {
+        console.log('positionType, positionData', positionType, positionData);
         if (!positionType || !positionData) return;
 
         Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
@@ -59,13 +62,23 @@ export default class Filter extends Component {
             if (ptType == positionType) {
                 // 根据位置类型对应的数据
                 const ptDataByType = positionData[positionType];
-                if (ptDataByType.second && ptDataByType.second.id != -1) {
-                    this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
+
+                if (ptDataByType.second) {
+                    if (ptDataByType.second.id != -1) {
+                        this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
+                    } else {
+                        this._clearFilterParams(paramsKeyArr[0]);
+                    }
                 }
 
-                if (ptDataByType.third && ptDataByType.third.id != -1) {
-                    this.filterParams[paramsKeyArr[1]] = ptDataByType.third.id;
+                if (ptDataByType.third) {
+                    if (ptDataByType.third.id != -1) {
+                        this.filterParams[paramsKeyArr[1]] = ptDataByType.third.id;
+                    } else {
+                        this._clearFilterParams(paramsKeyArr[1]);
+                    }
                 }
+
                 return;
 
             } else {

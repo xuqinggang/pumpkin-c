@@ -1,3 +1,4 @@
+import getCurrentPosition from 'lib/geolocation';
 import Service from 'lib/Service';
 
 const Map = {
@@ -12,6 +13,7 @@ const Map = {
         text: '地铁',
     },
 };
+
 
 function stuffDataToPosition(itemArr, type, positionData) {
     let firstItemsArr = itemArr && itemArr.map((item, index) => {
@@ -56,46 +58,89 @@ function stuffDataToPosition(itemArr, type, positionData) {
     }
 }
 
+function stuffAroundDataToPosition() {
+    // 获取地理位置
+    return getCurrentPosition()
+        .then((lonlatArr) => {
+            if (lonlatArr) {
+                window.isGeoLocation = true;
+                window.lonlatArr = lonlatArr;
+                const [lon, lat] = lonlatArr;
+                const positionArroundObj = {
+                    text: '附近',
+                    itemArr: [
+                        {
+                            text: '不限',
+                            id: {
+                                lon,
+                                lat,
+                                distance: 1,
+                            },
+                        },
+                        {
+                            text: '1km',
+                            id: {
+                                lon,
+                                lat,
+                                distance: 1,
+                            },
+                        },
+                        {
+                            text: '2km',
+                            id: {
+                                lon,
+                                lat,
+                                distance: 2,
+                            },
+                        },
+                        {
+                            text: '3km',
+                            id: {
+                                lon,
+                                lat,
+                                distance: 3,
+                            },
+                        },
+                    ],
+                };
+
+                return positionArroundObj;
+            }
+        })
+        .catch((err) => {
+            window.isGeoLocation = false;
+            throw new Error(err);
+        });
+}
 export function ajaxInitPositionData(cityId = 1) {
     // 位置筛选的数据
     let positionData = {};
 
-    return Promise.all([
-        _ajaxDistricts(cityId),
-        _ajaxSubways(cityId),
-    ])
-        .then((datas) => {
-            datas.forEach((data) => {
-                stuffDataToPosition(data.arr, data.type, positionData);
-            });
-            
-            // 手动添加附近相关数据
-            positionData.around = {
-                text: '附近',
-                itemArr: [
-                    {
-                        text: '附近',
-                    },
-                    {
-                        text: '1km',
-                        distance: 1,
-                    },
-                    {
-                        text: '2km',
-                        distance: 2,
-                    },
-                    {
-                        text: '3km',
-                        distance: 3,
-                    },
-                ],
-            };
+    return new Promise((resolve, reject) => {
+        Promise.all([
+            _ajaxDistricts(cityId),
+            _ajaxSubways(cityId),
+        ])
+            .then((datas) => {
+                datas.forEach((data) => {
+                    stuffDataToPosition(data.arr, data.type, positionData);
+                });
 
-            return positionData;
-        })
-        .catch((err) => {
-            console.log('ajaxInitPositionData err:', err);
-        })
+                // 手动添加附近相关数据
+                // 如果地理位置权限允许，则添加附近数据
+                stuffAroundDataToPosition()
+                    .then((positionArroundObj) => {
+                        positionData.around = positionArroundObj;
+                        resolve(positionData);
+                    })
+                    .catch((err) => {
+                        resolve(positionData);
+                    });
+            })
+            .catch((err) => {
+                console.log('ajaxInitPositionData err:', err);
+            })
+    });
 }
 
 function _ajaxDistricts(cityId) {
