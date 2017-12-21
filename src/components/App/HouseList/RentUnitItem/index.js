@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { withRouter } from 'react-router';
 import { rentUnitShape } from 'base/propTypes';
 import { rentalTypeMap, directMap } from 'base/infoMap';
 import defaultImage from './images/nangua.png';
@@ -14,11 +15,16 @@ class RentUnitItem extends Component {
             imgLoading: true,
         };
         this.handleImageLoad = this.handleImageLoad.bind(this);
+        this.handleTouchTap = this.handleTouchTap.bind(this);
     }
     handleImageLoad() {
         this.setState({
             imgLoading: false,
         });
+    }
+    handleTouchTap() {
+        const cityName = this.props.match.params.cityName;
+        this.props.history.push(`/${cityName}/nangua/detail/${this.props.rentUnitId}`);
     }
     render() {
         const {
@@ -40,6 +46,7 @@ class RentUnitItem extends Component {
         });
         return (
             <div
+                onTouchTap={this.handleTouchTap}
                 className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
             >
                 <div className={`${itemClassPrefix}-img-wrap`}>
@@ -99,4 +106,4 @@ class RentUnitItem extends Component {
 
 RentUnitItem.propTypes = rentUnitShape.isRequired;
 
-export default RentUnitItem;
+export default withRouter(RentUnitItem);
