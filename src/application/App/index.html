@@ -93,21 +93,18 @@
         </script>
     </head>
     <body>
-        <div event-tracking-click event-tracking-param-catalog="总价" event-tracking-param-label="500-800万">
-            <p>asdf</p>
-            <p>asdf</p>
-        </div>
         <div id="root"></div>
-        <script type="text/javascript" src="//focus-res-test.cn/front-end/stat.js"></script>
+        <script type="text/javascript" src="//t.focus-res.cn/front-end/stat.js"></script>
         <script>
+            // todo citId: 默认1
             window.config_external_params({
-                city: 1,
-                pageName: 'detail',
-                text: function() {
-                    return 'haha';
+                city: '1',
+                pageName: 'nangua_house_detail',
+                text: function(el) {
+                    return el.innerText;
                 },
-                url: function() {
-                    return '/detail';
+                href: function() {
+                    return $(this).attr('href');
                 }
             });
         </script>

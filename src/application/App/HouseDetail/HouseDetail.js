@@ -28,7 +28,9 @@ export default class HouseDetail extends Component {
             show: false,
             houseDetailData: {},
         };
+        window.rentUnitId = props.match.params.rentUnitId;
         console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
+        console.log('window.rentUnitId', window.rentUnitId);
     }
 
     handleTouchTap() {
