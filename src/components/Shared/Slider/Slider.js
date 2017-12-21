@@ -61,7 +61,6 @@ export default class Slider extends Component{
 
         const index = this.currentIndex;
         const touches = event.touches[0];
-        this.testDom.innerHTML = touches.pageX;
         this.delta = {
             x: touches.pageX - this.start.x,
         };
