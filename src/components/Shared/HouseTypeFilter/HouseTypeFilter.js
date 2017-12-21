@@ -65,11 +65,9 @@ export default class HouseTypeFilter extends Component {
     componentWillReceiveProps(nextProps) {
         // 是否清空
         if ('isClear' in nextProps) {
-            if (nextProps.isClear) {
-                this.setState({
-                    isClear: true,
-                });
-            }
+            this.setState({
+                isClear: nextProps.isClear,
+            });
         };
     }
 

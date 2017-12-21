@@ -97,14 +97,15 @@ export default class Filter extends Component {
     onFilterMoneyConfirm = (filterMoneyArr) => {
         if (!filterMoneyArr) {
             this._clearFilterParams('priceInfo');
-            return;
         }
 
         // 20000标志着不限
-        if (filterMoneyArr[1] == 20000) {
-            this.filterParams.priceInfo = { floor: filterMoneyArr[0] }
-        } else {
-            this.filterParams.priceInfo = { floor: filterMoneyArr[0], ceil: filterMoneyArr[1] };
+        if (filterMoneyArr) {
+            if (filterMoneyArr[1] == 20000) {
+                this.filterParams.priceInfo = { floor: filterMoneyArr[0] }
+            } else {
+                this.filterParams.priceInfo = { floor: filterMoneyArr[0], ceil: filterMoneyArr[1] };
+            }
         }
 
         this.props.onFilterConfirm(this.filterParams);
@@ -114,13 +115,13 @@ export default class Filter extends Component {
     }
 
     onFilterHouseTypeConfirm = (filterHouseTypeObj) => {
+        console.log('filterHouseTypeObj', filterHouseTypeObj);
         if (!filterHouseTypeObj) {
             this._clearFilterParams('sharedRooms');
             this._clearFilterParams('wholeRooms');
-            return;
         }
 
-        Object.keys(filterHouseTypeObj).forEach((houseType) => {
+        filterHouseTypeObj && Object.keys(filterHouseTypeObj).forEach((houseType) => {
             const houseTypeValArr = filterHouseTypeObj[houseType];
             if (!houseTypeValArr.length) {
                 this._clearFilterParams(`${houseType}Rooms`);
@@ -150,10 +151,9 @@ export default class Filter extends Component {
                 const paramsKey = keyMapParamsKey[key];
                 this._clearFilterParams(paramsKey);
             });
-            return;
         }
 
-        Object.keys(filterMoreObj).forEach((key) => {
+        filterMoreObj && Object.keys(filterMoreObj).forEach((key) => {
             const moreValArr = filterMoreObj[key];
             const paramsKey = keyMapParamsKey[key];
             if (!moreValArr.length) {
