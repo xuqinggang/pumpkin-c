@@ -11,10 +11,10 @@ export default class Slider extends Component{
     constructor(props){
         super(props);
         const {
-            defaultValue,
-            max,
-            min,
-            step,
+            defaultValue = [0, 100],
+            max = 100,
+            min = 0,
+            step = 1,
         } = this.props
 
         this.max = max;
@@ -22,46 +22,56 @@ export default class Slider extends Component{
         this.step = step;
         this.halfStep = step / 2;
         this.defaultValue = defaultValue;
+
+        // 当前点击断点的索引
+        this.currentIndex = null;
+
+        // 根据defaultValue, 设置每一个断点的state
         let states = {};
         defaultValue.forEach((value, index) => {
             states[`currentValue${index}`] = value;
         });
         this.state = states;
-
-        // this.onHandleDown = this.onHandleDown.bind(this)
-        // this.onHandleMove = this.onHandleMove.bind(this)
-        // this.onHandleUp = this.onHandleUp.bind(this)
-        // this.clickhandler = this.clickhandler.bind(this)
-
-        // this.draggingPayload  = {
-        //     isDragging: false,
-        //     prevX : 0,
-        //     isThreshhold : false, // 是否到达阈值
-        //     handleMove : undefined, //记录匿名函数的指针
-        //     handleUp : undefined, //记录匿名函数的指针
-        // }
     }
 
-    handleTouchStart = (index, event) => {
+    handleTouchStart = (event) => {
         event.stopPropagation();
+        this.currentIndex = event.currentTarget.getAttribute('data-index');
+        const index = this.currentIndex;
+
+        // 允许move
         this.cancelMove = false;
+
         const touches = event.touches[0];
         this.start = {
             x: touches.pageX,
         };
-        this[`pre${index}`] = this.state[`currentValue${index}`];
+
+        // 记录move前的value, 因为移动过程中value，是不断变化的
+        this[`preValue${index}`] = this.state[`currentValue${index}`];
+
+        document.body.addEventListener('touchmove', this.handleTouchMove, false);
+        document.body.addEventListener('touchend', this.handleTouchEnd, false);
     }
 
-    handleTouchMove = (index, event) => {
+    handleTouchMove = (event) => {
         event.stopPropagation();
+
         if (this.cancelMove) { return; }
+
+        const index = this.currentIndex;
         const touches = event.touches[0];
+        this.testDom.innerHTML = touches.pageX;
         this.delta = {
             x: touches.pageX - this.start.x,
         };
-        const preValue = this.state[`currentValue${index}`];
-        let currentValue = this._validteValue(Math.ceil(this[`pre${index}`] + (this.delta.x / this.valueWidth)), index);
+
+        // 取合法的值，每个断点的值都要在左右两个断点之间
+        let currentValue = this._validteValue(Math.ceil(this[`preValue${index}`] + (this.delta.x / this.valueWidth)), index);
+
+        // 根据当前value值，寻找最接近step的
         currentValue = this._stepValue(currentValue);
+
         if (currentValue != this.state[`currentValue${index}`]) {
             this.setState({
                 [`currentValue${index}`]: currentValue,
@@ -73,25 +83,35 @@ export default class Slider extends Component{
         }
     }
 
-    handleTouchEnd = (index, event) => {
+    handleTouchEnd = (event) => {
         event.stopPropagation();
         this.cancelMove = true;
+
+        document.body.removeEventListener('touchmove', this.handleTouchMove, false);
+        document.body.removeEventListener('touchend', this.handleTouchEnd, false);
     }
 
     // _isPassBoundingValue(value) {
     //     return value < this.min || value > this.max;
     // }
 
+    // 根据当前value值，寻找最接近step的
+    // ex:当前value = 234, step = 20，那么最接近step的应该是240
+    // 寻找策略: 如下算法 
     _stepValue(value) {
         const interge = parseInt(value / this.step, 10);
-        const residue = value % this.step;
         let rt = interge * this.step;
-        if (residue > (this.halfStep)) {
+
+        // 余数，余数如果大于当前step的一半，则加上一个step
+        const residue = value % this.step;
+        if (residue > this.halfStep) {
             rt += this.step;
         }
+
         return rt;
     }
 
+    // 取得合法的值，保证断点在移动的过程中永远是在左右两侧断点中间
     _validteValue(value, index) {
         // 当前索引值，左右两侧的值
         // 假如当前索引为1,左侧是索引为0的值，右侧是索引为2的值，但是没有索引为2的,所以取边界值即是this.max
@@ -108,6 +128,7 @@ export default class Slider extends Component{
         if (this.state[`currentValue${rightIndex}`] != undefined) {
             rightValue = this.state[`currentValue${rightIndex}`];
         }
+
         return value < leftValue ? 
             leftValue : (
                 value > rightValue ?
@@ -115,14 +136,22 @@ export default class Slider extends Component{
             );
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
+    // }
 
     componentWillReceiveProps(nextProps) {
         if ('defaultValue' in nextProps) {
-            let states = {};
-            nextProps.defaultValue.forEach((value, index) => {
+            const nextDefaultValue = nextProps.defaultValue;
+            const defaultValue = this.props.defaultValue;
+
+            // 如果渲染前后defaultValue一样
+            if (defaultValue.length === nextDefaultValue.length && shallowEqual(nextDefaultValue, defaultValue)) {
+                return;
+            }
+
+            const states = {};
+            nextDefaultValue.forEach((value, index) => {
                 states[`currentValue${index}`] = value;
             });
             this.setState(states);
@@ -130,17 +159,16 @@ export default class Slider extends Component{
     }
 
     componentDidMount() {
+        this.testDom = document.querySelectorAll('.test')[0];
         const sliderDomInfo = this.sliderDom.getBoundingClientRect();
-        // this.sliderBoundingRight = sliderDomInfo.right;
-        // this.sliderBoundingLeft = sliderDomInfo.left;
 
         // slider横条宽度
         this.sliderWidth = sliderDomInfo.width;
 
         // 每一个值的宽度
         this.valueWidth = this.sliderWidth / (this.max - this.min);
-        
     }
+
     render() {
         const {
             defaultValue,
@@ -186,16 +214,18 @@ export default class Slider extends Component{
                 <div className={`${sliderClass}-track`} style={trackStyle}></div>
                 <span className={`${sliderClass}-handle`}
                     style={handleFirstStyle}
-                    onTouchStart={this.handleTouchStart.bind(this, 0)}
-                    onTouchMove={this.handleTouchMove.bind(this, 0)}
-                    onTouchEnd={this.handleTouchEnd.bind(this, 0)}
+                    data-index={0}
+                    onTouchStart={this.handleTouchStart}
+                    onTouchMove={this.handleTouchMove}
+                    onTouchEnd={this.handleTouchEnd}
                 >
                 </span>
                 <span className={`${sliderClass}-handle`}
                     style={handleTwoStyle}
-                    onTouchStart={this.handleTouchStart.bind(this, 1)}
-                    onTouchMove={this.handleTouchMove.bind(this, 1)}
-                    onTouchEnd={this.handleTouchEnd.bind(this, 1)}
+                    data-index={1}
+                    onTouchStart={this.handleTouchStart}
+                    onTouchMove={this.handleTouchMove}
+                    onTouchEnd={this.handleTouchEnd}
                 ></span>
             </div>
         )
