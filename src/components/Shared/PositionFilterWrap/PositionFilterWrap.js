@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import PositionFilter from 'Shared/PositionFilter/PositionFilter';
-import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitHouseList';
+import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 
 // 位置筛选，请求初始化筛选数据
 export default class PositionFilterWrap extends Component {

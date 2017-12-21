@@ -6,11 +6,11 @@ import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 
 import fetchRentUnitList from './fetchRentUnitList';
-import { ajaxInitPositionData } from './ajaxInitHouseList';
 
 import Service from 'lib/Service';
+import getCurrentPosition from 'lib/geolocation';
 import './styles.less';
-
+getCurrentPosition();
 const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends Component {
@@ -38,14 +38,6 @@ export default class HouseList extends Component {
     }
 
     componentDidMount() {
-        ajaxInitPositionData()
-            .then((positionFilterData) => {
-                this.setState({
-                    positionFilterData,
-                });
-                console.log('positionData', positionFilterData);
-            });
-
         this.handleFetchList('RESET');
     }
 
@@ -91,11 +83,11 @@ export default class HouseList extends Component {
     }
 
     onFilterConfirm = (filter) => {
-        this.setState({
-            filter,
-        }, () => {
-            this.handleFetchList('RESET');
-        });
+        // this.setState({
+        //     filter,
+        // }, () => {
+        //     this.handleFetchList('RESET');
+        // });
     }
 
     handleLoadMore() {
@@ -113,21 +105,23 @@ export default class HouseList extends Component {
     render() {
         return (
             <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
-                <HeadShared />
-                <hr className="u-housedetail-partline"/>
-                <Filter 
-                    className={`${houselistClassPrefix}-filter`}
-                    onFilterConfirm={this.onFilterConfirm}
-                />
-                <HouseLists
-                    rentUnitList={{
-                        list: this.state.rentUnitList,
-                        loading: this.state.fetching || this.state.isFetchCrash,
-                        onLoadMore: this.handleLoadMore,
-                    }}
-                    suggestRentUnitList={{ list: this.state.suggestRentUnitList }}
-                    singnalLess={this.state.fetchFor === 'RESET' && this.state.isFetchCrash}
-                />
+                {
+                    // <HeadShared />
+                    // <hr className="u-housedetail-partline"/>
+                    <Filter 
+                        className={`${houselistClassPrefix}-filter`}
+                        onFilterConfirm={this.onFilterConfirm}
+                    />
+                    // <HouseLists
+                    //     rentUnitList={{
+                    //         list: this.state.rentUnitList,
+                    //             loading: this.state.fetching || this.state.isFetchCrash,
+                    //             onLoadMore: this.handleLoadMore,
+                    //     }}
+                    //     suggestRentUnitList={{ list: this.state.suggestRentUnitList }}
+                    //     singnalLess={this.state.fetchFor === 'RESET' && this.state.isFetchCrash}
+                    // />
+                }
             </div>
         );
     }
