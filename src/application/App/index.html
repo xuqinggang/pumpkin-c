@@ -93,6 +93,23 @@
         </script>
     </head>
     <body>
+        <div event-tracking-click event-tracking-param-catalog="总价" event-tracking-param-label="500-800万">
+            <p>asdf</p>
+            <p>asdf</p>
+        </div>
         <div id="root"></div>
+        <script type="text/javascript" src="//focus-res-test.cn/front-end/stat.js"></script>
+        <script>
+            window.config_external_params({
+                city: 1,
+                pageName: 'detail',
+                text: function() {
+                    return 'haha';
+                },
+                url: function() {
+                    return '/detail';
+                }
+            });
+        </script>
     </body>
 </html>
