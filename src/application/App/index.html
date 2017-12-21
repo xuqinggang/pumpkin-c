@@ -94,5 +94,21 @@
     </head>
     <body>
         <div id="root"></div>
+        <script type="text/javascript" src="//t.focus-res.cn/front-end/stat.js"></script>
+        <script>
+            // todo citId: 默认1
+            window.config_external_params({
+                city: '1',
+                pageName: 'nangua_house_detail',
+                text: function(el) {
+                    return el.innerText;
+                },
+                href: function() {
+                    if(typeof this.getAttribute === 'function') {
+                        return this.getAttribute('href');
+                    }
+                }
+            });
+        </script>
     </body>
 </html>
