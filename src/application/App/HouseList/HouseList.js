@@ -83,11 +83,11 @@ export default class HouseList extends Component {
     }
 
     onFilterConfirm = (filter) => {
-        // this.setState({
-        //     filter,
-        // }, () => {
-        //     this.handleFetchList('RESET');
-        // });
+        this.setState({
+            filter,
+        }, () => {
+            this.handleFetchList('RESET');
+        });
     }
 
     handleLoadMore() {
@@ -105,23 +105,21 @@ export default class HouseList extends Component {
     render() {
         return (
             <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
-                {
-                    // <HeadShared />
-                    // <hr className="u-housedetail-partline"/>
-                    <Filter 
-                        className={`${houselistClassPrefix}-filter`}
-                        onFilterConfirm={this.onFilterConfirm}
-                    />
-                    // <HouseLists
-                    //     rentUnitList={{
-                    //         list: this.state.rentUnitList,
-                    //             loading: this.state.fetching || this.state.isFetchCrash,
-                    //             onLoadMore: this.handleLoadMore,
-                    //     }}
-                    //     suggestRentUnitList={{ list: this.state.suggestRentUnitList }}
-                    //     singnalLess={this.state.fetchFor === 'RESET' && this.state.isFetchCrash}
-                    // />
-                }
+                <HeadShared />
+                <hr className="u-housedetail-partline"/>
+                <Filter
+                    className={`${houselistClassPrefix}-filter`}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
+                <HouseLists
+                    rentUnitList={{
+                        list: this.state.rentUnitList,
+                        loading: this.state.fetching || this.state.isFetchCrash,
+                        onLoadMore: this.handleLoadMore,
+                    }}
+                    suggestRentUnitList={{ list: this.state.suggestRentUnitList }}
+                    singnalLess={this.state.fetchFor === 'RESET' && this.state.isFetchCrash}
+                />
             </div>
         );
     }
