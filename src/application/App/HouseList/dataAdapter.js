@@ -16,6 +16,7 @@ const cvtBe2feRentUnit = data => ({
     bedroomCount: data.bedroomCount,
     direct: data.direct,
     price: data.price,
+    rentUnitId: data.rentUnitId,
 });
 
 export default {
