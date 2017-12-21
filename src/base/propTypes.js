@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
+export const valueType = PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.number.isRequired,
+]);
+
 export const rentUnitShape = PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string), // or oneOf
     imgUrl: PropTypes.string,
@@ -12,6 +17,7 @@ export const rentUnitShape = PropTypes.shape({
     bedroomCount: PropTypes.number,
     direct: PropTypes.string,
     price: PropTypes.number,
+    rentUnitId: valueType,
 });
 
 export const pagerShape = PropTypes.shape({

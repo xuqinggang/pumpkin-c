@@ -27,6 +27,7 @@ export default function() {
             }
 
             handleConfirmTap = () => {
+                console.log('handleConfirmTap');
                 this.props.onFilterConfirm(this.filterData);
             }
 

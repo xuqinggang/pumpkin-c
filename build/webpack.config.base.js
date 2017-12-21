@@ -55,6 +55,7 @@ const webpackBaseConf = {
             styles: resolve('src/styles'),
             config: resolve('src/config'),
             lib: resolve('src/lib'),
+            images: resolve('src/images'),
         },
     },
 

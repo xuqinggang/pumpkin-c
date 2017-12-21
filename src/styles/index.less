@@ -2,3 +2,9 @@
 @import './reset.less';
 @import './common.less';
 @import './grid.less';
+
+// 预加载图片
+body::after {
+    display: none;
+     content: url('~images/singalless.png') url('~images/nangua.png');
+}

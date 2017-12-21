@@ -8,9 +8,9 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 import fetchRentUnitList from './fetchRentUnitList';
 
 import Service from 'lib/Service';
-import getCurrentPosition from 'lib/geolocation';
+import { shallowEqual } from 'lib/util';
+
 import './styles.less';
-getCurrentPosition();
 const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends Component {
@@ -89,11 +89,14 @@ export default class HouseList extends Component {
     }
 
     onFilterConfirm = (filter) => {
-        this.setState({
-            filter,
-        }, () => {
-            this.handleFetchList('RESET');
-        });
+        if (!shallowEqual(this.state.filter, filter)) {
+            const newFilter = Object.assign({}, filter);
+            this.setState({
+                filter: newFilter,
+            }, () => {
+                this.handleFetchList('RESET');
+            });
+        }
     }
 
     handleLoadMore() {
@@ -109,6 +112,7 @@ export default class HouseList extends Component {
     }
 
     render() {
+        console.log('render', this.state.filter);
         return (
             <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
                 <HeadShared />
