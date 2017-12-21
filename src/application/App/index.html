@@ -104,7 +104,9 @@
                     return el.innerText;
                 },
                 href: function() {
-                    return $(this).attr('href');
+                    if(typeof this.getAttribute === 'function') {
+                        return this.getAttribute('href');
+                    }
                 }
             });
         </script>
