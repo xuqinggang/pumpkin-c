@@ -64,7 +64,6 @@ export default class DropDownScreen extends Component {
             }
         } else {
             this.screenDom.style.visibility = 'hidden';
-            this.screenDom.style.width = '0px';
             this.screenDom.style.height = '0px';
 
             if (isMask && this.maskDom) {
@@ -103,6 +102,7 @@ export default class DropDownScreen extends Component {
     }
 
     componentDidMount() {
+        // this.screenDom.style.width = window.innerWidth + 'px';
         window.addEventListener('resize', this._reSetScreenDomHeight);
     }
 

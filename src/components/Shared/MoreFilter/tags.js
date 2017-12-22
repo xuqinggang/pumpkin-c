@@ -86,7 +86,7 @@ const floorTagsArr = [
     },
     {
         text: '6-12层',
-        value: { 'floor': 40, 'ceil': 60 },
+        value: { 'floor': 6, 'ceil': 12 },
     },
     {
         text: '12层以上',

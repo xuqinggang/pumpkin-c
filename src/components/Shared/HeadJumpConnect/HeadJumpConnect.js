@@ -5,7 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-headJump';
 
-export default function() {
+export default function(jumpConditionObj) {
     return function(WrappedCom) {
         return class HeadJumpConnect extends Component {
             constructor(props) {
@@ -13,15 +13,17 @@ export default function() {
             }
 
             handleBackBtnTap = () => {
-                if (WrappedCom.handleJump) {
-                    WrappedCom.handleJump();
+                const { historyback } = jumpConditionObj;
+                if (historyback) {
+                    history.back();
                     return;
                 }
             }
 
             render() {
+                const { className } = jumpConditionObj;
                 return (
-                    <div className={ classnames(classPrefix, 'g-grid-row') }>
+                    <div className={ classnames(classPrefix, 'g-grid-row', className) }>
                         <span
                             onTouchTap={this.handleBackBtnTap}
                             className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}

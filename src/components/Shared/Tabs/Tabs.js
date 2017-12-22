@@ -118,9 +118,10 @@ class Tabs extends Component {
 			tabNav
 		}
 	}
+
     componentDidMount() {
-        console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
     }
+
 	render() {
         const { className,
             navClassName,
@@ -139,6 +140,11 @@ class Tabs extends Component {
         const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
             active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });
+
+        if (this.testDom) {
+            // alert(this.testDom.getBoundingClientRect().width);
+            console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
+        }
 
 		return (
 			<div className={`${classPrefix} ${className}`}>
