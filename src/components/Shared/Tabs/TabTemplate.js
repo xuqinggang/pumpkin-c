@@ -8,20 +8,22 @@ class TabTemplate extends Component {
     render() {
         const {children, isSelected, contentItemClass} = this.props;
         const templateStyle = {};
-        if(!isSelected) {
-            templateStyle.width = 0;
-            templateStyle.height = 0;
-            templateStyle.overflow = 'hidden';
-        }
+        // if(!isSelected) {
+        //     templateStyle.width = 0;
+        //     templateStyle.height = 0;
+        //     templateStyle.overflow = 'hidden';
+        // }
 
         const contentClassName = classnames('content-item', contentItemClass, {
             'active': isSelected,
         });
 
         return (
+            isSelected ? 
             <div style={templateStyle} className={contentClassName}>
                 {children}
             </div>
+            : null
         );
     }
         

@@ -144,26 +144,6 @@ export default class PositionFilter extends Component {
             secondItemSelectedIndex,
             thirdItemSelectedIndex,
         } = this.state;
-    console.log('renderChildren');
-        // positionFilterData = [{
-        //     text: '附近',
-        //     itemArr: [
-        //         {
-        //             text: '不限',
-        //             id: {
-        //                 distance: 1,
-        //             },
-        //         },
-        //         {
-        //             text: '1km',
-        //             id: {
-        //                 distance: 1,
-        //             },
-        //         },
-        //     ],
-        // }
-        // ];
-
 
         return (
             <Tabs
@@ -275,7 +255,7 @@ class ThirdItemList extends Component {
 
         return (
             thirdItemArr && thirdItemArr.length ? (
-                <ul className={`${ptClass}-third-list`}>
+                <ul className={`${ptClass}-third-list f-singletext-ellipsis`}>
                     {
                         thirdItemArr.map((item, index) => {
                             const isSelected = selectItemIndex === index;

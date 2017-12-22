@@ -218,11 +218,17 @@ export default class Filter extends Component {
                         onTouchTap={this.handleFilterShowTap}
                     >
                         {
+                            // <div className="wrap">
+                            //     <ul className="child1">
+                            //         <li>ads</li>
+                            //     </ul>
+                            //     <div className="child2">xx</div>
+                            // </div>
                             <PositionFilterWrap
                                 type="position"
                                 onFilterConfirm={this.onFilterPositionConfirm}
                             />
-                            }
+                        }
                     </DropDownScreen>
                 </li>
                 <li>

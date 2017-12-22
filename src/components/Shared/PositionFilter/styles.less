@@ -1,5 +1,19 @@
 @import (reference) '~styles/lib.less';
 
+.wrap {
+    display: flex;
+    flex-direction: row;
+
+    .child1 {
+        flex-basis: 300px;
+        background: red;
+    }
+
+    .child2 {
+        flex: 1;
+        background: black;
+    }
+}
 .m-ptfilter {
     width: 100%;
     height: 800px;
@@ -8,29 +22,36 @@
     .font-size(28);
 
     &-nav {
-        background-color: #f8f8f8;
-        display: inline-block;
-        width: 260px;
+        box-sizing: border-box;
         flex-basis: 260px;
+        background-color: #f8f8f8;
     }
     
     &-content {
+        box-sizing: border-box;
+        flex: 1;
+        // flex-basis: 490px;
         background-color: #fff;
         // & > &-item {
         //     background: red;               
         // }
         .m-ptfilter-nav {
             box-sizing: boder-box;
-            width: 100%;
-            flex-basis: 100%;
+            flex: 1;
+            // flex-basis: 490px;
             overflow-y: auto;
             // flex-basis: 100%;
             background-color: #fff;
 
             &.active {
-                width: 214px;
+                flex: inherit;
                 flex-basis: 214px;
                 border-right: 1px solid #eee;
+            }
+
+            .m-ptfilter-content {
+                flex: inherit;
+                flex-basis: 276px;
             }
         }
 
@@ -55,11 +76,11 @@
     }
 
     &-content-item {
-        width: 100%;
+        flex: 1;
     }
 
     &-third-list {
-       width: 100%;
+       flex: 1;
        overflow-y: scroll;
 
        .item {

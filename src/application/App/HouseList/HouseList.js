@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // 业务组件
-import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import HeadTitle from 'components/App/HouseList/HeadTitle/HeadTitle';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 
@@ -115,12 +115,13 @@ export default class HouseList extends Component {
         console.log('render', this.state.filter);
         return (
             <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
-                <HeadShared />
-                <hr className="u-housedetail-partline"/>
-                <Filter
-                    className={`${houselistClassPrefix}-filter`}
-                    onFilterConfirm={this.onFilterConfirm}
-                />
+                <div className={`${houselistClassPrefix}-head`}>
+                    <HeadTitle />
+                    <Filter
+                        className="filter"
+                        onFilterConfirm={this.onFilterConfirm}
+                    />
+                </div>
                 <HouseLists
                     rentUnitList={{
                         pager: this.state.pager,
