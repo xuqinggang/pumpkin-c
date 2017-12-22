@@ -87,6 +87,7 @@ export default class DropDownScreen extends Component {
 
     _reSetScreenDomHeight = () => {
         this.screenDom.style.height =  (window.innerHeight - this.reduceTop) + 'px';
+        this.maskDom.style.height = (window.innerHeight - this.reduceTop) + 'px';
     };
 
     shouldComponentUpdate(nextProps, nextState) {

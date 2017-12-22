@@ -36,8 +36,10 @@ export default class Filter extends Component {
     _toggleForbideScrollThrough(isForbide) {
         if (isForbide) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'inherit';
+            document.documentElement.style.overflow = 'inherit';
         }
     }
 
