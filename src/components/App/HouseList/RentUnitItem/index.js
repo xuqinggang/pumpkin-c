@@ -57,12 +57,12 @@ class RentUnitItem extends Component {
                         onLoad={this.handleImageLoad}
                     />
                 </div>
-                <div className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
-                    <h1 className="intro-title" >
+                <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
+                    <li className="intro-title" >
                         {blockName}-{bedroomCount}居室-{directMap[direct]}
-                    </h1>
-                    <div className="intro-brief g-grid-row f-flex-justify-between">
-                        <div>
+                    </li>
+                    <ul className="intro-brief g-grid-row f-flex-justify-between">
+                        <li>
                             <div className="intro-tags">
                                 <span
                                     className="f-display-inlineblock tags-item"
@@ -79,16 +79,16 @@ class RentUnitItem extends Component {
                                 </span>
                             </div>
                             <div className="f-display-inlineblock intro-pt">{address}</div>
-                        </div>
-                        <div className="intro-price">
+                        </li>
+                        <li className="intro-price">
                             <span className="intro-price-wrap">
                                 <span>¥</span>
                                 <span className="intro-price-value">{price}</span>
                             </span>
                             <span>/月</span>
-                        </div>
-                    </div>
-                    <div>
+                        </li>
+                    </ul>
+                    <li>
                         {
                             tags.map(tag => (
                                 <span
@@ -97,8 +97,8 @@ class RentUnitItem extends Component {
                                 >{tag}</span>
                             ))
                         }
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         );
     }
