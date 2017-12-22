@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { withRouter } from 'react-router';
 import { rentUnitShape } from 'base/propTypes';
 import { rentalTypeMap, directMap } from 'base/infoMap';
-import defaultImage from './images/nangua.png';
+import { ModListImgUrl } from 'base/modUrlForCropImage';
 import './style.less';
 
 const itemClassPrefix = 'm-houseitem';
@@ -42,7 +42,7 @@ class RentUnitItem extends Component {
         } = this.props;
         const imgClsPrefix = `${itemClassPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
-            [`${imgClsPrefix}__loading`]: this.state.loading,
+            [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
         return (
             <div
@@ -52,7 +52,7 @@ class RentUnitItem extends Component {
                 <div className={`${itemClassPrefix}-img-wrap`}>
                     <img
                         className={imgCls}
-                        src={imgUrl || defaultImage}
+                        src={ModListImgUrl(imgUrl)}
                         alt="房源图片"
                         onLoad={this.handleImageLoad}
                     />
