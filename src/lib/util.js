@@ -75,3 +75,12 @@ export const getDocHeight = () => {
     return Math.max(body.scrollHeight, body.offsetHeight,
         html.clientHeight, html.scrollHeight, html.offsetHeight);
 };
+
+
+export function scrollTo(scrollTop) {
+    document.body.scrollTop = document.documentElement.scrollTop = scrollTop;
+}
+
+export function getScrollTop() {
+    return document.body.scrollTop || document.documentElement.scrollTop;
+}

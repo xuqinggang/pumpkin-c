@@ -28,10 +28,12 @@ export default class PositionFilterWrap extends Component {
         } = this.state;
 
         return (
+            positionFilterData ? 
             <PositionFilter
                 positionFilterData={positionFilterData}
                 onFilterConfirm={this.props.onFilterConfirm}
             />
+            : null
         );
     }
 }

@@ -136,7 +136,7 @@ export default class PositionFilter extends Component {
     }
 
     renderChildren() {
-        const {
+        let {
             positionFilterData,
         } = this.props;
 
@@ -144,8 +144,26 @@ export default class PositionFilter extends Component {
             secondItemSelectedIndex,
             thirdItemSelectedIndex,
         } = this.state;
+    console.log('renderChildren');
+        // positionFilterData = [{
+        //     text: '附近',
+        //     itemArr: [
+        //         {
+        //             text: '不限',
+        //             id: {
+        //                 distance: 1,
+        //             },
+        //         },
+        //         {
+        //             text: '1km',
+        //             id: {
+        //                 distance: 1,
+        //             },
+        //         },
+        //     ],
+        // }
+        // ];
 
-        if (!positionFilterData) return;
 
         return (
             <Tabs
@@ -156,7 +174,7 @@ export default class PositionFilter extends Component {
                 onChange={this.onFirstItemTap}
             >
                 {
-                    Object.keys(positionFilterData).map((ptKey, index) => {
+                    positionFilterData && Object.keys(positionFilterData).map((ptKey, index) => {
                         const ptFilterItemData = positionFilterData[ptKey];
                         return (
                             <Tab
@@ -176,7 +194,7 @@ export default class PositionFilter extends Component {
                                     onChange={this.onSecondItemTap}
                                 >
                                     {
-                                        ptFilterItemData.itemArr.map((firstItem, index) => {
+                                        ptFilterItemData && ptFilterItemData.itemArr.map((firstItem, index) => {
                                             return (
                                                 // 第二级别 item
                                                 <Tab

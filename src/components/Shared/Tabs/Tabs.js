@@ -118,7 +118,9 @@ class Tabs extends Component {
 			tabNav
 		}
 	}
-
+    componentDidMount() {
+        console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
+    }
 	render() {
         const { className,
             navClassName,
@@ -140,7 +142,7 @@ class Tabs extends Component {
 
 		return (
 			<div className={`${classPrefix} ${className}`}>
-                <ul className={ulClass}>
+                <ul className={ulClass} ref={(testDom) => { this.testDom = testDom }}>
                     {
                         tabNav
                     }
