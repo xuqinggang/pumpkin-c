@@ -203,6 +203,8 @@ export default class Filter extends Component {
                         show={positionShow}
                         type="position"
                         label="位置"
+                        isMask={true}
+                        isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         {
@@ -219,6 +221,7 @@ export default class Filter extends Component {
                         show={rentShow}
                         label="租金"
                         type="rent"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         {
@@ -235,6 +238,7 @@ export default class Filter extends Component {
                         show={houseTypeShow}
                         type="houseType"
                         label="房型"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         {
@@ -250,6 +254,7 @@ export default class Filter extends Component {
                         show={moreShow}
                         type="more"
                         label="更多"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         {

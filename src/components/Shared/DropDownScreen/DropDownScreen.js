@@ -30,7 +30,7 @@ export default class DropDownScreen extends Component {
         }
     }
 
-    handleScreenTap = (e) => {
+    handleMaskTap = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -43,15 +43,33 @@ export default class DropDownScreen extends Component {
     _setScreenDomShow(isShow) {
         if (!this.screenDom) return;
 
+        const { isFullScreen, isMask } = this.props;
+
         if (isShow) {
             this.screenDom.style.visibility = 'visible';
             this.screenDom.style.width = window.innerWidth + 'px';
-            this.screenDom.style.height = (window.innerHeight - this.reduceTop) + 'px';
-            this._setScreenDomLeft();
+            this.screenDom.style.left = -this.reduceLeft + 'px';
+            
+            if (isFullScreen) {
+                this.screenDom.style.height = (window.innerHeight - this.reduceTop) + 'px';
+            } else {
+                this.screenDom.style.height = 'inherit';
+            }
+
+            if (isMask && this.maskDom) {
+                this.maskDom.style.visibility = 'visible';
+                this.maskDom.style.width = window.innerWidth + 'px';
+                this.maskDom.style.height = (window.innerHeight - this.reduceTop) + 'px';
+                this.maskDom.style.left = -this.reduceLeft + 'px';
+            }
         } else {
             this.screenDom.style.visibility = 'hidden';
             this.screenDom.style.width = '0px';
             this.screenDom.style.height = '0px';
+
+            if (isMask && this.maskDom) {
+                this.maskDom.style.visibility = 'hidden';
+            }
         }
     }
 
@@ -95,6 +113,7 @@ export default class DropDownScreen extends Component {
         const {
             label,
             children,
+            isMask,
         } = this.props;
 
         const {
@@ -121,10 +140,17 @@ export default class DropDownScreen extends Component {
                     <span className={labelClass}>{label}</span>
                     <i className={iconClass}></i>
                 </div>
+                {
+                    isMask ?
+                        <div className={`${dropClass}-mask`}
+                            ref={(maskDom) => { this.maskDom = maskDom }}
+                            onTouchTap={this.handleMaskTap}
+                        ></div>
+                        : null
+                }
                 <div
                     ref={(screenDom) => { this.screenDom = screenDom }}
                     className={`${dropClass}-screen`}
-                    onTouchTap={this.handleScreenTap}
                 >
                     { children }
                 </div>
