@@ -8,6 +8,7 @@ import MoneyFilterWrap from 'Shared/MoneyFilterWrap/MoneyFilterWrap';
 import MoreFilterWrap from 'Shared/MoreFilterWrap/MoreFilterWrap';
 import HouseTypeFilterWrap from 'Shared/HouseTypeFilterWrap/HouseTypeFilterWrap';
 
+import { scrollTo, getScrollTop } from 'lib/util';
 import './styles.less';
 
 const filterClass = 'm-filter';
@@ -35,9 +36,18 @@ export default class Filter extends Component {
 
     _toggleForbideScrollThrough(isForbide) {
         if (isForbide) {
-            document.body.style.overflow = 'hidden';
+            this.scrollTop = getScrollTop();
+
+            // 使body脱离文档流
+            document.body.classList.add('f-position-fixed'); 
+
+            // 把脱离文档流的body拉上去！否则页面会回到顶部！
+            document.body.style.top = -this.scrollTop + 'px';
         } else {
-            document.body.style.overflow = 'inherit';
+            document.body.classList.remove('f-position-fixed');
+
+            // 滚回到老地方
+            scrollTo(this.scrollTop);
         }
     }
 

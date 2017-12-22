@@ -65,6 +65,13 @@ export default class HouseTypeFilter extends Component {
     componentWillReceiveProps(nextProps) {
         // 是否清空
         if ('isClear' in nextProps) {
+            if (nextProps.isClear) {
+                // 清空
+                this.tags = {
+                    shared: [],
+                    whole: [],
+                };
+            }
             this.setState({
                 isClear: nextProps.isClear,
             });
@@ -82,7 +89,6 @@ export default class HouseTypeFilter extends Component {
                 this.tags[type].push(tagValue);
             }
         });
-
         this.props.onFilterChange(this.tags);
     }
 

@@ -135,7 +135,7 @@ export function ajaxInitPositionData(cityId = 1) {
                     })
                     .catch((err) => {
                         resolve(positionData);
-                    });
+                    })
             })
             .catch((err) => {
                 console.log('ajaxInitPositionData err:', err);

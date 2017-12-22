@@ -57,6 +57,16 @@ export default class MoreFilter extends Component {
     componentWillReceiveProps(nextProps) {
         // 是否清空
         if ('isClear' in nextProps) {
+            if (nextProps.isClear) {
+                // 清空
+                this.tags = {
+                    direction: [],
+                    feature: [],
+                    area: [],
+                    floor: [],
+                };
+            }
+            
             this.setState({
                 isClear: nextProps.isClear,
             });
