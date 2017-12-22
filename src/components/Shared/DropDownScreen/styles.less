@@ -29,14 +29,22 @@
         }
     }
 
+    &-mask {
+        position: absolute;
+        top: 100%;
+        visibility: hidden;
+        z-index: 1000;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.40);
+    }
+
     &-screen {
         position: absolute;
         top: 100%;
         visibility: hidden;
-        height: 0;
+        // height: 0;
         z-index: 1001;
         overflow: hidden;
         transition: height 0.6s ease 0s;
-        background: rgba(0, 0, 0, 0.40);
     }
 }

@@ -33,6 +33,14 @@ export default class Filter extends Component {
         this.filterParams = {};
     }
 
+    _toggleForbideScrollThrough(isForbide) {
+        if (isForbide) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'inherit';
+        }
+    }
+
     _clearFilterParams(paramType) {
         if (this.filterParams[paramType]) {
             delete this.filterParams[paramType];
@@ -46,10 +54,16 @@ export default class Filter extends Component {
 
         Object.keys(preStates).forEach((stateIndex) => {
             newStates[stateIndex] = false;
-        })
+        });
         newStates[`${type}Show`] = !this.state[`${type}Show`];
 
-        this.setState(newStates);
+        this._toggleForbideScrollThrough(newStates[`${type}Show`]);
+
+        this.setState(newStates, () => {
+            console.log('handleFilterShowTap states', this.state);
+        });
+
+        // this._forbideScrollThrough();
     }
 
     // 回调函数-筛选数据确定回调函数
@@ -189,9 +203,16 @@ export default class Filter extends Component {
                         show={positionShow}
                         type="position"
                         label="位置"
+                        isMask={true}
+                        isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <PositionFilterWrap type="position" onFilterConfirm={this.onFilterPositionConfirm}/>
+                        {
+                            <PositionFilterWrap
+                                type="position"
+                                onFilterConfirm={this.onFilterPositionConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -200,12 +221,15 @@ export default class Filter extends Component {
                         show={rentShow}
                         label="租金"
                         type="rent"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoneyFilterWrap
-                            type="rent"
-                            onFilterConfirm={this.onFilterMoneyConfirm}
-                        />
+                        {
+                            <MoneyFilterWrap
+                                type="rent"
+                                onFilterConfirm={this.onFilterMoneyConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -214,12 +238,15 @@ export default class Filter extends Component {
                         show={houseTypeShow}
                         type="houseType"
                         label="房型"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <HouseTypeFilterWrap 
-                            type="houseType"
-                            onFilterConfirm={this.onFilterHouseTypeConfirm}
-                        />
+                        {
+                            <HouseTypeFilterWrap 
+                                type="houseType"
+                                onFilterConfirm={this.onFilterHouseTypeConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -227,12 +254,15 @@ export default class Filter extends Component {
                         show={moreShow}
                         type="more"
                         label="更多"
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoreFilterWrap
-                            type="more"
-                            onFilterConfirm={this.onFilterMoreConfirm}
-                        />
+                        {
+                            <MoreFilterWrap
+                                type="more"
+                                onFilterConfirm={this.onFilterMoreConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
             </ul>

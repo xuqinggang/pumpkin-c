@@ -36,14 +36,11 @@ export default class HouseDetail extends Component {
     handleTouchTap() {
     }
 
-    // handleClick = () => {
-    //     this.setState({
-    //         show: true,
-    //     });
-    // }
+    componentWillMount() {
+        window.scrollTo(0, 0);
+    }
 
     componentDidMount() {
-        console.log('this.props', this.props, this.props.match);
         this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
