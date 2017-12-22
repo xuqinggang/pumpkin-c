@@ -33,6 +33,14 @@ export default class Filter extends Component {
         this.filterParams = {};
     }
 
+    _toggleForbideScrollThrough(isForbide) {
+        if (isForbide) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'inherit';
+        }
+    }
+
     _clearFilterParams(paramType) {
         if (this.filterParams[paramType]) {
             delete this.filterParams[paramType];
@@ -46,10 +54,16 @@ export default class Filter extends Component {
 
         Object.keys(preStates).forEach((stateIndex) => {
             newStates[stateIndex] = false;
-        })
+        });
         newStates[`${type}Show`] = !this.state[`${type}Show`];
 
-        this.setState(newStates);
+        this._toggleForbideScrollThrough(newStates[`${type}Show`]);
+
+        this.setState(newStates, () => {
+            console.log('handleFilterShowTap states', this.state);
+        });
+
+        // this._forbideScrollThrough();
     }
 
     // 回调函数-筛选数据确定回调函数
@@ -191,7 +205,12 @@ export default class Filter extends Component {
                         label="位置"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <PositionFilterWrap type="position" onFilterConfirm={this.onFilterPositionConfirm}/>
+                        {
+                            <PositionFilterWrap
+                                type="position"
+                                onFilterConfirm={this.onFilterPositionConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -202,10 +221,12 @@ export default class Filter extends Component {
                         type="rent"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoneyFilterWrap
-                            type="rent"
-                            onFilterConfirm={this.onFilterMoneyConfirm}
-                        />
+                        {
+                            <MoneyFilterWrap
+                                type="rent"
+                                onFilterConfirm={this.onFilterMoneyConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -216,10 +237,12 @@ export default class Filter extends Component {
                         label="房型"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <HouseTypeFilterWrap 
-                            type="houseType"
-                            onFilterConfirm={this.onFilterHouseTypeConfirm}
-                        />
+                        {
+                            <HouseTypeFilterWrap 
+                                type="houseType"
+                                onFilterConfirm={this.onFilterHouseTypeConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
                 <li>
@@ -229,10 +252,12 @@ export default class Filter extends Component {
                         label="更多"
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <MoreFilterWrap
-                            type="more"
-                            onFilterConfirm={this.onFilterMoreConfirm}
-                        />
+                        {
+                            <MoreFilterWrap
+                                type="more"
+                                onFilterConfirm={this.onFilterMoreConfirm}
+                            />
+                            }
                     </DropDownScreen>
                 </li>
             </ul>
