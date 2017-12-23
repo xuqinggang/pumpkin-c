@@ -103,8 +103,9 @@ function stuffAroundDataToPosition() {
                         },
                     ],
                 };
-
                 return positionArroundObj;
+            } else {
+                throw new Error('lonlatArr is null');
             }
         })
         .catch((err) => {
