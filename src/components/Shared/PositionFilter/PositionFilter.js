@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'Shared/Tabs'
 import './styles.less';
 // test data
 // const positionData = {
-//     area: {
+//     around: {
 //         text: '区域',
 //         itemArr: [
 //             {
@@ -206,6 +206,7 @@ export default class PositionFilter extends Component {
             </Tabs>
         );
     }
+
     render() {
         return (
             <div onTouchTap={this.handleTap}>
