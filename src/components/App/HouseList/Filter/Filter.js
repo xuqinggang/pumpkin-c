@@ -39,12 +39,12 @@ export default class Filter extends Component {
             this.scrollTop = getScrollTop();
 
             // 使body脱离文档流
-            document.body.classList.add('f-position-fixed'); 
+            document.body.classList.add('f-body-fixed'); 
 
             // 把脱离文档流的body拉上去！否则页面会回到顶部！
             document.body.style.top = -this.scrollTop + 'px';
         } else {
-            document.body.classList.remove('f-position-fixed');
+            document.body.classList.remove('f-body-fixed');
 
             // 滚回到老地方
             scrollTo(this.scrollTop);
@@ -219,16 +219,20 @@ export default class Filter extends Component {
                     >
                         {
                             // <div className="wrap">
-                            //     <ul className="child1">
-                            //         <li>ads</li>
-                            //     </ul>
+                            //     <div className="child1">
+                            //         <span className="item">ads</span>
+                            //         <span className="item">ads</span>
+                            //         <span className="item">ads</span>
+                            //         <span className="item">ads</span>
+                            //         <span className="item">ads</span>
+                            //     </div>
                             //     <div className="child2">xx</div>
                             // </div>
-                            <PositionFilterWrap
-                                type="position"
-                                onFilterConfirm={this.onFilterPositionConfirm}
-                            />
                         }
+                        <PositionFilterWrap
+                            type="position"
+                            onFilterConfirm={this.onFilterPositionConfirm}
+                        />
                     </DropDownScreen>
                 </li>
                 <li>

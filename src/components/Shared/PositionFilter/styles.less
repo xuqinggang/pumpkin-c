@@ -1,19 +1,29 @@
 @import (reference) '~styles/lib.less';
 
-.wrap {
-    display: flex;
-    flex-direction: row;
+// .wrap {
+//     display: flex;
+//     flex-direction: row;
 
-    .child1 {
-        flex-basis: 300px;
-        background: red;
-    }
+//     .child1 {
+//         display: flex;
+//         flex-direction: column;
+//         width: 300px;
+//         flex-basis: 300px;
+//         background: red;
+//         line-height: 80px;
+//     }
 
-    .child2 {
-        flex: 1;
-        background: black;
-    }
-}
+//     .child2 {
+//         flex: 1;
+//         background: black;
+//     }
+
+//     .item {
+//         display: block;
+//         height: 100px;
+//     }
+// }
+
 .m-ptfilter {
     width: 100%;
     height: 800px;
@@ -23,6 +33,7 @@
 
     &-nav {
         box-sizing: border-box;
+        width: 260px;
         flex-basis: 260px;
         background-color: #f8f8f8;
     }
@@ -39,20 +50,23 @@
             box-sizing: boder-box;
             flex: 1;
             // flex-basis: 490px;
-            overflow-y: auto;
+            overflow-y: scroll;
             // flex-basis: 100%;
             background-color: #fff;
+            border-right: none;
 
             &.active {
                 flex: inherit;
+                width: 214px;
                 flex-basis: 214px;
                 border-right: 1px solid #eee;
             }
 
-            .m-ptfilter-content {
-                flex: inherit;
-                flex-basis: 276px;
-            }
+        }
+        .m-ptfilter-content {
+            flex: inherit;
+            width: 276px;
+            flex-basis: 276px;
         }
 
         .m-ptfilter-nav-item {
@@ -68,6 +82,7 @@
     }
 
     &-nav-item {
+        line-height: 80px;
         text-indent: 60px;
 
         &.active {

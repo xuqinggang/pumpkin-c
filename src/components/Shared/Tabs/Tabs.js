@@ -153,11 +153,18 @@ class Tabs extends Component {
                         tabNav
                     }
                 </ul>
-				<div className={`${classPrefix}-content ${contentClassName}`}>
-                    { 
-                        tabContent
-                    }
-				</div>
+                {
+                    (selectedIndex != prevIndex && tabContent[selectedIndex] != null) ?
+                        (
+                            <div className={`${classPrefix}-content ${contentClassName}`}>
+                                { 
+                                    tabContent
+                                }
+                            </div>
+
+                        )
+                        : null
+                }
 			</div>
 		)
 	}

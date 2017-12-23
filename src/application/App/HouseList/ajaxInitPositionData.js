@@ -112,6 +112,7 @@ function stuffAroundDataToPosition() {
             throw new Error(err);
         });
 }
+
 export function ajaxInitPositionData(cityId = 1) {
     // 位置筛选的数据
     let positionData = {};
