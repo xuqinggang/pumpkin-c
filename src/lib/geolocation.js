@@ -10,6 +10,8 @@ export default function getCurrentPosition() {
                     return;
                 }
                 reject({code: -1, message: error.message});
+            }, {
+                timeout: 2000,
             });
         } else {
             reject({ code: 404, message: '设备不支持获取地理位置' });
