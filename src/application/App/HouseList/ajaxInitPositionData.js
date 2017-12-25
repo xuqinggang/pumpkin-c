@@ -71,11 +71,7 @@ export function stuffAroundDataToPosition() {
                     itemArr: [
                         {
                             text: '不限',
-                            id: {
-                                lon,
-                                lat,
-                                distance: 1,
-                            },
+                            id: -1,
                         },
                         {
                             text: '1km',
