@@ -66,10 +66,13 @@ export default class PositionFilter extends Component {
         this.positionData = {};
         if (positionFilterData) {
             this.positionTypeArr = Object.keys(positionFilterData);
-            this.positionType = this.positionTypeArr[0];
             this.positionTypeArr.forEach((positionTypeItem) => {
                 this.positionData[positionTypeItem] = {};
             });
+
+            if (!this.positionType) {
+                this.positionType = this.positionTypeArr[0];
+            }
         }
     }
 
@@ -116,7 +119,7 @@ export default class PositionFilter extends Component {
     }
 
     // 每点击第一级item，要将之前点击的第二，三级item取消掉
-    // ptType: string,所点击的位置类型。ex: 'districts' or 'subways' or 'arround'
+    // ptType: string,所点击的位置类型。ex: 'districts' or 'subways' or 'around'
     onFirstItemTap = (index, event, ptType) => {
         if (this.firstItemSelectedIndex == index) return;
 
@@ -130,9 +133,7 @@ export default class PositionFilter extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.positionType) {
-            this._initPositionData(nextProps.positionFilterData);
-        }
+        this._initPositionData(nextProps.positionFilterData);
     }
 
     renderChildren() {

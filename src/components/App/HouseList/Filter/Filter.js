@@ -52,7 +52,7 @@ export default class Filter extends Component {
     }
 
     _clearFilterParams(paramType) {
-        if (this.filterParams[paramType]) {
+        if (paramType && this.filterParams[paramType]) {
             delete this.filterParams[paramType];
         }
     }
@@ -83,7 +83,7 @@ export default class Filter extends Component {
 
         Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
             const paramsKeyArr = ptTypeMapParamsKey[ptType];
-            if (ptType == positionType) {
+            if (ptType === positionType) {
                 // 根据位置类型对应的数据
                 const ptDataByType = positionData[positionType];
 
@@ -92,6 +92,7 @@ export default class Filter extends Component {
                         this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
                     } else {
                         this._clearFilterParams(paramsKeyArr[0]);
+                        this._clearFilterParams(paramsKeyArr[1]);
                     }
                 }
 
