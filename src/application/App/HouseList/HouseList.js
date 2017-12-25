@@ -8,7 +8,7 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 import fetchRentUnitList from './fetchRentUnitList';
 
 import Service from 'lib/Service';
-import { shallowEqual } from 'lib/util';
+import { shallowEqual, dynamicDocTitle } from 'lib/util';
 
 import './styles.less';
 const houselistClassPrefix = 'g-houselist';
@@ -35,6 +35,9 @@ export default class HouseList extends Component {
         };
 
         this.handleLoadMore = this.handleLoadMore.bind(this);
+
+        // 动态更改标题
+        dynamicDocTitle('南瓜租房');
     }
 
     componentDidMount() {
