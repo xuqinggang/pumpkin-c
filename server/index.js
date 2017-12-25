@@ -18,9 +18,10 @@ const config = require('./config/env');
 const koaConf = require('./config/koa');
 
 const routerConf = require('./routes');
+const proxyRouterConf = require('./routes/proxyRouter');
 
 const proxy = httpProxy.createProxyServer();
-// const serverRouter = new Router();
+const serverRouter = new Router();
 
 const app = new Koa();
 
@@ -37,23 +38,13 @@ koaConf(app);
 // 	await next()
 // });
 
-// 代理访问v1接口
-// serverRouter.all(/\/v1/, (ctx) => {
-//     ctx.respond = false;
-//     proxy.web(ctx.req, ctx.res, {
-//         target: 'http://10.23.64.8',
-//         headers: {
-//             host: 'test.api.nanguazufang.cn',
-//         },
-//     });
-// });
-
-
-// 代理接口 router
-// app.use(serverRouter.routes());
-
 // 静态资源文件 router
 app.use(mount('/bj/nangua', KoaStatic('dist')));
+
+// 本地server test环境测试router配置
+if (config.env === 'test') {
+    proxyRouterConf(app);
+}
 
 // router配置
 routerConf(app);
