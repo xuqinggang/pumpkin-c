@@ -16,6 +16,8 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 // ajax
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
+import { dynamicDocTitle } from 'lib/util';
+
 import Animate from 'rc-animate';
 
 
@@ -47,6 +49,9 @@ export default class HouseDetail extends Component {
                 this.setState({
                     houseDetailData,
                 });
+
+                // 动态更改标题
+                dynamicDocTitle(houseDetailData.houseProfileData.title);
             })
     }
 

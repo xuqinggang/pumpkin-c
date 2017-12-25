@@ -1,3 +1,11 @@
+// 动态改变title
+export function dynamicDocTitle(title) {
+    if (title) {
+        document.title = title;
+    }
+}
+
+// 切割数组
 export function divideArray(array, limit) {
     if (!array || (array && 0 === array.length)) return [];
 
