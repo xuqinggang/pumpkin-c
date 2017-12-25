@@ -160,8 +160,8 @@ export default class PositionFilter extends Component {
                             <Tab
                                 label={ptFilterItemData.text}
                                 passData={ptKey}
-                                key={index}
-                                order={index}
+                                key={ptKey}
+                                order={ptKey}
                                 navItemClass={`${ptClass}-nav-item`}
                                 contentItemClass={`${ptClass}-content-item`}
                             >

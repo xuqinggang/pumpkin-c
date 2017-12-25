@@ -58,7 +58,7 @@ function stuffDataToPosition(itemArr, type, positionData) {
     }
 }
 
-function stuffAroundDataToPosition() {
+export function stuffAroundDataToPosition() {
     // 获取地理位置
     return getCurrentPosition()
         .then((lonlatArr) => {
@@ -118,31 +118,31 @@ export function ajaxInitPositionData(cityId = 1) {
     // 位置筛选的数据
     let positionData = {};
 
-    return new Promise((resolve, reject) => {
-        Promise.all([
-            _ajaxDistricts(cityId),
-            _ajaxSubways(cityId),
-        ])
-            .then((datas) => {
-                datas.forEach((data) => {
-                    stuffDataToPosition(data.arr, data.type, positionData);
-                });
+    return Promise.all([
+        _ajaxDistricts(cityId),
+        _ajaxSubways(cityId),
+    ])
+        .then((datas) => {
+            datas.forEach((data) => {
+                stuffDataToPosition(data.arr, data.type, positionData);
+            });
 
-                // 手动添加附近相关数据
-                // 如果地理位置权限允许，则添加附近数据
-                stuffAroundDataToPosition()
-                    .then((positionArroundObj) => {
-                        positionData.around = positionArroundObj;
-                        resolve(positionData);
-                    })
-                    .catch((err) => {
-                        resolve(positionData);
-                    })
-            })
-            .catch((err) => {
-                console.log('ajaxInitPositionData err:', err);
-            })
-    });
+            return positionData;
+
+            // 手动添加附近相关数据
+            // 如果地理位置权限允许，则添加附近数据
+            // stuffAroundDataToPosition()
+            //     .then((positionArroundObj) => {
+            //         positionData.around = positionArroundObj;
+            //         resolve(positionData);
+            //     })
+            //     .catch((err) => {
+            //         resolve(positionData);
+            //     })
+        })
+        .catch((err) => {
+            console.log('ajaxInitPositionData err:', err);
+        })
 }
 
 function _ajaxDistricts(cityId) {
