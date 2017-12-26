@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+
 import TabTemplate from './TabTemplate.js'
 
 import './styles.less';
@@ -15,7 +16,6 @@ const horizonPrefix = 'm-tabs';
 const verticalPrefix = 'm-tabs-vertical';
 
 class Tabs extends Component {
-
 	// props 类型验证
 	static propTypes = {
 		className: PropTypes.string,
@@ -47,7 +47,7 @@ class Tabs extends Component {
 		}
 		this.state = {
 			selectedIndex: activeIndex,
-			prevIndex: activeIndex,
+			prevIndex: -1,
 		}
 	}
 
@@ -68,12 +68,12 @@ class Tabs extends Component {
 		if('activeIndex' in nextProps) {
 			this.setState({
 				selectedIndex: nextProps.activeIndex,
-				prevIndex: this.state.selectedIndex,
 			});
 		}
 	}
 
-	handleTouchTab = (activeIndex) => {
+    // 回调函数-每一个tab的点击
+    onTouchTab = (event, activeIndex, itemData) => {
 		const prevIndex = this.state.selectedIndex;
 		if(prevIndex !== activeIndex) {
 			this.setState({
@@ -81,16 +81,16 @@ class Tabs extends Component {
 				prevIndex
 			});
 		}
-		this.props.onChange({
-				selectedIndex: activeIndex,
-				prevIndex
-		});
+
+        this.props.onChange(event, activeIndex, itemData);
 	}
 
 	renderTabNavAndContent() {
 		const tabs = this.getTabs();
+
 		// 每一个tab的平均宽度%
         const tabContent = [];
+
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
 		const tabNav = tabs.map((tab, index) => {
             if (tab.props.children) {
@@ -101,13 +101,15 @@ class Tabs extends Component {
                         contentItemClass: tab.props.contentItemClass,
                     }, tab.props.children)
                 );
+            } else {
+                tabContent.push(null);
             }
 			
 			return cloneElement(tab, {
 				key: tab.props.order || index,
 				index: index, // 组件的索引
 				isSelected: this.state.selectedIndex === index,
-				onTouchTab: this.handleTouchTab,
+				onTouchTab: this.onTouchTab,
 			});
 		});
 
@@ -116,6 +118,9 @@ class Tabs extends Component {
 			tabNav
 		}
 	}
+
+    componentDidMount() {
+    }
 
 	render() {
         const { className,
@@ -129,24 +134,37 @@ class Tabs extends Component {
         } = this.state;
 
         const tabNavAndContent = this.renderTabNavAndContent();
+        const { tabContent, tabNav } = tabNavAndContent;
 
         const classPrefix = verticalPrefix;
         const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
-            active: selectedIndex != prevIndex,
+            active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });
+
+        // if (this.testDom) {
+        //     // alert(this.testDom.getBoundingClientRect().width);
+        //     console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
+        // }
 
 		return (
 			<div className={`${classPrefix} ${className}`}>
-                <ul className={ulClass}>
+                <ul className={ulClass} ref={(testDom) => { this.testDom = testDom }}>
                     {
-                        tabNavAndContent.tabNav
+                        tabNav
                     }
                 </ul>
-				<div className={`${classPrefix}-content ${contentClassName}`}>
-                    { 
-                        tabNavAndContent.tabContent
-                    }
-				</div>
+                {
+                    (selectedIndex != prevIndex && tabContent[selectedIndex] != null) ?
+                        (
+                            <div className={`${classPrefix}-content ${contentClassName}`}>
+                                { 
+                                    tabContent
+                                }
+                            </div>
+
+                        )
+                        : null
+                }
 			</div>
 		)
 	}

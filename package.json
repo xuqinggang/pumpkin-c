@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --config ./build/webpack.config.dev.babel.js --history-api-fallback",
     "build_production": "rm -rf dist && cross-env NODE_ENV=production webpack --config ./build/webpack.config.production.babel.js",
     "build_test": "rm -rf dist && cross-env NODE_ENV=test webpack --config ./build/webpack.config.test.babel.js",
+    "server_test": "cross-env NODE_ENV=test node ./server/index.js",
     "server": "cross-env NODE_ENV=production node ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +27,7 @@
     "css-loader": "^0.28.7",
     "eslint-config-kuaizhan": "^1.0.0",
     "eslint-friendly-formatter": "^3.0.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.9.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",

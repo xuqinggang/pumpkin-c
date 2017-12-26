@@ -21,9 +21,10 @@ class Tab extends Component {
 		super(props);
 	}
 
+    // 事件处理程序-每一个tab的点击
 	handleTouchTap = (event) => {
 		if(this.props.onTouchTab) {
-			this.props.onTouchTab(this.props.index, event, this)
+			this.props.onTouchTab(event, this.props.index, this.props.itemData);
 		}
 	}
 

@@ -17,4 +17,11 @@ module.exports = {
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/label-has-for': 'off',
     },
+    settings: {
+        'import/resolver': {
+            webpack: {
+                config: 'build/webpack.config.dev.babel.js',
+            },
+        },
+    },
 };

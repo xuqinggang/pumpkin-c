@@ -16,6 +16,8 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 // ajax
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
+import { dynamicDocTitle } from 'lib/util';
+
 import Animate from 'rc-animate';
 
 
@@ -36,20 +38,20 @@ export default class HouseDetail extends Component {
     handleTouchTap() {
     }
 
-    // handleClick = () => {
-    //     this.setState({
-    //         show: true,
-    //     });
-    // }
+    componentWillMount() {
+        window.scrollTo(0, 0);
+    }
 
     componentDidMount() {
-        console.log('this.props', this.props, this.props.match);
         this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
                     houseDetailData,
                 });
+
+                // 动态更改标题
+                dynamicDocTitle(houseDetailData.houseProfileData.title);
             })
     }
 
