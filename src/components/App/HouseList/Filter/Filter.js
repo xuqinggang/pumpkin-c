@@ -34,17 +34,18 @@ export default class Filter extends Component {
         this.filterParams = {};
     }
 
+    // 禁止滚动穿透
     _toggleForbideScrollThrough(isForbide) {
         if (isForbide) {
             this.scrollTop = getScrollTop();
 
             // 使body脱离文档流
-            document.body.classList.add('f-body-fixed'); 
+            document.body.classList.add('f-disscroll-through'); 
 
             // 把脱离文档流的body拉上去！否则页面会回到顶部！
             document.body.style.top = -this.scrollTop + 'px';
         } else {
-            document.body.classList.remove('f-body-fixed');
+            document.body.classList.remove('f-disscroll-through');
 
             // 滚回到老地方
             scrollTo(this.scrollTop);
@@ -245,12 +246,10 @@ export default class Filter extends Component {
                         isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        {
-                            <MoneyFilterWrap
-                                type="rent"
-                                onFilterConfirm={this.onFilterMoneyConfirm}
-                            />
-                            }
+                        <MoneyFilterWrap
+                            type="rent"
+                            onFilterConfirm={this.onFilterMoneyConfirm}
+                        />
                     </DropDownScreen>
                 </li>
                 <li>
@@ -262,12 +261,10 @@ export default class Filter extends Component {
                         isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        {
-                            <HouseTypeFilterWrap 
-                                type="houseType"
-                                onFilterConfirm={this.onFilterHouseTypeConfirm}
-                            />
-                            }
+                        <HouseTypeFilterWrap 
+                            type="houseType"
+                            onFilterConfirm={this.onFilterHouseTypeConfirm}
+                        />
                     </DropDownScreen>
                 </li>
                 <li>
@@ -278,12 +275,10 @@ export default class Filter extends Component {
                         isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        {
-                            <MoreFilterWrap
-                                type="more"
-                                onFilterConfirm={this.onFilterMoreConfirm}
-                            />
-                            }
+                        <MoreFilterWrap
+                            type="more"
+                            onFilterConfirm={this.onFilterMoreConfirm}
+                        />
                     </DropDownScreen>
                 </li>
             </ul>
