@@ -72,7 +72,8 @@ class Tabs extends Component {
 		}
 	}
 
-    handleTouchTab = (activeIndex, event, passData) => {
+    // 回调函数-每一个tab的点击
+    onTouchTab = (event, activeIndex, itemData) => {
 		const prevIndex = this.state.selectedIndex;
 		if(prevIndex !== activeIndex) {
 			this.setState({
@@ -81,7 +82,7 @@ class Tabs extends Component {
 			});
 		}
 
-        this.props.onChange(activeIndex, event, passData);
+        this.props.onChange(event, activeIndex, itemData);
 	}
 
 	renderTabNavAndContent() {
@@ -92,7 +93,6 @@ class Tabs extends Component {
 
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
 		const tabNav = tabs.map((tab, index) => {
-
             if (tab.props.children) {
                 tabContent.push(
                     createElement(TabTemplate, {
@@ -109,7 +109,7 @@ class Tabs extends Component {
 				key: tab.props.order || index,
 				index: index, // 组件的索引
 				isSelected: this.state.selectedIndex === index,
-				onTouchTab: this.handleTouchTab,
+				onTouchTab: this.onTouchTab,
 			});
 		});
 
@@ -141,10 +141,10 @@ class Tabs extends Component {
             active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });
 
-        if (this.testDom) {
-            // alert(this.testDom.getBoundingClientRect().width);
-            console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
-        }
+        // if (this.testDom) {
+        //     // alert(this.testDom.getBoundingClientRect().width);
+        //     console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
+        // }
 
 		return (
 			<div className={`${classPrefix} ${className}`}>

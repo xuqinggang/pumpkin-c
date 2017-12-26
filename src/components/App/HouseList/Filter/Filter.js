@@ -114,6 +114,7 @@ export default class Filter extends Component {
             }
         });
 
+        console.log('this.filterParams', this.filterParams);
         this.props.onFilterConfirm(this.filterParams);
 
         // 隐藏弹层

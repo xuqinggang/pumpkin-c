@@ -2,23 +2,24 @@ import React, { Component } from 'react';
 
 import PositionFilter from 'Shared/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
+import { findArrayItemByPathIndex } from 'lib/util';
 
 // 位置筛选，请求初始化筛选数据
 export default class PositionFilterWrap extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            positionFilterData: null,
+            positionFilterDataArr: [],
         };
     }
 
     componentDidMount() {
         ajaxInitPositionData()
-            .then((positionFilterData) => {
+            .then((positionFilterDataArr) => {
                 this.setState({
-                    positionFilterData,
+                    positionFilterDataArr: [...positionFilterDataArr, ...this.state.positionFilterDataArr],
                 });
-                console.log('ajax positionData', positionFilterData);
+                console.log('ajax positionData', positionFilterDataArr);
             });
 
         // 手动添加附近相关数据
@@ -26,22 +27,60 @@ export default class PositionFilterWrap extends Component {
         stuffAroundDataToPosition()
             .then((positionArroundObj) => {
                 this.setState({
-                    positionFilterData: Object.assign({}, this.state.positionFilterData, { around: positionArroundObj }),
+                    positionFilterDataArr: [...this.state.positionFilterDataArr, positionArroundObj],
                 });
-                console.log('positionArroundObj', positionFilterData);
+            })
+            .catch((err) => {
+                console.log('err', err);
             });
     }
 
+    onFilterConfirm = (stateData) => {
+        let positionType, positionData = {};
+
+        const {
+            firstItemSelectedIndex,
+            secondItemSelectedIndex,
+            thirdItemSelectedIndex,
+        } = stateData;
+
+        let thirdItem = null, third = null;
+        const positionFilterDataArr = this.state.positionFilterDataArr;
+        const firstItem = positionFilterDataArr[firstItemSelectedIndex];
+        const secondItem = firstItem.itemArr[secondItemSelectedIndex];
+
+        positionType = firstItem.id.type;
+        if (thirdItemSelectedIndex !== -1) {
+            thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
+            third = {
+                id: thirdItem.id,
+                text: thirdItem.text,
+            };
+        }
+
+        const second = {
+            id: secondItem.id,
+            text: secondItem.text,
+        };
+        positionData[positionType] = {
+            second,
+            third,
+        };
+
+        if (this.props.onFilterConfirm) {
+            this.props.onFilterConfirm(positionType, positionData);
+        }
+    }
     render() {
         const {
-            positionFilterData,
+            positionFilterDataArr,
         } = this.state;
 
         return (
-            positionFilterData ? 
+            positionFilterDataArr ? 
             <PositionFilter
-                positionFilterData={positionFilterData}
-                onFilterConfirm={this.props.onFilterConfirm}
+                positionFilterDataArr={positionFilterDataArr}
+                onFilterConfirm={this.onFilterConfirm}
             />
             : null
         );
