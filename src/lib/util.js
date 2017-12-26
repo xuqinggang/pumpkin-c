@@ -1,3 +1,18 @@
+export function findArrayItemByPathIndex(arr, pathIndexArr, nextLevelName) {
+    if (!arr.length || !pathIndexArr.length) return;
+    let itemResult = null;
+    itemResult = arr[pathIndexArr[0]];
+    if (pathIndexArr && pathIndexArr.length === 1) {
+        return itemResult;
+    }
+
+    let tmpPathIndexArr = pathIndexArr.slice(1);
+    tmpPathIndexArr && tmpPathIndexArr.forEach(function(index) {
+        itemResult = itemResult[nextLevelName][index];
+    });
+
+    return itemResult;
+}
 // 动态改变title
 export function dynamicDocTitle(title) {
     if (title) {
