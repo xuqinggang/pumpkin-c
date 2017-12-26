@@ -4,12 +4,20 @@
     display: inline-block;
     position: relative;
 
+    &-label-wrap {
+        white-space: nowrap;
+    }
     &-label {
         display: inline-block;
+        max-width: 156px;
+        // text-align: right;
         margin-right: 10px;
         padding: 28px 0;
         line-height: 1;
         vertical-align: middle;
+        overflow-x: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         .font-size(28);
 
         &.active {

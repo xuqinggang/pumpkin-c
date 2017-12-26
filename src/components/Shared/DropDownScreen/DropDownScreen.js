@@ -21,6 +21,8 @@ export default class DropDownScreen extends Component {
         e.stopPropagation();
         e.preventDefault();
 
+        const headDomRectInfo = e.currentTarget.getBoundingClientRect();
+        this.headDomLeft = headDomRectInfo.left;
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
         }
@@ -29,6 +31,7 @@ export default class DropDownScreen extends Component {
     handleMaskTap = (e) => {
         e.stopPropagation();
         e.preventDefault();
+
 
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
@@ -44,11 +47,11 @@ export default class DropDownScreen extends Component {
         const maskDom = this.maskDom;
 
         if (isShow) {
-
             screenDom.style.visibility = 'visible';
 
             if (isFullScreen) {
                 screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+                screenDom.style.left = -this.headDomLeft + 'px';
             } else {
                 screenDom.style.height = 'inherit';
             }
@@ -56,6 +59,7 @@ export default class DropDownScreen extends Component {
             if (isMask && this.maskDom) {
                 maskDom.style.visibility = 'visible';
                 maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+                maskDom.style.left = -this.headDomLeft + 'px';
             }
         } else {
             screenDom.style.visibility = 'hidden';
@@ -139,7 +143,11 @@ export default class DropDownScreen extends Component {
 
         return (
             <div className={`${dropClass}`}>
-                <div onTouchTap={this.handleHeadTap} ref={(headDom) => { this.headDom = headDom; }}>
+                <div
+                    className={`${dropClass}-label-wrap`}
+                    onTouchTap={this.handleHeadTap}
+                    ref={(headDom) => { this.headDom = headDom; }}
+                >
                     <span className={labelClass}>{label}</span>
                     <i className={iconClass}></i>
                 </div>
