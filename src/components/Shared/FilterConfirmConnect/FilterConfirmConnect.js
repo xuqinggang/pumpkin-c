@@ -14,11 +14,11 @@ export default function() {
                     // 是否清空
                     isClear: false,
                 };
-                this.filterData = null;
+                this.filterStateData = null;
             }
 
             onFilterChange = (data) => {
-                this.filterData = data;
+                this.filterStateData = data;
             }
 
             handleWrapTap = (e) => {
@@ -27,13 +27,12 @@ export default function() {
             }
 
             handleConfirmTap = () => {
-                console.log('handleConfirmTap');
-                this.props.onFilterConfirm(this.filterData);
+                this.props.onFilterConfirm(this.filterStateData);
             }
 
             // 事件处理程序-清空点击
             handleClearTap = () => {
-                this.filterData = null;
+                this.filterStateData = null;
                 this.setState({
                     isClear: true,
                 });

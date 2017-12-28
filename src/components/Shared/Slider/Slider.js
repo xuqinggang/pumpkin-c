@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+
 import { shallowEqual } from 'lib/util';
 
 import './styles.less';
 
 const sliderClass = 'm-slider';
+
 export default class Slider extends Component{
 
     constructor(props){
@@ -36,7 +37,7 @@ export default class Slider extends Component{
 
     handleTouchStart = (event) => {
         event.stopPropagation();
-        this.currentIndex = event.currentTarget.getAttribute('data-index');
+        this.currentIndex = parseInt(event.currentTarget.getAttribute('data-index'), 10);
         const index = this.currentIndex;
 
         // 允许move
@@ -135,9 +136,9 @@ export default class Slider extends Component{
             );
     }
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
-    // }
+    shouldComponentUpdate(nextProps, nextState) {
+        return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
+    }
 
     componentWillReceiveProps(nextProps) {
         if ('defaultValue' in nextProps) {

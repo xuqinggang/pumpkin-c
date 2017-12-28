@@ -78,7 +78,17 @@ export default class DropDownScreen extends Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-        return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
+        const {
+            children: nextChildren,
+            ...nextExtraProps,
+        } = nextProps;
+
+        const {
+            children,
+            ...extraProps,
+        } = this.props;
+
+        return !shallowEqual(nextExtraProps, extraProps) || !shallowEqual(nextState, this.state);
     }
 
     componentWillReceiveProps(nextProps) {

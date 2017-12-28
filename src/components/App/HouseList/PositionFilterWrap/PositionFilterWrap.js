@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 
-import PositionFilter from 'Shared/PositionFilter/PositionFilter';
+import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
 import { findArrayItemByPathIndex } from 'lib/util';
 
 // 位置筛选，请求初始化筛选数据
-export default class PositionFilterWrap extends Component {
+export default class PositionFilterWrap extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +16,7 @@ export default class PositionFilterWrap extends Component {
     componentDidMount() {
         ajaxInitPositionData()
             .then((positionFilterDataArr) => {
-                this.setState({
+                positionFilterDataArr && this.setState({
                     positionFilterDataArr: [...positionFilterDataArr, ...this.state.positionFilterDataArr],
                 });
                 console.log('ajax positionData', positionFilterDataArr);
@@ -26,7 +26,7 @@ export default class PositionFilterWrap extends Component {
         // 如果地理位置权限允许，则添加附近数据
         stuffAroundDataToPosition()
             .then((positionArroundObj) => {
-                this.setState({
+                positionArroundObj && this.setState({
                     positionFilterDataArr: [...this.state.positionFilterDataArr, positionArroundObj],
                 });
             })
@@ -44,33 +44,38 @@ export default class PositionFilterWrap extends Component {
             thirdItemSelectedIndex,
         } = stateData;
 
-        let thirdItem = null, third = null;
+        let thirdItem = null, thirdData = null;
         const positionFilterDataArr = this.state.positionFilterDataArr;
+
         const firstItem = positionFilterDataArr[firstItemSelectedIndex];
         const secondItem = firstItem.itemArr[secondItemSelectedIndex];
 
         positionType = firstItem.id.type;
         if (thirdItemSelectedIndex !== -1) {
             thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
-            third = {
+            // 选中的第三级数据
+            thirdData = {
                 id: thirdItem.id,
                 text: thirdItem.text,
             };
         }
 
-        const second = {
+        // 选中的第二级数据
+        const secondData = {
             id: secondItem.id,
             text: secondItem.text,
         };
+
         positionData[positionType] = {
-            second,
-            third,
+            second: secondData,
+            third: thirdData,
         };
 
         if (this.props.onFilterConfirm) {
             this.props.onFilterConfirm(positionType, positionData);
         }
     }
+
     render() {
         const {
             positionFilterDataArr,

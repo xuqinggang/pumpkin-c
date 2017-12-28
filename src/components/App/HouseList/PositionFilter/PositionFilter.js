@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import classnames from 'classnames';
+
 import { Tabs, Tab } from 'Shared/Tabs'
 import { findArrayItemByPathIndex } from 'lib/util';
 
@@ -39,7 +40,7 @@ import './styles.less';
 
 const ptClass = 'm-ptfilter';
 
-export default class PositionFilter extends Component {
+export default class PositionFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -52,32 +53,6 @@ export default class PositionFilter extends Component {
             // 第三级item选中索引
             thirdItemSelectedIndex: -1,
         };
-
-        // 第一级item选中索引
-        this.firstItemSelectedIndex = 0;
-
-        // this._initPositionData(props.positionFilterData);
-    }
-
-    _initPositionData(positionFilterData) {
-        // positionData，
-        // ex: {
-        //     districts: {
-        //         second: { id: 123, text: '' },
-        //         third: { id: 444, text: '' }
-        //     }
-        // }
-        this.positionData = {};
-        if (positionFilterData) {
-            this.positionTypeArr = Object.keys(positionFilterData);
-            this.positionTypeArr.forEach((positionTypeItem) => {
-                this.positionData[positionTypeItem] = {};
-            });
-
-            if (!this.positionType) {
-                this.positionType = this.positionTypeArr[0];
-            }
-        }
     }
 
     // 阻止默认行为，阻止冒泡
@@ -95,14 +70,6 @@ export default class PositionFilter extends Component {
 
     // 回调函数-第三级item点击
     onThirdItemTap = (index, ptData) => {
-        // const {
-        //     firstItemSelectedIndex,
-        //     secondItemSelectedIndex,
-        // } = this.state;
-        // const itemRt = findArrayItemByPathIndex(this.props.positionFilterDataArr, 
-        //     [firstItemSelectedIndex, secondItemSelectedIndex, index], 'itemArr');
-        
-        // this.positionData[this.positionType].third = ptData;
         this.setState({
             thirdItemSelectedIndex: index,
         }, () => {
@@ -111,30 +78,19 @@ export default class PositionFilter extends Component {
     }
 
     // 回调函数-第二级item点击
-    // ptData: 点击item信息: ex: { id:123, text:'' }
     onSecondItemTap = (event, index) => {
         const itemRt = findArrayItemByPathIndex(this.props.positionFilterDataArr, 
             [this.state.firstItemSelectedIndex, index], 'itemArr');
+
         this.setState({
             secondItemSelectedIndex: index,
             thirdItemSelectedIndex: -1,
         }, () => {
+            // 如果点击的第二级item,是可取消（响应的）
             if (itemRt && itemRt.isCanCancel) {
                 this.onPositionFilterChange(this.state);
             }
         });
-
-        // if (index == 0) {
-        //     this.onPositionFilterChange(this.positionType, this.positionData);
-        //     return;
-        // }
-
-        // 如果点击是附近类型，则其第二级item全部，可以出发filterChange
-        // if (this.positionType === 'around') {
-        //     this.onPositionFilterChange(this.positionType, this.positionData);
-        //     console.log('this.positionType', this.positionType);
-        //     return;
-        // }
     }
 
     // 每点击第一级item，要将之前点击的第二，三级item取消掉
@@ -148,17 +104,13 @@ export default class PositionFilter extends Component {
         });
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     // this._initPositionData(nextProps.positionFilterData);
-    // }
-
     renderChildren() {
         let {
             positionFilterDataArr,
         } = this.props;
 
-        console.log('this.props.positionFilterDataArr', positionFilterDataArr);
         const {
+            firstItemSelectedIndex,
             secondItemSelectedIndex,
             thirdItemSelectedIndex,
         } = this.state;
@@ -166,6 +118,7 @@ export default class PositionFilter extends Component {
         return (
             <Tabs
                 defaultActiveIndex={0}
+                activeIndex={firstItemSelectedIndex}
                 className={ptClass}
                 navClassName={`${ptClass}-nav`}
                 contentClassName={`${ptClass}-content`}
@@ -235,13 +188,12 @@ export default class PositionFilter extends Component {
 }
 
 // 第三级列表组件
-class ThirdItemList extends Component {
+class ThirdItemList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             thirdItemArr: props.thirdItemArr,
             selectItemIndex: -1,
-            selectItemId: null,
         };
     }
 
@@ -266,7 +218,6 @@ class ThirdItemList extends Component {
     render() {
         const {
             thirdItemArr,
-            selectItemId,
             selectItemIndex,
         } = this.state;
 
@@ -294,27 +245,35 @@ class ThirdItemList extends Component {
     }
 }
 
-function ThirdItem(props) {
-    const {
-        info,
-        onThirdItemTap,
-        isSelected,
-        index,
-    } = props;
+class ThirdItem extends PureComponent {
+    handleTouchTap = (e) => {
+        const {
+            onThirdItemTap,
+            index,
+            info,
+        } = this.props;
 
-    function handleTouchTap(e) {
         if (onThirdItemTap) {
             onThirdItemTap(index, info);
         }
     }
 
-    const itemClass = classnames('item', {
-        active: isSelected,
-    });
+    render() {
+        const {
+            info,
+            onThirdItemTap,
+            isSelected,
+            index,
+        } = this.props;
 
-    return (
-        <li onTouchTap={handleTouchTap} className={itemClass}>
-            {info.text}
-        </li>
-    );
+        const itemClass = classnames('item', {
+            active: isSelected,
+        });
+
+        return (
+            <li onTouchTap={this.handleTouchTap} className={itemClass}>
+                {info.text}
+            </li>
+        );
+    }
 }

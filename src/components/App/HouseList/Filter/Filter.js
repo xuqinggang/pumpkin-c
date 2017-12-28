@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
 
 // 四种筛选组件
-import PositionFilterWrap from 'Shared/PositionFilterWrap/PositionFilterWrap';
-import MoneyFilterWrap from 'Shared/MoneyFilterWrap/MoneyFilterWrap';
-import MoreFilterWrap from 'Shared/MoreFilterWrap/MoreFilterWrap';
-import HouseTypeFilterWrap from 'Shared/HouseTypeFilterWrap/HouseTypeFilterWrap';
+import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
+import MoneyFilterWrap from 'components/App/HouseList/MoneyFilter/MoneyFilter';
+import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
+import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
+
 import HouseDetailMap from 'application/App/HouseDetail/HouseDetailMap';
 
 import { scrollTo, getScrollTop } from 'lib/util';
@@ -15,13 +16,14 @@ import './styles.less';
 const filterClass = 'm-filter';
 
 // 位置类型对应接口参数key
-const ptTypeMapParamsKey = {
+const PtTypeMapParamsKey = {
     districts: ['districtId', 'circleId'],
     subways: ['subwayId', 'stationId'],
     around: ['nearByInfo'],
 };
 
-const houseTypeMapLabel = {
+// 房型筛选，筛选栏选定的内容
+const HouseTypeMapLabel = {
     UNLIMITED: '',
     ONE: '1居',
     TWO: '2居',
@@ -30,7 +32,7 @@ const houseTypeMapLabel = {
     THREE_MORE: '3居+',
 };
 
-export default class Filter extends Component {
+export default class Filter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,7 +96,6 @@ export default class Filter extends Component {
         this._toggleForbideScrollThrough(newStates[type].show);
 
         this.setState(newStates, () => {
-            console.log('handleFilterShowTap states', this.state);
         });
 
         // this._forbideScrollThrough();
@@ -106,8 +107,8 @@ export default class Filter extends Component {
         console.log('positionType, positionData', positionType, positionData);
         if (!positionType || !positionData) return;
 
-        Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
-            const paramsKeyArr = ptTypeMapParamsKey[ptType];
+        Object.keys(PtTypeMapParamsKey).forEach((ptType) => {
+            const paramsKeyArr = PtTypeMapParamsKey[ptType];
             if (ptType === positionType) {
                 // 根据位置类型对应的数据
                 const ptDataByType = positionData[positionType];
@@ -140,13 +141,13 @@ export default class Filter extends Component {
             }
         });
 
-        console.log('this.filterParams', this.filterParams);
         this.props.onFilterConfirm(this.filterParams);
 
         // 隐藏弹层
         this.handleFilterShowTap('position', label);
     }
 
+    // filterMoneyArr, ex: [1300, 1400]
     onFilterMoneyConfirm = (filterMoneyArr) => {
         let label = '租金';
         if (!filterMoneyArr) {
@@ -165,16 +166,16 @@ export default class Filter extends Component {
         }
 
         this.props.onFilterConfirm(this.filterParams);
-        console.log('babel', label);
 
         // 隐藏弹层
         this.handleFilterShowTap('rent', label);
     }
 
+    // filterHouseTypeObj, ex: { shared: ['ONE', ..], whole: [] }
     onFilterHouseTypeConfirm = (filterHouseTypeObj) => {
         let label = '房型';
+        // 统计选中的总数，如果大于1，则label为多选
         let totalCount = 0;
-        console.log('filterHouseTypeObj', filterHouseTypeObj);
         if (!filterHouseTypeObj) {
             this._clearFilterParams('sharedRooms');
             this._clearFilterParams('wholeRooms');
@@ -191,7 +192,7 @@ export default class Filter extends Component {
             if (houseTypeValArr.length === 1) {
                 label = (
                     houseType == 'shared' ? '合租' : '整租'
-                ) + houseTypeMapLabel[houseTypeValArr[0]];
+                ) + HouseTypeMapLabel[houseTypeValArr[0]];
             }
 
             this.filterParams[`${houseType}Rooms`] = houseTypeValArr;
@@ -207,8 +208,8 @@ export default class Filter extends Component {
         this.handleFilterShowTap('houseType', label);
     }
 
+    // filterMoreObj, ex: { area: [{floor: 20, ceil: 40}], floor: [], ... }
     onFilterMoreConfirm = (filterMoreObj) => {
-        console.log('filterMoreObj', filterMoreObj);
         let label = '更多';
         let totalCount = 0;
         const  keyMapParamsKey = {
@@ -277,18 +278,6 @@ export default class Filter extends Component {
                         isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        {
-                            // <div className="wrap">
-                            //     <div className="child1">
-                            //         <span className="item">ads</span>
-                            //         <span className="item">ads</span>
-                            //         <span className="item">ads</span>
-                            //         <span className="item">ads</span>
-                            //         <span className="item">ads</span>
-                            //     </div>
-                            //     <div className="child2">xx</div>
-                            // </div>
-                        }
                         <PositionFilterWrap
                             type="position"
                             onFilterConfirm={this.onFilterPositionConfirm}

@@ -1,5 +1,5 @@
 import React, {
-    Component,
+    PureComponent,
     createElement,
     cloneElement,
     Children,
@@ -15,7 +15,7 @@ import './styles.less';
 const horizonPrefix = 'm-tabs';
 const verticalPrefix = 'm-tabs-vertical';
 
-class Tabs extends Component {
+class Tabs extends PureComponent {
 	// props 类型验证
 	static propTypes = {
 		className: PropTypes.string,
@@ -74,21 +74,20 @@ class Tabs extends Component {
 
     // 回调函数-每一个tab的点击
     onTouchTab = (event, activeIndex, itemData) => {
-		const prevIndex = this.state.selectedIndex;
-		if(prevIndex !== activeIndex) {
-			this.setState({
-				selectedIndex: activeIndex,
-				prevIndex
-			});
-		}
+        const prevIndex = this.state.selectedIndex;
 
-        this.props.onChange(event, activeIndex, itemData);
-	}
+        if(prevIndex !== activeIndex) {
+            this.setState({
+                selectedIndex: activeIndex,
+                prevIndex
+            });
+
+            this.props.onChange(event, activeIndex, itemData);
+        }
+    }
 
 	renderTabNavAndContent() {
 		const tabs = this.getTabs();
-
-		// 每一个tab的平均宽度%
         const tabContent = [];
 
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
@@ -119,11 +118,9 @@ class Tabs extends Component {
 		}
 	}
 
-    componentDidMount() {
-    }
-
-	render() {
-        const { className,
+    render() {
+        const { 
+            className,
             navClassName,
             contentClassName,
         } = this.props;
@@ -133,22 +130,17 @@ class Tabs extends Component {
             prevIndex,
         } = this.state;
 
-        const tabNavAndContent = this.renderTabNavAndContent();
-        const { tabContent, tabNav } = tabNavAndContent;
-
         const classPrefix = verticalPrefix;
-        const ulClass = classnames(`${classPrefix}-nav ${navClassName}`, {
+
+        const { tabContent, tabNav } = this.renderTabNavAndContent();
+
+        const ulClass = classnames(`${classPrefix}-nav`, navClassName, {
             active: selectedIndex != prevIndex && tabContent[selectedIndex] != null ,
         });
 
-        // if (this.testDom) {
-        //     // alert(this.testDom.getBoundingClientRect().width);
-        //     console.log('this.testDom', this.testDom.getBoundingClientRect().width, this.testDom);
-        // }
-
 		return (
-			<div className={`${classPrefix} ${className}`}>
-                <ul className={ulClass} ref={(testDom) => { this.testDom = testDom }}>
+			<div className={classnames(`${classPrefix}`, className)}>
+                <ul className={ulClass}>
                     {
                         tabNav
                     }
