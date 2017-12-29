@@ -5,7 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-headJump';
 
-export default function(jumpConditionObj) {
+export default function(jumpConditionObj = {}) {
     return function(WrappedCom) {
         return class HeadJumpConnect extends Component {
             constructor(props) {

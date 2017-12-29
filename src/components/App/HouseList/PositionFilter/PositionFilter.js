@@ -6,7 +6,7 @@ import { findArrayItemByPathIndex } from 'lib/util';
 
 import './styles.less';
 // test data
-// const positionData = {
+// const positionDataArr = [{
 //     around: {
 //         text: '区域',
 //         itemArr: [
@@ -36,7 +36,7 @@ import './styles.less';
 //     // },
 //     // around: {
 //     // },
-// };
+// }];
 
 const ptClass = 'm-ptfilter';
 
@@ -176,6 +176,24 @@ export default class PositionFilter extends PureComponent {
         );
     }
 
+    componentWillMount() {
+        const {
+            filterState,
+        } = this.props;
+
+        if (filterState) {
+            this.setState(filterState);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const filterState = nextProps.filterState;
+
+        if (filterState) {
+            this.setState(filterState);
+        }
+    }
+
     render() {
         return (
             <div onTouchTap={this.handleStopEventTap}>
@@ -193,7 +211,7 @@ class ThirdItemList extends PureComponent {
         super(props);
         this.state = {
             thirdItemArr: props.thirdItemArr,
-            selectItemIndex: -1,
+            selectItemIndex: props.selectItemIndex,
         };
     }
 

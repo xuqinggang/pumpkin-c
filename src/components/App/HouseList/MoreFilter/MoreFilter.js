@@ -14,54 +14,26 @@ class MoreFilter extends PureComponent {
         super(props);
         // state, ex: { direction: { 0: false, 1: true }, area: { 3: true } }
         this.state = {};
-
-        // 筛选后的值,待请求的值
-        this.tags = {
-            direction: [],
-            feature: [],
-            area: [],
-            floor: [],
-        };
-    }
-
-    genTagsData(tagsObj, type) {
-        // 每次触发筛选操作，都要清空
-        this.tags[type] = [];
-
-        Object.keys(tagsObj).forEach((tagIndex) => {
-            const isSelected = tagsObj[tagIndex];
-            if (isSelected) {
-                // tagsInfoObj[`${type}TagsArr`] 拼接拿到相应的tags
-                const tagValue = MoreFilterTagData[`${type}TagsArr`][tagIndex].value;
-                this.tags[type].push(tagValue);
-            }
-        });
-
-        this.props.onFilterChange(this.tags);
     }
 
     onTagsChange = (type, tagsStateObj) => {
         this.setState({
             [type]: tagsStateObj,
         }, () => {
-            window.setStore('moreFilter', {
-                state: this.state,
-            });
-            this.genTagsData(tagsStateObj, type);
+            this.props.onFilterChange(this.state);
         });
+    }
+
+    componentWillMount() {
+        if (this.props.filterState) {
+            this.setState(this.props.filterState);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         // 是否清空
         if ('isClear' in nextProps) {
             if (nextProps.isClear) {
-                // 清空
-                this.tags = {
-                    direction: [],
-                    feature: [],
-                    area: [],
-                    floor: [],
-                };
                 // 清空state
                 const preStates = this.state;
                 let newStates = {};
@@ -70,7 +42,7 @@ class MoreFilter extends PureComponent {
                 });
                 this.setState(newStates);
             }
-        };
+        }
     }
     
     render() {
@@ -80,6 +52,7 @@ class MoreFilter extends PureComponent {
             feature,
             floor,
         } = this.state;
+
         return (
             <div className={`${moreClass}`}>
                 <TagsGroup

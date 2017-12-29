@@ -20,4 +20,4 @@ class HeadShared extends Component {
     }
 }
 
-export default HeadJumpConnect()(HeadShared);
+export default HeadJumpConnect({historyback: true})(HeadShared);

@@ -14,7 +14,7 @@ export default {
     ELEVATOR: '有电梯',
     HOUSEKEEPING: '免费保洁',
     ELECTRONIC_LOCKER: '智能门锁',
-    PAY_MONTHLY: '支出月付',
+    PAY_MONTHLY: '支持月付',
     SHORT_TERM: '支持短租',
     CENTRALIZED: '集中式',
     // QUEENSIZEBED: '加大双人床',

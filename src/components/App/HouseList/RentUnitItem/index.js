@@ -23,6 +23,10 @@ class RentUnitItem extends Component {
         });
     }
     handleTouchTap() {
+        // 记录从列表页进入到详情页，滚动条的位置
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        window.setStore('scrollTop', { pt: scrollTop });
+
         const cityName = this.props.match.params.cityName;
         this.props.history.push(`/${cityName}/nangua/detail/${this.props.rentUnitId}`);
     }

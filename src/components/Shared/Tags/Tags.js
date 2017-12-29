@@ -29,7 +29,7 @@ export default class Tags extends Component {
         // true/false标识每个索引是否isactive
         // state: { 0: false, 1: true, }
         this.state = {
-            tagStateObj: {},
+            tagStateObj: props.activeIndexObj || {},
         };
         this.tagsArr = this.props.tagsArr || [];
     }

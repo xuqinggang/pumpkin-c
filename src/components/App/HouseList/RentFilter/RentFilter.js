@@ -1,4 +1,4 @@
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
@@ -40,7 +40,7 @@ const selectMoneyList = [
 ];
 
 
-class MoneyFilter extends PureComponent {
+class RentFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,7 +55,7 @@ class MoneyFilter extends PureComponent {
         });
 
         if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr);
+            this.props.onFilterChange(rangeValueArr, rangeValueArr);
         }
     }
 
@@ -65,7 +65,7 @@ class MoneyFilter extends PureComponent {
         });
 
         if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr);
+            this.props.onFilterChange(rangeValueArr, rangeValueArr);
         }
     }
 
@@ -79,6 +79,17 @@ class MoneyFilter extends PureComponent {
             }
         };
     }
+
+    componentWillMount() {
+        const filterState = this.props.filterState;
+        console.log('RentFilter', filterState)
+        if (filterState) {
+            this.setState({
+                rangeValueArr: filterState,
+            });
+        }
+    }
+    
 
     render() {
         const {
@@ -118,7 +129,7 @@ class MoneyRangeList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            rangeValueArr: [],
+            rangeValueArr: props.rangeValueArr,
         };
     }
 
@@ -196,4 +207,4 @@ class MoneyRangeItem extends PureComponent {
     }
 }
 
-export default FilterConfirmConnect()(MoneyFilter);
+export default FilterConfirmConnect()(RentFilter);

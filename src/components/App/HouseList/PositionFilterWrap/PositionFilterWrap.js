@@ -3,6 +3,10 @@ import React, { PureComponent, Component } from 'react';
 import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
 import { findArrayItemByPathIndex } from 'lib/util';
+// 转换state->params和label
+import { 
+    positionFilterStateToParams,
+} from 'application/App/HouseList/filterStateToParams';
 
 // 位置筛选，请求初始化筛选数据
 export default class PositionFilterWrap extends PureComponent {
@@ -13,12 +17,29 @@ export default class PositionFilterWrap extends PureComponent {
         };
     }
 
+    setPositionFilterStateData() {
+        if ('filterState' in this.props) {
+            this.setState({
+                filterState: this.props.filterState,
+            });
+        }
+    }
+
     componentDidMount() {
         ajaxInitPositionData()
             .then((positionFilterDataArr) => {
-                positionFilterDataArr && this.setState({
-                    positionFilterDataArr: [...positionFilterDataArr, ...this.state.positionFilterDataArr],
-                });
+                if (positionFilterDataArr) {
+                    const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
+                    this.setState({
+                        positionFilterDataArr: newPositionFilterDataArr,
+                    });
+
+                    // this.setPositionFilterStateData();
+
+                    window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
+                    const { label } = positionFilterStateToParams(this.props.filterState);
+                    this.props.onDynamicSetLabel(label);
+                }
                 console.log('ajax positionData', positionFilterDataArr);
             });
 
@@ -26,54 +47,24 @@ export default class PositionFilterWrap extends PureComponent {
         // 如果地理位置权限允许，则添加附近数据
         stuffAroundDataToPosition()
             .then((positionArroundObj) => {
-                positionArroundObj && this.setState({
-                    positionFilterDataArr: [...this.state.positionFilterDataArr, positionArroundObj],
-                });
+                if (positionArroundObj) {
+                    const newPositionFilterDataArr = [...this.state.positionFilterDataArr, positionArroundObj];
+                    this.setState({
+                        positionFilterDataArr: newPositionFilterDataArr,
+                    });
+
+                    // this.setPositionFilterStateData();
+
+                    window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
+                }
             })
             .catch((err) => {
                 console.log('err', err);
             });
     }
 
-    onFilterConfirm = (stateData) => {
-        let positionType, positionData = {};
-
-        const {
-            firstItemSelectedIndex,
-            secondItemSelectedIndex,
-            thirdItemSelectedIndex,
-        } = stateData;
-
-        let thirdItem = null, thirdData = null;
-        const positionFilterDataArr = this.state.positionFilterDataArr;
-
-        const firstItem = positionFilterDataArr[firstItemSelectedIndex];
-        const secondItem = firstItem.itemArr[secondItemSelectedIndex];
-
-        positionType = firstItem.id.type;
-        if (thirdItemSelectedIndex !== -1) {
-            thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
-            // 选中的第三级数据
-            thirdData = {
-                id: thirdItem.id,
-                text: thirdItem.text,
-            };
-        }
-
-        // 选中的第二级数据
-        const secondData = {
-            id: secondItem.id,
-            text: secondItem.text,
-        };
-
-        positionData[positionType] = {
-            second: secondData,
-            third: thirdData,
-        };
-
-        if (this.props.onFilterConfirm) {
-            this.props.onFilterConfirm(positionType, positionData);
-        }
+    onFilterConfirm = (positionFilterStateObj) => {
+        this.props.onFilterConfirm(positionFilterStateObj);
     }
 
     render() {
@@ -81,9 +72,14 @@ export default class PositionFilterWrap extends PureComponent {
             positionFilterDataArr,
         } = this.state;
 
+        const {
+            filterState,
+        } = this.props;
+        
         return (
             positionFilterDataArr ? 
             <PositionFilter
+                filterState={filterState}
                 positionFilterDataArr={positionFilterDataArr}
                 onFilterConfirm={this.onFilterConfirm}
             />

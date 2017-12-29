@@ -1,6 +1,6 @@
 import './styles.less';
 import React, { Component } from 'react';
-// import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
 import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
@@ -93,7 +93,7 @@ export default class HouseDetail extends Component {
         return (
             <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 {
-                    // <HeadShared />
+                    <HeadShared />
                 }
                 <hr className="u-housedetail-partline" />
                 <RoomSlider sliderImgArr={sliderImgArr || []} />
