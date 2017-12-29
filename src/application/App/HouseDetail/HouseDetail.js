@@ -31,8 +31,6 @@ export default class HouseDetail extends Component {
             houseDetailData: {},
         };
         window.rentUnitId = props.match.params.rentUnitId;
-        console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
-        console.log('window.rentUnitId', window.rentUnitId);
     }
 
     handleTouchTap() {
@@ -42,7 +40,7 @@ export default class HouseDetail extends Component {
         window.scrollTo(0, 0);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
@@ -51,7 +49,7 @@ export default class HouseDetail extends Component {
                 });
 
                 // 动态更改标题
-                dynamicDocTitle(houseDetailData.houseProfileData.title);
+                dynamicDocTitle(houseDetailData.houseProfileData.title + '南瓜租房北京租房');
             })
     }
 

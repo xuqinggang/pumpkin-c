@@ -103,7 +103,6 @@ export const getDocHeight = () => {
         html.clientHeight, html.scrollHeight, html.offsetHeight);
 };
 
-
 export function scrollTo(scrollTop) {
     document.body.scrollTop = document.documentElement.scrollTop = scrollTop;
 }
