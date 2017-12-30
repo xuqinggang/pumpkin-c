@@ -16,7 +16,8 @@ export default function() {
                     // 是否清空
                     isClear: false,
                 };
-                this.filterState = null;
+
+                this.filterState = props.filterState;
             }
 
             onFilterChange = (filterState) => {
