@@ -1,6 +1,6 @@
 import Service from 'lib/Service';
 import { isWeiXin, dynamicScript } from 'lib/util';
-
+// 调用焦点，获取用于微信自定义分享的配置信息
 function _ajaxFocusWxConfig() {
     return Service.get('https://wx-open-api.focus.cn/ajax/wxJsConfig', {
         url: window.location.href.split('#')[0],
@@ -45,12 +45,7 @@ export function execWxShare(sharedObj) {
     if (isWeiXin()) {
         dynamicScript('//res.wx.qq.com/open/js/jweixin-1.0.0.js', function() {
             console.log('isWeiXinxx');
-            wxShare({
-                title: "分享demo标题",
-                url: window.location.href.split('#')[0],
-                pic: "https://t-img.51f.com/sh100x100sh/misc/logo_focus.png",
-                desc: "分享demo摘要，简单描述"
-            });
+            wxShare(sharedObj);
         });
     }
 }
