@@ -66,6 +66,10 @@ export function shallowEqual(objA, objB) {
         return true
     }
 
+    if (!objA || !objB) {
+        return false;
+    }
+
     // 获取 objA 和 objB 的所有属性
     const keysA = Object.keys(objA)
     const keysB = Object.keys(objB)
@@ -98,7 +102,6 @@ export const getDocHeight = () => {
     return Math.max(body.scrollHeight, body.offsetHeight,
         html.clientHeight, html.scrollHeight, html.offsetHeight);
 };
-
 
 export function scrollTo(scrollTop) {
     document.body.scrollTop = document.documentElement.scrollTop = scrollTop;

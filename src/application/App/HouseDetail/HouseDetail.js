@@ -1,6 +1,6 @@
 import './styles.less';
 import React, { Component } from 'react';
-// import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
 import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
@@ -31,18 +31,10 @@ export default class HouseDetail extends Component {
             houseDetailData: {},
         };
         window.rentUnitId = props.match.params.rentUnitId;
-        console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
-        console.log('window.rentUnitId', window.rentUnitId);
-    }
-
-    handleTouchTap() {
     }
 
     componentWillMount() {
         window.scrollTo(0, 0);
-    }
-
-    componentDidMount() {
         this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
@@ -51,7 +43,7 @@ export default class HouseDetail extends Component {
                 });
 
                 // 动态更改标题
-                dynamicDocTitle(houseDetailData.houseProfileData.title);
+                dynamicDocTitle(houseDetailData.houseProfileData.title + '-南瓜租房北京租房');
             })
     }
 
@@ -91,9 +83,9 @@ export default class HouseDetail extends Component {
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
 
         return (
-            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
+            <div className={`${classPrefix}`}>
                 {
-                    // <HeadShared />
+                    <HeadShared />
                 }
                 <hr className="u-housedetail-partline" />
                 <RoomSlider sliderImgArr={sliderImgArr || []} />

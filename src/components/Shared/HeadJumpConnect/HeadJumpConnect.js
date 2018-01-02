@@ -5,7 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-headJump';
 
-export default function(jumpConditionObj) {
+export default function(jumpConditionObj = {}) {
     return function(WrappedCom) {
         return class HeadJumpConnect extends Component {
             constructor(props) {
@@ -29,7 +29,7 @@ export default function(jumpConditionObj) {
                             className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
                         >
                         </span>
-                        <div className={`${classPrefix}-other grid-col`}>
+                        <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
                             <WrappedCom />
                         </div>
                     </div>
