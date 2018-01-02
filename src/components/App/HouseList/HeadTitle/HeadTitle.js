@@ -16,6 +16,6 @@ function HeadTitle() {
 
 export default HeadJumpConnect({
     historyback: true,
-    className: 'f-position-static',
+    className: 'f-position-relative',
     // routerback: true,
 })(HeadTitle);
