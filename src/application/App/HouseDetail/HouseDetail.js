@@ -17,6 +17,7 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
 import { dynamicDocTitle } from 'lib/util';
+import { execWxShare } from 'lib/wxShare';
 
 import Animate from 'rc-animate';
 
@@ -42,8 +43,18 @@ export default class HouseDetail extends Component {
                     houseDetailData,
                 });
 
+                const { sliderImgArr, houseProfileData } = houseDetailData;
+                const title = houseProfileData.title;
+                const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
+                // 分享
+                execWxShare({
+                    title: title + '-南瓜租房北京租房',
+                    link: window.location.href.split('#')[0],
+                    imgUrl: imgInfo && imgInfo.img,
+                    desc: '南瓜租房，只租真房源！',
+                });
                 // 动态更改标题
-                dynamicDocTitle(houseDetailData.houseProfileData.title + '-南瓜租房北京租房');
+                dynamicDocTitle(title + '-南瓜租房北京租房');
             })
     }
 
