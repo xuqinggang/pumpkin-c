@@ -11,9 +11,6 @@ import 'styles/index';
 import 'pumpkin-font-c';
 
 const history = createHistory();
-// history.listen((location) => {
-//     console.log('isWeiXin', location);
-// })
 
 // Server配置ajax url前缀
 Service.baseConfig = {

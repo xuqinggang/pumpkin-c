@@ -214,10 +214,12 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         circleId: null,
         subwayId: null,
         stationId: null,
+        nearByInfo: null,
     };
     let label = '位置';
+    const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
 
-    if (!positinFilterStateObj) {
+    if (!positinFilterStateObj || !positionFilterDataArr) {
         return {
             label,
             filterParams,
@@ -227,7 +229,6 @@ export function positionFilterStateToParams(positinFilterStateObj) {
     let positionType = '';
 
     // 位置筛选的区域，地铁数据 [{ around: { text: '区域', itemArr: [] } }]
-    const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
 
     const {
         firstItemSelectedIndex,

@@ -55,7 +55,7 @@ export default class PositionFilterWrap extends PureComponent {
 
                     // this.setPositionFilterStateData();
 
-                    window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
+                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
                 }
             })
             .catch((err) => {

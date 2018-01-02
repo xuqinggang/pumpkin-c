@@ -1,5 +1,6 @@
 import Service from 'lib/Service';
 import { isWeiXin, dynamicScript } from 'lib/util';
+
 // 调用焦点，获取用于微信自定义分享的配置信息
 function _ajaxFocusWxConfig() {
     return Service.get('https://wx-open-api.focus.cn/ajax/wxJsConfig', {
