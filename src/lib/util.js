@@ -1,3 +1,35 @@
+const dynamicScriptObj = {};
+export function dynamicScript(src, callback) {
+    // 如果该scr，已加载过，则直接执行callback
+    if (dynamicScriptObj[src]) {
+        callback();
+    }
+
+    var bodyDom = document.getElementsByTagName('body')[0];
+    var script= document.createElement('script');
+    script.type= 'text/javascript';
+    script.onload = script.onreadystatechange = function() {
+        if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete" ) {
+            callback();
+            dynamicScriptObj[src] = true;
+            // Handle memory leak in IE 
+            script.onload = script.onreadystatechange = null; 
+        }
+    };
+    script.src= src;
+    bodyDom.appendChild(script);
+}
+
+// 判断是否为微信浏览器
+export function isWeiXin() {
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 export function findArrayItemByPathIndex(arr, pathIndexArr, nextLevelName) {
     if (!arr.length || !pathIndexArr.length) return;
     let itemResult = null;

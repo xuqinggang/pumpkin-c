@@ -2,7 +2,7 @@ import React, { PureComponent, Component } from 'react';
 
 import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
-import { findArrayItemByPathIndex } from 'lib/util';
+
 // 转换state->params和label
 import { 
     positionFilterStateToParams,
