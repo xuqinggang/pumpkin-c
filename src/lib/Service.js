@@ -4,9 +4,11 @@ Service.reqServer = (url, paramters, type = 'GET') => {
     const {
         urlPrefix,
     } = Service.baseConfig;
-    if (urlPrefix) {
+
+    if (url.indexOf('http') === -1 && urlPrefix) {
         url = urlPrefix + url;
     }
+
     const promise = new Promise((resolve, reject) => {
         const xmlHttp = new XMLHttpRequest();
         // 请求参数
@@ -31,7 +33,7 @@ Service.reqServer = (url, paramters, type = 'GET') => {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
                 try {
                     const result = JSON.parse(xmlHttp.responseText);
-                    console.debug(`回调success:server:url=${url} [result]=`, result);
+                    console.log(`回调success:server:url=${url} [result]=`, result);
                     if (result && result.code === 200) {
                         resolve(result);
                     } else {
@@ -77,6 +79,7 @@ Service.reqServer = (url, paramters, type = 'GET') => {
 
     return promise;
 };
+
 Service.get = (url, paramters) => {
     return Service.reqServer(url, paramters, 'GET');
 }

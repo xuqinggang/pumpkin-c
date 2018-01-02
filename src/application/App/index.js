@@ -5,10 +5,17 @@ import createHistory from 'history/createBrowserHistory';
 import Config from 'config/config';
 import Service from 'lib/Service';
 import routes from './routes';
-
+import { execWxShare } from 'lib/wxShare';
 // 全局样式
 import 'styles/index';
 import 'pumpkin-font-c';
+
+execWxShare();
+
+const history = createHistory();
+// history.listen((location) => {
+//     console.log('isWeiXin', location);
+// })
 
 // Server配置ajax url前缀
 Service.baseConfig = {
@@ -40,10 +47,10 @@ window.getStore = function (key) {
     }
 }
 
-
+// 注册onTouchTap
 injectTapEventPlugin();
 
 render(
-    routes(createHistory()),
+    routes(history),
     document.getElementById('root'),
 );
