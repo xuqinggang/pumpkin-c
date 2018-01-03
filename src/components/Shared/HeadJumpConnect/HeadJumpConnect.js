@@ -13,7 +13,12 @@ export default function(jumpConditionObj = {}) {
             }
 
             handleBackBtnTap = () => {
-                const { historyback } = jumpConditionObj;
+                const { historyback, backUrl } = jumpConditionObj;
+                if (backUrl) {
+                    window.location.href = backUrl;
+                    return;
+                }
+
                 if (historyback) {
                     history.back();
                     return;

@@ -17,5 +17,6 @@ function HeadTitle() {
 export default HeadJumpConnect({
     historyback: true,
     className: 'f-position-relative',
+    backUrl: '//m.focus.cn',
     // routerback: true,
 })(HeadTitle);
