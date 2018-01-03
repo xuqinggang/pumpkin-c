@@ -61,7 +61,7 @@ const webpackProConf = webpackMerge(webpackBaseConf, {
                     reduce_vars: true,
                     // 删除所有的 `console` 语句
                     // 还可以兼容ie浏览器
-                    // drop_console: true,
+                    drop_console: true,
                     // 死代码消除
                     dead_code: true,  
                 },
