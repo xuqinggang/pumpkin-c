@@ -41,17 +41,17 @@ export function wxShare(shareObj = {}) {
             });
 
             wx.error(function(res) {
-                alert(JSON.stringify(res));
+                alert(JSON.stringify(data) + window.location.href.split('#')[0] + JSON.stringify(shareObj));
                 // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
             });
         })
 }
 
-export function execWxShare(sharedObj) {
+export function execWxShare(shareObj) {
     if (isWeiXin()) {
         dynamicScript('//res.wx.qq.com/open/js/jweixin-1.0.0.js', function() {
             console.log('isWeiXinxx');
-            wxShare(sharedObj);
+            wxShare(shareObj);
         });
     }
 }
