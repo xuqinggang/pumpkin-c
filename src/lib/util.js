@@ -3,6 +3,7 @@ export function dynamicScript(src, callback) {
     // 如果该scr，已加载过，则直接执行callback
     if (dynamicScriptObj[src]) {
         callback();
+        return;
     }
 
     var bodyDom = document.getElementsByTagName('body')[0];
