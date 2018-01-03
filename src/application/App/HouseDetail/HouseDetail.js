@@ -49,7 +49,7 @@ export default class HouseDetail extends Component {
                 // 分享
                 execWxShare({
                     title: title + '-南瓜租房北京租房',
-                    link: encodeURIComponent(window.location.href.split('#')[0]),
+                    link: window.location.href.split('#')[0],
                     imgUrl: imgInfo && imgInfo.img,
                     desc: '南瓜租房，只租真房源！',
                 });
