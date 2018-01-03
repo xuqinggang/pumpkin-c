@@ -24,7 +24,7 @@ export function wxShare(shareObj = {}) {
     var api_list = ['onMenuShareTimeline', 'onMenuShareAppMessage'];
     _ajaxFocusWxConfig(shareObj)
         .then((data) => {
-            console.log('isWeiXin', data);
+            console.log('isWeiXin', data, shareObj);
             wx.config({
                 debug: false, //true为调试模式，线上需置为false
                 appId: data.appId,
@@ -41,6 +41,7 @@ export function wxShare(shareObj = {}) {
             });
 
             wx.error(function(res) {
+                console.log('isWeiXin', res, shareObj, data);
                 // alert(JSON.stringify(data) + window.location.href.split('#')[0] + JSON.stringify(shareObj));
                 // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
             });
