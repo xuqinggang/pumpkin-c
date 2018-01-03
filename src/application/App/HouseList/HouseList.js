@@ -7,6 +7,7 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 
 import Service from 'lib/Service';
 import { shallowEqual, dynamicDocTitle } from 'lib/util';
+import { execWxShare } from 'lib/wxShare';
 import fetchRentUnitList from './fetchRentUnitList';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
@@ -77,6 +78,13 @@ export default class HouseList extends PureComponent {
             }
         }
 
+        // 分享
+        execWxShare({
+            title: '南瓜租房列表页-南瓜租房北京租房',
+            link: window.location.href.split('#')[0],
+            imgUrl: 'https://static-1252921496.file.myqcloud.com/pumpkin-c/images/logo.464cfadc.png',
+            desc: '南瓜租房，只租真房源！',
+        });
         console.log('props.match.params.filterUrlFragment', this.props.match.params.filterUrlFragment);
     }
 
