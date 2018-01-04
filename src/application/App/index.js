@@ -42,6 +42,8 @@ window.getStore = function (key) {
     }
 }
 
+window.isApp = window.navigator.userAgent.indexOf('FocusLiveApp') !== -1
+
 // 注册onTouchTap
 injectTapEventPlugin();
 

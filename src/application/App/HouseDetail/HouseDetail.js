@@ -58,6 +58,12 @@ export default class HouseDetail extends Component {
             })
     }
 
+    componentDidMount() {
+        if (window.isApp) {
+            this.wrapDom.style.paddingTop = '0';
+        }
+    }
+
     render() {
         const { 
             // 头部slider轮播图
@@ -94,9 +100,11 @@ export default class HouseDetail extends Component {
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
 
         return (
-            <div className={`${classPrefix}`}>
+            <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
+                    !window.isApp ?
                     <HeadShared />
+                    : null
                 }
                 <hr className="u-housedetail-partline" />
                 <RoomSlider sliderImgArr={sliderImgArr || []} />

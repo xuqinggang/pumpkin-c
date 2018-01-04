@@ -215,7 +215,11 @@ export default class HouseList extends PureComponent {
         return (
             <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
                 <div className={`${houselistClassPrefix}-head`}>
-                    <HeadTitle />
+                    {
+                        !window.isApp ?
+                        <HeadTitle />
+                        : null
+                    }
                     <Filter
                         className="filter"
                         filterState={filterState}
