@@ -12,15 +12,15 @@ export default class RentUnitsSuggest extends Component {
             <div className={clsPrefix}>
                 <div className={`${clsPrefix}--note`}>
                     <i className={`${clsPrefix}--note-icon`} />
+                    <div className={`${clsPrefix}--note-text`}>未找到对应房源，以下是推荐房源</div>
                     {
-                        // <div className={`${clsPrefix}--note-text`}>未找到对应房源，以下是推荐房源</div>
+                        // <div className={`${clsPrefix}--note-text`}>未找到对应房源</div>
                     }
-                    <div className={`${clsPrefix}--note-text`}>未找到对应房源</div>
                 </div>
                 {
-                    // this.props.list.map((rentalUnit, index) => (
-                    //     <RentUnitItem key={index} {...rentalUnit} />
-                    // ))
+                    this.props.list.map((rentalUnit, index) => (
+                        <RentUnitItem key={index} {...rentalUnit} />
+                    ))
                 }
             </div>
         );
