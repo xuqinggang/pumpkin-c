@@ -59,7 +59,9 @@ export default class HouseDetail extends Component {
     }
 
     componentDidMount() {
-        this.wrapDom.style.paddingTop = '0';
+        if (window.isApp) {
+            this.wrapDom.style.paddingTop = '0';
+        }
     }
 
     render() {
