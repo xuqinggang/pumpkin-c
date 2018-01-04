@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 // import BottomDialog from 'Shared/BottomDialog';
 
@@ -7,7 +7,7 @@ import './styles.less';
 const btnPrefix = 'm-contactbutler-btn';
 const dialogPrefix = 'm-contactbutler-dialog'
 
-export default class ContactButler extends Component {
+export default class ContactButler extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

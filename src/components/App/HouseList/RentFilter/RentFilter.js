@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import Slider from 'Shared/Slider/Slider';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+
+import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
+import Slider from 'Shared/Slider/Slider';
 
 import './styles.less';
 
@@ -38,7 +40,7 @@ const selectMoneyList = [
 ];
 
 
-export default class MoneyFilter extends Component {
+class RentFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,7 +55,7 @@ export default class MoneyFilter extends Component {
         });
 
         if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr);
+            this.props.onFilterChange(rangeValueArr, rangeValueArr);
         }
     }
 
@@ -63,7 +65,7 @@ export default class MoneyFilter extends Component {
         });
 
         if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr);
+            this.props.onFilterChange(rangeValueArr, rangeValueArr);
         }
     }
 
@@ -77,6 +79,17 @@ export default class MoneyFilter extends Component {
             }
         };
     }
+
+    componentWillMount() {
+        const filterState = this.props.filterState;
+        console.log('RentFilter', filterState)
+        if (filterState) {
+            this.setState({
+                rangeValueArr: filterState,
+            });
+        }
+    }
+    
 
     render() {
         const {
@@ -112,11 +125,11 @@ export default class MoneyFilter extends Component {
     } 
 }
 
-class MoneyRangeList extends Component {
+class MoneyRangeList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            rangeValueArr: [],
+            rangeValueArr: props.rangeValueArr,
         };
     }
 
@@ -129,6 +142,7 @@ class MoneyRangeList extends Component {
             this.props.onMonenyRangeListTap(rangeValueArr);
         }
     }
+
     componentWillReceiveProps(nextProps) {
         if ('rangeValueArr' in nextProps) {
             this.setState({
@@ -136,6 +150,7 @@ class MoneyRangeList extends Component {
             });
         }
     }
+
     render() {
         const rangeValueArr = this.state.rangeValueArr;
         const listDom = selectMoneyList.map((item, index) => {
@@ -158,29 +173,38 @@ class MoneyRangeList extends Component {
     }
 }
 
-function MoneyRangeItem(props) {
-    const {
-        moneyRangeItem,
-        selectedRange,
-    } = props;
+class MoneyRangeItem extends PureComponent {
+    handleMoneyRangeItemTap = () => {
+        const {
+            onMonenyRangeItemTap,
+            moneyRangeItem,
+        } = this.props;
 
-    function handleMoneyRangeItemTap() {
-        if (props.onMonenyRangeItemTap) {
-            props.onMonenyRangeItemTap(moneyRangeItem.range);
+        if (onMonenyRangeItemTap) {
+            onMonenyRangeItemTap(moneyRangeItem.range);
         }
     }
 
-    const itemClass = classnames('list-item', {
-        'active': moneyRangeItem.range[0] == selectedRange[0] && 
-        moneyRangeItem.range[1] == selectedRange[1],
-    });
+    render() {
+        const {
+            moneyRangeItem,
+            selectedRange,
+        } = this.props;
 
-    return (
-        <li
-            className={itemClass}
-            onTouchTap={handleMoneyRangeItemTap}
-        >
-            {moneyRangeItem.text}
-        </li>
-    )
+        const itemClass = classnames('list-item', {
+            'active': moneyRangeItem.range[0] == selectedRange[0] && 
+            moneyRangeItem.range[1] == selectedRange[1],
+        });
+
+        return (
+            <li
+                className={itemClass}
+                onTouchTap={this.handleMoneyRangeItemTap}
+            >
+                {moneyRangeItem.text}
+            </li>
+        )
+    }
 }
+
+export default FilterConfirmConnect()(RentFilter);

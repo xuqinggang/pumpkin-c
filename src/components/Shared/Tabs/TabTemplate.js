@@ -7,7 +7,6 @@ import './styles.less';
 class TabTemplate extends Component {
     render() {
         const {children, isSelected, contentItemClass} = this.props;
-        const templateStyle = {};
         // if(!isSelected) {
         //     templateStyle.width = 0;
         //     templateStyle.height = 0;
@@ -20,7 +19,7 @@ class TabTemplate extends Component {
 
         return (
             isSelected ? 
-            <div style={templateStyle} className={contentClassName}>
+            <div className={contentClassName}>
                 {children}
             </div>
             : null

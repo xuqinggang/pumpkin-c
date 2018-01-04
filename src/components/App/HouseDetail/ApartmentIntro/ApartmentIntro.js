@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import defaultImg from './images/default.png';
 import classnames from 'classnames';
 
 import './styles.less';
@@ -19,7 +20,7 @@ class ApartmentIntro extends Component {
         return (
             <div className={`${classPrefix} ${className}`}>
                 <div className={`${classPrefix}-head`}>
-                    <img src={image} alt="" className={`f-vertical-middle ${classPrefix}-img`} />
+                    <img src={image || defaultImg} alt="" className={`f-vertical-middle ${classPrefix}-img`} />
                     <h1 className={`f-vertical-middle ${classPrefix}-title s-housedetail-comptitle`}>{name}</h1>
                 </div>
                 <div className={`${classPrefix}-intro`}>

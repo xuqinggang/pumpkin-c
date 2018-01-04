@@ -15,7 +15,7 @@ const Map = {
 };
 
 
-function stuffDataToPosition(itemArr, type, positionData) {
+function stuffDataToPosition(itemArr, type, positionDataArr) {
     let firstItemsArr = itemArr && itemArr.map((item, index) => {
         // 第一级的item
         const itemFirst = {
@@ -45,16 +45,25 @@ function stuffDataToPosition(itemArr, type, positionData) {
     });
 
     if (firstItemsArr) {
-        if (!positionData[type]) {
-            positionData[type] = {};
-            firstItemsArr.unshift({
-                text: '不限',
-                id: -1,
-            });
+        firstItemsArr.unshift({
+            text: '不限',
+            id: -1,
+            isCanCancel: true,
+        });
 
-            positionData[type].itemArr = firstItemsArr;
-            positionData[type].text = Map[type].text;
-        }
+        positionDataArr.push({
+            id: {
+                type,
+            },
+            text: Map[type].text,
+            itemArr: firstItemsArr,
+        });
+        // if (!positionData[type]) {
+        //     positionData[type] = {};
+
+        //     positionData[type].itemArr = firstItemsArr;
+        //     positionData[type].text = Map[type].text;
+        // }
     }
 }
 
@@ -67,11 +76,15 @@ export function stuffAroundDataToPosition() {
                 window.lonlatArr = lonlatArr;
                 const [lon, lat] = lonlatArr;
                 const positionArroundObj = {
+                    id: {
+                        type: 'around',
+                    },
                     text: '附近',
                     itemArr: [
                         {
                             text: '不限',
                             id: -1,
+                            isCanCancel: true,
                         },
                         {
                             text: '1km',
@@ -80,6 +93,7 @@ export function stuffAroundDataToPosition() {
                                 lat,
                                 distance: 1,
                             },
+                            isCanCancel: true,
                         },
                         {
                             text: '2km',
@@ -88,6 +102,7 @@ export function stuffAroundDataToPosition() {
                                 lat,
                                 distance: 2,
                             },
+                            isCanCancel: true,
                         },
                         {
                             text: '3km',
@@ -96,6 +111,7 @@ export function stuffAroundDataToPosition() {
                                 lat,
                                 distance: 3,
                             },
+                            isCanCancel: true,
                         },
                     ],
                 };
@@ -112,7 +128,7 @@ export function stuffAroundDataToPosition() {
 
 export function ajaxInitPositionData(cityId = 1) {
     // 位置筛选的数据
-    let positionData = {};
+    let positionDataArr = [];
 
     return Promise.all([
         _ajaxDistricts(cityId),
@@ -120,10 +136,10 @@ export function ajaxInitPositionData(cityId = 1) {
     ])
         .then((datas) => {
             datas.forEach((data) => {
-                stuffDataToPosition(data.arr, data.type, positionData);
+                stuffDataToPosition(data.arr, data.type, positionDataArr);
             });
 
-            return positionData;
+            return positionDataArr;
 
             // 手动添加附近相关数据
             // 如果地理位置权限允许，则添加附近数据

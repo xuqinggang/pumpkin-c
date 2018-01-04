@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
+import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
+import HouseTypeFilterTagData from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilterTagData';
 import './styles.less';
 
 const classPrefix = 'm-filterconfirm';
@@ -14,11 +16,12 @@ export default function() {
                     // 是否清空
                     isClear: false,
                 };
-                this.filterData = null;
+
+                this.filterState = props.filterState;
             }
 
-            onFilterChange = (data) => {
-                this.filterData = data;
+            onFilterChange = (filterState) => {
+                this.filterState = filterState;
             }
 
             handleWrapTap = (e) => {
@@ -27,13 +30,13 @@ export default function() {
             }
 
             handleConfirmTap = () => {
-                console.log('handleConfirmTap');
-                this.props.onFilterConfirm(this.filterData);
+                this.props.onFilterConfirm(this.filterState);
             }
 
             // 事件处理程序-清空点击
             handleClearTap = () => {
-                this.filterData = null;
+                this.filterState = null;
+
                 this.setState({
                     isClear: true,
                 });
@@ -47,7 +50,7 @@ export default function() {
 
             render() {
                 const {
-                    ...extraProps,
+                    filterState,
                 } = this.props;
 
                 const {
@@ -58,6 +61,7 @@ export default function() {
                     <div className={`${classPrefix}`} onTouchTap={this.handleWrapTap}>
                         <WrappedCom
                             isClear={isClear}
+                            filterState={filterState}
                             onFilterChange={this.onFilterChange}
                         />
                         <div className={`${classPrefix}-footer`}>
@@ -80,3 +84,5 @@ export default function() {
         }
     }
 }
+
+// 

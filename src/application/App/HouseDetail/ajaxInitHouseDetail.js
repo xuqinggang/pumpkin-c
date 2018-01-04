@@ -1,5 +1,5 @@
 import Service from 'lib/Service';
-import HouseDetailMap from './HouseDetailMap';
+import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'base/MapData';
 
 export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
@@ -148,7 +148,7 @@ function genHouseProfile(houseDetailData) {
     });
 
     // title location ------------
-    let title = `${HouseDetailMap[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
+    let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
     let location = `${districtName}-${blockName}`;
     if (subwayLine != null && subwayDistance != null && subwayStation != null) {
         location = `${location}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
@@ -177,7 +177,7 @@ function genHouseTags(houseDetailData) {
     if (!tags || 0 === tags.length) return [];
 
     return tags.map((tag) => {
-        return HouseDetailMap[tag];
+        return TagTypeMapText[tag];
     });
 }
 
@@ -197,7 +197,7 @@ function genHouseBrief(houseDetailData) {
         livingRoomCount,
         floor,
         totalFloor,
-        direct: `${HouseDetailMap[direct]}`,
+        direct: `${DirectTypeMapText[direct]}`,
     };
 }
 
