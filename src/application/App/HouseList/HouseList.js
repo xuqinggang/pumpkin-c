@@ -201,21 +201,19 @@ export default class HouseList extends PureComponent {
                         onFilterConfirm={this.onFilterConfirm}
                     />
                 </div>
-                {
-                    <HouseLists
-                        rentUnitList={{
-                            pager: this.state.pager,
-                                list: this.state.rentUnitList,
-                                onLoadMore: this.handleLoadMore,
-                        }}
-                        suggestRentUnitList={{
-                            list: this.state.suggestRentUnitList,
-                        }}
-                        isFetchCrash={this.state.isFetchCrash}
-                        fetchFor={this.state.fetchFor}
-                        isLoading={this.state.fetching}
-                    />
-                }
+                <HouseLists
+                    rentUnitList={{
+                        pager: this.state.pager,
+                        list: this.state.rentUnitList,
+                        onLoadMore: this.handleLoadMore,
+                    }}
+                    suggestRentUnitList={{
+                        list: this.state.suggestRentUnitList,
+                    }}
+                    isFetchCrash={this.state.isFetchCrash}
+                    fetchFor={this.state.fetchFor}
+                    isLoading={this.state.fetching}
+                />
             </div>
         );
     }

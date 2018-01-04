@@ -3,6 +3,7 @@ import { Router, Switch, Route } from 'react-router';
 
 import HouseDetail from 'App/HouseDetail/HouseDetail';
 import HouseList from 'App/HouseList/HouseList';
+import HouseIndex from 'App/HouseIndex/HouseIndex';
 import Config from 'config/config';
 
 const routes = (history) => {
@@ -20,6 +21,7 @@ const routes = (history) => {
                     component={HouseDetail}
                 />
                 <Route path="/:cityName/nangua/list/:filterUrlFragment?" component={HouseList} />
+                <Route path="/" component={HouseIndex} />
             </Switch>
         </Router>
     );
