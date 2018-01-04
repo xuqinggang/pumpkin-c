@@ -20,6 +20,7 @@ export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
+        this.getParamsObj = this._getGetParams();
         this.state = {
             // 4个筛选面板的state
             filterLabel: {
@@ -30,7 +31,9 @@ export default class HouseList extends PureComponent {
             },
             filterState: {},
             // filter参数
-            filter: {},
+            filter: {
+                apartmentId: this.getParamsObj.apartment || null,
+            },
             pager: {
                 curPage: 1,
                 totalPage: 1,
@@ -48,6 +51,21 @@ export default class HouseList extends PureComponent {
 
         // 动态更改标题
         dynamicDocTitle('南瓜租房');
+    }
+
+    _getGetParams() {
+        const getParamsObj = {};
+        const url = decodeURIComponent(window.location.href);
+        const pt = url.indexOf('?');
+        if (pt === -1) return getParamsObj;
+        const getParamsArr = url.substr(pt+1).split('&');
+        getParamsArr.forEach((paramStr) => {
+            if (!paramStr) return;
+            const keyAndValueArr = paramStr.split('=');
+            getParamsObj[keyAndValueArr[0]] = keyAndValueArr[1];
+        });
+
+        return getParamsObj;
     }
 
     componentWillMount() {
@@ -72,7 +90,7 @@ export default class HouseList extends PureComponent {
             if (filterState) {
                 this.setState({
                     filterState: newFilterState,
-                    filter: Object.assign({}, extraTypeFilterParams, positionFilterParams),
+                    filter: Object.assign({}, this.state.filter, extraTypeFilterParams, positionFilterParams),
                     filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
                 });
             }
@@ -164,7 +182,11 @@ export default class HouseList extends PureComponent {
                 if (filterUrlFragment) {
                     console.log('filterStateObj', filterStateObj, filterUrlFragment);
                     const cityName = this.props.match.params.cityName;
-                    this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
+                    if (this.getParamsObj.apartment) {
+                        this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`);
+                    } else {
+                        this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
+                    }
                 }
 
                 this.handleFetchList('RESET');
@@ -201,21 +223,19 @@ export default class HouseList extends PureComponent {
                         onFilterConfirm={this.onFilterConfirm}
                     />
                 </div>
-                {
-                    <HouseLists
-                        rentUnitList={{
-                            pager: this.state.pager,
-                                list: this.state.rentUnitList,
-                                onLoadMore: this.handleLoadMore,
-                        }}
-                        suggestRentUnitList={{
-                            list: this.state.suggestRentUnitList,
-                        }}
-                        isFetchCrash={this.state.isFetchCrash}
-                        fetchFor={this.state.fetchFor}
-                        isLoading={this.state.fetching}
-                    />
-                }
+                <HouseLists
+                    rentUnitList={{
+                        pager: this.state.pager,
+                        list: this.state.rentUnitList,
+                        onLoadMore: this.handleLoadMore,
+                    }}
+                    suggestRentUnitList={{
+                        list: this.state.suggestRentUnitList,
+                    }}
+                    isFetchCrash={this.state.isFetchCrash}
+                    fetchFor={this.state.fetchFor}
+                    isLoading={this.state.fetching}
+                />
             </div>
         );
     }
