@@ -1,10 +1,10 @@
-export const rentalTypeMap = {
+export const RentalTypeMapText = {
     // rentalType
     SHARED: '合租',
     WHOLE: '整租',
 };
 
-export const tagMap = {
+export const TagTypeMapText = {
     // tags
     DEPOSIT_FREE: '免押金',
     FIRST_RENTAL: '首次出租',
@@ -22,7 +22,7 @@ export const tagMap = {
     // QUEENSIZEBED: '加大双人床',
 };
 
-export const directMap = {
+export const DirectTypeMapText = {
     // direct
     EAST: '东',
     SOUTH: '南',

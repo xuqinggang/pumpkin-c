@@ -7,9 +7,6 @@ import './styles.less';
 const classPrefix = 'm-headnavigate';
 
 class HeadNavigate extends Component {
-    static handleJump = () => {
-        history.back();
-    }
     constructor(props) {
         super(props);
     }
@@ -22,4 +19,6 @@ class HeadNavigate extends Component {
     }
 }
 
-export default HeadJumpConnect()(HeadNavigate);
+export default HeadJumpConnect({
+    historyback: true,
+})(HeadNavigate);

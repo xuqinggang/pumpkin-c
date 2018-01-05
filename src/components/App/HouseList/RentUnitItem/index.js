@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
 import { rentUnitShape } from 'base/propTypes';
-import { rentalTypeMap, directMap } from 'base/infoMap';
+import { RentalTypeMapText, DirectTypeMapText } from 'base/MapData';
 import { ModListImgUrl } from 'base/modUrlForCropImage';
 import './style.less';
 
@@ -23,6 +23,10 @@ class RentUnitItem extends Component {
         });
     }
     handleTouchTap() {
+        // 记录从列表页进入到详情页，滚动条的位置
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        window.setStore('scrollTop', { pt: scrollTop });
+
         const cityName = this.props.match.params.cityName;
         this.props.history.push(`/${cityName}/nangua/detail/${this.props.rentUnitId}`);
     }
@@ -59,7 +63,7 @@ class RentUnitItem extends Component {
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
-                        {blockName}-{bedroomCount}居室-{directMap[direct]}
+                        {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">
                         <li>
@@ -67,7 +71,7 @@ class RentUnitItem extends Component {
                                 <span
                                     className="f-display-inlineblock tags-item"
                                 >
-                                    {rentalTypeMap[rentalType]}
+                                    {RentalTypeMapText[rentalType]}
                                 </span>
                                 <i className={`${itemClassPrefix}--gap`}>/</i>
                                 <span className="f-display-inlineblock tags-item">

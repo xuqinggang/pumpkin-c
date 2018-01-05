@@ -7,21 +7,22 @@ import './styles.less';
 class TabTemplate extends Component {
     render() {
         const {children, isSelected, contentItemClass} = this.props;
-        const templateStyle = {};
-        if(!isSelected) {
-            templateStyle.width = 0;
-            templateStyle.height = 0;
-            templateStyle.overflow = 'hidden';
-        }
+        // if(!isSelected) {
+        //     templateStyle.width = 0;
+        //     templateStyle.height = 0;
+        //     templateStyle.overflow = 'hidden';
+        // }
 
         const contentClassName = classnames('content-item', contentItemClass, {
             'active': isSelected,
         });
 
         return (
-            <div style={templateStyle} className={contentClassName}>
+            isSelected ? 
+            <div className={contentClassName}>
                 {children}
             </div>
+            : null
         );
     }
         

@@ -5,7 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-headJump';
 
-export default function() {
+export default function(jumpConditionObj = {}) {
     return function(WrappedCom) {
         return class HeadJumpConnect extends Component {
             constructor(props) {
@@ -13,8 +13,14 @@ export default function() {
             }
 
             handleBackBtnTap = () => {
-                if (WrappedCom.handleJump) {
-                    WrappedCom.handleJump();
+                const { historyback, backUrl } = jumpConditionObj;
+                if (backUrl) {
+                    window.location.href = backUrl;
+                    return;
+                }
+
+                if (historyback) {
+                    history.back();
                     return;
                 }
             }
@@ -26,6 +32,7 @@ export default function() {
             }
 
             render() {
+                const { className } = jumpConditionObj;
                 return (
                     <div ref={(dom) => { this.header = dom; }} className={ classnames(classPrefix, 'g-grid-row') }>
                         <span
@@ -33,7 +40,7 @@ export default function() {
                             className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
                         >
                         </span>
-                        <div className={`${classPrefix}-other grid-col`}>
+                        <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
                             <WrappedCom />
                         </div>
                     </div>

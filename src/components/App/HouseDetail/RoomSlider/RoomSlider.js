@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import './styles.less';
 
 const classPrefix = 'm-roomslider';
+const imgCutModifier = '?crop=1&cpos=middle&w=750&h=388';
 
 class RoomSlider extends Component {
     constructor(props) {
@@ -164,7 +165,7 @@ class RoomSlider extends Component {
                         >
                             <img 
                                 className="img"
-                                src={imgItem.img} 
+                                src={imgItem.img + imgCutModifier} 
                                 alt=""
                             />
                         </div>

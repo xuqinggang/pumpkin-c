@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import classnames from 'classnames';
+
+import { shallowEqual } from 'lib/util';
 
 import './styles.less';
 
 const tagsClass = 'm-tags';
-// const tagsData = [
+// const tagsArr = [
 //     {
+//     // unique字段，唯一。不能多选
 //         unique: true,
 //         text: '不限',
 //     },
@@ -19,67 +22,59 @@ const tagsClass = 'm-tags';
 //         text: '3居+'
 //     },
 // ];
+
 export default class Tags extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        // true/false标识每个索引是否isactive
+        // state: { 0: false, 1: true, }
+        this.state = {
+            tagStateObj: props.activeIndexObj || {},
+        };
         this.tagsArr = this.props.tagsArr || [];
     }
 
-    handleTagTap = (index) => {
-        const preStates = this.state;
-        let newStates = Object.assign({}, preStates);
+    onTagItemTap = (index) => {
+        const preStates = this.state.tagStateObj;
+        let newStates;
 
         // 如果选中了，属性为unique设置为true，把其余选中的都取消掉设置为false
         if (this.tagsArr[index].unique) {
-            Object.keys(preStates).forEach((stateIndex) =>{
-                newStates[stateIndex] = false;
-            });
-            newStates[index] = true;
+            newStates = {};
+            newStates[index] = !preStates[index];
         } else {
+            newStates = Object.assign({}, preStates);
             Object.keys(preStates).forEach((stateIndex) =>{
                 if (this.props.tagsArr[stateIndex].unique) {
                     newStates[stateIndex] = false;
                 }
             });
-            newStates[index] = !this.state[index];
+            newStates[index] = !preStates[index];
         }
 
-        if (this.props.onChange) {
-            this.props.onChange(newStates);
-        }
-
-        this.setState(newStates);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        // 是否清空
-        if ('isClear' in nextProps) {
-            if (nextProps.isClear) {
-                const preStates = this.state;
-                let newStates = {};
-                Object.keys(preStates).forEach((stateIndex) =>{
-                    newStates[stateIndex] = false;
-                });
-                this.setState(newStates);
+        this.setState({
+            tagStateObj: newStates,
+        }, () => {
+            if (this.props.onChange) {
+                this.props.onChange(newStates);
             }
-        };
+        });
     }
 
     renderTags(tagsArr) {
         const { itemClass } = this.props;
-        const tagsList = tagsArr.map((tagItem, index) => {
-            const tagItemClass = classnames(`f-display-inlineblock f-align-center ${tagsClass}-item`, {
-                active: this.state[index],
-            });
 
-            return (
-                <li className={`${tagItemClass} ${itemClass}`}
+        // tagItem
+        const tagsList = tagsArr.map((tagItem, index) => {
+            return ( 
+                <TagItem 
+                    active={this.state.tagStateObj[index]}
                     key={index}
-                    onTouchTap={this.handleTagTap.bind(this, index)}
-                >
-                    {tagItem.text}
-                </li>
+                    index={index}
+                    className={itemClass}
+                    tagItem={tagItem}
+                    onTagItemTap={this.onTagItemTap}
+                />
             );
         });
 
@@ -90,7 +85,51 @@ export default class Tags extends Component {
         );
     }
 
+    componentWillReceiveProps(nextProps) {
+        // 是否清空
+        if ('activeIndexObj' in nextProps) {
+            this.setState({
+                tagStateObj: nextProps.activeIndexObj,
+            });
+        };
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !shallowEqual(nextState.tagStateObj, this.state.tagStateObj);
+    }
+
     render() {
         return this.renderTags(this.tagsArr);
+    }
+}
+
+// TagItem
+class TagItem extends PureComponent {
+    handleTagItemTap = () => {
+        if (this.props.onTagItemTap) {
+            this.props.onTagItemTap(this.props.index);
+        }
+    }
+
+    render() {
+        const {
+            active,
+            index,
+            tagItem,
+            className,
+        } = this.props;
+
+        const tagItemClass = classnames(`f-display-inlineblock f-align-center ${tagsClass}-item`, {
+            active,
+        });
+
+        return (
+            <li className={`${tagItemClass} ${className}`}
+                key={index}
+                onTouchTap={this.handleTagItemTap}
+            >
+                {tagItem.text}
+            </li>
+        );
     }
 }

@@ -1,159 +1,198 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
 
 // 四种筛选组件
-import PositionFilterWrap from 'Shared/PositionFilterWrap/PositionFilterWrap';
-import MoneyFilterWrap from 'Shared/MoneyFilterWrap/MoneyFilterWrap';
-import MoreFilterWrap from 'Shared/MoreFilterWrap/MoreFilterWrap';
-import HouseTypeFilterWrap from 'Shared/HouseTypeFilterWrap/HouseTypeFilterWrap';
+import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
+import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
+import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
+import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
+// 转换state->params
+import { 
+    houseTypeFilterStateToParams,
+    moreFilterStateToParams,
+    rentFilterStateToParams,
+    positionFilterStateToParams,
+} from 'application/App/HouseList/filterStateToParams';
+
+import { scrollTo, getScrollTop } from 'lib/util';
 import './styles.less';
 
 const filterClass = 'm-filter';
 
-const ptTypeMapParamsKey = {
+// 位置类型对应接口参数key
+const PtTypeMapParamsKey = {
     districts: ['districtId', 'circleId'],
     subways: ['subwayId', 'stationId'],
+    around: ['nearByInfo'],
 };
 
-export default class Filter extends Component {
+export default class Filter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            positionShow: false,
-            rentShow: false,
-            houseTypeShow: false,
-            moreShow: false,
+            // ex: { more: '更多', houseType: '房型' }
+            filterLabel: props.filterLabel,
+            // ex: { more: { direction: {1:true} }, houseType: {} }
+            filterState: {},
+            filterShow: {
+                position: false,
+                rent: false,
+                houseType: false,
+                more: false,
+            },
         };
-
-        // 筛选器参数
-        this.filterParams = {};
     }
 
-    _clearFilterParams(paramType) {
-        if (this.filterParams[paramType]) {
-            delete this.filterParams[paramType];
+    // 禁止滚动穿透
+    _toggleForbideScrollThrough(isForbide) {
+        if (isForbide) {
+            this.scrollTop = getScrollTop();
+
+            // 使body脱离文档流
+            document.body.classList.add('f-disscroll-through'); 
+
+            // 把脱离文档流的body拉上去！否则页面会回到顶部！
+            document.body.style.top = -this.scrollTop + 'px';
+        } else {
+            document.body.classList.remove('f-disscroll-through');
+
+            // 滚回到老地方
+            scrollTo(this.scrollTop);
         }
     }
 
     // 回调函数-弹层是否展现
     handleFilterShowTap = (type) => {
-        const preStates = this.state;
-        const newStates = {};
+        const preFilterShowState = this.state.filterShow;
+        const newFilterShowState = {};
 
-        Object.keys(preStates).forEach((stateIndex) => {
-            newStates[stateIndex] = false;
-        })
-        newStates[`${type}Show`] = !this.state[`${type}Show`];
+        Object.keys(preFilterShowState).forEach((typeName) => {
+            newFilterShowState[typeName] = false;
+        });
 
-        this.setState(newStates);
+        newFilterShowState[type] = !preFilterShowState[type];
+
+        this._toggleForbideScrollThrough(newFilterShowState[type]);
+
+        this.setState({
+            filterShow: newFilterShowState,
+        });
     }
 
     // 回调函数-筛选数据确定回调函数
-    onFilterPositionConfirm = (positionType, positionData) => {
-        if (!positionType || !positionData) return;
+    onFilterPositionConfirm = (positionFilterState) => {
 
-        Object.keys(ptTypeMapParamsKey).forEach((ptType) => {
-            const paramsKeyArr = ptTypeMapParamsKey[ptType];
-            if (ptType == positionType) {
-                // 根据位置类型对应的数据
-                const ptDataByType = positionData[positionType];
-                if (ptDataByType.second) {
-                    this.filterParams[paramsKeyArr[0]] = ptDataByType.second.id;
-                }
+        const { label, filterParams } = positionFilterStateToParams(positionFilterState);
+        this.positionFilterParams = filterParams;
 
-                if (ptDataByType.third) {
-                    this.filterParams[paramsKeyArr[1]] = ptDataByType.third.id;
-                }
-                return;
-
-            } else {
-                paramsKeyArr && paramsKeyArr.forEach((paramKey) => {
-                    this._clearFilterParams(paramKey);
-                });
-            }
+        const newFilterState = Object.assign({}, this.state.filterState, { position: positionFilterState });
+        this.setState({
+            filterState: newFilterState,
+            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
         });
 
-        this.props.onFilterConfirm(this.filterParams);
-
+        this.props.onFilterConfirm({
+            ...this.houseTypeFilterParams,
+            ...this.moreFilterParams,
+            ...this.positionFilterParams,
+            ...this.rentFilterParams,
+        }, newFilterState);
+        
         // 隐藏弹层
         this.handleFilterShowTap('position');
     }
 
-    onFilterMoneyConfirm = (filterMoneyArr) => {
-        if (!filterMoneyArr) {
-            this._clearFilterParams('priceInfo');
-            return;
-        }
+    // rentFilterState, ex: [1300, 1400]
+    onFilterRentConfirm = (rentFilterState) => {
+        const { label, filterParams } = rentFilterStateToParams(rentFilterState);
+        this.rentFilterParams = filterParams;
 
-        // 20000标志着不限
-        if (filterMoneyArr[1] == 20000) {
-            this.filterParams.priceInfo = { floor: filterMoneyArr[0] }
-        } else {
-            this.filterParams.priceInfo = { floor: filterMoneyArr[0], ceil: filterMoneyArr[1] };
-        }
-
-        this.props.onFilterConfirm(this.filterParams);
+        const newFilterState = Object.assign({}, this.state.filterState, { rent: rentFilterState });
+        this.setState({
+            filterState: newFilterState,
+            filterLabel: Object.assign({}, this.state.filterLabel, { rent: label }),
+        });
+        
+        this.props.onFilterConfirm({
+            ...this.houseTypeFilterParams,
+            ...this.moreFilterParams,
+            ...this.positionFilterParams,
+            ...this.rentFilterParams,
+        }, newFilterState);
 
         // 隐藏弹层
         this.handleFilterShowTap('rent');
     }
 
-    onFilterHouseTypeConfirm = (filterHouseTypeObj) => {
-        if (!filterHouseTypeObj) {
-            this._clearFilterParams('sharedRooms');
-            this._clearFilterParams('wholeRooms');
-            return;
-        }
+    // filterState, ex: { shared: {1:true, 2:false} }
+    onFilterHouseTypeConfirm = (houseTypeFilterState) => {
+        const { label, filterParams } = houseTypeFilterStateToParams(houseTypeFilterState);
+        this.houseTypeFilterParams = filterParams;
 
-        Object.keys(filterHouseTypeObj).forEach((houseType) => {
-            const houseTypeValArr = filterHouseTypeObj[houseType];
-            if (!houseTypeValArr.length) {
-                this._clearFilterParams(`${houseType}Rooms`);
-                return;
-            }
-
-            this.filterParams[`${houseType}Rooms`] = houseTypeValArr;
+        const newFilterState = Object.assign({}, this.state.filterState, { houseType: houseTypeFilterState });
+        this.setState({
+            filterState: newFilterState,
+            filterLabel: Object.assign({}, this.state.filterLabel, { houseType: label }),
         });
-    
-        this.props.onFilterConfirm(this.filterParams);
+        
+        this.props.onFilterConfirm({
+            ...this.houseTypeFilterParams,
+            ...this.moreFilterParams,
+            ...this.positionFilterParams,
+            ...this.rentFilterParams,
+        }, newFilterState);
 
         // 隐藏弹层
         this.handleFilterShowTap('houseType');
     }
 
-    onFilterMoreConfirm = (filterMoreObj) => {
-        const  keyMapParamsKey = {
-            area: 'areaInfo',
-            direction: 'directs',
-            feature: 'tags',
-            floor: 'floorInfo',
-        };
-
-        // 如果筛选被清空，需要清空filterParams相应的数据
-        if (!filterMoreObj) {
-            Object.keys(keyMapParamsKey).forEach((key) => {
-                const paramsKey = keyMapParamsKey[key];
-                this._clearFilterParams(paramsKey);
-            });
-            return;
-        }
-
-        Object.keys(filterMoreObj).forEach((key) => {
-            const moreValArr = filterMoreObj[key];
-            const paramsKey = keyMapParamsKey[key];
-            if (!moreValArr.length) {
-                this._clearFilterParams(paramsKey);
-                return;
-            }
-            this.filterParams[paramsKey] = moreValArr;
+    // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
+    onFilterMoreConfirm = (moreFilterState) => {
+        const { label, filterParams } = moreFilterStateToParams(moreFilterState);
+        this.moreFilterParams = filterParams;
+        
+        console.log('moreFilterState', moreFilterState, filterParams);
+        const newFilterState = Object.assign({}, this.state.filterState, { more: moreFilterState });
+        this.setState({
+            filterState: newFilterState,
+            filterLabel: Object.assign({}, this.state.filterLabel, { more: label }),
         });
 
-        this.props.onFilterConfirm(this.filterParams);
+       console.log('onFilterMoreConfirm', {
+            ...this.houseTypeFilterParams,
+            ...this.moreFilterParams,
+            ...this.positionFilterParams,
+            ...this.rentFilterParams,
+        });
+
+        this.props.onFilterConfirm({
+            ...this.houseTypeFilterParams,
+            ...this.moreFilterParams,
+            ...this.positionFilterParams,
+            ...this.rentFilterParams,
+        }, newFilterState);
 
         // 隐藏弹层
         this.handleFilterShowTap('more');
+    }
+
+    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
+    _dynamicSetPositionFilterLabel = (label) => {
+        this.setState({
+            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
+        });
+    }
+
+    componentWillMount() {
+        const { filterState, filterLabel } = this.props;
+        if (filterState) {
+            this.setState({
+                filterState,
+                filterLabel,
+            });
+        }
     }
 
     render() {
@@ -162,62 +201,74 @@ export default class Filter extends Component {
         } = this.props;
 
         const {
-            positionShow,
-            rentShow,
-            houseTypeShow,
-            moreShow,
+            filterShow,
+            filterState,
+            filterLabel,
         } = this.state;
 
         return (
             <ul className={`g-grid-row f-flex-justify-between ${filterClass} ${className}`}>
-                <li>
+                <li className={`${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-position`}
-                        show={positionShow}
+                        show={filterShow.position}
                         type="position"
-                        label="位置"
+                        label={filterLabel.position}
+                        isMask={true}
+                        isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <PositionFilterWrap type="position" onFilterConfirm={this.onFilterPositionConfirm}/>
-                    </DropDownScreen>
-                </li>
-                <li>
-                    <DropDownScreen
-                        className={`${filterClass}-dropscreen-rent`}
-                        show={rentShow}
-                        label="租金"
-                        type="rent"
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <MoneyFilterWrap
-                            type="rent"
-                            onFilterConfirm={this.onFilterMoneyConfirm}
+                        <PositionFilterWrap
+                            type="position"
+                            filterState={filterState.position}
+                            onFilterConfirm={this.onFilterPositionConfirm}
+                            onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
                         />
                     </DropDownScreen>
                 </li>
-                <li>
+                <li className={`${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-rent`}
-                        show={houseTypeShow}
+                        show={filterShow.rent}
+                        label={filterLabel.rent}
+                        type="rent"
+                        isFullScreen={true}
+                        onTouchTap={this.handleFilterShowTap}
+                    >
+                        <RentFilterWrap
+                            type="rent"
+                            filterState={filterState.rent}
+                            onFilterConfirm={this.onFilterRentConfirm}
+                        />
+                    </DropDownScreen>
+                </li>
+                <li className={`${filterClass}-item`}>
+                    <DropDownScreen
+                        className={`${filterClass}-dropscreen-rent`}
+                        show={filterShow.houseType}
                         type="houseType"
-                        label="房型"
+                        label={filterLabel.houseType}
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         <HouseTypeFilterWrap 
                             type="houseType"
+                            filterState={filterState.houseType}
                             onFilterConfirm={this.onFilterHouseTypeConfirm}
                         />
                     </DropDownScreen>
                 </li>
-                <li>
+                <li className={`${filterClass}-item`}>
                     <DropDownScreen
-                        show={moreShow}
+                        show={filterShow.more}
                         type="more"
-                        label="更多"
+                        label={filterLabel.more}
+                        isFullScreen={true}
                         onTouchTap={this.handleFilterShowTap}
                     >
                         <MoreFilterWrap
                             type="more"
+                            filterState={filterState.more}
                             onFilterConfirm={this.onFilterMoreConfirm}
                         />
                     </DropDownScreen>

@@ -8,6 +8,14 @@
         <meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes">
         <meta content="yes" name="apple-mobile-web-app-capable">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta name="keywords" content="南瓜租房,真房源,品牌公寓,公寓租房">
+        <meta name="description" content="南瓜租房，只租真房源！">
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="南瓜租房">
+        <meta property="og:description" content="南瓜租房，只租真房源！">
+        <!-- <meta property="og:image" content=""> -->
+        <!-- <meta property="og:url" content=""> -->
         <title>南瓜租房</title>
         <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script> -->
         <!-- <script>eruda.init();</script> -->
@@ -94,5 +102,21 @@
     </head>
     <body>
         <div id="root"></div>
+        <script type="text/javascript" src="//t.focus-res.cn/front-end/stat.js"></script>
+        <script>
+            // todo citId: 默认1
+            window.config_external_params({
+                city: '1',
+                pageName: 'nangua_house_detail',
+                text: function(el) {
+                    return el.innerText;
+                },
+                href: function() {
+                    if(typeof this.getAttribute === 'function') {
+                        return this.getAttribute('href');
+                    }
+                }
+            });
+        </script>
     </body>
 </html>

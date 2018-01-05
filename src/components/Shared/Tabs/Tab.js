@@ -1,9 +1,12 @@
 import React, {
     Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import TabTemplate from './TabTemplate.js'
+
+import { shallowEqual } from 'lib/util';
 
 import './styles.less';
 
@@ -16,22 +19,39 @@ class Tab extends Component {
 		width: PropTypes.string,
 		label: PropTypes.node,
 		tab: PropTypes.node,
-	}
-	constructor(props) {
-		super(props);
+    }
+
+    // 事件处理程序-每一个tab的点击
+    handleTouchTap = (event) => {
+        const {
+            onTouchTab,
+            index,
+            itemData,
+        } = this.props;
+
+        if(onTouchTab) {
+            onTouchTab(event, index, itemData);
+        }
 	}
 
-	handleTouchTap = (event) => {
-		if(this.props.onTouchTab) {
-			this.props.onTouchTab(this.props.index, event, this.props.passData);
-		}
-	}
+    shouldComponentUpdate(nextProps, nextState) {
+        const {
+            children: nextChildren,
+            ...nextExtraProps,
+        } = nextProps;
 
-	render() {
+        const {
+            children,
+            ...extraProps,
+        } = this.props;
+
+        return !shallowEqual(nextExtraProps, extraProps);
+    }
+
+    render() {
 		const {
 			label,
             navItemClass,
-            width,
             isSelected,
 		} = this.props;
 
@@ -42,7 +62,6 @@ class Tab extends Component {
 		return (
             <li className={itemClass}
                 onTouchTap={this.handleTouchTap}
-                style={{width:width}}
             >
 				{label}
 			</li>

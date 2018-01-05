@@ -18,43 +18,43 @@ const directionTagsArr = [
     },
     {
         text: '南北',
-        value: 'SOUTHNORTH',
+        value: 'NORTHSOUTH',
     },
 ];
 
 // 特性标签tags
 const featureTagsArr = [
     {
-        text: '集中式',
-        value: 'CENTRALIZED',
-    },
-    {
         text: '首次出租',
         value: 'FIRST_RENTAL',
-    },
-    {
-        text: '独立阳台',
-        value: 'BALCONY',
-    },
-    {
-        text: '独立卫生间',
-        value: 'BATHROOM',
     },
     {
         text: '集中供暖',
         value: 'CENTRALIZED_HEATER',
     },
     {
-        text: '独立供暖',
-        value: 'INDIVIDUAL_HEATER',
+        text: '独立阳台',
+        value: 'BALCONY',
     },
     {
         text: '免押金',
         value: 'DEPOSIT_FREE',
     },
     {
+        text: '独立卫生间',
+        value: 'BATHROOM',
+    },
+    {
+        text: '独立供暖',
+        value: 'INDIVIDUAL_HEATER',
+    },
+    {
         text: '随时入住',
         value: 'AVAILABLE',
+    },
+    {
+        text: '集中式',
+        value: 'CENTRALIZED',
     },
 ];
 
@@ -86,7 +86,7 @@ const floorTagsArr = [
     },
     {
         text: '6-12层',
-        value: { 'floor': 40, 'ceil': 60 },
+        value: { 'floor': 6, 'ceil': 12 },
     },
     {
         text: '12层以上',

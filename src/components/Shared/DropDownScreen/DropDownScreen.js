@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
+import { shallowEqual } from 'lib/util';
+
 import './styles.less';
 
 const dropClass = 'm-dropscreen';
@@ -12,28 +14,22 @@ export default class DropDownScreen extends Component {
             // 下拉层是否显示
             show: false,
         };
-        this.isfirst = true;
-        this.isScreenShow = false;
     }
 
     handleHeadTap = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        if (this.isfirst) {
-            this.isfirst = false;
-            const headRectInfo = e.target.getBoundingClientRect();
-            this.reduceTop = headRectInfo.top + headRectInfo.height;
-            this.reduceLeft = headRectInfo.left;
-            this._setScreenDomLeft();
-        }
+        const headDomRectInfo = e.currentTarget.getBoundingClientRect();
+        this.headDomLeft = headDomRectInfo.left;
+        this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
 
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
         }
     }
 
-    handleScreenTap = (e) => {
+    handleMaskTap = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -41,30 +37,64 @@ export default class DropDownScreen extends Component {
             this.props.onTouchTap(this.props.type);
         }
     }
-    
+
+    // 设置screenDom 和 maskDom 是否显示
     _setScreenDomShow(isShow) {
         if (!this.screenDom) return;
 
+        const { isFullScreen, isMask } = this.props;
+        const screenDom = this.screenDom;
+        const maskDom = this.maskDom;
+
         if (isShow) {
-            this.isScreenShow = true;
-            this.screenDom.style.visibility = 'visible';
-            this.screenDom.style.width = window.innerWidth + 'px';
-            this.screenDom.style.height = (window.innerHeight - this.reduceTop) + 'px';
+            screenDom.style.visibility = 'visible';
+
+            screenDom.style.left = -this.headDomLeft + 'px';
+            screenDom.style.width = window.innerWidth + 'px';
+
+            if (isFullScreen) {
+                screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+            } else {
+                screenDom.style.height = 'inherit';
+            }
+            
+            if (isMask && this.maskDom) {
+                maskDom.style.visibility = 'visible';
+                maskDom.style.width = window.innerWidth + 'px';
+                maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+                maskDom.style.left = -this.headDomLeft + 'px';
+            }
         } else {
-            this.isScreenShow = false;
-            this.screenDom.style.visibility = 'hidden';
-            this.screenDom.style.width = '0px';
-            this.screenDom.style.height = '0px';
+            screenDom.style.visibility = 'hidden';
+            screenDom.style.height = '0px';
+
+            if (isMask && this.maskDom) {
+                maskDom.style.visibility = 'hidden';
+            }
         }
     }
 
-    _setScreenDomLeft(reduceTop, reduceLeft) {
-        this.screenDom.style.left = -this.reduceLeft + 'px';
-    }
-
+    // resize,重设高度
     _reSetScreenDomHeight = () => {
-        this.screenDom.style.height =  (window.innerHeight - this.reduceTop) + 'px';
+        this.screenDom.style.height =  (window.innerHeight - this.headDomTop) + 'px';
+        if (this.maskDom) {
+            this.maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+        }
     };
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const {
+            children: nextChildren,
+            ...nextExtraProps,
+        } = nextProps;
+
+        const {
+            children,
+            ...extraProps,
+        } = this.props;
+
+        return !shallowEqual(nextExtraProps, extraProps) || !shallowEqual(nextState, this.state);
+    }
 
     componentWillReceiveProps(nextProps) {
         if ('show' in nextProps) {
@@ -86,12 +116,14 @@ export default class DropDownScreen extends Component {
         const {
             label,
             children,
+            isMask,
         } = this.props;
 
         const {
             show,
         } = this.state;
 
+        // 设置screenDom maskDom是否显示
         this._setScreenDomShow(show);
 
         const iconClass = classnames('icon-pull-down', `${dropClass}-icon`, {
@@ -104,14 +136,25 @@ export default class DropDownScreen extends Component {
 
         return (
             <div className={`${dropClass}`}>
-                <div onTouchTap={this.handleHeadTap}>
+                <div
+                    className={`${dropClass}-label-wrap`}
+                    onTouchTap={this.handleHeadTap}
+                    ref={(headDom) => { this.headDom = headDom; }}
+                >
                     <span className={labelClass}>{label}</span>
                     <i className={iconClass}></i>
                 </div>
+                {
+                    isMask ?
+                        <div className={`${dropClass}-mask`}
+                            ref={(maskDom) => { this.maskDom = maskDom; }}
+                            onTouchTap={this.handleMaskTap}
+                        ></div>
+                        : null
+                }
                 <div
-                    ref={(screenDom) => { this.screenDom = screenDom }}
+                    ref={(screenDom) => { this.screenDom = screenDom; }}
                     className={`${dropClass}-screen`}
-                    onTouchTap={this.handleScreenTap}
                 >
                     { children }
                 </div>

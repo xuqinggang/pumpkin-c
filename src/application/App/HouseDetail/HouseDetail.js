@@ -1,6 +1,6 @@
 import './styles.less';
 import React, { Component } from 'react';
-// import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
 import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
 import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
@@ -16,6 +16,9 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 // ajax
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
+import { dynamicDocTitle } from 'lib/util';
+import { execWxShare } from 'lib/wxShare';
+
 import Animate from 'rc-animate';
 
 
@@ -28,27 +31,37 @@ export default class HouseDetail extends Component {
             show: false,
             houseDetailData: {},
         };
-        console.log('HouseDetail props, props', props, props.match.params.rentUnitId);
+        window.rentUnitId = props.match.params.rentUnitId;
     }
 
-    handleTouchTap() {
-    }
-
-    // handleClick = () => {
-    //     this.setState({
-    //         show: true,
-    //     });
-    // }
-
-    componentDidMount() {
-        console.log('this.props', this.props, this.props.match);
+    componentWillMount() {
+        window.scrollTo(0, 0);
         this.rentUnitId = this.props.match.params.rentUnitId;
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
                     houseDetailData,
                 });
+
+                const { sliderImgArr, houseProfileData } = houseDetailData;
+                const title = houseProfileData.title;
+                const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
+                // 分享
+                execWxShare({
+                    title: title + '-南瓜租房北京租房',
+                    link: window.location.href.split('#')[0],
+                    imgUrl: imgInfo && imgInfo.img,
+                    desc: '南瓜租房，只租真房源！',
+                });
+                // 动态更改标题
+                dynamicDocTitle(title + '-南瓜租房北京租房');
             })
+    }
+
+    componentDidMount() {
+        if (window.isApp) {
+            this.wrapDom.style.paddingTop = '0';
+        }
     }
 
     render() {
@@ -87,9 +100,11 @@ export default class HouseDetail extends Component {
         console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
 
         return (
-            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
+            <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
-                    // <HeadShared />
+                    !window.isApp ?
+                    <HeadShared />
+                    : null
                 }
                 <hr className="u-housedetail-partline" />
                 <RoomSlider sliderImgArr={sliderImgArr || []} />

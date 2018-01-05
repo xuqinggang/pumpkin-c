@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { rentUnitShape, pagerShape } from 'base/propTypes';
 import RentUnitList from '../RentUnitList';
@@ -8,10 +8,15 @@ import './styles.less';
 
 const clsPrefix = 'm-houselists';
 
-export default class HouseLists extends Component {
+export default class HouseLists extends PureComponent {
+    componentDidMount() {
+        if (window.isApp) {
+            this.listDom.style.marginTop = '1.12rem';
+        }
+    }
     render() {
         return (
-            <div className={clsPrefix}>
+            <div className={clsPrefix} ref={ (listDom) => { this.listDom = listDom; } }>
                 {
                     (this.props.fetchFor === 'RESET' && !this.props.isFetchCrash)
                     || (this.props.fetchFor === 'LOADMORE')
