@@ -25,10 +25,16 @@ export default function(jumpConditionObj = {}) {
                 }
             }
 
+            componentDidMount() {
+                if (window.isApp) {
+                    this.header.style.display = 'none';
+                }
+            }
+
             render() {
                 const { className } = jumpConditionObj;
                 return (
-                    <div className={ classnames(classPrefix, 'g-grid-row', className) }>
+                    <div ref={(dom) => { this.header = dom; }} className={ classnames(classPrefix, 'g-grid-row') }>
                         <span
                             onTouchTap={this.handleBackBtnTap}
                             className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
