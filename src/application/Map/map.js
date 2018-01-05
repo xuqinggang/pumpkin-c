@@ -17,7 +17,11 @@ injectTapEventPlugin();
 
 render(
     <div className="m-map">
-        <HeadNavigate />
+        {
+            !window.isApp ?
+                <HeadNavigate />
+                : null
+        }
         <TrafficAround />
     </div>,
     document.getElementById('root'),
