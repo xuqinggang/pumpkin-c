@@ -19,9 +19,15 @@ export default function() {
                 }
             }
 
+            componentDidMount() {
+                if (window.isApp) {
+                    this.header.style.display = 'none';
+                }
+            }
+
             render() {
                 return (
-                    <div className={ classnames(classPrefix, 'g-grid-row') }>
+                    <div ref={(dom) => { this.header = dom; }} className={ classnames(classPrefix, 'g-grid-row') }>
                         <span
                             onTouchTap={this.handleBackBtnTap}
                             className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
