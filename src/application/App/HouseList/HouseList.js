@@ -137,7 +137,10 @@ export default class HouseList extends PureComponent {
                     } else {
                         this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
                     }
-                    this.wxShare();
+                    const timer = setTimeout(() => {
+                        clearTimeout(timer);
+                        this.wxShare();
+                    }, 0);
                 }
 
                 this.handleFetchList('RESET');
