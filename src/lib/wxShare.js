@@ -1,5 +1,6 @@
 import Service from 'lib/Service';
-import { isWeiXin, dynamicScript } from 'lib/util';
+import { isWeiXin } from 'lib/const';
+import { dynamicScript } from 'lib/util';
 
 // 调用焦点，获取用于微信自定义分享的配置信息
 function _ajaxFocusWxConfig(shareObj) {
@@ -44,7 +45,7 @@ export function wxShare(shareObj = {}) {
 }
 
 export function execWxShare(shareObj) {
-    if (isWeiXin()) {
+    if (isWeiXin) {
         dynamicScript('//res.wx.qq.com/open/js/jweixin-1.0.0.js', function() {
             wxShare(shareObj);
         });

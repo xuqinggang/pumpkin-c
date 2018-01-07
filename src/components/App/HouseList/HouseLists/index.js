@@ -4,16 +4,20 @@ import { rentUnitShape, pagerShape } from 'base/propTypes';
 import RentUnitList from '../RentUnitList';
 import RentUnitsSuggest from '../RentUnitsSuggest';
 import SingnalLessNote from '../SingnalLessNote';
+
+import { isApp } from 'lib/const';
+
 import './styles.less';
 
 const clsPrefix = 'm-houselists';
 
 export default class HouseLists extends PureComponent {
     componentDidMount() {
-        if (window.isApp) {
+        if (isApp) {
             this.listDom.style.marginTop = '1.12rem';
         }
     }
+
     render() {
         return (
             <div className={clsPrefix} ref={ (listDom) => { this.listDom = listDom; } }>
