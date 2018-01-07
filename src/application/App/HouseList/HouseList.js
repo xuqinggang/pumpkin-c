@@ -147,7 +147,6 @@ export default class HouseList extends PureComponent {
                         this.wxShare();
                     }, 500);
                 }
-
             });
         }
     }
