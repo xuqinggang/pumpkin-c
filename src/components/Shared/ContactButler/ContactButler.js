@@ -1,13 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
-// import BottomDialog from 'Shared/BottomDialog';
+import BottomDialog from 'Shared/BottomDialog';
+import { isAndroid } from 'lib/const';
 
 import './styles.less';
 
 const btnPrefix = 'm-contactbutler-btn';
 const dialogPrefix = 'm-contactbutler-dialog'
 
-export default class ContactButler extends PureComponent {
+export default class ContactButler extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,7 +33,12 @@ export default class ContactButler extends PureComponent {
     render() {
         const { show } = this.state;
         const { name, img, tel } = this.props.contactButlerData;
+        const tmpArr = tel && tel.split(',');
+        // 分机号
+        const extTel = tmpArr && tmpArr[1];
+
         return (
+            !isAndroid ? 
             <a
                 href={`tel:${tel}`} 
                 className="f-display-inlineblock"
@@ -48,29 +54,48 @@ export default class ContactButler extends PureComponent {
                     联系管家
                 </span>
             </a>
-            // 去掉弹窗
-            // <BottomDialog
-            //     key={1}
-            //     show={show}
-            //     className={`${dialogPrefix}`}
-            // >
-            //     <BottomDialog.Body className={`${dialogPrefix}-body`}>
-            //         <div>
-            //             <img
-            //                 className={`f-display-inlineblock f-vertical-middle ${dialogPrefix}-img`}
-            //                 src={img}
-            //                 alt="" 
-            //             />
-            //             <span className={`f-vertical-middle ${dialogPrefix}-name`}>{name}</span>
-            //         </div>
-            //         <a href={`tel:${tel}`} className={`f-display-inlineblock ${dialogPrefix}-tel`}>{tel}</a>
-            //     </BottomDialog.Body>
-            //     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
-            //         <div className="f-display-inlineblock line" />
-            //         <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
-            //         <a href={`tel:${tel}`} className="f-display-inlineblock text">立即联系</a>
-            //     </BottomDialog.Footer>
-            // </BottomDialog>
+            :
+            [
+                <span
+                    className={`f-display-inlineblock ${btnPrefix}`}
+                    onTouchTap={this.handleConcatTap}
+                    key={0}>
+                    联系管家
+                </span>,
+                // 去掉弹窗
+                <BottomDialog
+                    key={1}
+                    show={show}
+                    className={`${dialogPrefix}`}
+                >
+                    <BottomDialog.Body className={`${dialogPrefix}-body`}>
+                        <div>
+                            <img
+                                className={`f-display-inlineblock f-vertical-middle ${dialogPrefix}-img`}
+                                src={img}
+                                alt="" 
+                            />
+                            <span className={`f-vertical-middle ${dialogPrefix}-name`}>{name}</span>
+                        </div>
+                        <div className={`${dialogPrefix}-tel-wrap`}>
+                            <span className={`${dialogPrefix}-tel-text`}>电话号码：</span>
+                            <a href={`tel:${tel}`} className={`f-display-inlineblock ${dialogPrefix}-tel`}>{tel}</a>
+                        </div>
+                        <div className={`${dialogPrefix}-extTel-wrap`}>
+                            <span className={`${dialogPrefix}-tel-text`}>分机号：</span>
+                            <span className={`${dialogPrefix}-tel ${dialogPrefix}-extTel`}>{ extTel }&nbsp;</span>
+                            <span className={`${dialogPrefix}-tel-text ${dialogPrefix}-extTel-text`}>
+                                (拨打后需要用到哦)
+                            </span>
+                        </div>
+                    </BottomDialog.Body>
+                    <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
+                        <div className="f-display-inlineblock line" />
+                        <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
+                        <a href={`tel:${tel}`} className="f-display-inlineblock text">立即联系</a>
+                    </BottomDialog.Footer>
+                </BottomDialog>
+            ]
         );
     }
 }
