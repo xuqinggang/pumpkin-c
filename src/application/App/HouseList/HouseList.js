@@ -68,56 +68,6 @@ export default class HouseList extends PureComponent {
         return getParamsObj;
     }
 
-    componentWillMount() {
-        const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        if (filterUrlFragment) {
-            // 注意返回的position，包含state和params
-            const filterState = parseUrlToState(filterUrlFragment);
-            console.log('componentWillMount filterState', filterState);
-            const { position: positionFilterState, ...extraTypeFilterState } = filterState;
-
-            const filterParamsAndLabel = filterStateToParams(extraTypeFilterState);
-            // filter params
-            const extraTypeFilterParams = filterParamsAndLabel.filterParams;
-            const positionFilterParams = positionFilterState && positionFilterState.params;
-
-            // filter state
-            const newFilterState = Object.assign(extraTypeFilterState, { 
-                position: positionFilterState && positionFilterState.state
-            });
-
-            console.log('componentWillMount filterState', newFilterState, extraTypeFilterParams, positionFilterParams);
-            if (filterState) {
-                this.setState({
-                    filterState: newFilterState,
-                    filter: Object.assign({}, this.state.filter, extraTypeFilterParams, positionFilterParams),
-                    filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-                });
-            }
-        }
-
-        // 分享
-        execWxShare({
-            title: '上南瓜租房，找品牌公寓',
-            link: window.location.href.split('#')[0],
-            imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
-            desc: '南瓜租房，只租真房源！',
-        });
-        console.log('props.match.params.filterUrlFragment', this.props.match.params.filterUrlFragment);
-    }
-
-    componentDidMount() {
-        const storeHouseListState = window.getStore('houseList');
-        if (storeHouseListState) {
-            this.setState(storeHouseListState, () => {
-                const scrollTop = window.getStore('scrollTop').pt;
-                console.log('scrollTop', scrollTop);
-                window.scrollTo(0, scrollTop);
-            });
-        } else {
-            this.handleFetchList('RESET');
-        }
-    }
 
     handleFetchList(fetchFor) {
         if (this.state.fetching) {
@@ -187,6 +137,10 @@ export default class HouseList extends PureComponent {
                     } else {
                         this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
                     }
+                    const timer = setTimeout(() => {
+                        clearTimeout(timer);
+                        this.wxShare();
+                    }, 0);
                 }
 
                 this.handleFetchList('RESET');
@@ -194,26 +148,70 @@ export default class HouseList extends PureComponent {
         }
     }
 
+    wxShare() {
+        // 分享
+        execWxShare({
+            title: '上南瓜租房，找品牌公寓',
+            link: window.location.href.split('#')[0],
+            imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
+            desc: '南瓜租房，只租真房源！',
+        });
+    }
+
     handleLoadMore() {
         this.handleFetchList('LOADMORE');
     }
 
-    handleTouchTap() {
-        console.log('App HouseList handleTouchTap')
+    componentWillMount() {
+        const filterUrlFragment = this.props.match.params.filterUrlFragment;
+        if (filterUrlFragment) {
+            // 注意返回的position，包含state和params
+            const filterState = parseUrlToState(filterUrlFragment);
+            const { position: positionFilterState, ...extraTypeFilterState } = filterState;
+
+            const filterParamsAndLabel = filterStateToParams(extraTypeFilterState);
+            // filter params
+            const extraTypeFilterParams = filterParamsAndLabel.filterParams;
+            const positionFilterParams = positionFilterState && positionFilterState.params;
+
+            // filter state
+            const newFilterState = Object.assign(extraTypeFilterState, { 
+                position: positionFilterState && positionFilterState.state
+            });
+
+            if (filterState) {
+                this.setState({
+                    filterState: newFilterState,
+                    filter: Object.assign({}, this.state.filter, extraTypeFilterParams, positionFilterParams),
+                    filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
+                });
+            }
+        }
+        this.wxShare();
     }
 
-    handleClick() {
-        console.log('App HouseList handleClick')
+    componentDidMount() {
+        const storeHouseListState = window.getStore('houseList');
+        if (storeHouseListState) {
+            this.setState(storeHouseListState, () => {
+                const scrollTop = window.getStore('scrollTop').pt;
+                console.log('scrollTop', scrollTop);
+                window.scrollTo(0, scrollTop);
+            });
+        } else {
+            this.handleFetchList('RESET');
+        }
     }
-
+    
     render() {
         const {
             filterState,
             filterLabel,
         } = this.state;
         console.log('render', this.state.filter, this.state.filterState);
+
         return (
-            <div onTouchTap={this.handleTouchTap} onClick={this.handleClick}>
+            <div>
                 <div className={`${houselistClassPrefix}-head`}>
                     {
                         !window.isApp ?
