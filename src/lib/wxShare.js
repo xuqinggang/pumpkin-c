@@ -33,7 +33,6 @@ export function wxShare(shareObj = {}) {
             });
 
             wx.ready(function () {
-                alert('!'+JSON.stringify(shareObj));
                 wx.onMenuShareTimeline(shareObj); //分享到朋友圈
                 wx.onMenuShareAppMessage(shareObj); //分享给朋友
             });
