@@ -142,7 +142,7 @@ export default class HouseList extends PureComponent {
                     const timer = setTimeout(() => {
                         clearTimeout(timer);
                         this.wxShare();
-                    }, 0);
+                    }, 100);
                 }
 
             });
