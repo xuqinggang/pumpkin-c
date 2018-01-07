@@ -128,6 +128,8 @@ export default class HouseList extends PureComponent {
             this.setState({
                 filter: newFilterParams,
             }, () => {
+                this.handleFetchList('RESET');
+
                 const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
                 if (filterUrlFragment) {
                     console.log('filterStateObj', filterStateObj, filterUrlFragment);
@@ -137,13 +139,12 @@ export default class HouseList extends PureComponent {
                     } else {
                         this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
                     }
-                    // const timer = setTimeout(() => {
-                    //     clearTimeout(timer);
-                    //     this.wxShare();
-                    // }, 0);
+                    const timer = setTimeout(() => {
+                        clearTimeout(timer);
+                        this.wxShare();
+                    }, 0);
                 }
 
-                this.handleFetchList('RESET');
             });
         }
     }
