@@ -132,16 +132,20 @@ export default class HouseList extends PureComponent {
 
                 const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
                 if (filterUrlFragment) {
-                    console.log('filterStateObj', filterStateObj, filterUrlFragment);
+                    let link = '';
                     const cityName = this.props.match.params.cityName;
+
                     if (this.getParamsObj.apartment) {
-                        this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`);
+                        link = `/${cityName}/nangua/list/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
                     } else {
-                        this.props.history.push(`/${cityName}/nangua/list/${filterUrlFragment}`);
+                        link = `/${cityName}/nangua/list/${filterUrlFragment}`;
                     }
+
+                    this.props.history.push(link);
                     const timer = setTimeout(() => {
+                        const { protocol, host } = window.location;
                         clearTimeout(timer);
-                        this.wxShare();
+                        this.wxShare(`${protocol}//${host}${link}`);
                     }, 100);
                 }
 
@@ -149,11 +153,11 @@ export default class HouseList extends PureComponent {
         }
     }
 
-    wxShare() {
+    wxShare(link) {
         // 分享
         execWxShare({
             title: '上南瓜租房，找品牌公寓',
-            link: window.location.href.split('#')[0],
+            link: link || window.location.href.split('#')[0],
             imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
             desc: '南瓜租房，只租真房源！',
         });
