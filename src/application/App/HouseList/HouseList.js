@@ -5,12 +5,13 @@ import HeadTitle from 'components/App/HouseList/HeadTitle/HeadTitle';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 
-import Service from 'lib/Service';
-import { shallowEqual, dynamicDocTitle } from 'lib/util';
-import { execWxShare } from 'lib/wxShare';
 import fetchRentUnitList from './fetchRentUnitList';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
+import Service from 'lib/Service';
+import { shallowEqual, dynamicDocTitle } from 'lib/util';
+import { isApp } from 'lib/const';
+import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
 
@@ -147,7 +148,6 @@ export default class HouseList extends PureComponent {
                         this.wxShare();
                     }, 500);
                 }
-
             });
         }
     }
@@ -218,7 +218,7 @@ export default class HouseList extends PureComponent {
             <div>
                 <div className={`${houselistClassPrefix}-head`}>
                     {
-                        !window.isApp ?
+                        !isApp ?
                         <HeadTitle />
                         : null
                     }

@@ -21,16 +21,6 @@ export function dynamicScript(src, callback) {
     bodyDom.appendChild(script);
 }
 
-// 判断是否为微信浏览器
-export function isWeiXin() {
-    var ua = window.navigator.userAgent.toLowerCase();
-    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-        return true;
-    } else {
-        return false;
-    }
-}
-
 export function findArrayItemByPathIndex(arr, pathIndexArr, nextLevelName) {
     if (!arr.length || !pathIndexArr.length) return;
     let itemResult = null;

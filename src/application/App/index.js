@@ -42,9 +42,6 @@ window.getStore = function (key) {
     }
 }
 
-const ua = window.navigator.userAgent;
-window.isApp = ua.indexOf('FocusLiveApp') !== -1 || ua.indexOf('NanguaApp') !== -1;
-
 // 注册onTouchTap
 injectTapEventPlugin();
 

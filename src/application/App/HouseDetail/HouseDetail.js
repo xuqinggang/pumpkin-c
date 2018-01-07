@@ -18,6 +18,7 @@ import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
 import { dynamicDocTitle } from 'lib/util';
 import { execWxShare } from 'lib/wxShare';
+import { isApp } from 'lib/const';
 
 import Animate from 'rc-animate';
 
@@ -59,7 +60,7 @@ export default class HouseDetail extends Component {
     }
 
     componentDidMount() {
-        if (window.isApp) {
+        if (isApp) {
             this.wrapDom.style.paddingTop = '0';
         }
     }
@@ -102,7 +103,7 @@ export default class HouseDetail extends Component {
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
-                    !window.isApp ?
+                    !isApp ?
                     <HeadShared />
                     : null
                 }
