@@ -3,6 +3,7 @@ import { isWeiXin, dynamicScript } from 'lib/util';
 
 // 调用焦点，获取用于微信自定义分享的配置信息
 function _ajaxFocusWxConfig(shareObj) {
+    alert(JSON.stringify(shareObj));
     return Service.get('https://wx-open-api.focus.cn/ajax/wxJsConfig', {
         url: encodeURIComponent(shareObj.link),
         sceneType: 6,
@@ -33,6 +34,7 @@ export function wxShare(shareObj = {}) {
             });
 
             wx.ready(function () {
+                alert('!'+JSON.stringify(shareObj));
                 wx.onMenuShareTimeline(shareObj); //分享到朋友圈
                 wx.onMenuShareAppMessage(shareObj); //分享给朋友
             });
