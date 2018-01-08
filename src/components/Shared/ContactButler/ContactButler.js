@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import BottomDialog from 'Shared/BottomDialog';
+import headImg from 'components/App/HouseDetail/RoommateInfo/images/male.png';
 import { isAndroid } from 'lib/const';
 
 import './styles.less';
@@ -72,7 +73,7 @@ export default class ContactButler extends Component {
                         <div>
                             <img
                                 className={`f-display-inlineblock f-vertical-middle ${dialogPrefix}-img`}
-                                src={img}
+                                src={img || headImg}
                                 alt="" 
                             />
                             <span className={`f-vertical-middle ${dialogPrefix}-name`}>{name}</span>
