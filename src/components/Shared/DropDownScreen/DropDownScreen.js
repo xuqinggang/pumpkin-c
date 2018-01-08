@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import { shallowEqual } from 'lib/util';
+import { isiPhoneX } from 'lib/const';
 
 import './styles.less';
 
@@ -106,6 +107,10 @@ export default class DropDownScreen extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this._reSetScreenDomHeight);
+
+        if (isiPhoneX) {
+            this.screenDom.style.transition = 'height 1.2s ease-in-out 0s';
+        }
     }
 
     componentWillUnmount() {
