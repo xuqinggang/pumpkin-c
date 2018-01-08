@@ -13,11 +13,13 @@ import RoommateInfo from 'components/App/HouseDetail/RoommateInfo/RoommateInfo';
 import CommunityIntro from 'components/App/HouseDetail/CommunityIntro/CommunityIntro';
 // Shared
 import ContactButler from 'Shared/ContactButler/ContactButler';
+import OpenNative from 'Shared/OpenNative/OpenNative';
 // ajax
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
 import { dynamicDocTitle } from 'lib/util';
 import { execWxShare } from 'lib/wxShare';
+import { isApp } from 'lib/const';
 
 import Animate from 'rc-animate';
 
@@ -59,7 +61,7 @@ export default class HouseDetail extends Component {
     }
 
     componentDidMount() {
-        if (window.isApp) {
+        if (isApp) {
             this.wrapDom.style.paddingTop = '0';
         }
     }
@@ -102,11 +104,12 @@ export default class HouseDetail extends Component {
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
-                    !window.isApp ?
+                    !isApp ?
                     <HeadShared />
                     : null
                 }
                 <hr className="u-housedetail-partline" />
+                <OpenNative schema={`api.nanguazufang.cn/rentUnit?rentUnitId=${this.rentUnitId}`}/>
                 <RoomSlider sliderImgArr={sliderImgArr || []} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}

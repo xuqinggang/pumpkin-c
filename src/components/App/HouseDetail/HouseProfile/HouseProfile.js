@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import BottomDialog from 'Shared/BottomDialog';
 import Config from 'config/config';
 
-
 import './styles.less';
 
 const classPrefix = 'm-houseprofile';
@@ -89,6 +88,7 @@ class HouseProfileHead extends Component {
         const { payTypeData, apartmentName } = this.props.houseProfileHeadData;
         // 当前选中的价钱
         const selectedPrice = payTypeData && payTypeData[selectedPayType] && payTypeData[selectedPayType].price;
+
         return (
             <div className={`${classPrefix}-head g-grid-row f-flex-justify-between f-flex-align-center`}>
                 <div>
