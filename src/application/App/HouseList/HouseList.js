@@ -152,7 +152,7 @@ export default class HouseList extends PureComponent {
         }
     }
 
-    wxShare(link) {
+    wxShare() {
         // 分享
         execWxShare({
             title: '上南瓜租房，找品牌公寓',
