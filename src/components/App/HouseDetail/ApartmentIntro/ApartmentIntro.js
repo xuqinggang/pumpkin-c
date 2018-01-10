@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
-import defaultImg from './images/default.png';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+
+import ExpandText from 'Shared/ExpandText/ExpandText';
+import defaultImg from './images/default.png';
 
 import './styles.less';
 
 const classPrefix = 'm-apartmentintro';
 
-class ApartmentIntro extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
-
+export default class ApartmentIntro extends PureComponent {
     render() {
         const { className, apartmentIntroData } = this.props;
         const { name, image, intro } = apartmentIntroData;
@@ -23,14 +19,8 @@ class ApartmentIntro extends Component {
                     <img src={image || defaultImg} alt="" className={`f-vertical-middle ${classPrefix}-img`} />
                     <h1 className={`f-vertical-middle ${classPrefix}-title s-housedetail-comptitle`}>{name}</h1>
                 </div>
-                <div className={`${classPrefix}-intro`}>
-                    <p className={`intro-text s-housedetail-introtext`}>
-                        {intro}
-                    </p>
-                </div>
+                <ExpandText intro={intro} />
             </div>
-        )
+        );
     }
 }
-
-export default ApartmentIntro;
