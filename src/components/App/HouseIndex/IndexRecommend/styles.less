@@ -1,0 +1,31 @@
+@import (reference) '~styles/lib.less';
+
+.m-indexrecommend {
+    background: #f8f8f8;
+
+    &-title {
+        margin: 0px 0px 36px 40px;
+        font-family: PingFangSC-Medium;
+        color: #000;
+        .font-size(40);
+    }
+
+    &-wrapper {
+        padding-left: 30px;
+    }
+
+    &-list {
+        white-space: nowrap;
+
+        .list-item {
+            margin-right: 35px;
+
+            .item-img {
+                width: 280px;
+                height: 180px;
+                border-radius: 10px;
+                box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+}
