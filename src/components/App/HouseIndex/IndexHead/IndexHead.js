@@ -18,7 +18,9 @@ export default class IndexHead extends PureComponent {
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
                 <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" />
-                <img className={`f-display-flex ${classPrefix}-me`} src={meImg} alt="" />
+                <a href="" className={`f-dispaly-inlineblock ${classPrefix}-me-wrap`}>
+                    <img className={`f-display-flex ${classPrefix}-me`} src={meImg} alt="" />
+                </a> 
             </div>
         );
     }
