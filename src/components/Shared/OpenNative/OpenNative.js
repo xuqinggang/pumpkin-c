@@ -33,11 +33,11 @@ export default class OpenNative extends PureComponent {
             //发起唤醒请求后，会等待loadWaiting时间，超时则跳转到failUrl，默认3000ms
             loadWaiting: 3000,
 
-            iosFailUrl: 'https://itunes.apple.com/cn/app/%E7%9F%A5%E4%B9%8E-%E7%9B%B4%E6%92%AD%E4%BA%92%E5%8A%A8%E9%97%AE%E7%AD%94-%E5%85%B1%E4%BA%AB%E6%9C%80%E7%83%AD%E7%9F%A5%E8%AF%86%E7%9A%84%E7%A4%BE%E4%BA%A4%E5%B9%B3%E5%8F%B0/id432274380?mt=8',
+            iosFailUrl: 'https://itunes.apple.com/cn/app/id1330527627',
             // 安卓浏览器唤起失败，直接下载文件
             androidFailUrl: 'http://app-1252921496.file.myqcloud.com/nangua/app_official_latest.apk',
             // 安卓微信唤起失败跳转应用宝
-            wxAndroidFailUrl: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653',
+            wxAndroidFailUrl: 'http://sj.qq.com/myapp/detail.htm?apkName=com.sohu.pumpkin',
 
             // // Android 客户端信息,可以询问 Android同事
             apkInfo: {
