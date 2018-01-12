@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+
 import BottomDialog from 'Shared/BottomDialog';
 import Config from 'config/config';
+import { PayTypeMapName } from 'base/MapData';
 
 import './styles.less';
 
 const classPrefix = 'm-houseprofile';
 const payTypeClass = 'm-paytype';
-
-const payTypeMapName = {
-    Month: '月付',
-    Season: '季付',
-    HalfYear: '半年付',
-    Year: '年付',
-};
 
 export default function HouseProfile(props) {
     const { className, houseProfileData, houseTrafficData } = props;
@@ -98,7 +93,7 @@ class HouseProfileHead extends Component {
                         onTouchTap={this.handleSelectPayTypeTouchTap}
                     >
                         <span className="f-display-inlineblock f-vertical-middle head-paytype">
-                            {payTypeMapName[selectedPayType]}价
+                            {PayTypeMapName[selectedPayType]}价
                         </span>
                         <span className="f-display-inlineblock f-vertical-middle icon-next head-icon"></span>
                     </span>
@@ -187,7 +182,7 @@ function PayTypeItem(props) {
             onTouchTap={handlePayTypeTouchTap}
         >
             <ul className="g-grid-row f-flex-justify-between">
-                <li className="text">{payTypeMapName[payType]}</li>
+                <li className="text">{PayTypeMapName[payType]}</li>
                 <li className="price">¥{payData.price} / 月</li>
             </ul>
             <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit}元</span>

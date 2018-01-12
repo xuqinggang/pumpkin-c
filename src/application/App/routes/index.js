@@ -5,6 +5,7 @@ import HouseIndex from 'App/HouseIndex/HouseIndex';
 import HouseDetail from 'App/HouseDetail/HouseDetail';
 import HouseList from 'App/HouseList/HouseList';
 import HouseLogin from 'App/HouseLogin/HouseLogin';
+import HouseMe from 'App/HouseMe/HouseMe';
 import Config from 'config/config';
 
 const routes = (history) => {
@@ -18,8 +19,11 @@ const routes = (history) => {
                 {
                     // pageType:可以list 代表列表页
                 }
-                <Route exact path="/:cityName/nangua/login/:tel?" component={HouseLogin} />
-                <Route exact path="/:cityName/nangua/:pageType/:filterUrlFragment?" component={HouseList} />
+                <Route path="/:cityName/nangua/login" component={HouseLogin} />
+                <Route path="/:cityName/nangua/me" component={HouseMe} />
+                {
+                    // <Route exact path="/:cityName/nangua/:pageType/:filterUrlFragment?" component={HouseList} />
+                }
             </Switch>
         </Router>
     );

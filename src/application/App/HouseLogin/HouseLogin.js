@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Route, Link } from 'react-router-dom'
-import { withRouter } from 'react-router';
 
 import LoginVerifyCodeRouter from 'components/App/HouseLogin/LoginVerifyCode/LoginVerifyCode';
 import LoginTelRouter from 'components/App/HouseLogin/LoginTel/LoginTel';
@@ -10,7 +9,7 @@ import './styles.less';
 
 const classPrefix = 'm-houselogin';
 
-class HouseLogin extends PureComponent {
+export default class HouseLogin extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -30,6 +29,3 @@ class HouseLogin extends PureComponent {
         );
     }
 }
-
-export default withRouter(HouseLogin);
-

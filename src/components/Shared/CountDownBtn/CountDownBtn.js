@@ -14,27 +14,19 @@ export default class CountDownBtn extends PureComponent {
         };
     }
 
-    handleResetTap = () => {
-        const { start } = this.state;
-        if (!start) {
-            this.setState({
-                start: true,
-                downTime: this.props.downTime,
-            });
-        }
-    }
-
-    render() {
+    _startCountDownTime() {
         let { start, downTime } = this.state;
 
         if (start) {
             this.timer = setInterval(() => {
+            console.log('downTime', downTime)
                 // 归0停止倒计时
                 if (downTime < 0) {
                     clearInterval(this.timer);
                     this.setState({
                         start: false,
                     });
+                    return;
                 }
 
                 this.setState({
@@ -42,6 +34,32 @@ export default class CountDownBtn extends PureComponent {
                 });
             }, 1000);
         }
+    }
+
+    handleResetTap = () => {
+        const { start } = this.state;
+        if (!start) {
+            this.setState({
+                start: true,
+                downTime: this.props.downTime,
+            }, () => {
+                this._startCountDownTime();
+            });
+        }
+    }
+
+    componentWillMount() {
+        this._startCountDownTime();
+    }
+
+    componentWillUnmount() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+    }
+
+    render() {
+        let { start, downTime } = this.state;
 
         const btnClass = classnames('f-display-inlineblock', 'm-countdownbtn', {
             disable: start,
