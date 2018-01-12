@@ -69,12 +69,6 @@ class LoginVerify extends PureComponent {
             })
     }
 
-    ajaxUserLogin(tel, verifyCode) {
-        ajaxLogin(tel, verifyCode)
-            .then(() => {
-
-            })
-    }
 
     componentWillReceiveProps(nextProps) {
         const pathTel = nextProps.match.params.tel;
@@ -154,6 +148,57 @@ class LoginVerify extends PureComponent {
                 }
             </div>
         );
+    }
+}
+
+class LoginVerifyCode extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            verifyCode: '',
+        };
+    }
+
+    handleVerifyCodeChange = (e) => {
+        let {
+            tel,
+            verifyCode
+        } = this.state;
+        const verifyCodeVal = e.target.value.substr(0, 6);
+        this.setState({
+            verifyCode: verifyCodeVal,
+        });
+
+        // 验证码输入6个数字后，自动登录验证
+        if (verifyCodeVal.length === 6) {
+            this.ajaxUserLogin(tel, verifyCodeVal)
+                .then((data) => {
+
+                })
+        }
+    }
+    
+    render() {
+        const {
+tel,
+        } = this.props;
+        return (
+            <div className={`${classPrefix}-verifyrouter`}>
+                <span className={`f-display-block ${classPrefix}-showtel`}>{tel}</span>
+                <div className={`${classPrefix}-input-wrap`}>
+                    <input
+                        className={`${classPrefix}-input`}
+                        type="number"
+                        value={verifyCode}
+                        onChange={this.handleVerifyCodeChange}
+                        placeholder="请输入验证码"
+                    />
+                </div>
+                <div className={`${classPrefix}-verifybtn-wrap`}>
+                    <CountDownBtn start={true} />
+                </div>
+            </div>
+        )
     }
 }
 

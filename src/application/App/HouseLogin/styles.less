@@ -1,3 +1,66 @@
+@import (reference) '~styles/lib.less';
+
 .m-houselogin {
     padding-top: 88px;
+
+    &-title {
+        margin: 148px 0px 140px 40px;
+        font-family: PingFangSC-Semibold;
+        color: #333333;
+        .font-size(56);
+    }
+
+    &-input-wrap {
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0 40px;
+
+        .righticon {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            margin-right: 40px;
+            color: #f38d39;
+            transform: translate(0, -50%);
+        }
+    }
+
+    &-input {
+        width: 100%;
+        line-height: 104px;
+        border: none;
+        border-bottom: 1px solid #eaeaea;
+        color: #000;
+        .font-size(34);
+    }
+
+    &-verifybtn-wrap {
+        margin-top: 78px;
+        text-align: center;
+    }
+
+    &-verifybtn {
+        width: 288px;
+        padding: 14px 0;
+        border-radius: 67px;
+        text-align: center;
+        background: #cdd0d3;
+        line-height: 45px;
+        color: #fff;
+        pointer-events: none;
+        .font-size(32);
+
+        &.active {
+            pointer-events: inherit;
+            background: #f38d39;
+        }
+    }
+
+    &-showtel {
+        margin-left: 40px;
+        color: #999;
+        .font-size(28);
+    }
+
 }
