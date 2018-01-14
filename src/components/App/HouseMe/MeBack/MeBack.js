@@ -3,10 +3,6 @@ import classnames from 'classnames';
 
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 
-import './styles.less';
-
-const classPrefix = 'm-meback'
-
 class MeBack extends PureComponent {
     render() {
         const {
@@ -14,14 +10,14 @@ class MeBack extends PureComponent {
         } = this.props;
 
         return (
-            <span className={classnames(`${classPrefix}-title`, className)}>我的</span>
+            <h1 className="m-headJump-title">我的</h1>
         );
     }
 }
 
 export default HeadJumpConnect({
     historyback: true,
-    className: `${classPrefix} f-flex-justify-start`,
+    className: 'f-flex-justify-start',
     // backUrl: '//m.focus.cn',
     // // routerback: true,
 })(MeBack);

@@ -135,13 +135,17 @@ export default class HouseList extends PureComponent {
             filterLabel,
             filterParamsObj,
         } = this.state;
+        const {
+            match,
+            history,
+        } = this.props;
 
         return (
             <div>
                 <div className={`${houselistClassPrefix}-head`}>
                     {
                         !isApp ?
-                        <IndexHead />
+                        <IndexHead match={match} history={history} />
                         : null
                     }
                     <Filter

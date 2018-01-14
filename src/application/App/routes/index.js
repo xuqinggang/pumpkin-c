@@ -6,6 +6,7 @@ import HouseDetail from 'App/HouseDetail/HouseDetail';
 import HouseList from 'App/HouseList/HouseList';
 import HouseLogin from 'App/HouseLogin/HouseLogin';
 import HouseMe from 'App/HouseMe/HouseMe';
+import HouseAboutUs from 'App/HouseAboutUs/HouseAboutUs';
 import Config from 'config/config';
 
 const routes = (history) => {
@@ -21,8 +22,9 @@ const routes = (history) => {
                 }
                 <Route path="/:cityName/nangua/login" component={HouseLogin} />
                 <Route path="/:cityName/nangua/me" component={HouseMe} />
+                <Route path="/:cityName/nangua/about" component={HouseAboutUs} />
                 {
-                    // <Route exact path="/:cityName/nangua/:pageType/:filterUrlFragment?" component={HouseList} />
+                    <Route exact path="/:cityName/nangua/:pageType/:filterUrlFragment?" component={HouseList} />
                 }
             </Switch>
         </Router>

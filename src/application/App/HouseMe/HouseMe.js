@@ -6,7 +6,8 @@ import MeBack from 'components/App/HouseMe/MeBack/MeBack';
 import MeInfo from 'components/App/HouseMe/MeInfo/MeInfo';
 import MeEntry from 'components/App/HouseMe/MeEntry/MeEntry';
 import HouseMeWish from 'application/App/HouseMeWish/HouseMeWish';
-console.log('HouseMeWish', HouseMeWish);
+import HouseMeFeedBack from 'application/App/HouseMeFeedBack/HouseMeFeedBack';
+import { isHasCookie } from 'lib/util';
 
 import './styles.less';
 
@@ -23,26 +24,27 @@ class HouseMe extends PureComponent {
         // };
     }
 
-    // getRouterUrlAndParams(props) {
-    //     const { match } = props;
-    //     window.setStore('houseMeUrl', {
-    //         urlPrefix: match.url,
-    //     });
-    // }
-    // componentWillReceiveProps(nextProps) {
-    //     console.log('HouseMe componentWillReceiveProps', nextProps.match.url);
-    //     console.log('HouseMe componentWillReceiveProps', this.props.match.url);
-    // }
+    componentWillMount() {
+        // 进入组件之前判断是否登录
+        const {
+            cityName,
+        } = this.props.match.params;
+
+        if (!isHasCookie('sid')) {
+            this.props.history.replace(`/${cityName}/nangua/login`);
+        }
+    }
+
     render() {
         const {
             match,
         } = this.props;
-        console.log('123', match.url);
 
         return (
             <div className={`${classPrefix}`}>
                 <Route exact path={match.url} component={HouseMeIndex}/>
                 <Route path={`${match.url}/wish`} component={HouseMeWish} />
+                <Route path={`${match.url}/feedback`} component={HouseMeFeedBack} />
             </div>
         );
     }

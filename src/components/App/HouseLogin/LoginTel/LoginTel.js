@@ -30,21 +30,21 @@ export default class LoginTel extends PureComponent {
     // 点击事件-获取验证码
     handleGetVerifyTap = () => {
         const telVal = this.state.telVal;
-        // ajaxVerifyCode(telVal)
-        //     .then((bool) => {
-        //         // 验证成功
-        //         if (bool) {
+        ajaxVerifyCode(telVal)
+            .then((bool) => {
+                // 验证成功
+                if (bool) {
                     const {
                         url,
                     } = this.props.match;
         //             console.log('handleGetVerifyTap', url)
                     this.props.history.push(`${url}/${telVal}`);
-                // }
-            // })
-            // .catch((info) => {
-                // // 验证失败
+                }
+            })
+            .catch((info) => {
+                // 验证失败
 
-            // })
+            })
     }
     
     render() {

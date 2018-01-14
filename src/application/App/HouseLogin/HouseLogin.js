@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router';
 import { Route, Link } from 'react-router-dom'
 
 import LoginVerifyCodeRouter from 'components/App/HouseLogin/LoginVerifyCode/LoginVerifyCode';
@@ -10,18 +11,15 @@ import './styles.less';
 const classPrefix = 'm-houselogin';
 
 export default class HouseLogin extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             match,
+            history,
         } = this.props;
 
         return (
             <div className={`${classPrefix}`}>
-                <LoginBack />
+                <LoginBack history={history} match={match} />
                 <h2 className={`${classPrefix}-title`}>欢迎来到南瓜租房！</h2>
                 <Route exact path={match.url} component={LoginTelRouter}/>
                 <Route path={`${match.url}/:telVal`} component={LoginVerifyCodeRouter} />

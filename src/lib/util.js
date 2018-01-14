@@ -1,3 +1,11 @@
+export function isHasCookie(key) {
+    const cookieStr = document.cookie;
+    if (!cookieStr) return false;
+
+    return cookieStr.indexOf(key) !== -1;
+}
+
+// 动态加载标签
 const dynamicScriptObj = {};
 export function dynamicScript(src, callback) {
     // 如果该scr，已加载过，则直接执行callback

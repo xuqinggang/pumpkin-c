@@ -21,7 +21,7 @@ export default class RentUnitList extends Component {
     }
     handleLoadMore = () => {
         const reserveSize = 200;
-        const scrollTop = window.pageYOffset || window.screenY;
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
         if (scrollTop > this.lastScrollTop) {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
@@ -32,6 +32,10 @@ export default class RentUnitList extends Component {
             }
         }
         this.lastScrollTop = scrollTop;
+
+
+        // 在滚动的时候就记在scrollTop的位置
+        window.setStore('scrollTop', { pt: scrollTop });
     }
     render() {
         return (

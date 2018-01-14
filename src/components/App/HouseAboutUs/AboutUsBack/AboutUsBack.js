@@ -3,14 +3,10 @@ import classnames from 'classnames';
 
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 
-class MeWishBack extends PureComponent {
+class AboutUsBack extends PureComponent{
     render() {
-        const {
-            className,
-        } = this.props;
-
         return (
-            <span className="m-headJump-title">心愿单</span>
+            <h1 className="m-headJump-title">关于我们</h1>
         );
     }
 }
@@ -20,4 +16,4 @@ export default HeadJumpConnect({
     className: 'f-flex-justify-start',
     // backUrl: '//m.focus.cn',
     // // routerback: true,
-})(MeWishBack);
+})(AboutUsBack);

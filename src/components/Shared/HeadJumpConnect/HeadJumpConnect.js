@@ -34,7 +34,7 @@ export default function(jumpConditionObj = {}) {
                             className={`${classPrefix}-jumpbtn f-display-flex f-flex-align-center icon-back`}
                         >
                         </span>
-                        <WrappedCom />
+                        <WrappedCom {...this.props} />
                         {
                             // <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
                             //     <WrappedCom />
