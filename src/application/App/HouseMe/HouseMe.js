@@ -2,18 +2,16 @@ import React, { PureComponent } from 'react';
 import { Route, Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
-import MeBack from 'components/App/HouseMe/MeBack/MeBack';
-import MeInfo from 'components/App/HouseMe/MeInfo/MeInfo';
-import MeEntry from 'components/App/HouseMe/MeEntry/MeEntry';
-import HouseMeWish from 'application/App/HouseMeWish/HouseMeWish';
-import HouseMeFeedBack from 'application/App/HouseMeFeedBack/HouseMeFeedBack';
+import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
+import HouseMeWish from 'components/App/HouseMeWish/HouseMeWish';
+import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
 import { isHasCookie } from 'lib/util';
 
 import './styles.less';
 
 const classPrefix = 'm-houseme';
 
-class HouseMe extends PureComponent {
+export default class HouseMe extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -49,16 +47,3 @@ class HouseMe extends PureComponent {
         );
     }
 }
-
-class HouseMeIndex extends PureComponent {
-    render() {
-        return (
-            <div>
-                <MeBack className={`${classPrefix}-meback`} />
-                <MeInfo className={`${classPrefix}-meinfo`} />
-                <MeEntry className={`${classPrefix}-meentry`} />
-            </div>
-        )
-    }
-}
-export default withRouter(HouseMe);

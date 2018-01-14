@@ -3,8 +3,6 @@ import LogoImg from 'images/App/singleLogo.png';
 
 import MeFeedBackBack from 'components/App/HouseMeFeedBack/MeFeedBackBack/MeFeedBackBack';
 
-import './styles.less';
-
 const classPrefix = 'm-aboutus';
 
 export default class AboutUs extends PureComponent {
