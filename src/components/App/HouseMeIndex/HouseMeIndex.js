@@ -47,7 +47,7 @@ export default class HouseMeIndex extends PureComponent {
             <div>
                 <MeBack className={`${classPrefix}-meback`} />
                 <MeInfo className={`${classPrefix}-meinfo`} info={infoObj}/>
-                <MeEntry match={match} className={`${classPrefix}-meentry`} />
+                <MeEntry match={match} history={history} className={`${classPrefix}-meentry`} />
             </div>
         );
     }

@@ -2,11 +2,18 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
+import { clearCookie } from 'lib/util';
+
 import './styles.less';
 
 const classPrefix = 'm-meentry';
 
 export default class MeEntry extends PureComponent {
+    handleExitTap = () => {
+        console.log('handleExitTap');
+        clearCookie('sid');
+        // this.props.history.push(this.rootUrlPrefix);
+    }
     render() {
         const {
             className,
@@ -19,7 +26,7 @@ export default class MeEntry extends PureComponent {
 
         // url路径去掉me字段 (/bj/nangua/me => /bj/nangua)
         // 根url前缀 /bj/nangua
-        const rootUrlPrefix = matchUrl.substr(0, matchUrl.indexOf('/me'));
+        this.rootUrlPrefix = matchUrl.substr(0, matchUrl.indexOf('/me'));
 
         return (
             <ul className={classnames(`${classPrefix}`, className)}>
@@ -50,7 +57,7 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <Link to={`${rootUrlPrefix}/about`}>
+                <Link to={`${this.rootUrlPrefix}/about`}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>
@@ -59,12 +66,13 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <Link to={`${rootUrlPrefix}`}>
-                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
-                        <span className="item-text">退出当前帐号</span>
-                        <span className="icon-next item-iconnext"></span>
-                    </li>
-                </Link>
+                <li
+                    onTouchTap={this.handleExitTap}
+                    className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}
+                >
+                    <span className="item-text">退出当前帐号</span>
+                    <span className="icon-next item-iconnext"></span>
+                </li>
             </ul>
         );
     }
