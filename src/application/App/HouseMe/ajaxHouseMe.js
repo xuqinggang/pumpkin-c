@@ -1,7 +1,27 @@
 import Service from 'lib/Service';
 import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'base/MapData';
 
-export default function ajaxInitHouseMeWish() {
+export function ajaxFeedBack(msg = '') {
+    return Service.post(`/api/v1/user/feedbacks`, {
+        msg,
+    })
+        .then((data) => {
+            if (data.code === 200) return true;
+            throw new Error(false);
+        })
+}
+
+export function ajaxEditNickName(nickname) {
+    return Service.post(`/api/v1/user/nickname`, {
+        nickname,
+    })
+        .then((data) => {
+            if (data.code === 200) return true;
+            throw new Error(false);
+        })
+}
+
+export function ajaxInitHouseMeWish() {
     return Service.get(`/api/v1/user/collections`, {
         offset: 0,
         limit: 30,

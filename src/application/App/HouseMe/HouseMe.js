@@ -5,6 +5,7 @@ import { withRouter } from 'react-router'
 import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
 import HouseMeWish from 'components/App/HouseMeWish/HouseMeWish';
 import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
+import HouseMeInfo from 'components/App/HouseMeInfo/HouseMeInfo';
 import { isHasCookie } from 'lib/util';
 
 import './styles.less';
@@ -42,6 +43,7 @@ export default class HouseMe extends PureComponent {
             <div className={`${classPrefix}`}>
                 <Route exact path={match.url} component={HouseMeIndex}/>
                 <Route path={`${match.url}/wish`} component={HouseMeWish} />
+                <Route path={`${match.url}/info`} component={HouseMeInfo} />
                 <Route path={`${match.url}/feedback`} component={HouseMeFeedBack} />
             </div>
         );

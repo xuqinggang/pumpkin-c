@@ -10,11 +10,20 @@ export default class MeEntry extends PureComponent {
     render() {
         const {
             className,
+            match,
         } = this.props;
+
+        const {
+            url: matchUrl,
+        } = match;
+
+        // url路径去掉me字段 (/bj/nangua/me => /bj/nangua)
+        // 根url前缀 /bj/nangua
+        const rootUrlPrefix = matchUrl.substr(0, matchUrl.indexOf('/me'));
 
         return (
             <ul className={classnames(`${classPrefix}`, className)}>
-                <Link to="/bj/nangua/me/wish">
+                <Link to={`${matchUrl}/wish`}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>
@@ -23,31 +32,39 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
-                    <div>
-                        <span className="icon-wish-list item-icon"></span>
-                        <span className="item-text">个人信息</span>
-                    </div> 
-                    <span className="icon-next item-iconnext"></span>
-                </li>
-                <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
-                    <div>
-                        <span className="icon-wish-list item-icon"></span>
-                        <span className="item-text">意见反馈</span>
-                    </div> 
-                    <span className="icon-next item-iconnext"></span>
-                </li>
-                <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
-                    <div>
-                        <span className="icon-wish-list item-icon"></span>
-                        <span className="item-text">关于我们</span>
-                    </div>
-                    <span className="icon-next item-iconnext"></span>
-                </li>
-                <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
-                    <span className="item-text">退出当前帐号</span>
-                    <span className="icon-next item-iconnext"></span>
-                </li>
+                <Link to={`${matchUrl}/info`}>
+                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
+                        <div>
+                            <span className="icon-wish-list item-icon"></span>
+                            <span className="item-text">个人信息</span>
+                        </div> 
+                        <span className="icon-next item-iconnext"></span>
+                    </li>
+                </Link>
+                <Link to={`${matchUrl}/feedback`}>
+                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
+                        <div>
+                            <span className="icon-wish-list item-icon"></span>
+                            <span className="item-text">意见反馈</span>
+                        </div> 
+                        <span className="icon-next item-iconnext"></span>
+                    </li>
+                </Link>
+                <Link to={`${rootUrlPrefix}/about`}>
+                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
+                        <div>
+                            <span className="icon-wish-list item-icon"></span>
+                            <span className="item-text">关于我们</span>
+                        </div>
+                        <span className="icon-next item-iconnext"></span>
+                    </li>
+                </Link>
+                <Link to={`${rootUrlPrefix}`}>
+                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
+                        <span className="item-text">退出当前帐号</span>
+                        <span className="icon-next item-iconnext"></span>
+                    </li>
+                </Link>
             </ul>
         );
     }

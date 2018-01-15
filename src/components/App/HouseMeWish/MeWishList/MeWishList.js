@@ -1,8 +1,7 @@
-
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import ajaxInitHouseMeWish from 'application/App/HouseMeWish/ajaxInitHouseMeWish';
 import WishRentUnitItem from 'components/App/HouseMeWish/MeWishList/WishRentUnitItem';
+import { ajaxInitHouseMeWish } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
 
