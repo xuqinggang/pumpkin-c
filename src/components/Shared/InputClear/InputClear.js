@@ -5,6 +5,11 @@ import './styles.less';
 const classPrefix = 'm-inputclear';
 
 export default class InputClear extends PureComponent {
+    static defaultProps = {
+        type: 'text',
+        placeholder: '',
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -34,10 +39,16 @@ export default class InputClear extends PureComponent {
     }
 
     render() {
+        const {
+            type,
+            placeholder,
+        } = this.props;
+
         return (
             <div className={`${classPrefix}`}>
                 <input
-                    type="text"
+                    type={type}
+                    placeholder={placeholder}
                     className={`${classPrefix}-input`}
                     value={this.state.inputVal}
                     onChange={this.onInputChange}

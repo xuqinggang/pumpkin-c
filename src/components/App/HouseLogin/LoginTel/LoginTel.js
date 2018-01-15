@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
+import { regTel } from 'lib/regExp';
 
 import './styles.less';
 
@@ -18,7 +19,6 @@ export default class LoginTel extends PureComponent {
     }
 
     handleTelChange = (e) => {
-        const regTel = /^1[3|4|5|8][0-9]\d{8}$/;
         const telVal = e.target.value;
         this.setState({
             telVal,
@@ -53,7 +53,7 @@ export default class LoginTel extends PureComponent {
             isTelValid,
         } = this.state;
 
-        const verifyBtnClass = classnames('f-display-inlineblock', `${classPrefix}-verifybtn`, {
+        const verifyBtnClass = classnames('u-btn-getverify', {
             active: isTelValid,
         });
 

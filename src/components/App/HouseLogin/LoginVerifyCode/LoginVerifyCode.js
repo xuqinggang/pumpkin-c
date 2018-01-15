@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
+import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 
 const classPrefix = 'm-houselogin';
 
@@ -20,8 +21,9 @@ export default class LoginVerifyCode extends PureComponent {
 
     ajaxUserLogin(tel, verifyCode) {
         ajaxLogin(tel, verifyCode)
-            .then(() => {
-
+            .then((infoObj) => {
+                // 存储个人信息
+                window.setStore('meInfo', infoObj);
             })
     }
     
@@ -38,6 +40,20 @@ export default class LoginVerifyCode extends PureComponent {
 
                 })
         }
+    }
+
+    // 重新发送验证码
+    onReSendVerifyCode = () => {
+        ajaxVerifyCode(this.telVal)
+            .then((bool) => {
+                // 验证成功
+                if (bool) {
+                }
+            })
+            .catch((info) => {
+                // 验证失败
+
+            })
     }
 
     render() {
@@ -58,7 +74,7 @@ export default class LoginVerifyCode extends PureComponent {
                     />
                 </div>
                 <div className={`${classPrefix}-verifybtn-wrap`}>
-                    <CountDownBtn start={true} />
+                    <CountDownBtn start={true} onReStart={this.onReSendVerifyCode}/>
                 </div>
             </div>
         )

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router';
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import LoginVerifyCodeRouter from 'components/App/HouseLogin/LoginVerifyCode/LoginVerifyCode';
 import LoginTelRouter from 'components/App/HouseLogin/LoginTel/LoginTel';

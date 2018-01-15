@@ -44,6 +44,9 @@ export default class CountDownBtn extends PureComponent {
                 downTime: this.props.downTime,
             }, () => {
                 this._startCountDownTime();
+                if (this.props.onReStart) {
+                    this.props.onReStart();
+                }
             });
         }
     }

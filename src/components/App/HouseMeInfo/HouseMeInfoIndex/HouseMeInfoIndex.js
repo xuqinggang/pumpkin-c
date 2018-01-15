@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route, Link } from 'react-router-dom';
 
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import HouseMeInfoIndexBack from './HouseMeInfoIndexBack';
 
 import './styles.less';
@@ -8,13 +9,39 @@ import './styles.less';
 const classPrefix = 'm-meinfoindex';
 
 export default class HouseMeInfoIndex extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            infoObj: {},
+        };
+    }
+
+    componentWillMount() {
+        const infoObj = window.getStore('meInfo');
+        if (infoObj) {
+            this.setState({
+                infoObj,
+            });
+        } else {
+            ajaxGetMeInfo()
+                .then((infoObj) => {
+                    this.setState({
+                        infoObj,
+                    });
+                })
+        }
+    }
+
     render() {
         const {
             match,
             history,
+        } = this.props;
+
+        const {
             nickname,
             phone,
-        } = this.props;
+        } = this.state.infoObj;
 
         const {
             url: matchUrl,

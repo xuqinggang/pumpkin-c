@@ -5,8 +5,13 @@ export function ajaxLogin(mobile, captcha) {
         mobile,
         captcha,
     })
-        .then(() => {
-
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+            throw new Error({
+                msg: '登录失败',
+            });
         })
 }
 
