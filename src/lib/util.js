@@ -1,3 +1,22 @@
+export function getCookie(key) {
+    let arr, reg = new RegExp("(^| )"+key+"=([^;]*)(;|$)");
+
+    if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+    else return null;
+}
+
+// 删除cookie需要指定path
+export function clearCookie(key) {
+    let exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    let cval = getCookie(key);
+    if(cval != null) {
+        console.log('call', cval,  exp.toGMTString());
+        document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
+        console.log('document.cookie', document.cookie);
+    }
+}
+
 export function isHasCookie(key) {
     const cookieStr = document.cookie;
     if (!cookieStr) return false;
