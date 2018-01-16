@@ -33,6 +33,7 @@ export default class Filter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            isFixed: false,
             // ex: { more: '更多', houseType: '房型' }
             filterLabel: props.filterLabel,
             // ex: { more: { direction: {1:true} }, houseType: {} }
@@ -49,6 +50,7 @@ export default class Filter extends PureComponent {
     // 回调函数-弹层是否展现
     handleFilterShowTap = (type) => {
         const preFilterShowState = this.state.filterShow;
+        console.log('this.state', this.state.isFixed)
         const newFilterShowState = {};
 
         Object.keys(preFilterShowState).forEach((typeName) => {
@@ -60,14 +62,11 @@ export default class Filter extends PureComponent {
         // 点击filter先滚动到顶部
         // 起始scrollTop
         const srcScrollTop = getScrollTop();
-        const filterDomTop = Math.round(this.filterDom.getBoundingClientRect().top);
-        // 目的scropllTop(也就是filter固定时的scrollTop)
-        this.destScrollTop = srcScrollTop + filterDomTop - this.headDomHeight;
-
-        if (srcScrollTop >= this.destScrollTop) {
+        // this.filterFixScrollTop filterDom固定是的scrollTop
+        if (srcScrollTop >= this.filterFixScrollTop) {
             this._filterShow(newFilterShowState, type);
         } else {
-            animateScrollTop(srcScrollTop, this.destScrollTop, 250, () => {
+            animateScrollTop(srcScrollTop, this.filterFixScrollTop, 250, () => {
                 this._filterShow(newFilterShowState, type);
             });
         }
@@ -76,26 +75,18 @@ export default class Filter extends PureComponent {
     // 禁止滚动穿透
     _toggleForbideScrollThrough(isForbide) {
         if (isForbide) {
-            this.scrollTop = getScrollTop();
-
             // 使body脱离文档流
             document.body.classList.add('f-disscroll-through'); 
-
-            // 把脱离文档流的body拉上去！否则页面会回到顶部！
-            document.body.style.top = -this.scrollTop + 'px';
         } else {
             document.body.classList.remove('f-disscroll-through');
-
-            // 滚回到老地方
-            scrollTo(this.scrollTop);
         }
     }
 
     _filterShow(newFilterShowState, type) {
-        this._toggleForbideScrollThrough(newFilterShowState[type]);
-
         this.setState({
             filterShow: newFilterShowState,
+        }, () => {
+            this._toggleForbideScrollThrough(newFilterShowState[type]);
         });
     }
 
@@ -108,19 +99,28 @@ export default class Filter extends PureComponent {
 
     // 滚动时固定filterDom
     _fixFilterDom = () => {
+        if (!this.filterDom) return;
         const curScrollTop = getScrollTop();
         const filterDomTop = Math.round(this.filterDom.getBoundingClientRect().top);
         // 是否filterDom fixed
         const isFilterDomFixed = this.filterDom.classList.contains('f-filterdom-fixed');
 
+        document.querySelector('.test').innerHTML = curScrollTop;
+            console.log('_fixFilterDom', curScrollTop, this.filterFixScrollTop, this.test);
         if (!isFilterDomFixed && filterDomTop <= (this.headDomHeight - 2)) {
-            this.filterDom.classList.add('f-filterdom-fixed');
+            this.setState({
+                isFixed: true,
+            });
+            // this.filterDom.classList.add('f-filterdom-fixed');
             this.listWrapDom.classList.add('f-list-addpadding');
             return;
         }
 
-        if (isFilterDomFixed && curScrollTop < this.filterFixScrollTop ) {
-            this.filterDom.classList.remove('f-filterdom-fixed');
+        if (isFilterDomFixed && curScrollTop !== 0 && curScrollTop < this.filterFixScrollTop ) {
+            this.setState({
+                isFixed: false,
+            });
+            // this.filterDom.classList.remove('f-filterdom-fixed');
             this.listWrapDom.classList.remove('f-list-addpadding');
 
             return;
@@ -256,7 +256,7 @@ export default class Filter extends PureComponent {
     }
     componentWillUnmount() {
 // window.setStore('leave', { leaveListPage: true });
-//         window.removeEventListener('scroll', this._fixFilterDom);
+        window.removeEventListener('scroll', this._fixFilterDom);
     }
 
     render() {
@@ -268,12 +268,17 @@ export default class Filter extends PureComponent {
             filterShow,
             filterState,
             filterLabel,
+            isFixed,
         } = this.state;
+        console.log('filter render state', this.state.isFixed)
+        const filterListClass = classnames('g-grid-row f-flex-justify-between', `${filterClass}`, className, {
+            'f-filterdom-fixed': isFixed,
+        });
 
         return (
             <ul
                 ref={(dom) => { this.filterDom = dom; }}
-                className={`g-grid-row f-flex-justify-between ${filterClass} ${className}`}
+                className={filterListClass}
             >
                 <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen

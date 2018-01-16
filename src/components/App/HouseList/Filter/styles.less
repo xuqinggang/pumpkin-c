@@ -18,8 +18,14 @@
 
 // 弹层禁止滚动穿透，让body fixed
 .f-disscroll-through {
-    position: fixed;
-    width: 100%;
+    // position: fixed;
+    // width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
 }
 
 .m-filter {
