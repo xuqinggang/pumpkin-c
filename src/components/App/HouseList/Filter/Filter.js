@@ -46,6 +46,33 @@ export default class Filter extends PureComponent {
         };
     }
 
+    // 回调函数-弹层是否展现
+    handleFilterShowTap = (type) => {
+        const preFilterShowState = this.state.filterShow;
+        const newFilterShowState = {};
+
+        Object.keys(preFilterShowState).forEach((typeName) => {
+            newFilterShowState[typeName] = false;
+        });
+
+        newFilterShowState[type] = !preFilterShowState[type];
+
+        // 点击filter先滚动到顶部
+        // 起始scrollTop
+        const srcScrollTop = getScrollTop();
+        const filterDomTop = Math.round(this.filterDom.getBoundingClientRect().top);
+        // 目的scropllTop(也就是filter固定时的scrollTop)
+        this.destScrollTop = srcScrollTop + filterDomTop - this.headDomHeight;
+
+        if (srcScrollTop >= this.destScrollTop) {
+            this._filterShow(newFilterShowState, type);
+        } else {
+            animateScrollTop(srcScrollTop, this.destScrollTop, 250, () => {
+                this._filterShow(newFilterShowState, type);
+            });
+        }
+    }
+
     // 禁止滚动穿透
     _toggleForbideScrollThrough(isForbide) {
         if (isForbide) {
@@ -64,42 +91,40 @@ export default class Filter extends PureComponent {
         }
     }
 
-    // 回调函数-弹层是否展现
-    handleFilterShowTap = (type) => {
-        const preFilterShowState = this.state.filterShow;
-        const newFilterShowState = {};
-
-        Object.keys(preFilterShowState).forEach((typeName) => {
-            newFilterShowState[typeName] = false;
-        });
-
-        newFilterShowState[type] = !preFilterShowState[type];
-
-        // 点击filter先滚动到顶部
-        // 起始scrollTop
-        const srcScrollTop = getScrollTop();
-        const filterDomTop = Math.ceil(this.filterDom.getBoundingClientRect().top);
-        // 目的scropllTop(也就是filter固定时的scrollTop)
-        this.destScrollTop = srcScrollTop + filterDomTop - this.headDomHeight;
-
-        if (srcScrollTop >= this.destScrollTop) {
-            this._filterShow(newFilterShowState, type);
-        } else {
-            animateScrollTop(srcScrollTop, this.destScrollTop, 250, () => {
-                const timer = setTimeout(() => {
-                    clearTimeout(timer);
-                    this._filterShow(newFilterShowState, type);
-                }, 17);
-            });
-        }
-    }
-
     _filterShow(newFilterShowState, type) {
         this._toggleForbideScrollThrough(newFilterShowState[type]);
 
         this.setState({
             filterShow: newFilterShowState,
         });
+    }
+
+    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
+    _dynamicSetPositionFilterLabel = (label) => {
+        this.setState({
+            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
+        });
+    }
+
+    // 滚动时固定filterDom
+    _fixFilterDom = () => {
+        const curScrollTop = getScrollTop();
+        const filterDomTop = Math.round(this.filterDom.getBoundingClientRect().top);
+        // 是否filterDom fixed
+        const isFilterDomFixed = this.filterDom.classList.contains('f-filterdom-fixed');
+
+        if (!isFilterDomFixed && filterDomTop <= (this.headDomHeight - 2)) {
+            this.filterDom.classList.add('f-filterdom-fixed');
+            this.listWrapDom.classList.add('f-list-addpadding');
+            return;
+        }
+
+        if (isFilterDomFixed && curScrollTop < this.filterFixScrollTop ) {
+            this.filterDom.classList.remove('f-filterdom-fixed');
+            this.listWrapDom.classList.remove('f-list-addpadding');
+
+            return;
+        }
     }
 
     // 回调函数-筛选数据确定回调函数
@@ -198,45 +223,25 @@ export default class Filter extends PureComponent {
         // 隐藏弹层
         this.handleFilterShowTap('more');
     }
-
-    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
-    _dynamicSetPositionFilterLabel = (label) => {
-        this.setState({
-            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
-        });
-    }
-
-    // fix filter
-    _fixFilterDom = () => {
-        const curScrollTop = getScrollTop();
-        const filterDomTop = Math.ceil(this.filterDom.getBoundingClientRect().top);
-        // 是否filterDom fixed
-        const isFilterDomFixed = this.filterDom.classList.contains('f-filterdom-fixed');
-
-        const scrollTopInfo = window.getStore('scrollTop');
-        const fixScrollTop = scrollTopInfo && scrollTopInfo.fixScrollTop;
-        console.log('scroll _fixFilterDom', curScrollTop, fixScrollTop, isFilterDomFixed, filterDomTop, this.headDomHeight);
-
-        if (!isFilterDomFixed && filterDomTop <= this.headDomHeight) {
-            this.filterDom.classList.add('f-filterdom-fixed');
-            // this.listWrapDom.classList.add('f-list-addpadding');
-            if (!fixScrollTop) {
-                window.setStore('scrollTop', { fixScrollTop: curScrollTop });
-            }
-            return;
-        }
-
-        if (isFilterDomFixed && curScrollTop < fixScrollTop ) {
-            this.filterDom.classList.remove('f-filterdom-fixed');
-            // this.listWrapDom.classList.remove('f-list-addpadding');
-            return;
-        }
-    }
-
+    
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度
-        this.headDomHeight = Math.ceil(document.querySelector('.g-houselist-head').offsetHeight);
+        this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
+        this.bannerDomHeight = Math.round(document.querySelector('.m-indexbanner').offsetHeight);
+        this.recommendDomHeight = Math.round(document.querySelector('.m-indexrecommend').offsetHeight);
+        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight) + 2;
+// console.log('filterFixScrollTop', this.filterFixScrollTop, document.querySelector('.m-indexbanner').offsetHeight, document.querySelector('.m-indexrecommend').offsetHeight);
+        // const curScrollTop = getScrollTop();
+        // const scrollTopInfo = window.getStore('scrollTop');
+        // const fixScrollTop = scrollTopInfo && scrollTopInfo.fixScrollTop;
+        // console.log('filter componentDidMount', curScrollTop);
+
+        // const leaveInfo = window.getStore('leave');
+        // const isReEnterListPage = leaveInfo && leaveInfo.leaveListPage;
+        // if (isReEnterListPage && curScrollTop < fixScrollTop) {
+        //     this.filterDom.classList.add('f-filterdom-fixed');
+        // }
     }
 
     componentWillMount() {
@@ -250,8 +255,8 @@ export default class Filter extends PureComponent {
         window.addEventListener('scroll', this._fixFilterDom);
     }
     componentWillUnmount() {
-
-        window.removeEventListener('scroll', this._fixFilterDom);
+// window.setStore('leave', { leaveListPage: true });
+//         window.removeEventListener('scroll', this._fixFilterDom);
     }
 
     render() {

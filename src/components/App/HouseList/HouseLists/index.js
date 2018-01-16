@@ -102,8 +102,9 @@ export default class HouseLists extends PureComponent {
             this.setState(storeHouseListState, () => {
                 const storeScrollTop = window.getStore('scrollTop');
                 const scrollTop = storeScrollTop && storeScrollTop.pt || 0;
-                console.log('scroll componentWillMount', scrollTop);
+                console.log('houselist scrollTo before', scrollTop);
                 window.scrollTo(0, scrollTop);
+                console.log('houselist scrollTo after', scrollTop);
             });
         } else {
             this.handleFetchList('INIT');
@@ -111,6 +112,7 @@ export default class HouseLists extends PureComponent {
     }
 
     componentDidMount() {
+        console.log('houselist componentDidMount');
         if (isApp) {
             // 在app中把头部去掉
             this.listDom.style.marginTop = '1.12rem';

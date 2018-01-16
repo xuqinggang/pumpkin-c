@@ -133,6 +133,9 @@ export default class HouseList extends PureComponent {
         this.wxShare();
     }
 
+    componentDidMount() {
+    }
+
     render() {
         const {
             filterState,
@@ -164,6 +167,7 @@ export default class HouseList extends PureComponent {
                 <HouseLists
                     filterParams={filterParamsObj}
                 />
+                <div className="test">test</div>
             </div>
         );
     }

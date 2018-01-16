@@ -33,7 +33,7 @@ export default class IndexBanner extends PureComponent {
 
         return (
             <div className={classnames(classPrefix)}>
-                <a href={url}>
+                <a className={`f-display-inlineblock ${classPrefix}-img-wrap`} href={url}>
                     <img className={`f-display-inlineblock ${classPrefix}-img`} src={avatar} alt="" />
                 </a>
             </div>
