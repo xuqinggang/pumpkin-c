@@ -15,8 +15,9 @@ import {
     rentFilterStateToParams,
     positionFilterStateToParams,
 } from 'application/App/HouseList/filterStateToParams';
-
 import { scrollTo, getScrollTop } from 'lib/util';
+import { animateScrollTop } from 'lib/animate';
+
 import './styles.less';
 
 const filterClass = 'm-filter';
@@ -74,6 +75,27 @@ export default class Filter extends PureComponent {
 
         newFilterShowState[type] = !preFilterShowState[type];
 
+        // 点击filter先滚动到顶部
+        const headDomHeight = document.querySelector('.g-houselist-head').offsetHeight;
+        // 起始scrollTop
+        const srcScrollTop = getScrollTop();
+        const filterDomTop = Math.ceil(this.filterDom.getBoundingClientRect().top);
+        // 目的scropllTop
+        const destScrollTop = srcScrollTop + filterDomTop - headDomHeight;
+
+        if (srcScrollTop >= destScrollTop) {
+            this._filterShow(newFilterShowState, type);
+        } else {
+            animateScrollTop(srcScrollTop, srcScrollTop + filterDomTop - headDomHeight, 250, () => {
+                const timer = setTimeout(() => {
+                    clearTimeout(timer);
+                    this._filterShow(newFilterShowState, type);
+                }, 50);
+            });
+        }
+    }
+
+    _filterShow(newFilterShowState, type) {
         this._toggleForbideScrollThrough(newFilterShowState[type]);
 
         this.setState({
@@ -207,7 +229,10 @@ export default class Filter extends PureComponent {
         } = this.state;
 
         return (
-            <ul className={`g-grid-row f-flex-justify-between ${filterClass} ${className}`}>
+            <ul
+                ref={(dom) => { this.filterDom = dom; }}
+                className={`g-grid-row f-flex-justify-between ${filterClass} ${className}`}
+            >
                 <li className={`${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-position`}

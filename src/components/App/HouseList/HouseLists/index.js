@@ -7,7 +7,7 @@ import SingnalLessNote from '../SingnalLessNote';
 import { rentUnitShape, pagerShape } from 'base/propTypes';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 import { isApp } from 'lib/const';
-import { shallowEqual } from 'lib/util';
+import { shallowEqual, getScrollTop } from 'lib/util';
 
 import './styles.less';
 
@@ -90,6 +90,12 @@ export default class HouseLists extends PureComponent {
             })
     }
 
+    _markScrollTop() {
+        const scrollTop = getScrollTop();
+        // 在滚动的时候就记在scrollTop的位置
+        window.setStore('scrollTop', { pt: scrollTop });
+    }
+
     componentWillMount() {
         const storeHouseListState = window.getStore('houseList');
         if (storeHouseListState) {
@@ -108,6 +114,8 @@ export default class HouseLists extends PureComponent {
             // 在app中把头部去掉
             this.listDom.style.marginTop = '1.12rem';
         }
+
+        window.addEventListener('scroll', this._markScrollTop);
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -115,6 +123,10 @@ export default class HouseLists extends PureComponent {
         if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
             this.handleFetchList('INIT');
         }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this._markScrollTop);
     }
 
     render() {

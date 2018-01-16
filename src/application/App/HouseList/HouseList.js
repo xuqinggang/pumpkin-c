@@ -18,7 +18,7 @@ import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
 
-const houselistClassPrefix = 'g-houselist';
+const classPrefix = 'g-houselist';
 
 export default class HouseList extends PureComponent {
     constructor(props) {
@@ -43,6 +43,10 @@ export default class HouseList extends PureComponent {
 
         // 动态更改标题
         dynamicDocTitle('南瓜租房');
+    }
+
+    _isPageList() {
+        return this.props.match.pageType === 'list';
     }
 
     _getGetParams() {
@@ -135,26 +139,28 @@ export default class HouseList extends PureComponent {
             filterLabel,
             filterParamsObj,
         } = this.state;
+
         const {
             match,
             history,
         } = this.props;
 
+        // 是否是列表页
+        const isPageList = this._isPageList();
+
         return (
-            <div>
-                <div className={`${houselistClassPrefix}-head`}>
-                    {
-                        !isApp ?
-                        <IndexHead match={match} history={history} />
-                        : null
-                    }
-                    <Filter
-                        className="filter"
-                        filterState={filterState}
-                        filterLabel={filterLabel}
-                        onFilterConfirm={this.onFilterConfirm}
-                    />
+            <div className={`${classPrefix}`}>
+                <div className={`${classPrefix}-head`}>
+                    <IndexHead match={match} history={history} />
                 </div>
+                <IndexBanner />
+                <IndexRecommend />
+                <Filter
+                    className="filter"
+                    filterState={filterState}
+                    filterLabel={filterLabel}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
                 <HouseLists
                     filterParams={filterParamsObj}
                 />

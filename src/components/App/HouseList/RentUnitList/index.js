@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { rentUnitShape, pagerShape } from 'base/propTypes';
-import { getDocHeight } from 'lib/util';
+import { getDocHeight, getScrollTop } from 'lib/util';
 import RentUnitPlaceHolder from '../RentUnitPlaceHolder';
 import RentUnitItem from '../RentUnitItem';
 import './style.less';
@@ -21,7 +21,7 @@ export default class RentUnitList extends Component {
     }
     handleLoadMore = () => {
         const reserveSize = 200;
-        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        const scrollTop = getScrollTop();
         if (scrollTop > this.lastScrollTop) {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
@@ -32,10 +32,6 @@ export default class RentUnitList extends Component {
             }
         }
         this.lastScrollTop = scrollTop;
-
-
-        // 在滚动的时候就记在scrollTop的位置
-        window.setStore('scrollTop', { pt: scrollTop });
     }
     render() {
         return (

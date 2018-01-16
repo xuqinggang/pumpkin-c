@@ -21,9 +21,9 @@ export default class DropDownScreen extends Component {
         e.stopPropagation();
         e.preventDefault();
 
-        const headDomRectInfo = e.currentTarget.getBoundingClientRect();
-        this.headDomLeft = headDomRectInfo.left;
-        this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
+        // const headDomRectInfo = e.currentTarget.getBoundingClientRect();
+        // this.headDomLeft = headDomRectInfo.left;
+        // this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
 
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
@@ -49,10 +49,13 @@ export default class DropDownScreen extends Component {
 
         if (isShow) {
             screenDom.style.visibility = 'visible';
+            const headDomRectInfo = this.headDom.getBoundingClientRect();
+
+            this.headDomLeft = headDomRectInfo.left;
+            this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
 
             screenDom.style.left = -this.headDomLeft + 'px';
             screenDom.style.width = window.innerWidth + 'px';
-
             if (isFullScreen) {
                 screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
             } else {
