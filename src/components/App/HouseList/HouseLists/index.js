@@ -102,6 +102,7 @@ export default class HouseLists extends PureComponent {
             this.setState(storeHouseListState, () => {
                 const storeScrollTop = window.getStore('scrollTop');
                 const scrollTop = storeScrollTop && storeScrollTop.pt || 0;
+                console.log('scroll componentWillMount', scrollTop);
                 window.scrollTo(0, scrollTop);
             });
         } else {

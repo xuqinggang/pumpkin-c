@@ -1,3 +1,21 @@
+// 滚动到固定位置时，fix
+.f-filterdom-fixed {
+    position: fixed;
+    top: 86px;
+    width: 100%;
+
+    &::after {
+        content: '';
+        display: block;
+        height: 0;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border-bottom: 1px solid #eee;
+    }
+}
+
 // 弹层禁止滚动穿透，让body fixed
 .f-disscroll-through {
     position: fixed;
@@ -6,6 +24,7 @@
 
 .m-filter {
     box-sizing: border-box;
+    height: 88px;
     padding: 0 46px;
     background-color: #fff;
 

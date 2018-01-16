@@ -76,21 +76,20 @@ export default class Filter extends PureComponent {
         newFilterShowState[type] = !preFilterShowState[type];
 
         // 点击filter先滚动到顶部
-        const headDomHeight = document.querySelector('.g-houselist-head').offsetHeight;
         // 起始scrollTop
         const srcScrollTop = getScrollTop();
         const filterDomTop = Math.ceil(this.filterDom.getBoundingClientRect().top);
-        // 目的scropllTop
-        const destScrollTop = srcScrollTop + filterDomTop - headDomHeight;
+        // 目的scropllTop(也就是filter固定时的scrollTop)
+        this.destScrollTop = srcScrollTop + filterDomTop - this.headDomHeight;
 
-        if (srcScrollTop >= destScrollTop) {
+        if (srcScrollTop >= this.destScrollTop) {
             this._filterShow(newFilterShowState, type);
         } else {
-            animateScrollTop(srcScrollTop, srcScrollTop + filterDomTop - headDomHeight, 250, () => {
+            animateScrollTop(srcScrollTop, this.destScrollTop, 250, () => {
                 const timer = setTimeout(() => {
                     clearTimeout(timer);
                     this._filterShow(newFilterShowState, type);
-                }, 50);
+                }, 17);
             });
         }
     }
@@ -207,6 +206,39 @@ export default class Filter extends PureComponent {
         });
     }
 
+    // fix filter
+    _fixFilterDom = () => {
+        const curScrollTop = getScrollTop();
+        const filterDomTop = Math.ceil(this.filterDom.getBoundingClientRect().top);
+        // 是否filterDom fixed
+        const isFilterDomFixed = this.filterDom.classList.contains('f-filterdom-fixed');
+
+        const scrollTopInfo = window.getStore('scrollTop');
+        const fixScrollTop = scrollTopInfo && scrollTopInfo.fixScrollTop;
+        console.log('scroll _fixFilterDom', curScrollTop, fixScrollTop, isFilterDomFixed, filterDomTop, this.headDomHeight);
+
+        if (!isFilterDomFixed && filterDomTop <= this.headDomHeight) {
+            this.filterDom.classList.add('f-filterdom-fixed');
+            // this.listWrapDom.classList.add('f-list-addpadding');
+            if (!fixScrollTop) {
+                window.setStore('scrollTop', { fixScrollTop: curScrollTop });
+            }
+            return;
+        }
+
+        if (isFilterDomFixed && curScrollTop < fixScrollTop ) {
+            this.filterDom.classList.remove('f-filterdom-fixed');
+            // this.listWrapDom.classList.remove('f-list-addpadding');
+            return;
+        }
+    }
+
+    componentDidMount() {
+        this.listWrapDom = document.querySelector('.g-houselist');
+        // 头部高度
+        this.headDomHeight = Math.ceil(document.querySelector('.g-houselist-head').offsetHeight);
+    }
+
     componentWillMount() {
         const { filterState, filterLabel } = this.props;
         if (filterState) {
@@ -215,6 +247,11 @@ export default class Filter extends PureComponent {
                 filterLabel,
             });
         }
+        window.addEventListener('scroll', this._fixFilterDom);
+    }
+    componentWillUnmount() {
+
+        window.removeEventListener('scroll', this._fixFilterDom);
     }
 
     render() {
@@ -233,7 +270,7 @@ export default class Filter extends PureComponent {
                 ref={(dom) => { this.filterDom = dom; }}
                 className={`g-grid-row f-flex-justify-between ${filterClass} ${className}`}
             >
-                <li className={`${filterClass}-item`}>
+                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-position`}
                         show={filterShow.position}
@@ -251,7 +288,7 @@ export default class Filter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`${filterClass}-item`}>
+                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-rent`}
                         show={filterShow.rent}
@@ -267,7 +304,7 @@ export default class Filter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`${filterClass}-item`}>
+                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-rent`}
                         show={filterShow.houseType}
@@ -283,7 +320,7 @@ export default class Filter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`${filterClass}-item`}>
+                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen
                         show={filterShow.more}
                         type="more"
