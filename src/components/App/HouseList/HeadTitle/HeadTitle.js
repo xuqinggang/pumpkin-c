@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 
-import logo from './images/logo.png';
+import logo from 'images/App/logo.png';
 import './styles.less';
 
 const classPrefix = 'm-headtitle';

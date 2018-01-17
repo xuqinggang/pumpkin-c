@@ -20,11 +20,13 @@ function fetchRentUnitList({ filter, pager } = {}) {
             if (Math.ceil(res.data.total / perPage) > 0) {
                 totalPage = Math.ceil(res.data.total / perPage);
             }
+
             return {
                 type: 'SUCCESS',
                 message: 'ok',
             };
         }
+
         return {
             type: 'FAILED',
             message: res.msg,
