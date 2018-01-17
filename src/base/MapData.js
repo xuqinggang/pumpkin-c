@@ -1,3 +1,10 @@
+export const PayTypeMapName = {
+    Month: '月付',
+    Season: '季付',
+    HalfYear: '半年付',
+    Year: '年付',
+};
+
 export const RentalTypeMapText = {
     // rentalType
     SHARED: '合租',
