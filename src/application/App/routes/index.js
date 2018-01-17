@@ -23,7 +23,7 @@ const routes = (history) => {
                 <Route path="/:cityName/nangua/me" component={HouseMe} />
                 <Route path="/:cityName/nangua/about" component={HouseAboutUs} />
                 {
-                    <Route exact path="/:cityName/nangua/:pageType?/:filterUrlFragment?" component={HouseList} />
+                    <Route exact path="/:cityName/nangua/:filterUrlFragment?" component={HouseList} />
                 }
             </Switch>
         </Router>

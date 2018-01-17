@@ -45,10 +45,6 @@ export default class HouseList extends PureComponent {
         dynamicDocTitle('南瓜租房');
     }
 
-    _isPageList() {
-        return this.props.match.pageType === 'list';
-    }
-
     _getGetParams() {
         const getParamsObj = {};
         const url = decodeURIComponent(window.location.href);
@@ -78,9 +74,9 @@ export default class HouseList extends PureComponent {
                     const cityName = this.props.match.params.cityName;
 
                     if (this.getParamsObj.apartment) {
-                        link = `/${cityName}/nangua/list/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
+                        link = `/${cityName}/nangua/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
                     } else {
-                        link = `/${cityName}/nangua/list/${filterUrlFragment}`;
+                        link = `/${cityName}/nangua/${filterUrlFragment}`;
                     }
 
                     this.props.history.push(link);
@@ -147,9 +143,6 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-
-        // 是否是列表页
-        const isPageList = this._isPageList();
 
         return (
             <div className={`${classPrefix}`}>
