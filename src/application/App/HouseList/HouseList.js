@@ -1,9 +1,6 @@
 import React, { PureComponent } from 'react';
 
 // 业务组件
-import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
-import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
-import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
 import HeadTitle from 'components/App/HouseList/HeadTitle/HeadTitle';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
@@ -18,7 +15,7 @@ import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
 
-const classPrefix = 'g-houselist';
+const houselistClassPrefix = 'g-houselist';
 
 export default class HouseList extends PureComponent {
     constructor(props) {
@@ -33,13 +30,25 @@ export default class HouseList extends PureComponent {
                 houseType: '房型',
                 more: '更多',
             },
-            // 筛选状态
             filterState: {},
-            // 筛选的请求参数
-            filterParamsObj: {
+            // filter参数
+            filter: {
                 apartmentId: this.getParamsObj.apartment || null,
             },
+            pager: {
+                curPage: 1,
+                totalPage: 1,
+            },
+
+            rentUnitList: [],
+            suggestRentUnitList: [],
+            fetching: false,
+            isFetchCrash: false,
+
+            fetchFor: 'RESET', // 页面重置类型的数据请求，整个列表变化
         };
+
+        this.handleLoadMore = this.handleLoadMore.bind(this);
 
         // 动态更改标题
         dynamicDocTitle('南瓜租房');
@@ -60,27 +69,80 @@ export default class HouseList extends PureComponent {
         return getParamsObj;
     }
 
-    // 筛选确认回调
-    onFilterConfirm = (filterParams, filterStateObj) => {
-        const newFilterParams = Object.assign({}, this.state.filterParamsObj, filterParams);
 
-        if (!shallowEqual(this.state.filterParamsObj, newFilterParams)) {
+    handleFetchList(fetchFor) {
+        if (this.state.fetching) {
+            return;
+        }
+
+        let { curPage, totalPage } = this.state.pager;
+        if (fetchFor === 'LOADMORE') {
+            curPage += 1;
+        }
+        if (fetchFor === 'RESET') {
+            curPage = 1;
+            totalPage = 1;
+        }
+
+        this.setState({
+            fetchFor,
+            ...(fetchFor === 'RESET' ? {rentUnitList: []} : {}),
+
+            fetching: true,
+        });
+
+        fetchRentUnitList({ filter: this.state.filter, pager: { curPage, totalPage } })
+            .then((res) => {
+                let rentUnitList = [];
+                if (fetchFor === 'LOADMORE') {
+                    rentUnitList = this.state.rentUnitList.concat(res.data.rentUnitList);
+                }
+
+                if (fetchFor === 'RESET') {
+                    rentUnitList = res.data.rentUnitList;
+                }
+
+                const newState = {
+                    fetching: false,
+                    isFetchCrash: res.fetch.type === 'CRASH',
+                    rentUnitList,
+                    suggestRentUnitList: res.data.suggestRentUnitList,
+                    pager: {
+                        ...res.data.pager,
+                        ...(res.fetch.type === 'SUCCESS'
+                        ? {}
+                        : { curPage: this.state.pager.curPage }
+                    ),
+                    },
+                };
+                this.setState(newState);
+
+                // setStore
+                window.setStore('houseList', newState);
+            });
+    }
+
+    onFilterConfirm = (filterParams, filterStateObj) => {
+        const newFilterParams = Object.assign({}, this.state.filter, filterParams);
+        console.log('fiter', newFilterParams, this.state.filter);
+        if (!shallowEqual(this.state.filter, newFilterParams)) {
             this.setState({
-                filterParamsObj: newFilterParams,
+                filter: newFilterParams,
             }, () => {
+                this.handleFetchList('RESET');
+
                 const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
                 if (filterUrlFragment) {
                     let link = '';
                     const cityName = this.props.match.params.cityName;
 
                     if (this.getParamsObj.apartment) {
-                        link = `/${cityName}/nangua/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
+                        link = `/${cityName}/nangua/list/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
                     } else {
-                        link = `/${cityName}/nangua/${filterUrlFragment}`;
+                        link = `/${cityName}/nangua/list/${filterUrlFragment}`;
                     }
 
                     this.props.history.push(link);
-                    // 未知原因，需要设置延时来确保微信分享正常
                     const timer = setTimeout(() => {
                         clearTimeout(timer);
                         this.wxShare();
@@ -90,7 +152,7 @@ export default class HouseList extends PureComponent {
         }
     }
 
-    wxShare() {
+    wxShare(link) {
         // 分享
         execWxShare({
             title: '上南瓜租房，找品牌公寓',
@@ -98,6 +160,10 @@ export default class HouseList extends PureComponent {
             imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
             desc: '南瓜租房，只租真房源！',
         });
+    }
+
+    handleLoadMore() {
+        this.handleFetchList('LOADMORE');
     }
 
     componentWillMount() {
@@ -120,8 +186,7 @@ export default class HouseList extends PureComponent {
             if (filterState) {
                 this.setState({
                     filterState: newFilterState,
-                    filterParamsObj: Object.assign({}, this.state.filterParamsObj, 
-                        extraTypeFilterParams, positionFilterParams),
+                    filter: Object.assign({}, this.state.filter, extraTypeFilterParams, positionFilterParams),
                     filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
                 });
             }
@@ -130,35 +195,52 @@ export default class HouseList extends PureComponent {
     }
 
     componentDidMount() {
+        const storeHouseListState = window.getStore('houseList');
+        if (storeHouseListState) {
+            this.setState(storeHouseListState, () => {
+                const scrollTop = window.getStore('scrollTop').pt;
+                console.log('scrollTop', scrollTop);
+                window.scrollTo(0, scrollTop);
+            });
+        } else {
+            this.handleFetchList('RESET');
+        }
     }
-
+    
     render() {
         const {
             filterState,
             filterLabel,
-            filterParamsObj,
         } = this.state;
-
-        const {
-            match,
-            history,
-        } = this.props;
+        console.log('render', this.state.filter, this.state.filterState);
 
         return (
-            <div className={`${classPrefix}`}>
-                <div className={`${classPrefix}-head`}>
-                    <IndexHead match={match} history={history} />
+            <div>
+                <div className={`${houselistClassPrefix}-head`}>
+                    {
+                        !isApp ?
+                        <HeadTitle />
+                        : null
+                    }
+                    <Filter
+                        className="filter"
+                        filterState={filterState}
+                        filterLabel={filterLabel}
+                        onFilterConfirm={this.onFilterConfirm}
+                    />
                 </div>
-                <IndexBanner />
-                <IndexRecommend />
-                <Filter
-                    className="filter"
-                    filterState={filterState}
-                    filterLabel={filterLabel}
-                    onFilterConfirm={this.onFilterConfirm}
-                />
                 <HouseLists
-                    filterParams={filterParamsObj}
+                    rentUnitList={{
+                        pager: this.state.pager,
+                        list: this.state.rentUnitList,
+                        onLoadMore: this.handleLoadMore,
+                    }}
+                    suggestRentUnitList={{
+                        list: this.state.suggestRentUnitList,
+                    }}
+                    isFetchCrash={this.state.isFetchCrash}
+                    fetchFor={this.state.fetchFor}
+                    isLoading={this.state.fetching}
                 />
             </div>
         );

@@ -17,18 +17,19 @@ class RentUnitItem extends Component {
         this.handleImageLoad = this.handleImageLoad.bind(this);
         this.handleTouchTap = this.handleTouchTap.bind(this);
     }
-
     handleImageLoad() {
         this.setState({
             imgLoading: false,
         });
     }
-
     handleTouchTap() {
+        // 记录从列表页进入到详情页，滚动条的位置
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        window.setStore('scrollTop', { pt: scrollTop });
+
         const cityName = this.props.match.params.cityName;
         this.props.history.push(`/${cityName}/nangua/detail/${this.props.rentUnitId}`);
     }
-
     render() {
         const {
             tags,

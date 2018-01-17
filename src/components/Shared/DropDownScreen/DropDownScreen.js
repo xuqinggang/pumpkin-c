@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import { shallowEqual } from 'lib/util';
-import { isiPhoneX } from 'lib/const';
 
 import './styles.less';
 
@@ -21,9 +20,9 @@ export default class DropDownScreen extends Component {
         e.stopPropagation();
         e.preventDefault();
 
-        // const headDomRectInfo = e.currentTarget.getBoundingClientRect();
-        // this.headDomLeft = headDomRectInfo.left;
-        // this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
+        const headDomRectInfo = e.currentTarget.getBoundingClientRect();
+        this.headDomLeft = headDomRectInfo.left;
+        this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
 
         if (this.props.onTouchTap) {
             this.props.onTouchTap(this.props.type);
@@ -49,37 +48,22 @@ export default class DropDownScreen extends Component {
 
         if (isShow) {
             screenDom.style.visibility = 'visible';
-            const headDomRectInfo = this.headDom.getBoundingClientRect();
-
-            this.headDomLeft = headDomRectInfo.left;
-            this.headDomTop = headDomRectInfo.top + headDomRectInfo.height;
 
             screenDom.style.left = -this.headDomLeft + 'px';
             screenDom.style.width = window.innerWidth + 'px';
-
-            // console.log('this.headDomTop', window.innerHeight, headDomRectInfo.height, headDomRectInfo.top);
-            // document.querySelector('.test').innerHTML = 'DropDownScreen:' + ';' + window.innerHeight + ';' + this.headDomTop;
 
             if (isFullScreen) {
                 screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
             } else {
                 screenDom.style.height = 'inherit';
             }
-
+            
             if (isMask && this.maskDom) {
                 maskDom.style.visibility = 'visible';
                 maskDom.style.width = window.innerWidth + 'px';
                 maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
                 maskDom.style.left = -this.headDomLeft + 'px';
             }
-
-            if (isiPhoneX) {
-                const timer = setTimeout(() => {
-                    clearTimeout(timer);
-                    this._reSetScreenDomHeight();
-                }, 817);
-            }
-
         } else {
             screenDom.style.visibility = 'hidden';
             screenDom.style.height = '0px';
@@ -88,7 +72,6 @@ export default class DropDownScreen extends Component {
                 maskDom.style.visibility = 'hidden';
             }
         }
-
     }
 
     // resize,重设高度
@@ -123,10 +106,6 @@ export default class DropDownScreen extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this._reSetScreenDomHeight);
-
-        if (isiPhoneX) {
-            this.screenDom.style.transition = 'height 0.8s ease-in-out 0s';
-        }
     }
 
     componentWillUnmount() {

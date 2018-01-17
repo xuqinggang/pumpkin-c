@@ -31,15 +31,12 @@ export default function(jumpConditionObj = {}) {
                     <div className={ classnames(classPrefix, 'g-grid-row', className) }>
                         <span
                             onTouchTap={this.handleBackBtnTap}
-                            className={`${classPrefix}-jumpbtn f-display-flex f-flex-align-center icon-back`}
+                            className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
                         >
                         </span>
-                        <WrappedCom {...this.props} />
-                        {
-                            // <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
-                            //     <WrappedCom />
-                            //     </div>
-                        }
+                        <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
+                            <WrappedCom />
+                        </div>
                     </div>
                 )
             }
