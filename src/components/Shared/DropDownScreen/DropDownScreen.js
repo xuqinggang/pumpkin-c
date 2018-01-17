@@ -56,16 +56,12 @@ export default class DropDownScreen extends Component {
 
             screenDom.style.left = -this.headDomLeft + 'px';
             screenDom.style.width = window.innerWidth + 'px';
-            document.querySelector('.test').innerHTML = window.innerHeight + ';' + headDomRectInfo.height + ';' + headDomRectInfo.top;
 
-            console.log('this.headDomTop', window.innerHeight, headDomRectInfo.height, headDomRectInfo.top);
+            // console.log('this.headDomTop', window.innerHeight, headDomRectInfo.height, headDomRectInfo.top);
+            // document.querySelector('.test').innerHTML = 'DropDownScreen:' + ';' + window.innerHeight + ';' + this.headDomTop;
+
             if (isFullScreen) {
-                if (isiPhoneX) {
-                    // iphoneX底部黑条背景高度为102px
-                    screenDom.style.height = (window.innerHeight - this.headDomTop - 102) + 'px';
-                } else {
-                    screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
-                }
+                screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
             } else {
                 screenDom.style.height = 'inherit';
             }
@@ -76,6 +72,14 @@ export default class DropDownScreen extends Component {
                 maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
                 maskDom.style.left = -this.headDomLeft + 'px';
             }
+
+            if (isiPhoneX) {
+                const timer = setTimeout(() => {
+                    clearTimeout(timer);
+                    this._reSetScreenDomHeight();
+                }, 817);
+            }
+
         } else {
             screenDom.style.visibility = 'hidden';
             screenDom.style.height = '0px';
@@ -84,15 +88,16 @@ export default class DropDownScreen extends Component {
                 maskDom.style.visibility = 'hidden';
             }
         }
+
     }
 
     // resize,重设高度
-    // _reSetScreenDomHeight = () => {
-    //     this.screenDom.style.height =  (window.innerHeight - this.headDomTop) + 'px';
-    //     if (this.maskDom) {
-    //         this.maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
-    //     }
-    // };
+    _reSetScreenDomHeight = () => {
+        this.screenDom.style.height =  (window.innerHeight - this.headDomTop) + 'px';
+        if (this.maskDom) {
+            this.maskDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
+        }
+    };
 
     shouldComponentUpdate(nextProps, nextState) {
         const {
@@ -117,15 +122,15 @@ export default class DropDownScreen extends Component {
     }
 
     componentDidMount() {
-        // window.addEventListener('resize', this._reSetScreenDomHeight);
+        window.addEventListener('resize', this._reSetScreenDomHeight);
 
         if (isiPhoneX) {
-            this.screenDom.style.transition = 'height 1.2s ease-in-out 0s';
+            this.screenDom.style.transition = 'height 0.8s ease-in-out 0s';
         }
     }
 
     componentWillUnmount() {
-        // window.removeEventListener('resize', this._reSetScreenDomHeight);
+        window.removeEventListener('resize', this._reSetScreenDomHeight);
     }
 
     render() {
@@ -140,9 +145,7 @@ export default class DropDownScreen extends Component {
         } = this.state;
 
         // 设置screenDom maskDom是否显示
-        setTimeout(() => {
-this._setScreenDomShow(show);
-        }, 0);
+        this._setScreenDomShow(show);
 
         const iconClass = classnames('icon-pull-down', `${dropClass}-icon`, {
             active: show,
