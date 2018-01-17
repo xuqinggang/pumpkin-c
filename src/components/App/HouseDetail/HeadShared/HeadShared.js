@@ -22,7 +22,4 @@ class HeadShared extends PureComponent {
     }
 }
 
-export default HeadJumpConnect({
-    historyback: true,
-    className: 'f-flex-justify-start',
-})(HeadShared);
+export default HeadJumpConnect({historyback: true})(HeadShared);

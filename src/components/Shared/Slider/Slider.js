@@ -159,6 +159,7 @@ export default class Slider extends Component{
     }
 
     componentDidMount() {
+        this.testDom = document.querySelectorAll('.test')[0];
         const sliderDomInfo = this.sliderDom.getBoundingClientRect();
 
         // slider横条宽度

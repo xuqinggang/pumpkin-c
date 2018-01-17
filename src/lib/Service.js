@@ -1,6 +1,6 @@
 const Service = {};
 
-Service.reqServer = (url, paramters, type = 'GET', contentType) => {
+Service.reqServer = (url, paramters, type = 'GET') => {
     const {
         urlPrefix,
     } = Service.baseConfig;
@@ -71,14 +71,8 @@ Service.reqServer = (url, paramters, type = 'GET', contentType) => {
             xmlHttp.send(null);
         } else if (type === 'PUT' || type === 'POST') {
             xmlHttp.open(type, url, true);
-
-            if (contentType === 'form') {
-                xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xmlHttp.send(reqData);
-            } else {
-                xmlHttp.setRequestHeader('Content-type', 'application/json');
-                xmlHttp.send(JSON.stringify(paramters));
-            }
+            xmlHttp.setRequestHeader('Content-type', 'application/json');
+            xmlHttp.send(JSON.stringify(paramters));
         }
         console.info(`请求server: type=${type} url=${url}`);
     });
@@ -89,8 +83,8 @@ Service.reqServer = (url, paramters, type = 'GET', contentType) => {
 Service.get = (url, paramters) => {
     return Service.reqServer(url, paramters, 'GET');
 }
-Service.post = (url, paramters, contentType = 'json') => {
-    return Service.reqServer(url, paramters, 'POST', contentType);
+Service.post = (url, paramters) => {
+    return Service.reqServer(url, paramters, 'POST');
 }
 Service.put = (url, paramters) => {
     return Service.reqServer(url, paramters, 'PUT');
