@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import BottomDialog from 'Shared/BottomDialog';
@@ -10,38 +10,41 @@ import './styles.less';
 const classPrefix = 'm-houseprofile';
 const payTypeClass = 'm-paytype';
 
-export default function HouseProfile(props) {
-    const { className, houseProfileData, houseTrafficData } = props;
-    const { title, location } = houseProfileData;
-
-    // 经纬度
-    const { lon, lat } = houseTrafficData;
-    const pos = `${lon},${lat}`;
-
-    function handleJumpMapTap() {
+export default class HouseProfile extends PureComponent {
+    static handleJumpMapTap() {
         window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
     }
-    
-    return (
-        <div className={`${classPrefix} ${className}`}>
-            <HouseProfileHead
-                houseProfileHeadData={houseProfileData.houseProfileHeadData || {}}
-            />
-            <h2 className={`${classPrefix}-title`}>{title}</h2>
-            <div className={`${classPrefix}-location`} onTouchTap={handleJumpMapTap}>
-                <span
-                    className="f-display-inlineblock f-vertical-middle f-singletext-ellipsis location-text"
-                >
-                    {location}
-                </span>
-                <span className="f-display-inlineblock f-vertical-middle icon-next location-icon"></span>
+
+    render() {
+        const { className, houseProfileData, houseTrafficData } = this.props;
+        const { title, location } = houseProfileData;
+
+        // 经纬度
+        const { lon, lat } = houseTrafficData;
+        const pos = `${lon},${lat}`;
+
+        return (
+            <div className={`${classPrefix} ${className}`}>
+                <HouseProfileHead
+                    houseProfileHeadData={houseProfileData.houseProfileHeadData || {}}
+                />
+                <h2 className={`${classPrefix}-title`}>{title}</h2>
+                <div className={`${classPrefix}-location`} onTouchTap={this.handleJumpMapTap}>
+                    <span
+                        className="f-display-inlineblock f-vertical-middle f-singletext-ellipsis location-text"
+                    >
+                        {location}
+                    </span>
+                    <span className="f-display-inlineblock f-vertical-middle icon-next location-icon"></span>
+                </div>
             </div>
-        </div>
-    )
+        );
+    }
+        
 }
 
 // houseProfile头部含有付款方式选择单独提取出来作为一个组件
-class HouseProfileHead extends Component {
+class HouseProfileHead extends PureComponent {
     constructor(props) {
         super(props);
         const { selectedPayType } = props.houseProfileHeadData;
@@ -64,6 +67,12 @@ class HouseProfileHead extends Component {
     handleSelectPayTypeTouchTap = () => {
         this.setState({
             show: true,
+        });
+    }
+
+    onCloseDialogTap = () => {
+        this.setState({
+            show: false,
         });
     }
 
@@ -109,6 +118,7 @@ class HouseProfileHead extends Component {
                 }
                 <PayTypeComp
                     show={show}
+                    onClose={this.onCloseDialogTap}
                     selectedPayType={selectedPayType}
                     onPayTypeTouchTap={this.onPayTypeTouchTap}
                     payTypeData={payTypeData}
@@ -119,14 +129,10 @@ class HouseProfileHead extends Component {
 }
 
 // 付款方式弹层组件
-function PayTypeComp(props) {
-    const { show, selectedPayType, onPayTypeTouchTap, payTypeData } = props;
+class PayTypeComp extends PureComponent {
+    renderPayTypeBody() {
+        const { selectedPayType, onPayTypeTouchTap, payTypeData } = this.props;
 
-    if (!show) {
-        return null;
-    }
-    
-    function renderPayTypeBody() {
         return payTypeData && Object.keys(payTypeData).map((payTypeKey, index) => {
             if (!payTypeData[payTypeKey]) return null;
 
@@ -141,51 +147,67 @@ function PayTypeComp(props) {
             );
         });
     }
+    
+    render() {
+        const {
+            show,
+            onClose,
+        } = this.props;
 
-    return (
-        <BottomDialog show={show} className={`${payTypeClass}`}>
-            <BottomDialog.Header className={`${payTypeClass}-head`}>
-                <ul className="g-grid-row f-flex-justify-between f-flex-align-center">
-                    <li>
-                        <span className="f-display-inlineblock f-vertical-middle head-title">
-                            付款方式
-                        </span>
-                    </li>
-                    <li>
-                        <BottomDialog.CloseBtn className={`f-vertical-middle head-icon`} />
-                    </li>
-                </ul>
-            </BottomDialog.Header>
-            <BottomDialog.Body className={`${payTypeClass}-body`}>
-                    { renderPayTypeBody() }
-            </BottomDialog.Body>
-        </BottomDialog>
-    )
+        if (!show) {
+            return null;
+        }
+
+
+        return (
+            <BottomDialog show={show} className={`${payTypeClass}`} onClose={onClose}>
+                <BottomDialog.Header className={`${payTypeClass}-head`}>
+                    <ul className="g-grid-row f-flex-justify-between f-flex-align-center">
+                        <li>
+                            <span className="f-display-inlineblock f-vertical-middle head-title">
+                                付款方式
+                            </span>
+                        </li>
+                        <li>
+                            <BottomDialog.CloseBtn className={`f-vertical-middle head-icon`} />
+                        </li>
+                    </ul>
+                </BottomDialog.Header>
+                <BottomDialog.Body className={`${payTypeClass}-body`}>
+                    { this.renderPayTypeBody() }
+                </BottomDialog.Body>
+            </BottomDialog>
+        );
+    }
+        
 }
 
 // 付款方式Item
-function PayTypeItem(props) {
-    const { payData, payType, selectedPayType, onPayTypeTouchTap } = props;
-
+class PayTypeItem extends PureComponent {
     // 事件处理程序-付款方式itemTouchTap
-    function handlePayTypeTouchTap() {
-        onPayTypeTouchTap(payType);
+    handlePayTypeTouchTap() {
+        this.props.onPayTypeTouchTap(payType);
     }
 
-    const itemClass = classnames(`f-clear-float ${payTypeClass}-item`, {
-        'item-active': payType === selectedPayType,
-    });
+    render() {
+        const { payData, payType, selectedPayType } = this.props;
 
-    return (
-        <div
-            className={itemClass}
-            onTouchTap={handlePayTypeTouchTap}
-        >
-            <ul className="g-grid-row f-flex-justify-between">
-                <li className="text">{PayTypeMapName[payType]}</li>
-                <li className="price">¥{payData.price} / 月</li>
-            </ul>
-            <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit}元</span>
-        </div>
-    )
+        const itemClass = classnames(`f-clear-float ${payTypeClass}-item`, {
+            'item-active': payType === selectedPayType,
+        });
+
+        return (
+            <div
+                className={itemClass}
+                onTouchTap={this.handlePayTypeTouchTap}
+            >
+                <ul className="g-grid-row f-flex-justify-between">
+                    <li className="text">{PayTypeMapName[payType]}</li>
+                    <li className="price">¥{payData.price} / 月</li>
+                </ul>
+                <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit}元</span>
+            </div>
+        );
+    }
+        
 }
