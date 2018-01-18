@@ -11,6 +11,11 @@ Service.baseConfig = {
 window.customStore = {};
 
 window.setStore = function (key, dataObj) {
+    if (dataObj === null) {
+        window.customStore[key] = null;
+        return;
+    }
+
     let keyCorrespondValueObj = window.customStore[key];
     if (!keyCorrespondValueObj) {
         keyCorrespondValueObj = {};

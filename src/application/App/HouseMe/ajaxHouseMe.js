@@ -8,6 +8,8 @@ export function ajaxGetMeInfo() {
             if (data.code === 200) {
                 return data.data;
             }
+
+            throw new Error(data);
         })
 }
 
@@ -20,12 +22,9 @@ export function ajaxUpdateTel(mobile, captcha) {
         .then((data) => {
             if (data.code === 200) {
                 return true;
-            } else {
-                throw new Error({
-                    code: data.code,
-                    msg: data.msg,
-                });
-            }
+            } 
+
+            throw new Error(data);
         })
 }
 
@@ -37,12 +36,9 @@ export function ajaxUpdatemobileCaptchas(mobile) {
         .then((data) => {
             if (data.code === 200) {
                 return true;
-            } else {
-                throw new Error({
-                    code: data.code,
-                    msg: data.msg,
-                });
             }
+
+            throw new Error(data);
         })
 }
 
@@ -53,7 +49,8 @@ export function ajaxFeedBack(msg = '') {
     })
         .then((data) => {
             if (data.code === 200) return true;
-            throw new Error(false);
+
+            throw new Error(data);
         })
 }
 
@@ -64,7 +61,8 @@ export function ajaxEditNickName(nickname) {
     }, 'form')
         .then((data) => {
             if (data.code === 200) return true;
-            throw new Error(false);
+
+            throw new Error(data);
         })
 }
 

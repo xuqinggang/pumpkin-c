@@ -129,9 +129,6 @@ export default class HouseList extends PureComponent {
         this.wxShare();
     }
 
-    componentDidMount() {
-    }
-
     render() {
         const {
             filterState,

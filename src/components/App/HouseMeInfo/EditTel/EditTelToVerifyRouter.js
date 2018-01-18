@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+
 import { ajaxUpdateTel, ajaxUpdatemobileCaptchas } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
@@ -35,7 +37,12 @@ export default class EditTelToVerifyRouter extends PureComponent {
                         window.setStore('meInfo', {
                             phone: this.telVal,
                         });
+                        this.props.history.go(-2);
                     }
+                })
+                .catch((err) => {
+                    // 验证失败
+                    PopToolTip({text: err.code ? err.msg : err.toString()})
                 })
         }
     }
@@ -43,14 +50,9 @@ export default class EditTelToVerifyRouter extends PureComponent {
     // 重新发送验证码
     onReSendVerifyCode = () => {
         ajaxUpdatemobileCaptchas(this.telVal)
-            .then((bool) => {
-                // 验证成功
-                if (bool) {
-                }
-            })
-            .catch((info) => {
+            .catch((err) => {
                 // 验证失败
-
+                PopToolTip({text: err.code ? err.msg : err.toString()})
             })
     }
 

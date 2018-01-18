@@ -37,15 +37,17 @@ export default class HouseMeIndex extends PureComponent {
     render() {
         const {
             match,
+            history,
         } = this.props;
 
         const {
             infoObj,
         } = this.state;
+        console.log('this.props', this.props);
 
         return (
             <div>
-                <MeBack className={`${classPrefix}-meback`} />
+                <MeBack match={match} history={history} className={`${classPrefix}-meback`} />
                 <MeInfo className={`${classPrefix}-meinfo`} info={infoObj}/>
                 <MeEntry match={match} history={history} className={`${classPrefix}-meentry`} />
             </div>
