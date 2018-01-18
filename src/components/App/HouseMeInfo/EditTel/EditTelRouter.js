@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import InputClear from 'Shared/InputClear/InputClear';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+
 import { ajaxUpdatemobileCaptchas } from 'application/App/HouseMe/ajaxHouseMe';
 import { regTel } from 'lib/regExp';
 
@@ -27,23 +29,22 @@ export default class EditTelRouter extends PureComponent {
     }
 
     handleGetVerifyTap = () => {
-        console.log('handleGetVerifyTap');
         const telVal = this.state.telVal;
-        // ajaxUpdatemobileCaptchas(telVal)
-        //     .then((bool) => {
-        //         // 验证成功
-        //         if (bool) {
+        ajaxUpdatemobileCaptchas(telVal)
+            .then((bool) => {
+                // 验证成功
+                if (bool) {
                     const {
                         url,
                     } = this.props.match;
-                    //             console.log('handleGetVerifyTap', url)
                     this.props.history.push(`${url}/${telVal}`);
-                // }
-            // })
-            // .catch((info) => {
-                // // 验证失败
-
-            // })
+                }
+            })
+            .catch((err) => {
+                console.log('err', err);
+                // 验证失败
+                PopToolTip({text: err.code ? err.msg : err.toString()})
+            })
     }
 
     render() {
@@ -53,7 +54,7 @@ export default class EditTelRouter extends PureComponent {
         
         return (
             <div>
-                <InputClear onChange={this.onTelValChange} type="number" />
+                <InputClear onChange={this.onTelValChange} type="number" placeholder="请输入新的手机号"/>
                 <span className={`f-display-inlineblock ${classPrefix}-tip`}>
                     更换手机号后，将不能使用原手机号登录
                 </span>

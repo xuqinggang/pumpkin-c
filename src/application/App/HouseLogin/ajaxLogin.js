@@ -9,9 +9,8 @@ export function ajaxLogin(mobile, captcha) {
             if (data.code === 200) {
                 return data.data;
             }
-            throw new Error({
-                msg: '登录失败',
-            });
+
+            throw new Error(data);
         })
 }
 
@@ -22,11 +21,8 @@ export function ajaxVerifyCode(mobile) {
         .then((data) => {
             if (data.code === 200) {
                 return true;
-            } else {
-                throw new Error({
-                    code: data.code,
-                    msg: data.msg,
-                });
             }
+
+            throw new Error(data);
         })
 }

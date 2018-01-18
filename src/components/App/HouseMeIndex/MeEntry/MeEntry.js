@@ -9,11 +9,12 @@ import './styles.less';
 const classPrefix = 'm-meentry';
 
 export default class MeEntry extends PureComponent {
-    handleExitTap = () => {
-        console.log('handleExitTap');
+    // 事件处理程序-退出当前账号点击
+    handleLogoutTap = () => {
         clearCookie('sid');
-        // this.props.history.push(this.rootUrlPrefix);
+        this.props.history.replace(this.rootUrlPrefix);
     }
+
     render() {
         const {
             className,
@@ -67,7 +68,7 @@ export default class MeEntry extends PureComponent {
                     </li>
                 </Link>
                 <li
-                    onTouchTap={this.handleExitTap}
+                    onTouchTap={this.handleLogoutTap}
                     className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}
                 >
                     <span className="item-text">退出当前帐号</span>

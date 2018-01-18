@@ -16,29 +16,25 @@ const bottomDialogClass = 'm-bottomdialog';
 export default class BottomDialog extends Component {
     static defaultProps = {
         modal: true,   
+        mask: true,
+        show: false,
     };
 
     static childContextTypes = {
-        closePotal: PropTypes.func,
+        _closePotal: PropTypes.func,
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: props.show || false,
-        };
-    }
 
     getChildContext() {
         return {
-            closePotal: this.closePotal,
+            _closePotal: this._closePotal,
         };
     }
 
-    closePotal = () => {
-        this.setState({
-            show: false,
-        });
+    _closePotal = (e) => {
+        const { onClose } = this.props;
+        if (onClose) {
+            onClose(e);
+        }
     }
 
     _removePortal() {
@@ -47,7 +43,9 @@ export default class BottomDialog extends Component {
 
     // 事件处理程序-遮罩点击事件
     handleMaskTouchTap = (e) => {
-        this.closePotal();
+        console.log('e', 'handleMaskTouchTap');
+        this._closePotal();
+
         // e.preventDefault();
         // e.stopPropagation();
         // const { modal } = this.props;
@@ -68,30 +66,22 @@ export default class BottomDialog extends Component {
         document.body.appendChild(this.node);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if ('show' in nextProps) {
-            this.setState({
-                show: nextProps.show,
-            });
-        }
-    }
-
     componentWillUnmount() {
         this._removePortal();
     }
 
     render() {
-        const { className, children } = this.props;
-        const { show } = this.state;
+        const { className, children, onClose, mask, show } = this.props;
 
         if (!this.node) {
             this.node = document.createElement("div");
         }
 
         let newChildren = null;
+
         if (show) {
             newChildren = (
-                <div className={`${maskClass}`} onTouchTap={this.handleMaskTouchTap}>
+                <div className={mask ? `${maskClass}` : ''} onTouchTap={mask ? this.handleMaskTouchTap : undefined}>
                     <div className={`${bottomDialogClass} ${className}`} onTouchTap={this.handleDialogBodyTouchTap}>
                         {
                             children

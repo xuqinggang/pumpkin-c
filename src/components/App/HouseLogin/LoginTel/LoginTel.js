@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
+
+import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 import { regTel } from 'lib/regExp';
 
 import './styles.less';
@@ -37,13 +39,13 @@ export default class LoginTel extends PureComponent {
                     const {
                         url,
                     } = this.props.match;
-        //             console.log('handleGetVerifyTap', url)
+                    //             console.log('handleGetVerifyTap', url)
                     this.props.history.push(`${url}/${telVal}`);
                 }
             })
-            .catch((info) => {
+            .catch((err) => {
                 // 验证失败
-
+                PopToolTip({text: err.code ? err.msg : err.toString()});
             })
     }
     

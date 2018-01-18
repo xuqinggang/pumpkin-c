@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import BottomDialog from 'Shared/BottomDialog';
 import headImg from 'components/App/HouseDetail/RoommateInfo/images/male.png';
@@ -9,7 +9,7 @@ import './styles.less';
 const btnPrefix = 'm-contactbutler-btn';
 const dialogPrefix = 'm-contactbutler-dialog'
 
-export default class ContactButler extends Component {
+export default class ContactButler extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,14 +18,16 @@ export default class ContactButler extends Component {
     }
 
     handleConcatTap = (e) => {
-        // e.preventDefault();
         this.setState({
             show: true,
         });
     }
-    
+
     handleNoContactTap = (e) => {
-        // e.preventDefault();
+        this.onCloseDialogTap();
+    }
+
+    onCloseDialogTap = () => {
         this.setState({
             show: false,
         });
@@ -34,6 +36,7 @@ export default class ContactButler extends Component {
     render() {
         const { show } = this.state;
         const { name, img, tel } = this.props.contactButlerData;
+
         const tmpArr = tel && tel.split(',');
         // 分机号
         const extTel = tmpArr && tmpArr[1];
@@ -67,6 +70,7 @@ export default class ContactButler extends Component {
                 <BottomDialog
                     key={1}
                     show={show}
+                    onClose={this.onCloseDialogTap}
                     className={`${dialogPrefix}`}
                 >
                     <BottomDialog.Body className={`${dialogPrefix}-body`}>

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
+
+import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
 import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 
 const classPrefix = 'm-houselogin';
@@ -11,7 +13,6 @@ export default class LoginVerifyCode extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            isVerifyCodeValid: false,
             verifyCodeVal: '',
         };
 
@@ -24,6 +25,12 @@ export default class LoginVerifyCode extends PureComponent {
             .then((infoObj) => {
                 // 存储个人信息
                 window.setStore('meInfo', infoObj);
+                
+                const cityName = this.props.match.params.cityName;
+                this.props.history.push(`/${cityName}/nangua/me`);
+            })
+            .catch((err) => {
+                PopToolTip({text: err.code ? err.msg : err.toString()});
             })
     }
     
@@ -36,23 +43,19 @@ export default class LoginVerifyCode extends PureComponent {
         // 验证码输入6个数字后，自动登录验证
         if (verifyCodeVal.length === 6) {
             this.ajaxUserLogin(this.telVal, verifyCodeVal)
-                .then((data) => {
-
-                })
         }
     }
 
     // 重新发送验证码
     onReSendVerifyCode = () => {
-        ajaxVerifyCode(this.telVal)
-            .then((bool) => {
-                // 验证成功
-                if (bool) {
-                }
-            })
-            .catch((info) => {
-                // 验证失败
+        this.setState({
+            verifyCodeVal: '',
+        });
 
+        ajaxVerifyCode(this.telVal)
+            .catch((err) => {
+                // 验证失败
+                PopToolTip({text: err.code ? err.msg : err.toString()});
             })
     }
 
