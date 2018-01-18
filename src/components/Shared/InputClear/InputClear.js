@@ -8,6 +8,7 @@ export default class InputClear extends PureComponent {
     static defaultProps = {
         type: 'text',
         placeholder: '',
+        maxLength: 999999,
     };
 
     constructor(props) {
@@ -18,12 +19,18 @@ export default class InputClear extends PureComponent {
     }
 
     onInputChange = (e) => {
-        const inputVal = e.target.value.substr(0, 20);
+        const {
+            maxLength,
+            onChange,
+        } = this.props;
+
+        const inputVal = e.target.value.substr(0, maxLength);
+
         this.setState({
             inputVal,
         }, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state.inputVal);
+            if (onChange) {
+                onChange(this.state.inputVal);
             }
         });
     }

@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 
 import LogoImg from 'images/App/singleLogo.png';
 import MeFeedBackBack from 'components/App/HouseMeFeedBack/MeFeedBackBack/MeFeedBackBack';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+
 import { ajaxFeedBack } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
@@ -28,12 +30,13 @@ export default class AboutUs extends PureComponent {
             .then((bool) => {
                 // 发送成功
                 if (bool) {
-
+                    PopToolTip({text: '反馈成功'});
+                    this.props.history.goBack();
                 }
             })
             .catch((err) => {
                 // 发送失败
-
+                PopToolTip({text: err.code ? err.msg : err.toString()})
             })
     }
 
