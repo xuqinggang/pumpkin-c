@@ -13,6 +13,7 @@ import RoommateInfo from 'components/App/HouseDetail/RoommateInfo/RoommateInfo';
 import CommunityIntro from 'components/App/HouseDetail/CommunityIntro/CommunityIntro';
 // Shared
 import ContactButler from 'Shared/ContactButler/ContactButler';
+import OpenNative from 'Shared/OpenNative/OpenNative';
 // ajax
 import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
@@ -108,6 +109,7 @@ export default class HouseDetail extends Component {
                     : null
                 }
                 <hr className="u-housedetail-partline" />
+                <OpenNative schema={`api.nanguazufang.cn/rentUnit?rentUnitId=${this.rentUnitId}`}/>
                 <RoomSlider sliderImgArr={sliderImgArr || []} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
