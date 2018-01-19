@@ -15,16 +15,11 @@ const routes = (history) => {
             history={history}
         >
             <Switch>
-                <Route exact path={`/:cityName/nangua/detail/:rentUnitId`} component={HouseDetail} />
-                {
-                    // pageType:可以list 代表列表页
-                }
                 <Route path="/:cityName/nangua/login" component={HouseLogin} />
                 <Route path="/:cityName/nangua/me" component={HouseMe} />
-                <Route path="/:cityName/nangua/about" component={HouseAboutUs} />
-                {
-                    <Route exact path="/:cityName/nangua/:filterUrlFragment?" component={HouseList} />
-                }
+                <Route exact path="/:cityName/nangua/about" component={HouseAboutUs} />
+                <Route path={`/:cityName/nangua/detail/:rentUnitId`} component={HouseDetail} />
+                <Route exact path="/:cityName/nangua/:filterUrlFragment?" component={HouseList} />
             </Switch>
         </Router>
     );

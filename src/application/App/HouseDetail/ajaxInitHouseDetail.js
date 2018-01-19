@@ -1,6 +1,31 @@
 import Service from 'lib/Service';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'base/MapData';
 
+// 收藏房源
+export function ajaxCollectHouse(rentUnitId) {
+    return Service.post(`/api/v1/rentUnits/${rentUnitId}/collections`)
+        .then((data) => {
+            if (data.code === 200) {
+                return true;
+            }
+
+            throw new Error(data);
+        })
+}
+
+// 取消收藏
+export function ajaxCancelCollectHouse(rentUnitId) {
+    return Service.delete(`/api/v1/rentUnits/${rentUnitId}/collections`)
+        .then((data) => {
+            if (data.code === 200) {
+                return true;
+            }
+
+            throw new Error(data);
+        })
+}
+
+
 export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
     return Service.get(`/api/v1/rentUnits/${rentUnitId}`)
@@ -20,7 +45,11 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 // 经纬度
                 lon,
                 lat,
+
+                // 是否收藏（登录下）
+                isCollected,
             } = houseDetailData;
+
 
             // RoomSlider轮播图数据和家具轮播数据
             const { sliderImgArr, furnitureSliderArrData } = genRoomSlider(houseDetailData);
@@ -52,6 +81,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             console.log('sliderImgArr', sliderImgArr, houseProfileData, communityIntroData);
 
             return {
+                headData: { isCollected, },
                 sliderImgArr,
                 furnitureSliderArrData,
                 houseProfileData,
