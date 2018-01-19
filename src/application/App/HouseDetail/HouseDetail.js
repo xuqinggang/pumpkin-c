@@ -1,6 +1,7 @@
-import './styles.less';
-import React, { Component } from 'react';
-import HeadShared from 'components/App/HouseDetail/HeadShared/HeadShared';
+import React, { PureComponent } from 'react';
+import { Route } from 'react-router-dom'
+
+import HouseHead from 'components/App/HouseDetail/HouseHead/HouseHead';
 import RoomSlider from 'components/App/HouseDetail/RoomSlider/RoomSlider';
 import HouseProfile from 'components/App/HouseDetail/HouseProfile/HouseProfile';
 import HouseBrief from 'components/App/HouseDetail/HouseBrief/HouseBrief';
@@ -11,22 +12,31 @@ import HouseTraffic from 'components/App/HouseDetail/HouseTraffic/HouseTraffic';
 import ApartmentIntro from 'components/App/HouseDetail/ApartmentIntro/ApartmentIntro';
 import RoommateInfo from 'components/App/HouseDetail/RoommateInfo/RoommateInfo';
 import CommunityIntro from 'components/App/HouseDetail/CommunityIntro/CommunityIntro';
+import HouseReport from 'components/App/HouseReport/HouseReport';
 // Shared
 import ContactButler from 'Shared/ContactButler/ContactButler';
 import OpenNative from 'Shared/OpenNative/OpenNative';
-// ajax
-import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
 import { dynamicDocTitle } from 'lib/util';
 import { execWxShare } from 'lib/wxShare';
-import { isApp } from 'lib/const';
+import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 
-import Animate from 'rc-animate';
+import './styles.less';
 
+export default class HouseDetail extends PureComponent {
+    render() {
+        return (
+            [
+                <Route exact path={`/:cityName/nangua/detail/:rentUnitId`} component={HouseDetailIndex} key={0} />,
+                <Route exact path={`/:cityName/nangua/detail/:rentUnitId/report`} component={HouseReport} key={1}/>
+            ]
+        );
+    }
+}
 
 const classPrefix = 'g-housedetail';
 
-export default class HouseDetail extends Component {
+class HouseDetailIndex extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,35 +49,70 @@ export default class HouseDetail extends Component {
     componentWillMount() {
         window.scrollTo(0, 0);
         this.rentUnitId = this.props.match.params.rentUnitId;
+
+        // 如果store不存在数据，则请求
+        const houseDetailStore = window.getStore('houseDetail');
+        let curHouseDetailData = houseDetailStore && houseDetailStore[this.rentUnitId];
+        if (curHouseDetailData) {
+            this.setState({
+                houseDetailData: curHouseDetailData,
+            });
+
+            this.callWxShareAgain(curHouseDetailData);
+            return;
+        }
+
+        // 请求
         ajaxInitHouseDetail(this.rentUnitId)
             .then((houseDetailData) => {
                 this.setState({
                     houseDetailData,
                 });
 
-                const { sliderImgArr, houseProfileData } = houseDetailData;
-                const title = houseProfileData.title;
-                const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
-                // 分享
-                execWxShare({
-                    title: title + '-南瓜租房北京租房',
-                    link: window.location.href.split('#')[0],
-                    imgUrl: imgInfo && imgInfo.img,
-                    desc: '南瓜租房，只租真房源！',
+                window.setStore('houseDetail', {
+                    [this.rentUnitId]: houseDetailData,
                 });
-                // 动态更改标题
-                dynamicDocTitle(title + '-南瓜租房北京租房');
+
+                this.callWxShareAgain(houseDetailData);
             })
     }
 
-    componentDidMount() {
-        if (isApp) {
-            this.wrapDom.style.paddingTop = '0';
-        }
+    // 每次进来一定要再次调用微信分享
+    callWxShareAgain(houseDetailData) {
+        const { sliderImgArr, houseProfileData } = houseDetailData;
+        const title = houseProfileData.title;
+        const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
+
+        // 分享
+        execWxShare({
+            title: title + '-南瓜租房北京租房',
+            link: window.location.href.split('#')[0],
+            imgUrl: imgInfo && imgInfo.img,
+            desc: '南瓜租房，只租真房源！',
+        });
+        // 动态更改标题
+        dynamicDocTitle(title + '-南瓜租房北京租房');
+    }
+
+    componentWillUnmount() {
+        // 把除此房源外的其余房源详情页数据给清除
+        const houseDetailStore = window.getStore('houseDetail');
+        const currentHouseDetailData = houseDetailStore && houseDetailStore[this.rentUnitId];
+        window.setStore('houseDetail', null);
+        window.setStore('houseDetail', {
+            [this.rentUnitId]: currentHouseDetailData,
+        });
     }
 
     render() {
-        const { 
+        const {
+            match,
+            history,
+        } = this.props;
+
+        const {
+            // 头部，收藏信息
+            headData,
             // 头部slider轮播图
             sliderImgArr,
             // house头部,title,付款数据
@@ -99,17 +144,17 @@ export default class HouseDetail extends Component {
             height: '200px',
             backgroundColor: 'red',
         };
-        console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData);
+        console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData, headData);
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
-                {
-                    !isApp ?
-                    <HeadShared />
-                    : null
-                }
-                <hr className="u-housedetail-partline" />
-                <OpenNative schema={`api.nanguazufang.cn/rentUnit?rentUnitId=${this.rentUnitId}`}/>
+                <OpenNative schema={`api.nanguazufang.cn/rentUnit?rentUnitId=${this.rentUnitId}`} />
+                <HouseHead
+                    headData={headData || {}}
+                    rentUnitId={this.rentUnitId}
+                    history={history}
+                    match={match}
+                />
                 <RoomSlider sliderImgArr={sliderImgArr || []} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
@@ -143,20 +188,6 @@ export default class HouseDetail extends Component {
                     communityIntroData={communityIntroData || {}}
                 />
                 <ContactButler contactButlerData={contactButlerData || {}} />
-                {
-                    // <button style={{fontSize: '50px'}} onClick={this.handleClick}>adsf</button>
-                }
-                {
-                    // <Animate
-                    //     component=""
-                    //     transitionName="fade"
-                    // >
-                    //     {
-                    //         this.state.show ? 
-                    //             <div key="1" style={style}/> : null
-                    //     }
-                    // </Animate>
-                }
             </div>
         );
     }

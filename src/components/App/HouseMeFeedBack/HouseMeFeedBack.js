@@ -61,7 +61,7 @@ export default class AboutUs extends PureComponent {
                 </div>
                 <div className="f-align-center">
                     <span
-                        className={`f-display-inlineblock ${classPrefix}-btn-submit`}
+                        className={`u-btn-submit ${classPrefix}-btn-submit`}
                         onTouchTap={this.handleSumitTap}
                     >
                         提交
