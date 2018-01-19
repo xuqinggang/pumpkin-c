@@ -9,11 +9,15 @@ const classPrefix = 'm-housemewish';
 
 export default class HouseMeWish extends PureComponent {
     render() {
+        const {
+            match,
+        } = this.props;
+
         return (
             <div>
                 <MeWishBack />
-                <MeWishList />
+                <MeWishList match={match} />
             </div>
-        )
+        );
     }
 }

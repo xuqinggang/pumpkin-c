@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
 import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
