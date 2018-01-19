@@ -16,10 +16,25 @@ export default class IndexBanner extends PureComponent {
     }
 
     componentWillMount() {
+        const houseIndexData = window.getStore('houseIndex');
+
+        // 如果存在数据，则不请求
+        if (houseIndexData && houseIndexData.indexBannerData) {
+            this.setState({
+                indexBannerData: houseIndexData.indexBannerData,
+            });
+
+            return;
+        }
+
         const cityId = 1;
         ajaxInitHouseIndexBanner(cityId)
             .then((indexBannerData) => {
                 this.setState({
+                    indexBannerData,
+                });
+
+                window.setStore('houseIndex', {
                     indexBannerData,
                 });
             });

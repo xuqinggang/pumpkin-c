@@ -6,6 +6,8 @@ import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
 import HouseMeWish from 'components/App/HouseMeWish/HouseMeWish';
 import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
 import HouseMeInfo from 'components/App/HouseMeInfo/HouseMeInfo';
+
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import { isHasCookie } from 'lib/util';
 
 import './styles.less';
@@ -15,12 +17,9 @@ const classPrefix = 'm-houseme';
 export default class HouseMe extends PureComponent {
     constructor(props) {
         super(props);
-
-        // this.state = {
-        //     // 我的页面，入口类型，默认为首页
-        //     // index:首页; wish:心愿单页面; info:个人信息页面
-        //     entryType: 'index',
-        // };
+        this.state = {
+            meInfoObj: {},
+        };
     }
 
     componentWillMount() {
@@ -32,19 +31,38 @@ export default class HouseMe extends PureComponent {
         if (!isHasCookie('sid')) {
             this.props.history.replace(`/${cityName}/nangua/login`);
         }
+
+        const meInfoStore = window.getStore('meInfo');
+        if (meInfoStore) {
+            this.setState({
+                meInfoObj: meInfoStore 
+            });
+
+            return ;
+        }
+
+        ajaxGetMeInfo()
+            .then((meInfoObj) => {
+                this.setState({
+                    meInfoObj,
+                });
+
+                window.setStore('meInfo', meInfoObj);
+            })
     }
 
     render() {
         const {
             match,
+            history,
         } = this.props;
 
         return (
             <div className={`${classPrefix}`}>
-                <Route exact path={match.url} component={HouseMeIndex}/>
-                <Route path={`${match.url}/wish`} component={HouseMeWish} />
+                <Route exact path={match.url} component={HouseMeIndex} />
+                <Route exact path={`${match.url}/wish`} component={HouseMeWish} />
                 <Route path={`${match.url}/info`} component={HouseMeInfo} />
-                <Route path={`${match.url}/feedback`} component={HouseMeFeedBack} />
+                <Route exact path={`${match.url}/feedback`} component={HouseMeFeedBack} />
             </div>
         );
     }

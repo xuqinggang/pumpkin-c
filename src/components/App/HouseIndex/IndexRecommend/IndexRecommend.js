@@ -17,10 +17,23 @@ export default class IndexRecommend extends PureComponent {
     }
 
     componentWillMount() {
+        const houseIndexData = window.getStore('houseIndex');
+
+        // 如果存在数据，则不请求
+        if (houseIndexData && houseIndexData.indexRecommendArr) {
+            this.setState({
+                indexRecommendArr: houseIndexData.indexRecommendArr,
+            });
+            return;
+        }
+        
         const cityId = 1;
         ajaxInitHouseIndexRecommend(cityId)
             .then((indexRecommendArr) => {
                 this.setState({
+                    indexRecommendArr,
+                });
+                window.setStore('houseIndex', {
                     indexRecommendArr,
                 });
             })

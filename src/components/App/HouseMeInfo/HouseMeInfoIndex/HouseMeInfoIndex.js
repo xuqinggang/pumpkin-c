@@ -9,29 +9,6 @@ import './styles.less';
 const classPrefix = 'm-meinfoindex';
 
 export default class HouseMeInfoIndex extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            infoObj: {},
-        };
-    }
-
-    componentWillMount() {
-        const infoObj = window.getStore('meInfo');
-        if (infoObj) {
-            this.setState({
-                infoObj,
-            });
-        } else {
-            ajaxGetMeInfo()
-                .then((infoObj) => {
-                    this.setState({
-                        infoObj,
-                    });
-                })
-        }
-    }
-
     render() {
         const {
             match,
@@ -39,13 +16,15 @@ export default class HouseMeInfoIndex extends PureComponent {
         } = this.props;
 
         const {
-            nickname,
-            phone,
-        } = this.state.infoObj;
-
-        const {
             url: matchUrl,
         } = match;
+
+
+        const meInfoObj = window.getStore('meInfo') || {};
+        const {
+            nickname,
+            phone,
+        } = meInfoObj;
 
         return (
             <div className={`${classPrefix}`}>
