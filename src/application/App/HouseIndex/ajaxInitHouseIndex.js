@@ -8,6 +8,7 @@ export function ajaxInitHouseIndexBanner(cityId) {
             if (data.code !== 200) {
                 return;
             }
+
             return data.data;
         })
 }
@@ -20,6 +21,7 @@ export function ajaxInitHouseIndexRecommend(cityId) {
             if (data.code !== 200) {
                 return;
             }
+
             return data.data;
         })
 }

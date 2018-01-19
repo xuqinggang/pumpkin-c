@@ -17,28 +17,31 @@ export default class PositionFilterWrap extends PureComponent {
         };
     }
 
-    setPositionFilterStateData() {
-        if ('filterState' in this.props) {
-            this.setState({
-                filterState: this.props.filterState,
-            });
-        }
-    }
+    componentWillMount() {
+        const positionFilterDataArrStore = window.getStore('positionFilterDataArr');
 
-    componentDidMount() {
+        // 如果存在数据，则不请求
+        if (positionFilterDataArrStore && positionFilterDataArrStore.data) {
+            this.setState({
+                positionFilterDataArr: positionFilterDataArrStore.data,
+            });
+
+            return;
+        }
+        
         ajaxInitPositionData()
             .then((positionFilterDataArr) => {
                 if (positionFilterDataArr) {
                     const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
+                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
+
                     this.setState({
                         positionFilterDataArr: newPositionFilterDataArr,
                     });
 
-                    // this.setPositionFilterStateData();
-
-                    window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
                     const { label } = positionFilterStateToParams(this.props.filterState);
                     this.props.onDynamicSetLabel(label);
+
                 }
                 console.log('ajax positionData', positionFilterDataArr);
             });
@@ -48,19 +51,15 @@ export default class PositionFilterWrap extends PureComponent {
         stuffAroundDataToPosition()
             .then((positionArroundObj) => {
                 if (positionArroundObj) {
+                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
+
                     const newPositionFilterDataArr = [...this.state.positionFilterDataArr, positionArroundObj];
+
                     this.setState({
                         positionFilterDataArr: newPositionFilterDataArr,
                     });
-
-                    // this.setPositionFilterStateData();
-
-                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
                 }
             })
-            .catch((err) => {
-                console.log('err', err);
-            });
     }
 
     onFilterConfirm = (positionFilterStateObj) => {

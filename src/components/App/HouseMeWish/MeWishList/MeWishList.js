@@ -30,11 +30,16 @@ export default class MeWishList extends PureComponent {
         const {
             list,
         } = this.state;
+
+        const {
+            match,
+        } = this.props;
+
         return (
             <div className={`${classPrefix}`}>
                 {
                     list.map((item, index) =>{
-                        return <WishRentUnitItem info={item} key={index} /> 
+                        return <WishRentUnitItem info={item} key={index} match={match} /> 
                     })
                 }
             </div>

@@ -11,10 +11,6 @@ import './styles.less';
 const classPrefix = 'm-edittel';
 
 export default class EditTel extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             match,
@@ -24,7 +20,7 @@ export default class EditTel extends PureComponent {
             <div className={`${classPrefix}`}>
                 <EditTelBack />
                 <Route exact path={match.url} component={EditTelRouter}/>
-                <Route path={`${match.url}/:telVal`} component={EditTelToVerifyRouter} />
+                <Route exact path={`${match.url}/:telVal`} component={EditTelToVerifyRouter} />
             </div>
         );
     }

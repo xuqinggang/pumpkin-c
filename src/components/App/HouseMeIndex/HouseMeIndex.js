@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router';
 
 import MeBack from 'components/App/HouseMeIndex/MeBack/MeBack';
 import MeInfo from 'components/App/HouseMeIndex/MeInfo/MeInfo';
@@ -10,45 +11,18 @@ import './styles.less';
 const classPrefix = 'm-housemeindex';
 
 export default class HouseMeIndex extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            // 个人信息
-            infoObj: {},
-        };
-    }
-
-    componentWillMount() {
-        const infoObj = window.getStore('meInfo');
-        if (infoObj) {
-            this.setState({
-                infoObj,
-            });
-        } else {
-            ajaxGetMeInfo()
-                .then((infoObj) => {
-                    this.setState({
-                        infoObj,
-                    });
-                })
-        }
-    }
-
     render() {
         const {
             match,
             history,
         } = this.props;
 
-        const {
-            infoObj,
-        } = this.state;
-        console.log('this.props', this.props);
+        const meInfoObj = window.getStore('meInfo') || {};
 
         return (
             <div>
                 <MeBack match={match} history={history} className={`${classPrefix}-meback`} />
-                <MeInfo className={`${classPrefix}-meinfo`} info={infoObj}/>
+                <MeInfo className={`${classPrefix}-meinfo`} info={meInfoObj}/>
                 <MeEntry match={match} history={history} className={`${classPrefix}-meentry`} />
             </div>
         );
