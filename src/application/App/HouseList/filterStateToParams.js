@@ -188,7 +188,13 @@ export function rentFilterStateToParams(rentState) {
     if (rentState) {
         if (rentState[1] == 20000) {
             filterParams.priceInfo = { floor: rentState[0] }
-            label = `${rentState[0]}以上`;
+            if (rentState[0] === 0) {
+                label = '租金';
+            } else {
+                label = `${rentState[0]}以上`;
+            }
+        } else if (rentState[0] === 0) {
+            label = `${rentState[1]}以下`;
         } else {
             filterParams.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             label = `${rentState[0]}-${rentState[1]}`;
