@@ -4,13 +4,17 @@ import classnames from 'classnames';
 import './styles.less';
 
 export default class CountDownBtn extends PureComponent {
+    static defaultProps = {
+        downTime: 60,
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             // 开始倒计时
             start: props.start || false,
             // 倒计时60s
-            downTime: props.downTime || 60,
+            downTime: props.downTime,
         };
     }
 
@@ -21,7 +25,7 @@ export default class CountDownBtn extends PureComponent {
             this.timer = setInterval(() => {
             console.log('downTime', downTime)
                 // 归0停止倒计时
-                if (downTime < 0) {
+                if (downTime <= 0) {
                     clearInterval(this.timer);
                     this.setState({
                         start: false,
