@@ -17,7 +17,7 @@ export default class HouseLists extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-
+            minHeight: window.innerHeight - 88,
             rentUnitList: [],
             suggestRentUnitList: [],
             // 是否正在请求
@@ -97,6 +97,12 @@ export default class HouseLists extends PureComponent {
         window.setStore('scrollTop', { pt: scrollTop });
     }
 
+    _resizeMinHeight() {
+        this.setState({
+            minHeight: window.innerHeight - 88,
+        });
+    }
+
     componentWillMount() {
         const storeHouseListState = window.getStore('houseList');
         if (storeHouseListState) {
@@ -117,6 +123,7 @@ export default class HouseLists extends PureComponent {
         }
 
         window.addEventListener('scroll', this._markScrollTop);
+        window.addEventListener('resize', this._resizeMinHeight);
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -128,6 +135,7 @@ export default class HouseLists extends PureComponent {
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this._markScrollTop);
+        window.removeEventListener('resize', this._resizeMinHeight);
     }
 
     render() {
@@ -137,10 +145,12 @@ export default class HouseLists extends PureComponent {
             suggestRentUnitList,
             isFetching,
             pager,
+            minHeight,
         } = this.state;
-
         return (
-            <div className={clsPrefix} ref={ (listDom) => { this.listDom = listDom; } } style={{'minHeight': `${window.innerHeight -88}px`}}>
+            <div className={clsPrefix}
+                ref={ (listDom) => { this.listDom = listDom; } }
+                style={{'minHeight': `${minHeight}px`}}>
                 {
                     !isFetchCrash
                     ? <RentUnitList
