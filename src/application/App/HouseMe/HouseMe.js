@@ -17,9 +17,15 @@ const classPrefix = 'm-houseme';
 export default class HouseMe extends PureComponent {
     constructor(props) {
         super(props);
+
         this.state = {
             meInfoObj: {},
         };
+
+        const cityName = props.match.params.cityName;
+        window.setStore('urlInfo', {
+            rootUrlPrefix: `/${cityName}/nangua`,
+        });
     }
 
     componentWillMount() {
