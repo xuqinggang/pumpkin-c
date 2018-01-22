@@ -54,7 +54,7 @@ export default class IndexRecommend extends PureComponent {
                                 indexRecommendArr.map((item, index) => {
                                     return (
                                         <li className="f-display-inlineblock list-item" key={index}>
-                                            <a href={item.url}>
+                                            <a href={item.url} className="f-display-inlineblock">
                                                 <img className="f-display-inlineblock item-img" src={item.avatar} alt="" />
                                             </a>
                                         </li>

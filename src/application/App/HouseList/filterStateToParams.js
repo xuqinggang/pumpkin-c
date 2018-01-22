@@ -46,8 +46,6 @@ const  TagGroupTypeMapParamKey = {
 // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
 // return { label:'更多', filterParams: { directs: ['NORTH'] } }
 export function moreFilterStateToParams(moreFilterStateObj) {
-    console.log('moreFilterState', moreFilterStateObj);
-
     // 总共选中的tag数量
     let totalCount = 0;
 
@@ -151,14 +149,15 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
                 } else {
                     filterParams[paramKey].push(tagValue);
                 }
+
+                if (totalCount === 1) {
+                    label = (
+                        tagGroupType == 'shared' ? '合租' : '整租'
+                    ) + HouseTypeMapLabel[tmpValue];
+                }
             }
         });
 
-        if (totalCount === 1) {
-            label = (
-                tagGroupType == 'shared' ? '合租' : '整租'
-            ) + HouseTypeMapLabel[tmpValue];
-        }
     }
 
     if (totalCount > 1) {
@@ -189,7 +188,13 @@ export function rentFilterStateToParams(rentState) {
     if (rentState) {
         if (rentState[1] == 20000) {
             filterParams.priceInfo = { floor: rentState[0] }
-            label = `${rentState[0]}以上`;
+            if (rentState[0] === 0) {
+                label = '租金';
+            } else {
+                label = `${rentState[0]}以上`;
+            }
+        } else if (rentState[0] === 0) {
+            label = `${rentState[1]}以下`;
         } else {
             filterParams.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             label = `${rentState[0]}-${rentState[1]}`;
@@ -208,7 +213,6 @@ const PtTypeMapParamsKey = {
     around: ['nearByInfo'],
 };
 export function positionFilterStateToParams(positinFilterStateObj) {
-    console.log('positionFilterStateToParams', positinFilterStateObj);
     const filterParams = {
         districtId: null,
         circleId: null,

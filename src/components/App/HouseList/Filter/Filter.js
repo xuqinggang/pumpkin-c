@@ -125,9 +125,7 @@ export default class Filter extends PureComponent {
         // 是否filterDom fixed
         const isFixed = this.state.isFixed;
 
-        // document.querySelector('.test').innerHTML = 'scroll' + ';' + curScrollTop;
-
-        if (!isFixed && filterDomTop <= (this.headDomHeight - 2)) {
+        if (!isFixed && filterDomTop <= (this.headDomHeight)) {
             this.setState({
                 isFixed: true,
             });
@@ -243,7 +241,7 @@ export default class Filter extends PureComponent {
         this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
         this.bannerDomHeight = Math.round(document.querySelector('.m-indexbanner').offsetHeight);
         this.recommendDomHeight = Math.round(document.querySelector('.m-indexrecommend').offsetHeight);
-        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight) + 2;
+        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
     }
 
     componentWillMount() {
@@ -265,7 +263,7 @@ export default class Filter extends PureComponent {
         const {
             className,
         } = this.props;
-
+console.log('Filter render');
         const {
             filterShow,
             filterState,

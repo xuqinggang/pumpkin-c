@@ -61,6 +61,7 @@ export default class HouseList extends PureComponent {
 
     // 筛选确认回调
     onFilterConfirm = (filterParams, filterStateObj) => {
+        console.log('filterParams', filterParams, filterStateObj);
         const newFilterParams = Object.assign({}, this.state.filterParamsObj, filterParams);
 
         if (!shallowEqual(this.state.filterParamsObj, newFilterParams)) {
@@ -139,7 +140,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-
+console.log('HouseList render');
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>

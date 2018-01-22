@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { getByteLen } from 'lib/util';
 
 import './styles.less';
 
@@ -24,15 +25,16 @@ export default class InputClear extends PureComponent {
             onChange,
         } = this.props;
 
-        const inputVal = e.target.value.substr(0, maxLength);
-
-        this.setState({
-            inputVal,
-        }, () => {
-            if (onChange) {
-                onChange(this.state.inputVal);
-            }
-        });
+        const inputVal = e.target.value;
+        if (getByteLen(inputVal) <= maxLength) {
+            this.setState({
+                inputVal,
+            }, () => {
+                if (onChange) {
+                    onChange(this.state.inputVal);
+                }
+            });
+        }
     }
 
     handleClearTap = (e) => {
