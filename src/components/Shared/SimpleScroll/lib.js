@@ -68,6 +68,32 @@ function removeEvent (el, type, method) {
     el.removeEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
 }
 
+const sty = document.createElement('div').style;
+const prefix = (function () {
+    var vendors = ['OT', 'msT', 'MozT', 'webkitT', 't']
+    var transform
+    var i = vendors.length
+
+    while (i--) {
+        transform = vendors[i] + 'ransform'
+        if (transform in sty) return vendors[i]
+    }
+})();
+
+const utils = {
+    TSF: prefix + 'ransform',
+    // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
+    translateZ: (function (pre) {
+      var f
+      if (pre) {
+        f = pre + 'Perspective' in sty
+      } else {
+        f = 'perspective' in sty
+      }
+      return f ? ' translateZ(0px)' : ''
+    })(prefix.substr(0, prefix.length - 1)),
+}
+
 export default class SimpleScroll {
     constructor(wrapperDom, options) {
 
@@ -208,7 +234,9 @@ export default class SimpleScroll {
             startY = 0,
             endX, endY, zoom = 1,
             stepX, stepY, result, directionY, directionX;
-        result = /translate3d\(([\-\d\.]+)px,\s+([\-\d\.]+)px,\s+([\-\d\.]+px)\)/g.exec(el.style.transform);
+        result = /translate\(([-\d.]+)px,\s+([-\d.]+)px\)\s+(?:translateZ\(0px\)\s+)?/.exec(el.style[utils.TSF]);
+        // result = /translate3d\(([\-\d\.]+)px,\s+([\-\d\.]+)px,\s+([\-\d\.]+px)\)/g.exec(el.style[utils.TSF]);
+
         if (result) {
             startX = Number(result[1]);
             startY = Number(result[2]);
@@ -252,7 +280,8 @@ export default class SimpleScroll {
                 endY = tmpY;
             }
 
-            el.style.transform = `translate3d(${endX}px, ${endY}px, 0px)`;
+            el.style[utils.TSF] = 'translate(' + endX + 'px, ' + endY + 'px)' + utils.translateZ;
+            // el.style.transform = `translate3d(${endX}px, ${endY}px, 0px)`;
 
             if (duration > 0 && !(endX === translateX && endY === translateY)) {
                 rAF(moving);
@@ -297,9 +326,11 @@ export default class SimpleScroll {
 
         return this;
     }
+
     _scrollTo(translateX, translateY) {
-      this.scrollerDom.style.transform = `translate3d(${translateX}px, ${translateY}px, 0px)`;
+        this.scrollerDom.style[utils.TSF] = 'translate(' + translateX + 'px, ' + translateY + 'px)' + utils.translateZ;
     }
+
     // touchmove 实时滚动
     _doScroll() {
         const {
@@ -503,13 +534,12 @@ export default class SimpleScroll {
     }
 
     _touchStart = (e) => {
-        e.preventDefault();
-
         if (!this.options.isScroll) {
             return;
         }
 
         if (this.isMoving) {
+            e.preventDefault();
             this.isMoving = false;
         }
 
