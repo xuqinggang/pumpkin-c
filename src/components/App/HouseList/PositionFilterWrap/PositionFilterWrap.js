@@ -51,13 +51,12 @@ export default class PositionFilterWrap extends PureComponent {
         stuffAroundDataToPosition()
             .then((positionArroundObj) => {
                 if (positionArroundObj) {
-                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
-
                     const newPositionFilterDataArr = [...this.state.positionFilterDataArr, positionArroundObj];
-
                     this.setState({
                         positionFilterDataArr: newPositionFilterDataArr,
                     });
+
+                    window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
                 }
             })
     }

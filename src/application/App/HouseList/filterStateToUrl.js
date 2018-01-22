@@ -105,7 +105,6 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
     
     // 位置筛选的区域，地铁数据 [{ around: { text: '区域', itemArr: [] } }]
     const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
-    
     let positionUrlArr = [];
 
     const firstItem = positionFilterDataArr[firstItemSelectedIndex];

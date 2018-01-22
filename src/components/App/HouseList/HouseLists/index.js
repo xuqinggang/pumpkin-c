@@ -52,6 +52,7 @@ export default class HouseLists extends PureComponent {
         if (fetchType === 'MORE') {
             curPage += 1;
         }
+
         if (fetchType === 'INIT') {
             curPage = 1;
             totalPage = 1;
@@ -139,7 +140,7 @@ export default class HouseLists extends PureComponent {
         } = this.state;
 
         return (
-            <div className={clsPrefix} ref={ (listDom) => { this.listDom = listDom; } }>
+            <div className={clsPrefix} ref={ (listDom) => { this.listDom = listDom; } } style={{'minHeight': `${window.innerHeight -88}px`}}>
                 {
                     !isFetchCrash
                     ? <RentUnitList
