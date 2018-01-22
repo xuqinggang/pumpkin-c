@@ -46,8 +46,6 @@ const  TagGroupTypeMapParamKey = {
 // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
 // return { label:'更多', filterParams: { directs: ['NORTH'] } }
 export function moreFilterStateToParams(moreFilterStateObj) {
-    console.log('moreFilterState', moreFilterStateObj);
-
     // 总共选中的tag数量
     let totalCount = 0;
 
@@ -151,14 +149,15 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
                 } else {
                     filterParams[paramKey].push(tagValue);
                 }
+
+                if (totalCount === 1) {
+                    label = (
+                        tagGroupType == 'shared' ? '合租' : '整租'
+                    ) + HouseTypeMapLabel[tmpValue];
+                }
             }
         });
 
-        if (totalCount === 1) {
-            label = (
-                tagGroupType == 'shared' ? '合租' : '整租'
-            ) + HouseTypeMapLabel[tmpValue];
-        }
     }
 
     if (totalCount > 1) {
@@ -208,7 +207,6 @@ const PtTypeMapParamsKey = {
     around: ['nearByInfo'],
 };
 export function positionFilterStateToParams(positinFilterStateObj) {
-    console.log('positionFilterStateToParams', positinFilterStateObj);
     const filterParams = {
         districtId: null,
         circleId: null,
