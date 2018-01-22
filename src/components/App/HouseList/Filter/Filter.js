@@ -66,7 +66,7 @@ export default class Filter extends PureComponent {
             srcScrollTop = this.scrollTop;
         }
 
-        // this.filterFixScrollTop filterDom固定是的scrollTop
+        // this.filterFixScrollTop filterDom固定的scrollTop
         if (srcScrollTop >= this.filterFixScrollTop) {
             this._filterShow(newFilterShowState, type, isResetScrollTop);
         } else {
@@ -81,7 +81,7 @@ export default class Filter extends PureComponent {
         if (isForbide) {
             // 使body脱离文档流
             document.body.classList.add('f-disscroll-through'); 
-            // 把脱离文档流的body拉上去！否则页面会回到顶部！
+            // 把脱离文档流的body拉上去！否则页面会回到顶部！此时的scrollTop为0
             document.body.style.top = -this.scrollTop + 'px';
             this.isForbide = true;
         } else {
@@ -115,7 +115,7 @@ export default class Filter extends PureComponent {
         });
     }
 
-    // 滚动时固定filterDom
+    // 固定filterDom,只有滚动时
     _fixFilterDom = () => {
         if (!this.filterDom || this.isForbide) return;
 

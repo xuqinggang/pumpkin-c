@@ -123,9 +123,15 @@
          * @return {[type]} [description]
          */
         loadSchema: function(config) {
-
             this.mixinConfig(config);
 
+            // 由于第一次点击打开app，走了setTimeout，判断出没有安装app,所以直接跳转下载地址
+            // (此处也是为了避免safari浏览器后续多次点击打开app按钮,由于setTimeout缘故导致无法跳转到正确的itunes下载地址)
+            if (AppConfig.isNotInstallApp) {
+                window.location.href = browser.isIOS() ? AppConfig.FAILBACK.IOS : AppConfig.FAILBACK.ANDROID;
+                return;
+            }
+            
             var schemaUrl = this.generateSchema(AppConfig.schema);
 
             var iframe = document.createElement("iframe"),
@@ -146,9 +152,11 @@
                 if (browser.isWx()) {
                     window.location.href = AppConfig.FAILBACK.IOS;
                 } else {
-                    aLink.href = schemaUrl;
-                    body.appendChild(aLink);
-                    aLink.click();
+                    body.appendChild(iframe);
+                    iframe.src = schemaUrl;
+                    // aLink.href = schemaUrl;
+                    // body.appendChild(aLink);
+                    // aLink.click();
                 }
 
                 // Android chrome 不支持iframe 方式唤醒
@@ -164,13 +172,13 @@
                 body.appendChild(iframe);
                 iframe.src = schemaUrl;
             }
-
             // 如果LOAD_WAITING时间后,还是无法唤醒app，则直接打开下载页
             // opera 无效
             var start = Date.now(),
                 that = this;
-            loadTimer = setTimeout(function() {
 
+            loadTimer = setTimeout(function() {
+                clearTimeout(loadTimer);
                 if (document.hidden || document.webkitHidden) {
                     return;
                 }
@@ -179,9 +187,9 @@
                 // 那么代码执行到此处时，时间间隔必然大于设置的定时时间
                 if (Date.now() - start > AppConfig.LOAD_WAITING + 200) {
                     // come back from app
-
-                    // 如果浏览器未因为app启动进入后台，则定时器会准时执行，故应该跳转到下载页
                 } else {
+                    AppConfig.isNotInstallApp = true;
+                    // 如果浏览器未因为app启动进入后台，则定时器会准时执行，故应该跳转到下载页
                     window.location.href = browser.isIOS() ? AppConfig.FAILBACK.IOS : AppConfig.FAILBACK.ANDROID;
                 }
 
