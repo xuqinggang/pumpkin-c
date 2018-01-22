@@ -22,10 +22,16 @@ export default class LoginTel extends PureComponent {
 
     handleTelChange = (e) => {
         const telVal = e.target.value;
+        const isTelValid = regTel.test(telVal);
+
         this.setState({
             telVal,
-            isTelValid: regTel.test(telVal),
+            isTelValid,
         });
+
+        if (isTelValid) {
+            e.target.blur();
+        }
     }
 
 

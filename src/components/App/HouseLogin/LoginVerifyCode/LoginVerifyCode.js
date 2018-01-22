@@ -16,7 +16,6 @@ export default class LoginVerifyCode extends PureComponent {
             verifyCodeVal: '',
         };
 
-        window.setStore('meInfo', infoObj);
         // tel值从router中提取
         this.telVal = props.match.params.telVal;
 
@@ -45,6 +44,7 @@ export default class LoginVerifyCode extends PureComponent {
         // 验证码输入6个数字后，自动登录验证
         if (verifyCodeVal.length === 6) {
             this.ajaxUserLogin(this.telVal, verifyCodeVal)
+            e.target.blur();
         }
     }
 
