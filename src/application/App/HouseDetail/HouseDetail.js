@@ -24,6 +24,13 @@ import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 import './styles.less';
 
 export default class HouseDetail extends PureComponent {
+    constructor(props) {
+        super(props);
+        const cityName = this.props.match.params.cityName;
+        window.setStore('urlInfo', {
+            rootUrlPrefix: `/${cityName}/nangua`,
+        });
+    }
     render() {
         return (
             [

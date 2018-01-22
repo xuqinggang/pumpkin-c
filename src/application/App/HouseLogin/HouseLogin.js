@@ -10,6 +10,15 @@ import './styles.less';
 const classPrefix = 'm-houselogin';
 
 export default class HouseLogin extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        const cityName = props.match.params.cityName;
+        window.setStore('urlInfo', {
+            rootUrlPrefix: `/${cityName}/nangua`,
+        });
+    }
+
     render() {
         const {
             match,

@@ -23,6 +23,11 @@ export default class HouseHead extends PureComponent {
 
         this.curUrl = match.url;
         this.cityName = match.params.cityName;
+
+        this.rootUrlPrefix = window.getStore('urlInfo').rootUrlPrefix;
+
+        // 判断是否来自客户端的分享
+        this.isShareFrom = window.location.href.indexOf('sharefrom') !== -1;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -88,12 +93,23 @@ export default class HouseHead extends PureComponent {
 
         return (
             <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
-                <Link
-                    className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
-                    to={`/${this.cityName}/nangua`}>
-                    <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
-                    <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
-                </Link>
+                {
+                    this.isShareFrom ? (
+                        <Link
+                            className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
+                            to={`${this.rootUrlPrefix}`}>
+                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
+                            <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
+                        </Link>
+                    )
+                    : (
+                        <a
+                            href="javascript:history.back();"
+                            className={`f-display-flex f-flex-align-center icon-back ${classPrefix}-btn-back-browser`}
+                        >
+                        </a>
+                    )
+                }
                 <div className={`f-display-flex f-flex-align-center`}>
                     <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
                     <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
