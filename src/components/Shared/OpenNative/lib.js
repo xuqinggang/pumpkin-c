@@ -17,7 +17,7 @@
             return ua.match(/Android/i) ? true : false;
         },
         isMobileQQ: function() {
-            return /(iPad|iPhone|iPod).*? (IPad)?QQ\/([\d\.]+)/.test(ua) || /\bV1_AND_SQI?_([\d\.]+)(.*? QQ\/([\d\.]+))?/.test(ua);
+            return /(iPad|iPhone|iPod).*? (IPad)?QQ\/([\d\.]+)/.test(ua) || /\bV1_AND_SQI?_([\d\.]+)(.*? QQ\/([\d\.]+))?/.test(ua) || /MQQBrowser/i.test(ua);
         },
         isIOS: function() {
             return ua.match(/iPhone|iPad|iPod/i) ? true : false;
@@ -86,6 +86,7 @@
                 AppConfig.APK_INFO = config.apkInfo || AppConfig.APK_INFO;
             }
         },
+
         /**
          * [generateSchema 根据不同的场景及UA生成最终应用的schema]
          * @return {[type]}                [description]
@@ -127,11 +128,11 @@
 
             // 由于第一次点击打开app，走了setTimeout，判断出没有安装app,所以直接跳转下载地址
             // (此处也是为了避免safari浏览器后续多次点击打开app按钮,由于setTimeout缘故导致无法跳转到正确的itunes下载地址)
-            if (AppConfig.isNotInstallApp) {
-                window.location.href = browser.isIOS() ? AppConfig.FAILBACK.IOS : AppConfig.FAILBACK.ANDROID;
-                return;
-            }
-            
+            // if (AppConfig.isNotInstallApp) {
+            //     window.location.href = browser.isIOS() ? AppConfig.FAILBACK.IOS : AppConfig.FAILBACK.ANDROID;
+            //     return;
+            // }
+
             var schemaUrl = this.generateSchema(AppConfig.schema);
 
             var iframe = document.createElement("iframe"),
@@ -172,6 +173,7 @@
                 body.appendChild(iframe);
                 iframe.src = schemaUrl;
             }
+
             // 如果LOAD_WAITING时间后,还是无法唤醒app，则直接打开下载页
             // opera 无效
             var start = Date.now(),
