@@ -155,7 +155,7 @@ class HouseDetailIndex extends PureComponent {
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
-                <OpenNative schema={`api.nanguazufang.cn/rentUnit?rentUnitId=${this.rentUnitId}`} />
+                <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
                 <HouseHead
                     headData={headData || {}}
                     rentUnitId={this.rentUnitId}
