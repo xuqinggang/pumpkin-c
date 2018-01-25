@@ -12,15 +12,13 @@ const classPrefix = 'm-indexhead';
 export default class IndexHead extends PureComponent {
 
     handleNavigateMe = () => {
-        const {
-            cityName,
-        } = this.props.match.params;
+        const urlPrefix = window.getStore('url').urlPrefix;
 
         // 跳转前判断是否登录，利用cookie中是否含有sid判断
         if (isHasCookie('sid')) {
-            this.props.history.push(`/${cityName}/nangua/me`);
+            this.props.history.push(`${urlPrefix}/me`);
         } else {
-            this.props.history.push(`/${cityName}/nangua/login`);
+            this.props.history.push(`${urlPrefix}/login`);
         }
     }
 

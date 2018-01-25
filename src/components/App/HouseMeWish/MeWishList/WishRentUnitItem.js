@@ -27,7 +27,7 @@ export default class WishRentUnitItem extends PureComponent {
             url: matchUrl,
         } = match;
 
-        const rootUrlPrefix = matchUrl.substr(0, matchUrl.indexOf('/me'));
+        const rootUrlPrefix = window.getStore('url').urlPrefix;
 
         return (
             <Link to={`${rootUrlPrefix}/detail/${rentUnitId}`}>

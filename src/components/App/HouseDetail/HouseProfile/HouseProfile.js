@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import BottomDialog from 'Shared/BottomDialog';
-import Config from 'config/config';
 import { PayTypeMapName } from 'base/MapData';
 
 import './styles.less';
@@ -12,7 +11,10 @@ const payTypeClass = 'm-paytype';
 
 export default class HouseProfile extends PureComponent {
     static handleJumpMapTap() {
-        window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
+        const urlInfo = window.getStore('url');
+        const urlPrefix = urlInfo && urlInfo.urlPrefix;
+
+        window.location.href = `${urlPrefix}/map?pos=${pos}`;
     }
 
     render() {
@@ -47,6 +49,7 @@ export default class HouseProfile extends PureComponent {
 class HouseProfileHead extends PureComponent {
     constructor(props) {
         super(props);
+
         const { selectedPayType } = props.houseProfileHeadData;
         this.state = {
             selectedPayType,

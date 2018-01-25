@@ -3,8 +3,9 @@ import { render } from 'react-dom';
 import injectTapEventPlugin from "react-tap-event-plugin";
 import createHistory from 'history/createBrowserHistory';
 
+import './store';
 import routes from './routes';
-import './indexInit';
+import './ajaxInit';
 
 // 全局样式
 import 'styles/index';

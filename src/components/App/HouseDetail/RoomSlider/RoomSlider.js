@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
 import classnames from 'classnames';
@@ -8,7 +8,7 @@ import './styles.less';
 const classPrefix = 'm-roomslider';
 const imgCutModifier = '?crop=1&cpos=middle&w=750&h=388';
 
-class RoomSlider extends Component {
+class RoomSlider extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -119,12 +119,10 @@ class RoomSlider extends Component {
             //     },
             // ],
         };
-        this.onSliderChange = this.onSliderChange.bind(this);
-        this.handleTextTap = this.handleTextTap.bind(this);
     }
 
     // 事件处理程序-轮播图底部tab文字touchTap
-    handleTextTap(index, e) {
+    handleTextTap = (index, e) => {
         // 阻止冒泡
         e.preventDefault();
         const { sliderImgArr } = this.props;
@@ -139,7 +137,7 @@ class RoomSlider extends Component {
     }
 
     // 回调函数-轮播图滑动
-    onSliderChange(index, ele) {
+    onSliderChange = (index, ele) => {
         // console.log('RoomSlider onSliderChange')
         const { activeIndex } = this.state;
         const activeIndexAttr = parseInt(ele.getAttribute('data-activeindex'));
@@ -195,17 +193,11 @@ class RoomSlider extends Component {
             );
         });
     }
-    // componentWillReceiveProps() {
-    //     console.log('RoomSlider componentWillReceiveProps');
-    // }
-    // // shouldComponentUpdate(nextprops, nextState) {
-    // //     if (this.state.activeIndex === nextState.activeIndex) { return false }
-    // // }
     
     render() {
         const { activeIndex } = this.state;
         const { sliderImgArr } = this.props;
-        // console.log('RoomSlider render', sliderImgArr);
+
         return (
             <div className={classPrefix}>
                 <ReactSwipe
