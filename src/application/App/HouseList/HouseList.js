@@ -43,6 +43,8 @@ export default class HouseList extends PureComponent {
 
         // 动态更改标题
         dynamicDocTitle('南瓜租房');
+
+        this.urlPrefix = window.getStore('url').urlPrefix;
     }
 
     _getGetParams() {
@@ -75,9 +77,9 @@ export default class HouseList extends PureComponent {
                     const cityName = this.props.match.params.cityName;
 
                     if (this.getParamsObj.apartment) {
-                        link = `/${cityName}/nangua/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
+                        link = `${this.urlPrefix}/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
                     } else {
-                        link = `/${cityName}/nangua/${filterUrlFragment}`;
+                        link = `${this.urlPrefix}/${filterUrlFragment}`;
                     }
 
                     this.props.history.push(link);

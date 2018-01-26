@@ -39,6 +39,11 @@ export default class HouseHead extends PureComponent {
     }
 
     handleCollectTap = () => {
+        if (!isHasCookie('sid')) {
+            this.props.history.push(`${this.rootUrlPrefix}/login`);
+            return;
+        }
+        
         const isCollected = this.state.isCollected;
         this.setState({
             isCollected: !isCollected,

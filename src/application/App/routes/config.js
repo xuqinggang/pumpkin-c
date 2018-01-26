@@ -7,32 +7,38 @@ import HouseLogin from 'App/HouseLogin/HouseLogin';
 import HouseMe from 'App/HouseMe/HouseMe';
 import HouseAboutUs from 'App/HouseAboutUs/HouseAboutUs';
 
+import ajaxInit from  '../ajaxInit';
+
 import Service from 'lib/Service';
 
-function WrapRouter(props) {
-    const {
-        url: urlPrefix,
-    } = props.match;
+class WrapRouter extends PureComponent {
+    componentWillMount() {
+        this.urlPrefix  = this.props.match.url;
 
-    // 保存url前缀信息
-    window.setStore('url', {
-        urlPrefix,
-    });
+        // 保存url前缀信息
+        window.setStore('url', {
+            urlPrefix: this.urlPrefix,
+        });
 
-    // Server配置ajax url前缀, /bj/nangua
-    Service.baseConfig = {
-        urlPrefix,
-    };
+        // Server配置ajax url前缀, /bj/nangua
+        Service.baseConfig = {
+            urlPrefix: this.urlPrefix,
+        };
 
-    return (
-        <Switch>
-            <Route path={`${urlPrefix}/login`} component={HouseLogin} />
-            <Route path={`${urlPrefix}/me`} component={HouseMe} />
-            <Route exact path={`${urlPrefix}/about`} component={HouseAboutUs} />
-            <Route path={`${urlPrefix}/detail`} component={HouseDetail} />
-            <Route exact path={`${urlPrefix}/:filterUrlFragment?`} component={HouseList} />
-        </Switch>
-    );
+        ajaxInit();
+    }
+
+    render() {
+        return (
+            <Switch>
+                <Route path={`${this.urlPrefix}/login`} component={HouseLogin} />
+                <Route path={`${this.urlPrefix}/me`} component={HouseMe} />
+                <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />
+                <Route path={`${this.urlPrefix}/detail`} component={HouseDetail} />
+                <Route exact path={`${this.urlPrefix}/:filterUrlFragment?`} component={HouseList} />
+            </Switch>
+        );
+    }
 }
 
 export default function() {

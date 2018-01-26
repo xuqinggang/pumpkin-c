@@ -5,7 +5,6 @@ import createHistory from 'history/createBrowserHistory';
 
 import './store';
 import routes from './routes';
-import './ajaxInit';
 
 // 全局样式
 import 'styles/index';

@@ -1,9 +1,10 @@
-// import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 
 // 接口初始化
-// ajaxGetMeInfo()
-//     .then((infoObj) => {
-//         console.log('infoObj', infoObj);
-//         window.setStore('meInfo', infoObj);
-//     })
+// 初始化个人信息
+export default function ajaxInit() {
+    ajaxGetMeInfo()
+        .then((infoObj) => {
+            window.setStore('meInfo', infoObj);
+        })
+}

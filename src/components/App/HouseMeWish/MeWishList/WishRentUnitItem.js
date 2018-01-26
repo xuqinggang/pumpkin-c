@@ -34,7 +34,7 @@ export default class WishRentUnitItem extends PureComponent {
                 <div className={`g-grid-row f-flex-justify-start ${classPrefix}`}>
                     <img src={image} alt="" className={`${classPrefix}-img`}/>
                     <ul className={`g-grid-col grid-col f-flex-justify-between ${classPrefix}-info`}>
-                        <li className="info-title">{title}</li>
+                        <li className="f-singletext-ellipsis info-title">{title}</li>
                         <li className="info-price">
                             <span className="price-value">¥{price}/月</span>
                             <span className="price-label">({priceType})</span>

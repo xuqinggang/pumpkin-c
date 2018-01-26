@@ -143,6 +143,8 @@ class HouseDetailIndex extends PureComponent {
             contactButlerData,
             // 周边及交通,经纬度
             houseTrafficData,
+            // 额外信息
+            extraData,
         } = this.state.houseDetailData;
 
         const style = {
@@ -152,6 +154,10 @@ class HouseDetailIndex extends PureComponent {
             height: '200px',
             backgroundColor: 'red',
         };
+
+        const {
+            rentalType,
+        } = extraData || {};
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
@@ -186,10 +192,14 @@ class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
                 />
-                <RoommateInfo
-                    className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
-                    roomateInfoArrData={roomateInfoArrData || []}
-                />
+                {
+                    rentalType === 'SHARED' ? (
+                        <RoommateInfo
+                            className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
+                            roomateInfoArrData={roomateInfoArrData || []}
+                        />
+                    ) : null
+                }
                 <CommunityIntro
                     className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
                     communityIntroData={communityIntroData || {}}
