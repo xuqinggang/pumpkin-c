@@ -151,17 +151,12 @@ export default class HouseLists extends PureComponent {
             <div className={clsPrefix}
                 ref={ (listDom) => { this.listDom = listDom; } }
                 style={{'minHeight': `${minHeight}px`}}>
-                {
-                    !isFetchCrash
-                    ? <RentUnitList
-                        list={rentUnitList}
-                        pager={pager}
-                        loading={isFetching}
-                        isFetchCrash={isFetchCrash}
-                        onLoadMore={this.handleLoadMore}
-                    />
-                    : null
-                }
+                <RentUnitList
+                    list={rentUnitList}
+                    pager={pager}
+                    loading={isFetching}
+                    onLoadMore={this.handleLoadMore}
+                />
                 {
                     this.fetchType === 'INIT' && isFetchCrash ? 
                         <SingnalLessNote />
