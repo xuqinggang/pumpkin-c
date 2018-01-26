@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import BottomDialog from 'Shared/BottomDialog';
-import Config from 'config/config';
 import { PayTypeMapName } from 'base/MapData';
 
 import './styles.less';
@@ -11,17 +10,20 @@ const classPrefix = 'm-houseprofile';
 const payTypeClass = 'm-paytype';
 
 export default class HouseProfile extends PureComponent {
-    static handleJumpMapTap() {
-        window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
+    handleJumpMapTap = () => {
+        // 经纬度
+        const { lon, lat } = this.props.houseTrafficData;
+        const pos = `${lon},${lat}`;
+        
+        const urlInfo = window.getStore('url');
+        const urlPrefix = urlInfo && urlInfo.urlPrefix;
+
+        window.location.href = `${urlPrefix}/map?pos=${pos}`;
     }
 
     render() {
-        const { className, houseProfileData, houseTrafficData } = this.props;
+        const { className, houseProfileData } = this.props;
         const { title, location } = houseProfileData;
-
-        // 经纬度
-        const { lon, lat } = houseTrafficData;
-        const pos = `${lon},${lat}`;
 
         return (
             <div className={`${classPrefix} ${className}`}>
@@ -47,6 +49,7 @@ export default class HouseProfile extends PureComponent {
 class HouseProfileHead extends PureComponent {
     constructor(props) {
         super(props);
+
         const { selectedPayType } = props.houseProfileHeadData;
         this.state = {
             selectedPayType,
@@ -179,13 +182,18 @@ class PayTypeComp extends PureComponent {
             </BottomDialog>
         );
     }
-        
 }
 
 // 付款方式Item
 class PayTypeItem extends PureComponent {
     // 事件处理程序-付款方式itemTouchTap
-    handlePayTypeTouchTap() {
+    handlePayTypeTouchTap = (e) => {
+        e.preventDefault();
+
+        const {
+            payType,
+        } = this.props;
+
         this.props.onPayTypeTouchTap(payType);
     }
 
@@ -209,5 +217,4 @@ class PayTypeItem extends PureComponent {
             </div>
         );
     }
-        
 }

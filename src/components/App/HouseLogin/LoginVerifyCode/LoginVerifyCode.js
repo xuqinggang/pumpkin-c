@@ -19,7 +19,7 @@ export default class LoginVerifyCode extends PureComponent {
         // tel值从router中提取
         this.telVal = props.match.params.telVal;
 
-        this.rootUrlPrefix = window.getStore('urlInfo').rootUrlPrefix;
+        this.urlPrefix = window.getStore('url').urlPrefix;
     }
 
     ajaxUserLogin(tel, verifyCode) {
@@ -28,7 +28,7 @@ export default class LoginVerifyCode extends PureComponent {
                 // 存储个人信息
                 window.setStore('meInfo', infoObj);
 
-                this.props.history.replace(`${this.rootUrlPrefix}/me`);
+                this.props.history.replace(`${this.urlPrefix}/me`);
             })
             .catch((err) => {
                 PopToolTip({text: err.code ? err.msg : err.toString()});

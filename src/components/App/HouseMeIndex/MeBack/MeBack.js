@@ -7,8 +7,8 @@ class MeBack extends PureComponent {
     // 回调函数-回退按钮点击
     onBackTap = () => {
         // 我的页面，回退按钮回到首页
-        const rootUrlPrefix = window.getStore('urlInfo').rootUrlPrefix;
-        this.props.history.push(`${rootUrlPrefix}`);
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(`${urlPrefix}`);
     }
 
     render() {

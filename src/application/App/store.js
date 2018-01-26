@@ -1,18 +1,10 @@
-import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-import Config from 'config/config';
-import Service from 'lib/Service';
-
-// Server配置ajax url前缀
-Service.baseConfig = {
-    urlPrefix: Config.urlPrefix,
-};
-
 // 自定义数据存储，存放到window上
 window.customStore = {};
 
 window.setStore = function (key, dataObj) {
     if (dataObj === null) {
         window.customStore[key] = null;
+
         return;
     }
 
@@ -37,10 +29,3 @@ window.getStore = function (key) {
         return null;
     }
 }
-
-// 接口初始化
-ajaxGetMeInfo()
-    .then((infoObj) => {
-        console.log('infoObj', infoObj);
-        window.setStore('meInfo', infoObj);
-    })

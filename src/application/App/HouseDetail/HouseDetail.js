@@ -24,18 +24,15 @@ import ajaxInitHouseDetail from './ajaxInitHouseDetail';
 import './styles.less';
 
 export default class HouseDetail extends PureComponent {
-    constructor(props) {
-        super(props);
-        const cityName = this.props.match.params.cityName;
-        window.setStore('urlInfo', {
-            rootUrlPrefix: `/${cityName}/nangua`,
-        });
-    }
     render() {
+        const {
+            url,
+        } = this.props.match;
+
         return (
             [
-                <Route exact path={`/:cityName/nangua/detail/:rentUnitId`} component={HouseDetailIndex} key={0} />,
-                <Route exact path={`/:cityName/nangua/detail/:rentUnitId/report`} component={HouseReport} key={1}/>
+                <Route exact path={`${url}/:rentUnitId`} component={HouseDetailIndex} key={0} />,
+                <Route exact path={`${url}/:rentUnitId/report`} component={HouseReport} key={1}/>
             ]
         );
     }
@@ -46,18 +43,17 @@ const classPrefix = 'g-housedetail';
 class HouseDetailIndex extends PureComponent {
     constructor(props) {
         super(props);
+
         this.state = {
             show: false,
             houseDetailData: {},
         };
-        window.rentUnitId = props.match.params.rentUnitId;
+
+        this.rentUnitId = props.match.params.rentUnitId;
     }
 
     componentWillMount() {
-        window.scrollTo(0, 0);
-        this.rentUnitId = this.props.match.params.rentUnitId;
-
-        // 如果store不存在数据，则请求
+        // 如果store没有数据，则请求
         const houseDetailStore = window.getStore('houseDetail');
         let curHouseDetailData = houseDetailStore && houseDetailStore[this.rentUnitId];
         if (curHouseDetailData) {
@@ -66,6 +62,7 @@ class HouseDetailIndex extends PureComponent {
             });
 
             this.callWxShareAgain(curHouseDetailData);
+
             return;
         }
 
@@ -84,6 +81,10 @@ class HouseDetailIndex extends PureComponent {
             })
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     // 每次进来一定要再次调用微信分享
     callWxShareAgain(houseDetailData) {
         const { sliderImgArr, houseProfileData } = houseDetailData;
@@ -93,7 +94,7 @@ class HouseDetailIndex extends PureComponent {
         // 分享
         execWxShare({
             title: title + '-南瓜租房北京租房',
-            link: window.location.href.split('#')[0],
+            link: window.location && window.location.href.split('#')[0],
             imgUrl: imgInfo && imgInfo.img,
             desc: '南瓜租房，只租真房源！',
         });
@@ -142,6 +143,8 @@ class HouseDetailIndex extends PureComponent {
             contactButlerData,
             // 周边及交通,经纬度
             houseTrafficData,
+            // 额外信息
+            extraData,
         } = this.state.houseDetailData;
 
         const style = {
@@ -151,7 +154,10 @@ class HouseDetailIndex extends PureComponent {
             height: '200px',
             backgroundColor: 'red',
         };
-        console.log('RoomSlider render HouseDetail', sliderImgArr, houseProfileData, contactButlerData, headData);
+
+        const {
+            rentalType,
+        } = extraData || {};
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
@@ -186,10 +192,14 @@ class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
                 />
-                <RoommateInfo
-                    className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
-                    roomateInfoArrData={roomateInfoArrData || []}
-                />
+                {
+                    rentalType === 'SHARED' ? (
+                        <RoommateInfo
+                            className={`g-housedetail-module-padding ${classPrefix}-roommateinfo`}
+                            roomateInfoArrData={roomateInfoArrData || []}
+                        />
+                    ) : null
+                }
                 <CommunityIntro
                     className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
                     communityIntroData={communityIntroData || {}}

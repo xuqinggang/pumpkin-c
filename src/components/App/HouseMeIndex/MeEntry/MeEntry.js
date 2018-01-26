@@ -24,10 +24,9 @@ export default class MeEntry extends PureComponent {
         const {
             url: matchUrl,
         } = match;
+        console.log('MeEntry', matchUrl)
 
-        // url路径去掉me字段 (/bj/nangua/me => /bj/nangua)
-        // 根url前缀 /bj/nangua
-        this.rootUrlPrefix = matchUrl.substr(0, matchUrl.indexOf('/me'));
+        this.rootUrlPrefix = window.getStore('url').urlPrefix;
 
         return (
             <ul className={classnames(`${classPrefix}`, className)}>

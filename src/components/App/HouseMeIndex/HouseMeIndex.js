@@ -15,9 +15,8 @@ export default class HouseMeIndex extends PureComponent {
         const {
             match,
             history,
+            meInfoObj,
         } = this.props;
-
-        const meInfoObj = window.getStore('meInfo') || {};
 
         return (
             <div>

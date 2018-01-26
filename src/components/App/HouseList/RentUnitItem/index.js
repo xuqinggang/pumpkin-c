@@ -25,8 +25,8 @@ class RentUnitItem extends Component {
     }
 
     handleTouchTap() {
-        const cityName = this.props.match.params.cityName;
-        this.props.history.push(`/${cityName}/nangua/detail/${this.props.rentUnitId}`);
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(`${urlPrefix}/detail/${this.props.rentUnitId}`);
     }
 
     render() {

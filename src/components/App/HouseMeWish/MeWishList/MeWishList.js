@@ -17,9 +17,17 @@ export default class MeWishList extends PureComponent {
     }
 
     componentWillMount() {
+        const wishListStore = window.getStore('wishList');
+        if (wishListStore) {
+            this.setState({
+                list: wishListStore,
+            });
+
+            return;
+        }
+        
         ajaxInitHouseMeWish()
             .then((list) => {
-                console.log('MeWishList', list);
                 this.setState({
                     list,
                 });

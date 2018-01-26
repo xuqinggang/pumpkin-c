@@ -5,7 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-meinfo'
 
-export default class MeInfo extends PureComponent{
+export default class MeInfo extends PureComponent {
     render() {
         const {
             className,

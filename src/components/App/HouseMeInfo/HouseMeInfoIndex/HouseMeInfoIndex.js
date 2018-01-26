@@ -13,6 +13,7 @@ export default class HouseMeInfoIndex extends PureComponent {
         const {
             match,
             history,
+            meInfoObj,
         } = this.props;
 
         const {
@@ -20,11 +21,10 @@ export default class HouseMeInfoIndex extends PureComponent {
         } = match;
 
 
-        const meInfoObj = window.getStore('meInfo') || {};
         const {
             nickname,
             phone,
-        } = meInfoObj;
+        } = meInfoObj || {};
 
         return (
             <div className={`${classPrefix}`}>

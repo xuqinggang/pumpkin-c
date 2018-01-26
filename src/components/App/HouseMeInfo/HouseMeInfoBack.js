@@ -5,10 +5,6 @@ import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 
 class HouseMeInfoBack extends PureComponent {
     render() {
-        const {
-            className,
-        } = this.props;
-
         return (
             <span className="m-headJump-title">个人信息</span>
         );

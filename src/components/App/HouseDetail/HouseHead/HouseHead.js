@@ -22,9 +22,8 @@ export default class HouseHead extends PureComponent {
         } = props;
 
         this.curUrl = match.url;
-        this.cityName = match.params.cityName;
 
-        this.rootUrlPrefix = window.getStore('urlInfo').rootUrlPrefix;
+        this.rootUrlPrefix = window.getStore('url').urlPrefix;
 
         // 判断是否来自客户端的分享
         this.isShareFrom = window.location.href.indexOf('sharefrom') !== -1;
@@ -40,6 +39,11 @@ export default class HouseHead extends PureComponent {
     }
 
     handleCollectTap = () => {
+        if (!isHasCookie('sid')) {
+            this.props.history.push(`${this.rootUrlPrefix}/login`);
+            return;
+        }
+        
         const isCollected = this.state.isCollected;
         this.setState({
             isCollected: !isCollected,
@@ -74,9 +78,10 @@ export default class HouseHead extends PureComponent {
 
     handleReportTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`/${this.cityName}/nangua/login`);
+            this.props.history.push(`${this.rootUrlPrefix}/login`);
             return;
         }
+
         this.props.history.push(`${this.curUrl}/report`);
     }
 

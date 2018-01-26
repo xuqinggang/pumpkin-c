@@ -94,6 +94,7 @@ export function ajaxInitHouseMeWish() {
                     subwayDistance,
                     area,
                 } = itemInfo;
+                const tmpPriceType = priceType && (priceType[0].toUpperCase() + priceType.substr(1).toLowerCase());
 
                 let location = '';
                 if (subwayLine != null && subwayDistance != null && subwayStation != null) {
@@ -102,7 +103,7 @@ export function ajaxInitHouseMeWish() {
 
                 let rentalTypeText = RentalTypeMapText[rentalType];
                 let directText = DirectTypeMapText[direct];
-                let priceTypeText = PayTypeMapName[priceType];
+                let priceTypeText = PayTypeMapName[tmpPriceType];
                 let title = `${rentalTypeText}-${area}㎡-${blockName}-${bedroomCount}居室-${directText}`;
 
                 return {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
@@ -16,14 +16,7 @@ const roomKeyMapName = {
 const classSliderPrefix = 'm-sliderfurniture';
 const classScrollPrefix = 'm-scrollfurniture';
 
-// const furnitureArr = [
-//     {
-//         text: '公共空间',
-//         furniture: ["BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE"],
-//     },
-// ];
-
-export default class HouseFurniture extends Component {
+export default class HouseFurniture extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +25,13 @@ export default class HouseFurniture extends Component {
     }
 
     initGeneFurnitureData(furnitureArr) {
+        // const furnitureArr = [
+        //     {
+        //         text: '公共空间',
+        //         furniture: ["BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE", "BED", "WARDROBE"],
+        //     },
+        // ];
+
         if (this.scrollList && this.scrollList.length > 0) {
             return;
         }
@@ -47,7 +47,6 @@ export default class HouseFurniture extends Component {
 
     // 渲染家具swipe
     renderMultiSliderFurniture() {
-        console.log('this.sliderList', this.sliderList)
         const slideFurnitureList = this.sliderList && this.sliderList.map((furnitureArr, index) => {
             return <SlideFurniture key={index} furniture={furnitureArr} />
         });
@@ -145,28 +144,31 @@ export default class HouseFurniture extends Component {
 }
 
 // 家具slider面板
-function SlideFurniture(props) {
-    const { furniture } = props;
-    const furnitureList = furniture && furniture.map((item, index) => {
-        const furnitureItem = FurnitureMapIcon[item];
-        if (furnitureItem) {
-            return (
-                <li key={index} className={`${classSliderPrefix}-item`}>
-                    <span className={`f-display-block ${furnitureItem.className} ${classSliderPrefix}-icon`} />
-                    <span className={`f-display-block ${classSliderPrefix}-text`}>
-                        {furnitureItem.text}
-                    </span>
-                </li>
-            );
-        }
-        return null;
-    });
+class SlideFurniture extends PureComponent {
+    render() {
+        const { furniture } = this.props;
+        const furnitureList = furniture && furniture.map((item, index) => {
+            const furnitureItem = FurnitureMapIcon[item];
+            if (furnitureItem) {
+                return (
+                    <li key={index} className={`${classSliderPrefix}-item`}>
+                        <span className={`f-display-block ${furnitureItem.className} ${classSliderPrefix}-icon`} />
+                        <span className={`f-display-block ${classSliderPrefix}-text`}>
+                            {furnitureItem.text}
+                        </span>
+                    </li>
+                );
+            }
 
-    return (
-        <div className={`${classSliderPrefix}`}>
-            <ul className={`${classSliderPrefix}-list`}>
-                {furnitureList}
-            </ul>
-        </div>
-    );
+            return null;
+        });
+
+        return (
+            <div className={`${classSliderPrefix}`}>
+                <ul className={`${classSliderPrefix}-list`}>
+                    {furnitureList}
+                </ul>
+            </div>
+        );
+    }
 }

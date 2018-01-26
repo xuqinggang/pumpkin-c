@@ -9,10 +9,8 @@ const classPrefix = 'm-loginback'
 
 class LoginBack extends Component {
     handleNavigateAboutTap = () => {
-        const {
-            cityName,
-        } = this.props.match.params;
-        this.props.history.push(`/${cityName}/nangua/about`);
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(`${urlPrefix}/about`);
     }
 
     shouldComponentUpdate() {

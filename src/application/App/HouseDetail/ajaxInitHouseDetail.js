@@ -33,14 +33,18 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             if (200 !== data.code) {
                 return;
             }
+
             const houseDetailData = data.data;
 
-            const { 
+            const {
                 // 房源介绍
                 intro,
 
                 // 室友相关信息
                 roomMates,
+
+                // 出租类型
+                rentalType,
 
                 // 经纬度
                 lon,
@@ -78,8 +82,6 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 lat,
             };
 
-            console.log('sliderImgArr', sliderImgArr, houseProfileData, communityIntroData);
-
             return {
                 headData: { isCollected, },
                 sliderImgArr,
@@ -95,6 +97,9 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 communityIntroData,
                 contactButlerData,
                 houseTrafficData,
+                extraData: {
+                    rentalType,
+                },
             };
         })
         .catch((err) => {
