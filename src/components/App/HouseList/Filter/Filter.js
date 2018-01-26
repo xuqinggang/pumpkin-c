@@ -65,7 +65,7 @@ export default class Filter extends PureComponent {
         if (this.isForbide) {
             srcScrollTop = this.scrollTop;
         }
-
+        console.log('handleFilterShowTap', srcScrollTop, this.filterFixScrollTop);
         // this.filterFixScrollTop filterDom固定的scrollTop
         if (srcScrollTop >= this.filterFixScrollTop) {
             this._filterShow(newFilterShowState, type, isResetScrollTop);
@@ -103,6 +103,7 @@ export default class Filter extends PureComponent {
         }
         this.setState({
             filterShow: newFilterShowState,
+            isFixed: true,
         }, () => {
             this._toggleForbideScrollThrough(newFilterShowState[type], isResetScrollTop);
         });
@@ -124,7 +125,7 @@ export default class Filter extends PureComponent {
 
         // 是否filterDom fixed
         const isFixed = this.state.isFixed;
-
+        console.log('_fixFilterDom after', isFixed, filterDomTop, this.headDomHeight);
         if (!isFixed && filterDomTop <= (this.headDomHeight)) {
             this.setState({
                 isFixed: true,
@@ -263,7 +264,7 @@ export default class Filter extends PureComponent {
         const {
             className,
         } = this.props;
-console.log('Filter render');
+
         const {
             filterShow,
             filterState,

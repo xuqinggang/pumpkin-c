@@ -38,6 +38,26 @@ export default class HouseHead extends PureComponent {
         }
     }
 
+    // 是否收藏
+    _collectHouse(isCollected) {
+        const {
+            rentUnitId,
+        } = this.props;
+        
+        this.setState({
+            isCollected,
+        });
+        
+        const houseDetailStore = window.getStore('houseDetail');
+        const curHouseDetailData = houseDetailStore && houseDetailStore[rentUnitId];
+        curHouseDetailData && window.setStore('houseDetail', {
+            [rentUnitId]: {
+                ...curHouseDetailData,
+                headData: { isCollected, },
+            },
+        });
+    }
+
     handleCollectTap = () => {
         if (!isHasCookie('sid')) {
             this.props.history.push(`${this.rootUrlPrefix}/login`);
@@ -45,9 +65,6 @@ export default class HouseHead extends PureComponent {
         }
         
         const isCollected = this.state.isCollected;
-        this.setState({
-            isCollected: !isCollected,
-        });
 
         const {
             rentUnitId,
@@ -56,6 +73,8 @@ export default class HouseHead extends PureComponent {
         if (!isCollected) {
             ajaxCollectHouse(rentUnitId)
                 .then((bool) => {
+                    this._collectHouse(true);
+
                     bool && PopToolTip({text: '收藏成功'});
                 })
                 .catch((err) => {
@@ -67,6 +86,8 @@ export default class HouseHead extends PureComponent {
         if (isCollected) {
             ajaxCancelCollectHouse(rentUnitId)
                 .then((bool) => {
+                    this._collectHouse(false);
+                    
                     bool && PopToolTip({text: '取消收藏'});
                 })
                 .catch((err) => {

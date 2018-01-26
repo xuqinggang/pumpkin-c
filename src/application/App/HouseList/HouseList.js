@@ -143,7 +143,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-console.log('HouseList render');
+
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>

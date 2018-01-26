@@ -42,7 +42,7 @@ export default class RentUnitList extends Component {
                     ))
                 }
                 {
-                    this.props.loading || this.props.isFetchCrash
+                    this.props.loading
                     ? <RentUnitPlaceHolder />
                     : null
                 }
@@ -55,7 +55,6 @@ RentUnitList.propTypes = {
     list: PropTypes.arrayOf(rentUnitShape),
     onLoadMore: PropTypes.func,
     loading: PropTypes.bool,
-    isFetchCrash: PropTypes.bool,
     pager: pagerShape,
 };
 
@@ -63,7 +62,6 @@ RentUnitList.defaultProps = {
     list: [],
     onLoadMore: () => {},
     loading: false,
-    isFetchCrash: false,
     pager: {
         curPage: 1,
         totalPage: 1,
