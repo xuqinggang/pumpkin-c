@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { ajaxCollectHouse, ajaxCancelCollectHouse } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { isHasCookie } from 'lib/util';
+import { isHasCookie, getPageFrom } from 'lib/util';
 
 import './styles.less';
 
@@ -25,8 +25,12 @@ export default class HouseHead extends PureComponent {
 
         this.rootUrlPrefix = window.getStore('url').urlPrefix;
 
+        const search = props.history.location.search;
+        // 来自哪个页面
+        this.pageFrom = getPageFrom(search);
+        
         // 判断是否来自客户端的分享
-        this.isShareFrom = window.location.href.indexOf('sharefrom') !== -1;
+        this.isShareFrom = search.indexOf('sharefrom') !== -1;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -60,7 +64,7 @@ export default class HouseHead extends PureComponent {
 
     handleCollectTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`${this.rootUrlPrefix}/login`);
+            this.props.history.push(`${this.rootUrlPrefix}/login?pagefrom=detail`);
             return;
         }
         
@@ -120,7 +124,7 @@ export default class HouseHead extends PureComponent {
         return (
             <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
                 {
-                    this.isShareFrom ? (
+                    this.isShareFrom || this.pageFrom === 'login' ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={`${this.rootUrlPrefix}`}>

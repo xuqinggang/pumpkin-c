@@ -12,7 +12,7 @@ import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
 import Service from 'lib/Service';
-import { shallowEqual, dynamicDocTitle } from 'lib/util';
+import { shallowEqual, dynamicDocTitle, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 
@@ -34,17 +34,21 @@ export default class HouseList extends PureComponent {
                 more: '更多',
             },
             // 筛选状态
-            filterState: {},
+            filterState: {
+                position: {},
+                rent: [],
+                houseType: {},
+                more: {},
+            },
             // 筛选的请求参数
             filterParamsObj: {
                 apartmentId: this.getParamsObj.apartment || null,
             },
         };
-
         // 动态更改标题
         dynamicDocTitle('南瓜租房');
 
-        this.urlPrefix = window.getStore('url').urlPrefix;
+        this.curUrlPrefix = window.getStore('url').urlPrefix;
     }
 
     _getGetParams() {
@@ -62,33 +66,98 @@ export default class HouseList extends PureComponent {
         return getParamsObj;
     }
 
+    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
+    _dynamicSetPositionFilterLabel = (label) => {
+        console.log('_dynamicSetPositionFilterLabel', label)
+        this.setState({
+            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
+        });
+    }
+
     // 筛选确认回调
-    onFilterConfirm = (filterParams, filterStateObj) => {
-        console.log('filterParams', filterParams, filterStateObj);
-        const newFilterParams = Object.assign({}, this.state.filterParamsObj, filterParams);
+    onFilterConfirm = (filterStateObj) => {
+        const oldFilterState = this.state.filterState;
+        const newFilterState = Object.assign({}, oldFilterState, filterStateObj);
 
-        if (!shallowEqual(this.state.filterParamsObj, newFilterParams)) {
+        this.setState({
+            filterState: newFilterState,
+        });
+
+        console.log('test onFilterConfirm', newFilterState);
+
+        const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
+        let link = '';
+
+        // 筛选url片段
+        const rtFilterUrl = this._genHouseListFilterUrlFragment(filterUrlFragment);
+        link = urlJoin(this.curUrlPrefix, rtFilterUrl);
+
+        this.props.history.push(link);
+        // 未知原因，需要设置延时来确保微信分享正常
+        const timer = setTimeout(() => {
+            clearTimeout(timer);
+            this.wxShare();
+        }, 500);
+        
+        // const newFilterParams = Object.assign({}, this.state.filterParamsObj, filterParams);
+
+        // if (!shallowEqual(this.state.filterParamsObj, newFilterParams)) {
+        //     this.setState({
+        //         filterParamsObj: newFilterParams,
+        //     }, () => {
+        //         const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
+        //         if (filterUrlFragment) {
+        //             let link = '';
+
+        //             // 筛选url片段
+        //             const rtFilterUrl = this._genHouseListFilterUrlFragment(filterUrlFragment);
+        //             console.log('rtFilterUrl', rtFilterUrl);
+        //             link = urlJoin(this.curUrlPrefix, rtFilterUrl);
+
+        //             this.props.history.push(link);
+        //             // 未知原因，需要设置延时来确保微信分享正常
+        //             const timer = setTimeout(() => {
+        //                 clearTimeout(timer);
+        //                 this.wxShare();
+        //             }, 500);
+        //         }
+        //     });
+        // }
+    }
+    // 生成列表页筛选url片段，包括apartment查询字符串
+    _genHouseListFilterUrlFragment(filterUrlFragment) {
+        let rt = '';
+        if (this.getParamsObj.apartment) {
+            rt = `${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
+        } else {
+            rt = filterUrlFragment;
+        }
+
+        window.setStore('url', {
+            filterUrlFragment: rt,
+        });
+
+        return rt;
+    }
+
+    // 根据url片段生成state和params
+    _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
+        const filterState = parseUrlToState(filterUrlFragment);
+        // filterState中 position包含 state和params信息
+        const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
+        const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
+        console.log('newFilterState', newFilterState);
+        const filterParamsAndLabel = filterStateToParams(newFilterState);
+
+        if (filterState) {
             this.setState({
-                filterParamsObj: newFilterParams,
-            }, () => {
-                const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
-                if (filterUrlFragment) {
-                    let link = '';
-                    const cityName = this.props.match.params.cityName;
-
-                    if (this.getParamsObj.apartment) {
-                        link = `${this.urlPrefix}/${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
-                    } else {
-                        link = `${this.urlPrefix}/${filterUrlFragment}`;
-                    }
-
-                    this.props.history.push(link);
-                    // 未知原因，需要设置延时来确保微信分享正常
-                    const timer = setTimeout(() => {
-                        clearTimeout(timer);
-                        this.wxShare();
-                    }, 500);
-                }
+                filterState: Object.assign({}, this.state.filterState, newFilterState),
+                filterParamsObj: Object.assign({},
+                    this.state.filterParamsObj,
+                    filterParamsAndLabel.filterParams,
+                    positionStateAndParams && positionStateAndParams.params,
+                ),
+                filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
             });
         }
     }
@@ -105,31 +174,21 @@ export default class HouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        if (filterUrlFragment) {
-            // 注意返回的position，包含state和params
-            const filterState = parseUrlToState(filterUrlFragment);
-            const { position: positionFilterState, ...extraTypeFilterState } = filterState;
+        this._genHouseListFilterUrlFragment(filterUrlFragment);
 
-            const filterParamsAndLabel = filterStateToParams(extraTypeFilterState);
-            // filter params
-            const extraTypeFilterParams = filterParamsAndLabel.filterParams;
-            const positionFilterParams = positionFilterState && positionFilterState.params;
-
-            // filter state
-            const newFilterState = Object.assign(extraTypeFilterState, { 
-                position: positionFilterState && positionFilterState.state
-            });
-
-            if (filterState) {
-                this.setState({
-                    filterState: newFilterState,
-                    filterParamsObj: Object.assign({}, this.state.filterParamsObj, 
-                        extraTypeFilterParams, positionFilterParams),
-                    filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-                });
-            }
-        }
+        this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
         this.wxShare();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
+        const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
+        if (curFilterUrlFragment !== nextFilterUrlFragment) {
+            console.log('componentWillReceiveProps', nextFilterUrlFragment, curFilterUrlFragment);
+            this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
+
+            this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
+        }
     }
 
     render() {
@@ -143,6 +202,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
+        console.log('HouseList render', filterState);
 
         return (
             <div className={`${classPrefix}`}>
@@ -156,6 +216,9 @@ export default class HouseList extends PureComponent {
                     filterState={filterState}
                     filterLabel={filterLabel}
                     onFilterConfirm={this.onFilterConfirm}
+                    onFilterClear={this.onFilterClear}
+                    onFilterReSume={this.onFilterReSume}
+                    onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
                 />
                 <HouseLists
                     filterParams={filterParamsObj}

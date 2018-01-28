@@ -1,3 +1,26 @@
+// 来自哪个页
+export function getPageFrom(search) {
+    const regRt = search && search.match(/(pagefrom)=(\b\S+\b)/);
+
+    return regRt && regRt[2];
+}
+
+// 拼接url
+export function urlJoin(...urlArr) {
+    return urlArr.reduce(function(rt, cur) {
+        if (!cur) return rt;
+        if (cur.charAt(0) !== '/') {
+            cur = `/${cur}`;
+        }
+
+        const curLen = cur.length;
+        if (cur.charAt(curLen - 1) === '/') {
+            cur = cur.substr(0, curLen - 1);
+        }
+
+        return `${rt}${cur}`;
+    }, '');
+}
 // 获取字符串长度（汉字算两个字符，字母数字算一个）
 export function getByteLen(val) {
     var len = 0;
@@ -26,9 +49,7 @@ export function clearCookie(key) {
     exp.setTime(exp.getTime() - 1);
     let cval = getCookie(key);
     if(cval != null) {
-        console.log('call', cval,  exp.toGMTString());
         document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
-        console.log('document.cookie', document.cookie);
     }
 }
 

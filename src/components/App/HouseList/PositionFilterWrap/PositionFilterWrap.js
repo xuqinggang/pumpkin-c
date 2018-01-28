@@ -33,6 +33,7 @@ export default class PositionFilterWrap extends PureComponent {
             .then((positionFilterDataArr) => {
                 if (positionFilterDataArr) {
                     const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
+                    console.log('PositionFilterWrap', newPositionFilterDataArr);
                     window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
 
                     this.setState({
@@ -41,7 +42,6 @@ export default class PositionFilterWrap extends PureComponent {
 
                     const { label } = positionFilterStateToParams(this.props.filterState);
                     this.props.onDynamicSetLabel(label);
-
                 }
                 console.log('ajax positionData', positionFilterDataArr);
             });

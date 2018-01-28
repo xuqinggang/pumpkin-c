@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
@@ -9,18 +9,20 @@ import './styles.less';
 const houseTypeClass = 'm-housetype';
 
 
-class HouseTypeFilter extends PureComponent {
+class HouseTypeFilter extends Component {
     constructor(props) {
         super(props);
+        this.initialState = {
+            shared: {},
+            whole: {},
+        };
         // ex: { shared: {1:true}, whole: {3: false} }
-        this.state = {};
+        this.state = this.initialState;
     }
 
     onTagsChange = (type, tagsStateObj) => {
         this.setState({
             [type]: tagsStateObj,
-        }, () => {
-            this.props.onFilterChange(this.state);
         });
     }
 
@@ -30,20 +32,18 @@ class HouseTypeFilter extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        // 是否清空
-        if ('isClear' in nextProps) {
-            if (nextProps.isClear) {
+    // 清空state
+    _clearState = () => {
+        this.setState(this.initialState);
+    }
+    // 确认state
+    _confirmState = () => {
+        this.props.onFilterConfirm(this.state);
+    }
 
-                // 清空state
-                const preStates = this.state;
-                let newStates = {};
-                Object.keys(preStates).forEach((typeName) => {
-                    newStates[typeName] = {};
-                });
-                this.setState(newStates);
-            }
-        };
+    // 每一次展示，都以最顶部的filterState为准
+    componentWillReceiveProps(nextProps) {
+        this.setState(Object.assign({}, this.initialState, nextProps.filterState));
     }
     
     render() {
@@ -51,6 +51,8 @@ class HouseTypeFilter extends PureComponent {
             shared,
             whole,
         } = this.state;
+
+        console.log('HouseTypeFilter render', this.state)
         return (
             <div className={`${houseTypeClass}`}>
                 <TagsGroup

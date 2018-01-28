@@ -9,27 +9,28 @@ export function filterStateToParams(filterState) {
         more,
         houseType,
         rent,
+        position,
     } = filterState;
 
+    // 初始值
     const newFilterParams = {};
     const newLabel = {};
-    if (more) {
-        const { label, filterParams } = moreFilterStateToParams(more);
-        Object.assign(newFilterParams, filterParams);
-        newLabel.more = label;
-    }
 
-    if (rent) {
-        const { label, filterParams } = rentFilterStateToParams(rent);
-        Object.assign(newFilterParams, filterParams);
-        newLabel.rent = label;
-    }
+    const { label: moreLabel, filterParams: moreFilterParams } = moreFilterStateToParams(more);
+    Object.assign(newFilterParams, moreFilterParams);
+    newLabel.more = moreLabel;
 
-    if (houseType) {
-        const { label, filterParams } = houseTypeFilterStateToParams(houseType);
-        Object.assign(newFilterParams, filterParams);
-        newLabel.houseType = label;
-    }
+    const { label: rentLabel, filterParams: rentFilterParams } = rentFilterStateToParams(rent);
+    Object.assign(newFilterParams, rentFilterParams);
+    newLabel.rent = rentLabel;
+
+    const { label: houseTypeLabel, filterParams: houseTypeFilterParams } = houseTypeFilterStateToParams(houseType);
+    Object.assign(newFilterParams, houseTypeFilterParams);
+    newLabel.houseType = houseTypeLabel;
+
+    const { label: positionLabel, filterParams: positionFilterParams } = positionFilterStateToParams(position);
+    Object.assign(newFilterParams, positionFilterParams);
+    newLabel.position = positionLabel;
 
     return {
         label: newLabel,
@@ -179,13 +180,13 @@ export function rentFilterStateToParams(rentState) {
 
     if (!rentState) {
         return {
-            filterParams,
             label,
+            filterParams,
         };
     }
 
     // 20000标志着不限
-    if (rentState) {
+    if (rentState.length) {
         if (rentState[1] == 20000) {
             filterParams.priceInfo = { floor: rentState[0] }
             if (rentState[0] === 0) {
@@ -194,12 +195,14 @@ export function rentFilterStateToParams(rentState) {
                 label = `${rentState[0]}以上`;
             }
         } else if (rentState[0] === 0) {
+            filterParams.priceInfo = { ceil: rentState[1] };
             label = `${rentState[1]}以下`;
         } else {
             filterParams.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             label = `${rentState[0]}-${rentState[1]}`;
         }
     }
+
     return {
         label,
         filterParams,
@@ -212,6 +215,7 @@ const PtTypeMapParamsKey = {
     subways: ['subwayId', 'stationId'],
     around: ['nearByInfo'],
 };
+
 export function positionFilterStateToParams(positinFilterStateObj) {
     const filterParams = {
         districtId: null,
@@ -221,7 +225,8 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         nearByInfo: null,
     };
     let label = '位置';
-    const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
+    const positionStore = window.getStore('positionFilterDataArr');
+    const positionFilterDataArr = positionStore && positionStore.data;
 
     if (!positinFilterStateObj || !positionFilterDataArr) {
         return {
