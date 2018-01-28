@@ -6,6 +6,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
 import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
+import { getPageFrom } from 'lib/util';
 
 const classPrefix = 'm-houselogin';
 
@@ -20,6 +21,10 @@ export default class LoginVerifyCode extends PureComponent {
         this.telVal = props.match.params.telVal;
 
         this.urlPrefix = window.getStore('url').urlPrefix;
+
+        // 登录来自哪个页面：（列表页或者详情页）
+        const search = props.location.search;
+        this.pageFrom = getPageFrom(search);
     }
 
     ajaxUserLogin(tel, verifyCode) {
@@ -27,7 +32,11 @@ export default class LoginVerifyCode extends PureComponent {
             .then((infoObj) => {
                 // 存储个人信息
                 window.setStore('meInfo', infoObj);
-
+                if (this.pageFrom === 'detail') {
+                    const rentUnitId = window.getStore('rentUnit').rentUnitId;
+                    this.props.history.replace(`${this.urlPrefix}/detail/${rentUnitId}?pagefrom=login`)
+                    return;
+                }
                 this.props.history.replace(`${this.urlPrefix}/me`);
             })
             .catch((err) => {

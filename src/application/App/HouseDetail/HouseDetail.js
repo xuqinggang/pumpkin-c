@@ -50,6 +50,10 @@ class HouseDetailIndex extends PureComponent {
         };
 
         this.rentUnitId = props.match.params.rentUnitId;
+
+        window.setStore('rentUnit', {
+            rentUnitId: this.rentUnitId,
+        });
     }
 
     componentWillMount() {

@@ -1,3 +1,10 @@
+// 来自哪个页
+export function getPageFrom(search) {
+    const regRt = search && search.match(/(pagefrom)=(\b\S+\b)/);
+
+    return regRt && regRt[2];
+}
+
 // 拼接url
 export function urlJoin(...urlArr) {
     return urlArr.reduce(function(rt, cur) {
@@ -42,9 +49,7 @@ export function clearCookie(key) {
     exp.setTime(exp.getTime() - 1);
     let cval = getCookie(key);
     if(cval != null) {
-        console.log('call', cval,  exp.toGMTString());
         document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
-        console.log('document.cookie', document.cookie);
     }
 }
 

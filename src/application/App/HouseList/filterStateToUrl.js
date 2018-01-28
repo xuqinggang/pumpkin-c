@@ -228,6 +228,7 @@ export function stringifyStateObjToUrl(filterStateObj) {
 }
 
 export function parseUrlToState(filterUrlFragment) {
+    // 初始化的state
     const filterStateObj = {
         rent: [],
         position: {},
