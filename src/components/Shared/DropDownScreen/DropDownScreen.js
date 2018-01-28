@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import { shallowEqual } from 'lib/util';
@@ -8,7 +8,7 @@ import './styles.less';
 
 const dropClass = 'm-dropscreen';
 
-export default class DropDownScreen extends Component {
+export default class DropDownScreen extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,19 +99,19 @@ export default class DropDownScreen extends Component {
         }
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
-        const {
-            children: nextChildren,
-            ...nextExtraProps,
-        } = nextProps;
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     const {
+    //         children: nextChildren,
+    //         ...nextExtraProps,
+    //     } = nextProps;
 
-        const {
-            children,
-            ...extraProps,
-        } = this.props;
+    //     const {
+    //         children,
+    //         ...extraProps,
+    //     } = this.props;
 
-        return !shallowEqual(nextExtraProps, extraProps) || !shallowEqual(nextState, this.state);
-    }
+    //     return !shallowEqual(nextExtraProps, extraProps) || !shallowEqual(nextState, this.state);
+    // }
 
     componentWillReceiveProps(nextProps) {
         if ('show' in nextProps) {

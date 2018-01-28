@@ -127,6 +127,7 @@ export default class HouseLists extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
+        console.log('HouseLists componentWillReceiveProps', this.props.filterParams, nextProps.filterParams);
         this.filterParams = nextProps.filterParams;
         if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
             this.handleFetchList('INIT');

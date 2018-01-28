@@ -3,12 +3,10 @@ const rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame |
 };
 
 export function animateScrollTop(srcY, destY, duration, callback) {
-    console.log('destY', srcY, destY);
     const stepY = (destY - srcY) / (duration / 17);
     let endY = srcY;
 
     function moving() {
-        console.log('stepY', endY);
         endY = endY + stepY;
         endY = endY > destY ? destY : endY;
         window.scrollTo(0, endY);

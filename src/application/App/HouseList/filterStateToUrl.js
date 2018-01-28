@@ -146,9 +146,9 @@ const PtTypeMapParamsKey = {
     around: ['nearByInfo'],
 };
 
+// 位置比较特殊，根据url生成state和params信息
 // 转换positionUrl->positionState和positionParams
-export function parsePositionUrlToData(positionUrl) {
-    console.log('positionUrlxxx', positionUrl);
+export function parsePositionUrlToState(positionUrl) {
     if (!positionUrl) return ;
     const positionState = {
         firstItemSelectedIndex: 0,
@@ -205,25 +205,21 @@ export function stringifyStateObjToUrl(filterStateObj) {
     const urlArr = [];
 
     if (position) {
-        console.log('position', position);
         const positionUrl = stringifyPositionStateToUrl(position);
         positionUrl && urlArr.push(positionUrl);
     }
 
     if (rent) {
-        console.log('rent', rent);
         const rentUrl = stringifyRentStateToUrl(rent);
         rentUrl && urlArr.push(rentUrl);
     }
 
     if (more) {
-        console.log('more', more);
         const moreUrl = stringifyTagsStateToUrl(more);
         moreUrl && urlArr.push(moreUrl);
     }
 
     if (houseType) {
-        console.log('houseType', houseType);
         const houseTypeUrl = stringifyTagsStateToUrl(houseType);
         houseTypeUrl && urlArr.push(houseTypeUrl);
     }
@@ -232,12 +228,16 @@ export function stringifyStateObjToUrl(filterStateObj) {
 }
 
 export function parseUrlToState(filterUrlFragment) {
-    console.log('filterUrlFragment', filterUrlFragment);
+    const filterStateObj = {
+        rent: [],
+        position: {},
+        houseType: {},
+        more: {},
+    };
+
     if (filterUrlFragment) {
-        const filterStateObj = {};
         const filterUrlArr = filterUrlFragment.split('~');
         filterUrlArr.forEach((filerUrlItem) => {
-            console.log('filerUrlItem', filerUrlItem.indexOf('subways'));
             // 如果url第一个字母p,则为租金筛选
             if (filerUrlItem[0] === 'p') {
                 filterStateObj.rent = parseRentUrlToState(filerUrlItem);
@@ -246,8 +246,7 @@ export function parseUrlToState(filterUrlFragment) {
 
             // 如果url中含有'subways'和'districts'字段，则position筛选
             if (filerUrlItem.indexOf('subways') != -1 || filerUrlItem.indexOf('districts') != -1) {
-                console.log('filerUrlItem', 'subways')
-                filterStateObj.position = parsePositionUrlToData(filerUrlItem);
+                filterStateObj.position = parsePositionUrlToState(filerUrlItem);
                 return;
             }
 
@@ -261,4 +260,6 @@ export function parseUrlToState(filterUrlFragment) {
         });
         return filterStateObj;
     }
+
+    return filterStateObj;
 }
