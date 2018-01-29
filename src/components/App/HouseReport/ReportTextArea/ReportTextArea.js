@@ -14,10 +14,11 @@ export default class ReportTextArea extends PureComponent {
     }
 
     onMsgChange = (e) => {
+        const textareaVal = e.target.value.substr(0, 300);
         this.setState({
-            msg: e.target.value,
+            msg: textareaVal,
         });
-        this.props.onChange(e.target.value);
+        this.props.onChange(textareaVal);
     }
 
     render() {
