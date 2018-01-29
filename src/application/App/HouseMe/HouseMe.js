@@ -55,11 +55,8 @@ export default class HouseMe extends PureComponent {
             match,
             history,
         } = this.props;
-        const {
-            meInfoObj,
-        } = this.state;
 
-        console.log('meInfoObj', this.state.meInfoObj);
+        const meInfoObj = window.getStore('meInfo') || {};
 
         return (
             <div className={`${classPrefix}`}>

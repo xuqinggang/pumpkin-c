@@ -9,7 +9,6 @@ const classPrefix = 'm-bottomopennative';
 
 export default class BottomOpenNative extends PureComponent {
     handleOpenTap = () => {
-        console.log('this.props.schema', this.props.schema);
         nativeSchema.loadSchema({
             // 某个schema协议，例如login,
             schema: this.props.schema,
@@ -38,7 +37,7 @@ export default class BottomOpenNative extends PureComponent {
     render() {
         return (
             <span className={`${classPrefix}`} onTouchTap={this.handleOpenTap}>
-                下载APP
+                打开APP
             </span>
         );
     }
