@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { ajaxCollectHouse, ajaxCancelCollectHouse } from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { isHasCookie, getPageFrom } from 'lib/util';
+import { isWeiXin } from 'lib/const';
 
 import './styles.less';
 
@@ -128,7 +129,7 @@ export default class HouseHead extends PureComponent {
         return (
             <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
                 {
-                    this.isShareFrom || this.pageFrom === 'login' ? (
+                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={`${this.rootUrlPrefix}/${this.filterUrlFragment}`}>
