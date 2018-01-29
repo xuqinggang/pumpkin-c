@@ -13,6 +13,10 @@ export default function(jumpConditionObj = {}) {
             }
 
             handleBackBtnTap = () => {
+                if (this.refs.wrappedCom.onBackTap) {
+                    this.refs.wrappedCom.onBackTap();
+                    return ;
+                }
                 const { historyback, backUrl } = jumpConditionObj;
                 if (backUrl) {
                     window.location.href = backUrl;
@@ -31,12 +35,15 @@ export default function(jumpConditionObj = {}) {
                     <div className={ classnames(classPrefix, 'g-grid-row', className) }>
                         <span
                             onTouchTap={this.handleBackBtnTap}
-                            className={`${classPrefix}-jumpbtn grid-col grid-col-reset f-flex-align-center icon-back`}
+                            className={`${classPrefix}-jumpbtn f-display-flex f-flex-align-center icon-back`}
                         >
                         </span>
-                        <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
-                            <WrappedCom />
-                        </div>
+                        <WrappedCom {...this.props} ref="wrappedCom"/>
+                        {
+                            // <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
+                            //     <WrappedCom />
+                            //     </div>
+                        }
                     </div>
                 )
             }

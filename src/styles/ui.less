@@ -1,0 +1,32 @@
+// 公共ui库样式
+@import (reference) '~styles/lib.less';
+
+// 获取验证码btn
+.u-btn-getverify {
+    display: inline-block;
+    width: 288px;
+    padding: 14px 0;
+    border-radius: 67px;
+    text-align: center;
+    background: #cdd0d3;
+    line-height: 45px;
+    color: #fff;
+    pointer-events: none;
+    .font-size(32);
+
+    &.active {
+        pointer-events: inherit;
+        background: #f38d39;
+    }
+}
+
+.u-btn-submit {
+    display: inline-block;
+    width: 288px;
+    padding: 14px;
+    border-radius: 67px;
+    text-align: center;
+    background: #f38d39;
+    color: #fff;
+    .font-size(32);
+}

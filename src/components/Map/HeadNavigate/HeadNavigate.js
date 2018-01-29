@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 
@@ -6,19 +6,15 @@ import './styles.less';
 
 const classPrefix = 'm-headnavigate';
 
-class HeadNavigate extends Component {
-    constructor(props) {
-        super(props);
-    }
+class HeadNavigate extends PureComponent {
     render() {
         return (
-            <div className={classPrefix}>
-                <span className={`f-display-inlineblock ${classPrefix}-title`}>周边及交通</span>
-            </div>
+            <span className={`f-display-flex f-flex-align-center ${classPrefix}-title`}>周边及交通</span>
         )
     }
 }
 
 export default HeadJumpConnect({
     historyback: true,
+    className: `f-flex-justify-start`,
 })(HeadNavigate);

@@ -1,3 +1,66 @@
+// 来自哪个页
+export function getPageFrom(search) {
+    const regRt = search && search.match(/(pagefrom)=(\b\S+\b)/);
+
+    return regRt && regRt[2];
+}
+
+// 拼接url
+export function urlJoin(...urlArr) {
+    return urlArr.reduce(function(rt, cur) {
+        if (!cur) return rt;
+        if (cur.charAt(0) !== '/') {
+            cur = `/${cur}`;
+        }
+
+        const curLen = cur.length;
+        if (cur.charAt(curLen - 1) === '/') {
+            cur = cur.substr(0, curLen - 1);
+        }
+
+        return `${rt}${cur}`;
+    }, '');
+}
+// 获取字符串长度（汉字算两个字符，字母数字算一个）
+export function getByteLen(val) {
+    var len = 0;
+    for (var i = 0; i < val.length; i++) {
+        var a = val.charAt(i);
+        if (a.match(/[^\x00-\xff]/ig) != null) {
+            len += 2;
+        }
+        else {
+            len += 1;
+        }
+    }
+    return len;
+}
+
+export function getCookie(key) {
+    let arr, reg = new RegExp("(^| )"+key+"=([^;]*)(;|$)");
+
+    if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+    else return null;
+}
+
+// 删除cookie需要指定path
+export function clearCookie(key) {
+    let exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    let cval = getCookie(key);
+    if(cval != null) {
+        document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
+    }
+}
+
+export function isHasCookie(key) {
+    const cookieStr = document.cookie;
+    if (!cookieStr) return false;
+
+    return cookieStr.indexOf(key) !== -1;
+}
+
+// 动态加载标签
 const dynamicScriptObj = {};
 export function dynamicScript(src, callback) {
     // 如果该scr，已加载过，则直接执行callback

@@ -1,0 +1,57 @@
+@import (reference) '~styles/lib.less';
+
+.m-househead {
+    box-sizing: border-box;
+    height: 88px;
+
+    a, a:hover {
+        text-decoration: none;
+    }
+
+    &-btn-back {
+        padding: 0px 40px;
+    }
+
+    &-btn-back-browser {
+        padding: 0px 40px;
+        .font-size(40);
+    }
+
+    &-icon {
+        .font-size(34);
+    }
+
+    &-icon-text {
+        margin-left: 10px;
+        color: #414141;
+        .font-size(32);
+    }
+
+    &-btn-collected {
+        padding: 22px 23px;
+
+        &.active {
+            color: red;
+            transform-origin: center center;
+            animation: collection 0.25s ease-out;
+        }
+    }
+
+    &-btn-report {
+        padding: 22px 40px 22px 23px;
+    }
+}
+
+@keyframes collection {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.45, 1.45);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}

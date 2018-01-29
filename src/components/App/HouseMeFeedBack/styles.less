@@ -1,0 +1,27 @@
+@import (reference) '~styles/lib.less';
+
+.m-feedback {
+    &-textarea {
+        box-sizing: border-box;
+        width: 690px;
+        height: 350px;
+        padding: 30px;
+        border: none;
+        border-radius: 10px;
+        color: #333;
+        background: #fafafa;
+        .font-size(30);
+    }
+
+    &-remaining {
+        position: absolute;
+        right: 40px;
+        bottom: 20px;
+        color: #999;
+        .font-size(28);
+    }
+
+    &-btn-submit {
+        margin-top: 144px;
+    }
+}

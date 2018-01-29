@@ -1,0 +1,54 @@
+@import (reference) '~styles/lib.less';
+
+.m-mewishlist {
+    box-sizing: border-box;
+    padding: 20px 20px 0px;
+    background: #f8f8f8;
+}
+
+.m-wishrentitem {
+    box-sizing: border-box;
+    width: 100%;
+    height: 178px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.1);
+    background: #fff;
+
+    &-img {
+        width: 170px;
+        height: 130px;
+        margin-right: 24px;
+    }
+
+    &-info {
+        min-width: 70%;
+
+        .info-title {
+            color: #000000;
+            line-height: 1;
+            .font-size(28);
+        }
+
+        .info-price {
+            .price-value {
+                color: #333;
+            }
+
+            .price-label {
+                margin-left: 10px;
+                color: #999;
+            }
+        }
+
+        .info-location {
+            color: #999;
+            .font-size(22);
+        }
+
+        .info-status {
+            color: #f38d39;
+        }
+    }
+}

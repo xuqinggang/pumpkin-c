@@ -43,8 +43,9 @@ const selectMoneyList = [
 class RentFilter extends PureComponent {
     constructor(props) {
         super(props);
+        this.initialState = [0, 20000];
         this.state = {
-            rangeValueArr: [0, 20000],
+            rangeValueArr: this.initialState,
         };
     }
 
@@ -53,43 +54,37 @@ class RentFilter extends PureComponent {
         this.setState({
             rangeValueArr,
         });
-
-        if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr, rangeValueArr);
-        }
     }
 
     onMonenyRangeListTap = (rangeValueArr) => {
         this.setState({
             rangeValueArr,
         });
-
-        if (this.props.onFilterChange) {
-            this.props.onFilterChange(rangeValueArr, rangeValueArr);
-        }
     }
 
+    // 清空state
+    _clearState = () => {
+        this.setState(this.initialState);
+    }
+    // 确认state
+    _confirmState = () => {
+        this.props.onFilterConfirm(this.state.rangeValueArr);
+    }
+    
     componentWillReceiveProps(nextProps) {
-        // 是否清空
-        if ('isClear' in nextProps) {
-            if (nextProps.isClear) {
-                this.setState({
-                    rangeValueArr: [0, 20000],
-                });
-            }
-        };
+        this.setState({
+            rangeValueArr: nextProps.filterState,
+        });
     }
 
     componentWillMount() {
         const filterState = this.props.filterState;
-        console.log('RentFilter', filterState)
         if (filterState) {
             this.setState({
                 rangeValueArr: filterState,
             });
         }
     }
-    
 
     render() {
         const {

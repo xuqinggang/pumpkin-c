@@ -12,18 +12,32 @@ const moreClass = 'm-morefilter';
 class MoreFilter extends PureComponent {
     constructor(props) {
         super(props);
+        this.initialState = {
+            direction: {},
+            area: {},
+            feature: {},
+            floor: {},
+        };
+
         // state, ex: { direction: { 0: false, 1: true }, area: { 3: true } }
-        this.state = {};
+        this.state = this.initialState;
     }
 
     onTagsChange = (type, tagsStateObj) => {
         this.setState({
             [type]: tagsStateObj,
-        }, () => {
-            this.props.onFilterChange(this.state);
         });
     }
 
+    // 清空state
+    _clearState = () => {
+        this.setState(this.initialState);
+    }
+    // 确认state
+    _confirmState = () => {
+        this.props.onFilterConfirm(this.state);
+    }
+    
     componentWillMount() {
         if (this.props.filterState) {
             this.setState(this.props.filterState);
@@ -31,18 +45,7 @@ class MoreFilter extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        // 是否清空
-        if ('isClear' in nextProps) {
-            if (nextProps.isClear) {
-                // 清空state
-                const preStates = this.state;
-                let newStates = {};
-                Object.keys(preStates).forEach((typeName) => {
-                    newStates[typeName] = {};
-                });
-                this.setState(newStates);
-            }
-        }
+        this.setState(Object.assign({}, this.initialState, nextProps.filterState));
     }
     
     render() {

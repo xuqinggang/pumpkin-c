@@ -6,11 +6,11 @@ const classPrefix = 'm-bottomdialog-closebtn';
 
 export default class BottomDialogCloseBtn extends Component {
     static contextTypes = {
-        closePotal: PropTypes.func,
+        _closePotal: PropTypes.func,
     };
 
     handleCloseTouchTap = (e) => {
-        this.context.closePotal();
+        this.context._closePotal();
     }
 
     render() {

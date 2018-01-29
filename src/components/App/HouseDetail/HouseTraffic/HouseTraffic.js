@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import Config from 'config/config';
 
 import './styles.less';
 
@@ -10,6 +9,7 @@ export default function HouseTraffic(props) {
     const { className, houseTrafficData } = props;
     const { lon, lat } = houseTrafficData;
     if (!lon || !lat) return null;
+
     const pos = `${lon},${lat}`;
     // 中心点图片url
     const markerImgUrl = 'http://pic.kuaizhan.com/g3/a8/2f/cc39-9739-4af0-8142-6b440a6ff6fa15?id=1.png';
@@ -28,6 +28,9 @@ export default function HouseTraffic(props) {
     );
 
     function handleJumpPageTap() {
-        window.location.href = `${Config.urlPrefix}/map?pos=${pos}`;
+        const urlInfo = window.getStore('url');
+        const urlPrefix = urlInfo && urlInfo.urlPrefix;
+
+        window.location.href = `${urlPrefix}/map?pos=${pos}`;
     }
 }
