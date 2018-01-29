@@ -103,7 +103,7 @@ export default class HouseHead extends PureComponent {
 
     handleReportTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`${this.rootUrlPrefix}/login`);
+            this.props.history.push(`${this.rootUrlPrefix}/login?pagefrom=detail`);
             return;
         }
 
