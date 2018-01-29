@@ -72,7 +72,6 @@ class RentFilter extends PureComponent {
     }
     
     componentWillReceiveProps(nextProps) {
-        console.log('nextProps', nextProps.filterState);
         this.setState({
             rangeValueArr: nextProps.filterState,
         });

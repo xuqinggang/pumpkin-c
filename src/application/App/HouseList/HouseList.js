@@ -33,10 +33,10 @@ export default class HouseList extends PureComponent {
                 houseType: '房型',
                 more: '更多',
             },
-            // 筛选状态
+            // 筛选初始状态
             filterState: {
                 position: {},
-                rent: [],
+                rent: [0, 20000],
                 houseType: {},
                 more: {},
             },
@@ -68,7 +68,6 @@ export default class HouseList extends PureComponent {
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
     _dynamicSetPositionFilterLabel = (label) => {
-        console.log('_dynamicSetPositionFilterLabel', label)
         this.setState({
             filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
         });
@@ -82,8 +81,6 @@ export default class HouseList extends PureComponent {
         this.setState({
             filterState: newFilterState,
         });
-
-        console.log('test onFilterConfirm', newFilterState);
 
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
         let link = '';
@@ -146,7 +143,6 @@ export default class HouseList extends PureComponent {
         // filterState中 position包含 state和params信息
         const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
         const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
-        console.log('newFilterState', newFilterState);
         const filterParamsAndLabel = filterStateToParams(newFilterState);
 
         if (filterState) {
@@ -184,7 +180,6 @@ export default class HouseList extends PureComponent {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
         if (curFilterUrlFragment !== nextFilterUrlFragment) {
-            console.log('componentWillReceiveProps', nextFilterUrlFragment, curFilterUrlFragment);
             this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
 
             this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
@@ -202,8 +197,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-        console.log('HouseList render', filterState);
-
+console.log('HouseList render');
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>

@@ -119,7 +119,6 @@ export default class Filter extends PureComponent {
 
         const curScrollTop = getScrollTop();
         const filterDomTop = Math.round(this.filterDom.getBoundingClientRect().top);
-console.log('_fixFilterDom', filterDomTop, this.headDomHeight)
         // 是否filterDom fixed
         const isFixed = this.state.isFixed;
         if (!isFixed && filterDomTop <= (this.headDomHeight)) {
@@ -145,7 +144,6 @@ console.log('_fixFilterDom', filterDomTop, this.headDomHeight)
 
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionFilterState) => {
-        console.log('onFilterPositionConfirm', positionFilterState);
         this.props.onFilterConfirm({ position: positionFilterState });
         
         // 隐藏弹层
@@ -162,7 +160,6 @@ console.log('_fixFilterDom', filterDomTop, this.headDomHeight)
 
     // filterState, ex: { shared: {1:true, 2:false} }
     onFilterHouseTypeConfirm = (houseTypeFilterState) => {
-        console.log('HouseTypeFilter onFilterHouseTypeConfirm', houseTypeFilterState);
         this.props.onFilterConfirm({ houseType: houseTypeFilterState });
 
         // 隐藏弹层
@@ -198,7 +195,6 @@ console.log('_fixFilterDom', filterDomTop, this.headDomHeight)
             filterState,
             filterLabel,
         } = this.props;
-        console.log('Filter render', filterState);
 
         const {
             filterShow,

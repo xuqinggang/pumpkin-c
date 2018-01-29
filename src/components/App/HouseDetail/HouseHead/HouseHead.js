@@ -31,6 +31,10 @@ export default class HouseHead extends PureComponent {
         
         // 判断是否来自客户端的分享
         this.isShareFrom = search.indexOf('sharefrom') !== -1;
+
+        // 筛选url片段
+        const urlInfo = window.getStore('url');
+        this.filterUrlFragment = urlInfo && urlInfo.filterUrlFragment || '';
     }
 
     componentWillReceiveProps(nextProps) {
@@ -103,7 +107,7 @@ export default class HouseHead extends PureComponent {
 
     handleReportTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`${this.rootUrlPrefix}/login`);
+            this.props.history.push(`${this.rootUrlPrefix}/login?pagefrom=detail`);
             return;
         }
 
@@ -127,7 +131,7 @@ export default class HouseHead extends PureComponent {
                     this.isShareFrom || this.pageFrom === 'login' ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
-                            to={`${this.rootUrlPrefix}`}>
+                            to={`${this.rootUrlPrefix}/${this.filterUrlFragment}`}>
                             <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
                             <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
                         </Link>
