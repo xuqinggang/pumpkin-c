@@ -31,13 +31,13 @@ export default class OpenNative extends PureComponent {
             protocal: "nangua",
 
             //发起唤醒请求后，会等待loadWaiting时间，超时则跳转到failUrl，默认3000ms
-            loadWaiting: 3000,
+            loadWaiting: 2000,
 
-            iosFailUrl: 'https://itunes.apple.com/cn/app/id1330527627',
+            iosFailUrl: 'http://www.nanguazufang.cn/downloadApp?from=h5',
             // 安卓浏览器唤起失败，直接下载文件
-            androidFailUrl: 'http://app-1252921496.file.myqcloud.com/nangua/app_official_latest.apk',
+            androidFailUrl: 'http://www.nanguazufang.cn/downloadApp?from=h5',
             // 安卓微信唤起失败跳转应用宝
-            wxAndroidFailUrl: 'http://sj.qq.com/myapp/detail.htm?apkName=com.sohu.pumpkin',
+            // wxAndroidFailUrl: '',
 
             // // Android 客户端信息,可以询问 Android同事
             apkInfo: {
