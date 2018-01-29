@@ -111,7 +111,6 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
     // eg: 'districts', 'subways'
     const positionType = firstItem.id.type;
 
-    if (positionType === 'around') { return; }
 
     let secondItem = null;
     if (secondItemSelectedIndex != undefined && secondItemSelectedIndex != -1) {
@@ -119,10 +118,17 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
 
         positionUrlArr.push(positionType);
         const secondItemId = secondItem.id;
+
         if (secondItemId === -1) {
             positionUrlArr.push(secondItemSelectedIndex);
         } else {
-            positionUrlArr.push(`${secondItemSelectedIndex}-${secondItemId}`);
+            // 如果是附近 需做特别处理
+            if (positionType === 'around') {
+                const { lon, lat, distance } = secondItemId;
+                positionUrlArr.push(`${secondItemSelectedIndex}-${lon},${lat},${distance}`);
+            } else {
+                positionUrlArr.push(`${secondItemSelectedIndex}-${secondItemId}`);
+            }
         }
     }
 
@@ -158,9 +164,11 @@ export function parsePositionUrlToState(positionUrl) {
     const positionParams = {};
     let positionParamsKey = null;
 
+    // 类型对应索引
     const TypeMapIndex = {
         districts: 0,
         subways: 1,
+        around: 2,
     };
 
     const positionUrlArr = positionUrl.split('|');
@@ -175,7 +183,17 @@ export function parsePositionUrlToState(positionUrl) {
 
         // id
         if (indexAndIdArr[1] && positionParamsKey) {
-            positionParams[positionParamsKey[0]] = indexAndIdArr[1];
+            // 对附近，做处理
+            if (positionParamsKey[0] === 'nearByInfo') {
+                const nearByInfoParams = indexAndIdArr[1].split(',');
+                positionParams[positionParamsKey[0]] = {
+                    lon: nearByInfoParams[0],
+                    lat: nearByInfoParams[1],
+                    distance: nearByInfoParams[2],
+                };
+            } else {
+                positionParams[positionParamsKey[0]] = indexAndIdArr[1];
+            }
         }
     }
 
@@ -246,7 +264,10 @@ export function parseUrlToState(filterUrlFragment) {
             }
 
             // 如果url中含有'subways'和'districts'字段，则position筛选
-            if (filerUrlItem.indexOf('subways') != -1 || filerUrlItem.indexOf('districts') != -1) {
+            if (filerUrlItem.indexOf('subways') !== -1 ||
+                filerUrlItem.indexOf('districts') !== -1 ||
+                filerUrlItem.indexOf('around') !== -1
+            ) {
                 filterStateObj.position = parsePositionUrlToState(filerUrlItem);
                 return;
             }
@@ -259,7 +280,6 @@ export function parseUrlToState(filterUrlFragment) {
             filterStateObj.more = parseTagsUrlToState(filerUrlItem);
 
         });
-        return filterStateObj;
     }
 
     return filterStateObj;

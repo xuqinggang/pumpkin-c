@@ -6,9 +6,11 @@ export function getPageFrom(search) {
 }
 
 // 拼接url
+// return /bj/nangua/list/
 export function urlJoin(...urlArr) {
-    return urlArr.reduce(function(rt, cur) {
+    const rt = urlArr.reduce(function(rt, cur) {
         if (!cur) return rt;
+
         if (cur.charAt(0) !== '/') {
             cur = `/${cur}`;
         }
@@ -20,7 +22,10 @@ export function urlJoin(...urlArr) {
 
         return `${rt}${cur}`;
     }, '');
+
+    return `${rt}/`;
 }
+
 // 获取字符串长度（汉字算两个字符，字母数字算一个）
 export function getByteLen(val) {
     var len = 0;

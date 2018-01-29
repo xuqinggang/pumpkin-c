@@ -58,17 +58,12 @@ function stuffDataToPosition(itemArr, type, positionDataArr) {
             text: Map[type].text,
             itemArr: firstItemsArr,
         });
-        // if (!positionData[type]) {
-        //     positionData[type] = {};
-
-        //     positionData[type].itemArr = firstItemsArr;
-        //     positionData[type].text = Map[type].text;
-        // }
     }
 }
 
 export function stuffAroundDataToPosition() {
     // 获取地理位置
+    // return Promise.resolve([116.574807, 39.906535])
     return getCurrentPosition()
         .then((lonlatArr) => {
             if (lonlatArr) {
