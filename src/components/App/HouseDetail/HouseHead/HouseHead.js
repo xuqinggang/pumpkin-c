@@ -33,6 +33,9 @@ export default class HouseHead extends PureComponent {
         // 判断是否来自客户端的分享
         this.isShareFrom = search.indexOf('sharefrom') !== -1;
 
+        // 是否是从微信浏览器打开
+        this.isFrom = search.indexOf('from') !== -1;
+
         // 筛选url片段
         const urlInfo = window.getStore('url');
         this.filterUrlFragment = urlInfo && urlInfo.filterUrlFragment || '';
@@ -129,7 +132,7 @@ export default class HouseHead extends PureComponent {
         return (
             <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
                 {
-                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin ? (
+                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin || this.isFrom ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={`${this.rootUrlPrefix}/${this.filterUrlFragment}`}>
