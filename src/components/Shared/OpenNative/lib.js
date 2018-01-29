@@ -152,6 +152,7 @@
             } else if (browser.isIOS()) {
                 if (browser.isWx()) {
                     window.location.href = AppConfig.FAILBACK.IOS;
+                    return;
                 } else {
                     body.appendChild(iframe);
                     iframe.src = schemaUrl;
