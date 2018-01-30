@@ -97,12 +97,13 @@ export function parseRentUrlToState(rentUrl) {
 
 //positionFilterState, eg: {firstItemSelectedIndex: 0, secondItemSelectedIndex: 1, thirdItemSelectedIndex: 2} 
 export function stringifyPositionStateToUrl(positinFilterStateObj) {
+    if (!Object.keys(positinFilterStateObj).length) return '';
     const {
         firstItemSelectedIndex,
         secondItemSelectedIndex,
         thirdItemSelectedIndex,
     } = positinFilterStateObj;
-    
+
     // 位置筛选的区域，地铁数据 [{ around: { text: '区域', itemArr: [] } }]
     const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
     let positionUrlArr = [];
