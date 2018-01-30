@@ -249,7 +249,10 @@ export function parseUrlToState(filterUrlFragment) {
     // 初始化的state
     const filterStateObj = {
         rent: [0, 20000],
-        position: {},
+        position: {
+            state: {},
+            params: {},
+        },
         houseType: {},
         more: {},
     };
