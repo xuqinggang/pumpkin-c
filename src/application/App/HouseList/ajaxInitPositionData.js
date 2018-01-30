@@ -63,6 +63,7 @@ function stuffDataToPosition(itemArr, type, positionDataArr) {
 
 export function stuffAroundDataToPosition() {
     // 获取地理位置
+    // return Promise.resolve([116, 39])
     return getCurrentPosition()
         .then((lonlatArr) => {
             if (lonlatArr) {

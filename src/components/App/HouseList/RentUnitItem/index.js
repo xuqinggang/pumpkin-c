@@ -29,6 +29,8 @@ class RentUnitItem extends Component {
     handleTouchTap() {
         const urlPrefix = window.getStore('url').urlPrefix;
         this.props.history.push(urlJoin(urlPrefix, `detail/${this.props.rentUnitId}`));
+        // 每次进入详情页，发送一次pv请求
+        window.send_stat_pv();
     }
 
     render() {
