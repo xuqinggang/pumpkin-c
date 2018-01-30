@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
-import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
-import HouseMeWish from 'components/App/HouseMeWish/HouseMeWish';
-import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
-import HouseMeInfo from 'components/App/HouseMeInfo/HouseMeInfo';
+import HouseMeIndex from 'components/App/HouseMe/HouseMeIndex/HouseMeIndex';
+import HouseMeWish from 'components/App/HouseMe/HouseMeWish/HouseMeWish';
+import HouseMeFeedBack from 'components/App/HouseMe/HouseMeFeedBack/HouseMeFeedBack';
+import HouseMeInfo from 'components/App/HouseMe/HouseMeInfo/HouseMeInfo';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import { isHasCookie, urlJoin } from 'lib/util';

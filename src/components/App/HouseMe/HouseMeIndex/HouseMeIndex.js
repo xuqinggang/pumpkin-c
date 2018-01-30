@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
-import MeBack from 'components/App/HouseMeIndex/MeBack/MeBack';
-import MeInfo from 'components/App/HouseMeIndex/MeInfo/MeInfo';
-import MeEntry from 'components/App/HouseMeIndex/MeEntry/MeEntry';
+import MeBack from './MeBack/MeBack';
+import MeInfo from './MeInfo/MeInfo';
+import MeEntry from './MeEntry/MeEntry';
+
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';

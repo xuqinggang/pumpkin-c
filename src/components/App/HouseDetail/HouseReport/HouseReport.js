@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 
-import ReportBack from 'components/App/HouseReport/ReportBack/ReportBack';
-import ReportType from 'components/App/HouseReport/ReportType/ReportType';
-import ReportTextArea from 'components/App/HouseReport/ReportTextArea/ReportTextArea';
+import ReportBack from './ReportBack/ReportBack';
+import ReportType from './ReportType/ReportType';
+import ReportTextArea from './ReportTextArea/ReportTextArea';
+
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
-import { ajaxHouseReport } from './ajaxHouseReport';
+import { ajaxHouseReport } from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import './styles.less';
 
 const classPrefix = 'm-housereport';
