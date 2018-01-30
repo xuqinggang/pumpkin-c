@@ -25,6 +25,17 @@ export function ajaxCancelCollectHouse(rentUnitId) {
         })
 }
 
+// 举报房源
+export function ajaxHouseReport(rentUnitId, paramsObj) {
+    return Service.post(`/api/v1/rentUnits/${rentUnitId}/reports`, paramsObj)
+        .then((data) => {
+            if (data.code === 200) {
+                return true;
+            }
+
+            throw new Error(data);
+        })
+}
 
 export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }

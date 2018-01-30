@@ -2,8 +2,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import MeWishBack from 'components/App/HouseMeWish/MeWishBack/MeWishBack';
-import MeWishList from 'components/App/HouseMeWish/MeWishList/MeWishList';
+import MeWishBack from './MeWishBack/MeWishBack';
+import MeWishList from './MeWishList/MeWishList';
 
 const classPrefix = 'm-housemewish';
 

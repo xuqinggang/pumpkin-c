@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import MeFeedBackBack from './MeFeedBackBack/MeFeedBackBack';
 import LogoImg from 'images/App/singleLogo.png';
-import MeFeedBackBack from 'components/App/HouseMeFeedBack/MeFeedBackBack/MeFeedBackBack';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
 import { ajaxFeedBack } from 'application/App/HouseMe/ajaxHouseMe';

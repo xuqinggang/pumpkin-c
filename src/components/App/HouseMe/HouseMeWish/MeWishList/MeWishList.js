@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import WishRentUnitItem from 'components/App/HouseMeWish/MeWishList/WishRentUnitItem';
+
+import WishRentUnitItem from './WishRentUnitItem';
+
 import { ajaxInitHouseMeWish } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
@@ -13,7 +15,6 @@ export default class MeWishList extends PureComponent {
         this.state = {
             list: [],
         };
-
     }
 
     componentWillMount() {
