@@ -157,8 +157,11 @@ export default class HouseList extends PureComponent {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
         if (curFilterUrlFragment !== nextFilterUrlFragment) {
+
             this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
 
+            // 每生成一个新的url发送一次pv请求
+            window.send_stat_pv();
             // this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
         }
     }
@@ -174,7 +177,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-console.log('HouseList render');
+
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
