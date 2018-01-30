@@ -11,7 +11,7 @@ const classPrefix = 'm-loginback'
 class LoginBack extends Component {
     handleNavigateAboutTap = () => {
         const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, about));
+        this.props.history.push(urlJoin(urlPrefix, 'about'));
     }
 
     shouldComponentUpdate() {
