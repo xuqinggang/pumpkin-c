@@ -228,7 +228,7 @@ export function positionFilterStateToParams(positinFilterStateObj) {
     const positionStore = window.getStore('positionFilterDataArr');
     const positionFilterDataArr = positionStore && positionStore.data;
 
-    if (!positinFilterStateObj || !positionFilterDataArr) {
+    if (!positinFilterStateObj || !positionFilterDataArr || !Object.keys(positinFilterStateObj).length) {
         return {
             label,
             filterParams,
