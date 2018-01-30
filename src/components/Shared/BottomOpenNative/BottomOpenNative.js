@@ -20,6 +20,7 @@ export default class BottomOpenNative extends PureComponent {
             loadWaiting: 2000,
 
             iosFailUrl: 'http://www.nanguazufang.cn',
+            wxIosFailUrl: 'http://www.nanguazufang.cn/downloadApp?from=h5',
             // 安卓浏览器唤起失败，直接下载文件
             androidFailUrl: 'http://www.nanguazufang.cn/downloadApp?from=h5',
             // 安卓微信唤起失败跳转应用宝
