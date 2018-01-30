@@ -76,7 +76,11 @@
             AppConfig.LOAD_WAITING = config.loadWaiting || AppConfig.LOAD_WAITING;
 
             if (browser.isIOS()) {
-                AppConfig.FAILBACK.IOS = config.iosFailUrl || AppConfig.FAILBACK.IOS;
+                if (browser.isWx) {
+                    AppConfig.FAILBACK.IOS = config.wxIosFailUrl || config.iosFailUrl;
+                } else {
+                    AppConfig.FAILBACK.IOS = config.iosFailUrl;
+                }
             } else if (browser.isAndroid()) {
                 if (browser.isWx()) {
                     AppConfig.FAILBACK.ANDROID = config.wxAndroidFailUrl || config.androidFailUrl;
