@@ -8,7 +8,7 @@ import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
 import HouseMeInfo from 'components/App/HouseMeInfo/HouseMeInfo';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-import { isHasCookie } from 'lib/util';
+import { isHasCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -28,7 +28,7 @@ export default class HouseMe extends PureComponent {
     componentWillMount() {
         // 进入组件之前判断是否登录
         if (!isHasCookie('sid')) {
-            this.props.history.replace(`${this.urlPrefix}/login`);
+            this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
         }
 
         const meInfoStore = window.getStore('meInfo');

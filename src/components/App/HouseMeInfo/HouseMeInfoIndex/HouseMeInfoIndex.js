@@ -3,6 +3,7 @@ import { Route, Link } from 'react-router-dom';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import HouseMeInfoIndexBack from './HouseMeInfoIndexBack';
+import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -30,7 +31,7 @@ export default class HouseMeInfoIndex extends PureComponent {
             <div className={`${classPrefix}`}>
                 <HouseMeInfoIndexBack />
                 <ul className={`${classPrefix}-list`}>
-                    <Link to={`${matchUrl}/editnick`}>
+                    <Link to={urlJoin(matchUrl, 'editnick')}>
                         <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                             <span className="item-label">昵称</span>
                             <div>
@@ -39,7 +40,7 @@ export default class HouseMeInfoIndex extends PureComponent {
                             </div>
                         </li>
                     </Link>
-                    <Link to={`${matchUrl}/edittel`}>
+                    <Link to={urlJoin(matchUrl, 'edittel')}>
                         <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                             <span className="item-label">手机号</span>
                             <div>

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
-import { clearCookie } from 'lib/util';
+import { clearCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -12,7 +12,8 @@ export default class MeEntry extends PureComponent {
     // 事件处理程序-退出当前账号点击
     handleLogoutTap = () => {
         clearCookie('sid');
-        this.props.history.replace(this.rootUrlPrefix);
+
+        this.props.history.replace(urlJoin(this.rootUrlPrefix));
     }
 
     render() {
@@ -24,13 +25,12 @@ export default class MeEntry extends PureComponent {
         const {
             url: matchUrl,
         } = match;
-        console.log('MeEntry', matchUrl)
 
         this.rootUrlPrefix = window.getStore('url').urlPrefix;
 
         return (
             <ul className={classnames(`${classPrefix}`, className)}>
-                <Link to={`${matchUrl}/wish`}>
+                <Link to={urlJoin(matchUrl, 'wish')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>
@@ -39,7 +39,7 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <Link to={`${matchUrl}/info`}>
+                <Link to={urlJoin(matchUrl, 'info')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>
@@ -48,7 +48,7 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <Link to={`${matchUrl}/feedback`}>
+                <Link to={urlJoin(matchUrl, 'feedback')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>
@@ -57,7 +57,7 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
-                <Link to={`${this.rootUrlPrefix}/about`}>
+                <Link to={urlJoin(this.rootUrlPrefix, 'about')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
                             <span className="icon-wish-list item-icon"></span>

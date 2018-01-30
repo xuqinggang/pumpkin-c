@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
-import { isHasCookie } from 'lib/util';
+import { isHasCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -16,9 +16,9 @@ export default class IndexHead extends PureComponent {
 
         // 跳转前判断是否登录，利用cookie中是否含有sid判断
         if (isHasCookie('sid')) {
-            this.props.history.push(`${urlPrefix}/me`);
+            this.props.history.push(urlJoin(urlPrefix, 'me'));
         } else {
-            this.props.history.push(`${urlPrefix}/login`);
+            this.props.history.push(urlJoin(urlPrefix, 'login'));
         }
     }
 

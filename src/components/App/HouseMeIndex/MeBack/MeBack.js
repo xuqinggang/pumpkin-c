@@ -9,7 +9,7 @@ class MeBack extends PureComponent {
     onBackTap = () => {
         // 我的页面，回退按钮回到首页
         const { urlPrefix, filterUrlFragment = '' } = window.getStore('url');
-        this.props.history.push(urlJoin(urlPrefix, filterUrlFragment));
+        this.props.history.push(urlJoin(urlPrefix)+`${filterUrlFragment}`);
     }
 
     render() {

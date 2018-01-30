@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
+
 import { rentUnitShape } from 'base/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'base/MapData';
 import { ModListImgUrl } from 'base/modUrlForCropImage';
+import { urlJoin } from 'lib/util';
 import './style.less';
 
 const itemClassPrefix = 'm-houseitem';
@@ -26,7 +28,7 @@ class RentUnitItem extends Component {
 
     handleTouchTap() {
         const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(`${urlPrefix}/detail/${this.props.rentUnitId}`);
+        this.props.history.push(urlJoin(urlPrefix, `detail/${this.props.rentUnitId}`));
     }
 
     render() {
