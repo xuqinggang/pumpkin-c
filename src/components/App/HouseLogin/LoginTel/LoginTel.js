@@ -6,6 +6,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 import { regTel } from 'lib/regExp';
+import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -50,7 +51,7 @@ export default class LoginTel extends PureComponent {
                     const {
                         search,
                     } = this.props.location;
-                    this.props.history.push(`${url}/${telVal}${search}`);
+                    this.props.history.push(urlJoin(url, telVal)+`${search}`);
                 }
             })
             .catch((err) => {

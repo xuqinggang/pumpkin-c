@@ -6,6 +6,7 @@ import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
 import { ajaxUpdatemobileCaptchas } from 'application/App/HouseMe/ajaxHouseMe';
 import { regTel } from 'lib/regExp';
+import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -37,7 +38,7 @@ export default class EditTelRouter extends PureComponent {
                     const {
                         url,
                     } = this.props.match;
-                    this.props.history.push(`${url}/${telVal}`);
+                    this.props.history.push(urlJoin(url, telVal));
                 }
             })
             .catch((err) => {

@@ -6,7 +6,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
 import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
-import { getPageFrom } from 'lib/util';
+import { getPageFrom, urlJoin } from 'lib/util';
 
 const classPrefix = 'm-houselogin';
 
@@ -34,10 +34,10 @@ export default class LoginVerifyCode extends PureComponent {
                 window.setStore('meInfo', infoObj);
                 if (this.pageFrom === 'detail') {
                     const rentUnitId = window.getStore('rentUnit').rentUnitId;
-                    this.props.history.replace(`${this.urlPrefix}/detail/${rentUnitId}?pagefrom=login`)
+                    this.props.history.replace(urlJoin(this.urlPrefix, `detail/${rentUnitId}`)+`?pagefrom=login`);
                     return;
                 }
-                this.props.history.replace(`${this.urlPrefix}/me`);
+                this.props.history.replace(urlJoin(this.urlPrefix, 'me'));
             })
             .catch((err) => {
                 PopToolTip({text: err.code ? err.msg : err.toString()});

@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { ajaxCollectHouse, ajaxCancelCollectHouse } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { isHasCookie, getPageFrom } from 'lib/util';
+import { isHasCookie, getPageFrom, urlJoin } from 'lib/util';
 import { isWeiXin } from 'lib/const';
 
 import './styles.less';
@@ -72,7 +72,7 @@ export default class HouseHead extends PureComponent {
 
     handleCollectTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`${this.rootUrlPrefix}/login?pagefrom=detail`);
+            this.props.history.push(urlJoin(this.rootUrlPrefix, 'login')+`?pagefrom=detail`);
             return;
         }
         
@@ -111,11 +111,11 @@ export default class HouseHead extends PureComponent {
 
     handleReportTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(`${this.rootUrlPrefix}/login?pagefrom=detail`);
+            this.props.history.push(urlJoin(this.rootUrlPrefix, 'login')+`?pagefrom=detail`);
             return;
         }
 
-        this.props.history.push(`${this.curUrl}/report`);
+        this.props.history.push(urlJoin(this.curUrl, 'report'));
     }
 
     render() {
