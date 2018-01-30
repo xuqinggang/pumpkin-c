@@ -186,7 +186,7 @@ function genHouseProfile(houseDetailData) {
     let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
     let location = `${districtName}-${blockName}`;
     if (subwayLine != null && subwayDistance != null && subwayStation != null) {
-        location = `${location}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
+        location = `${location}-距${subwayLine}${subwayStation}${subwayDistance}米`;
     }
 
     // 合租的话，标题添加 '-01卧室'

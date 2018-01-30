@@ -217,6 +217,7 @@ export default class Filter extends PureComponent {
                         type="position"
                         label={filterLabel.position}
                         isMask={true}
+                        screenHeight="10.66667rem"
                         isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >

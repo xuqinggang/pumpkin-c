@@ -63,7 +63,7 @@ export default class DropDownScreen extends PureComponent {
             if (isFullScreen) {
                 screenDom.style.height = (window.innerHeight - this.headDomTop) + 'px';
             } else {
-                screenDom.style.height = 'inherit';
+                screenDom.style.height = this.props.screenHeight || 'inherit';
             }
 
             if (isMask && this.maskDom) {

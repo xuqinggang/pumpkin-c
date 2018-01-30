@@ -21,6 +21,8 @@ export default class EditNickName extends PureComponent {
     }
 
     onSaveNickName = () => {
+        this.refs.inputIns.refs.inputDom.blur();
+        
         ajaxEditNickName(this.nickname)
             .then((bool) => {
                 if (bool) {
@@ -40,7 +42,7 @@ export default class EditNickName extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 <EditNickNameBack onSaveNickName={this.onSaveNickName} />
-                <InputClear onChange={this.onNickNameChange} placeholder="请输入昵称" maxLength={20} />
+                <InputClear ref="inputIns" onChange={this.onNickNameChange} placeholder="请输入昵称" maxLength={20} />
                 <span className={`f-display-inlineblock ${classPrefix}-tip`}>
                     请输入昵称，不超过20个字符，一个汉字为2个字符
                 </span>

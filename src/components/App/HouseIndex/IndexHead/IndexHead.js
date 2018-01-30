@@ -10,7 +10,6 @@ import './styles.less';
 const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
-
     handleNavigateMe = () => {
         const urlPrefix = window.getStore('url').urlPrefix;
 
@@ -20,6 +19,10 @@ export default class IndexHead extends PureComponent {
         } else {
             this.props.history.push(urlJoin(urlPrefix, 'login'));
         }
+    }
+
+    handleLogTap = () => {
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -33,7 +36,7 @@ export default class IndexHead extends PureComponent {
                     <span className="f-vertical-middle location-text">北京</span>
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
-                <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" />
+                <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" onTouchTap={this.handleLogTap}/>
                 <a 
                     href="javascript:void(0)"
                     className={`f-dispaly-inlineblock ${classPrefix}-me-wrap`}
