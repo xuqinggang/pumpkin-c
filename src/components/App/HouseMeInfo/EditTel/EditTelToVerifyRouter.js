@@ -30,6 +30,8 @@ export default class EditTelToVerifyRouter extends PureComponent {
 
         // 验证码输入6个数字后，自动更改手机号
         if (verifyCodeVal.length === 6) {
+            e.target.blur();
+            
             // 更改手机号
             ajaxUpdateTel(this.telVal, verifyCodeVal)
                 .then((bool) => {

@@ -17,7 +17,7 @@ export default class BottomOpenNative extends PureComponent {
             protocal: "nangua",
 
             //发起唤醒请求后，会等待loadWaiting时间，超时则跳转到failUrl，默认3000ms
-            loadWaiting: 3000,
+            loadWaiting: 2000,
 
             iosFailUrl: 'http://www.nanguazufang.cn/downloadApp?from=h5',
             // 安卓浏览器唤起失败，直接下载文件

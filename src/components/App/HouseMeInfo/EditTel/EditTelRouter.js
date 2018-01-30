@@ -30,6 +30,8 @@ export default class EditTelRouter extends PureComponent {
     }
 
     handleGetVerifyTap = () => {
+        this.refs.inputIns.refs.inputDom.blur();
+
         const telVal = this.state.telVal;
         ajaxUpdatemobileCaptchas(telVal)
             .then((bool) => {
@@ -55,7 +57,7 @@ export default class EditTelRouter extends PureComponent {
         
         return (
             <div>
-                <InputClear onChange={this.onTelValChange} type="number" placeholder="请输入新的手机号"/>
+                <InputClear ref="inputIns" onChange={this.onTelValChange} type="number" placeholder="请输入新的手机号"/>
                 <span className={`f-display-inlineblock ${classPrefix}-tip`}>
                     更换手机号后，将不能使用原手机号登录
                 </span>

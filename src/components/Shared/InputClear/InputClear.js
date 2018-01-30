@@ -61,6 +61,7 @@ export default class InputClear extends PureComponent {
                     className={`${classPrefix}-input`}
                     value={this.state.inputVal}
                     onChange={this.onInputChange}
+                    ref='inputDom'
                 />
                 <span className={`icon-big-close ${classPrefix}-btn-clear`} onTouchTap={this.handleClearTap}></span>
             </div>
