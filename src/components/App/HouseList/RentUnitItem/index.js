@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
 
-import { rentUnitShape } from 'base/propTypes';
-import { RentalTypeMapText, DirectTypeMapText } from 'base/MapData';
-import { ModListImgUrl } from 'base/modUrlForCropImage';
+import { rentUnitShape } from 'baseData/propTypes';
+import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
+import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { urlJoin } from 'lib/util';
 import './style.less';
 

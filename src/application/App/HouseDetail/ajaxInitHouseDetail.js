@@ -1,5 +1,5 @@
 import Service from 'lib/Service';
-import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'base/MapData';
+import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'baseData/MapData';
 
 // 收藏房源
 export function ajaxCollectHouse(rentUnitId) {
