@@ -42,7 +42,7 @@ export default class MeEntry extends PureComponent {
                 <Link to={urlJoin(matchUrl, 'info')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
-                            <span className="icon-wish-list item-icon"></span>
+                            <span className="icon-user-information item-icon"></span>
                             <span className="item-text">个人信息</span>
                         </div> 
                         <span className="icon-next item-iconnext"></span>
@@ -51,7 +51,7 @@ export default class MeEntry extends PureComponent {
                 <Link to={urlJoin(matchUrl, 'feedback')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
-                            <span className="icon-wish-list item-icon"></span>
+                            <span className="icon-feedback item-icon"></span>
                             <span className="item-text">意见反馈</span>
                         </div> 
                         <span className="icon-next item-iconnext"></span>
@@ -60,7 +60,7 @@ export default class MeEntry extends PureComponent {
                 <Link to={urlJoin(this.rootUrlPrefix, 'about')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
-                            <span className="icon-wish-list item-icon"></span>
+                            <span className="icon-about-us item-icon"></span>
                             <span className="item-text">关于我们</span>
                         </div>
                         <span className="icon-next item-iconnext"></span>
