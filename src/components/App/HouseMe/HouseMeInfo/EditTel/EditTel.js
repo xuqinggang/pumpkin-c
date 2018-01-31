@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router'
 import classnames from 'classnames';
 
 import EditTelRouter from './EditTelRouter';

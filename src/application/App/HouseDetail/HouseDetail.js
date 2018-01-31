@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router'
 
 import HouseDetailIndex from 'components/App/HouseDetail/HouseDetailIndex/HouseDetailIndex';
 import HouseReport from 'components/App/HouseDetail/HouseReport/HouseReport';

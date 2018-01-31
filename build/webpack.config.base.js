@@ -60,6 +60,12 @@ const webpackBaseConf = {
     },
 
     plugins: [
+        new webpack.ProvidePlugin({
+            // ReactJS module name in node_modules folder
+            React: 'react',
+            // ReactDom module name in node_modules folder
+            ReactDOM: 'react-dom',
+        }),
 
         new ExtractTextPlugin({
             filename: 'css/[name].[contenthash:8].css',

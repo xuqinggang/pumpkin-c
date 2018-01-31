@@ -1,5 +1,4 @@
 import React, { Component, Children } from 'react';
-import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import BottomDialogHeader from './BottomDialogHeader';
 import BottomDialogBody from './BottomDialogBody';
@@ -91,7 +90,7 @@ export default class BottomDialog extends Component {
             );
         }
 
-        return createPortal(newChildren, this.node);
+        return ReactDOM.createPortal(newChildren, this.node);
     }
 }
 

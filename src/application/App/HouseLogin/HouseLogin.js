@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router'
 
 import LoginVerifyCodeRouter from 'components/App/HouseLogin/LoginVerifyCode/LoginVerifyCode';
 import LoginTelRouter from 'components/App/HouseLogin/LoginTel/LoginTel';
