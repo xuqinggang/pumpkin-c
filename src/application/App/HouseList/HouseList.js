@@ -83,7 +83,6 @@ export default class HouseList extends PureComponent {
         });
 
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
-        console.log('onFilterConfirm', filterUrlFragment);
         let link = '';
 
         // 筛选url片段

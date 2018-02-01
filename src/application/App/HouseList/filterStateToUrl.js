@@ -193,7 +193,7 @@ export function parsePositionUrlToState(positionUrl) {
                     distance: nearByInfoParams[2],
                 };
             } else {
-                positionParams[positionParamsKey[0]] = indexAndIdArr[1];
+                positionParams[positionParamsKey[0]] = parseInt(indexAndIdArr[1], 10);
             }
         }
     }
@@ -204,7 +204,7 @@ export function parsePositionUrlToState(positionUrl) {
 
         // id
         if (indexAndIdArr[1] && positionParamsKey) {
-            positionParams[positionParamsKey[1]] = indexAndIdArr[1];
+            positionParams[positionParamsKey[1]] = parseInt(indexAndIdArr[1], 10);
         }
     }
 
