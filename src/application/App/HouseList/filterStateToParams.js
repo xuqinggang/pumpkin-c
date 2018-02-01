@@ -188,14 +188,14 @@ export function rentFilterStateToParams(rentState) {
     // 20000标志着不限
     if (rentState.length) {
         if (rentState[1] == 20000) {
-            filterParams.priceInfo = { floor: rentState[0] }
+            filterParams.priceInfo = { floor: rentState[0], ceil: null }
             if (rentState[0] === 0) {
                 label = '租金';
             } else {
                 label = `${rentState[0]}以上`;
             }
         } else if (rentState[0] === 0) {
-            filterParams.priceInfo = { ceil: rentState[1] };
+            filterParams.priceInfo = { floor: null, ceil: rentState[1] };
             label = `${rentState[1]}以下`;
         } else {
             filterParams.priceInfo = { floor: rentState[0], ceil: rentState[1] };
@@ -258,7 +258,7 @@ export function positionFilterStateToParams(positinFilterStateObj) {
     if (secondItemSelectedIndex != undefined && secondItemSelectedIndex !== -1) {
         if (secondItem.id != -1) {
             label = secondItem.text;
-            filterParams[correspondParamsKeyArr[0]] = secondItem.id;
+            filterParams[correspondParamsKeyArr[0]] = parseInt(secondItem.id, 10);
         }
     }
 
@@ -266,7 +266,7 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
         if (thirdItem.id != -1) {
             label = thirdItem.text;
-            filterParams[correspondParamsKeyArr[1]] = thirdItem.id;
+            filterParams[correspondParamsKeyArr[1]] = parseInt(thirdItem.id, 10);
         }
     }
 
