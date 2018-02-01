@@ -158,11 +158,12 @@
                     window.location.href = AppConfig.FAILBACK.IOS;
                     return;
                 } else {
-                    body.appendChild(iframe);
-                    iframe.src = schemaUrl;
-                    // aLink.href = schemaUrl;
-                    // body.appendChild(aLink);
-                    // aLink.click();
+                    console.log('schemaUrl', schemaUrl);
+                    // body.appendChild(iframe);
+                    // iframe.src = schemaUrl;
+                    aLink.href = schemaUrl;
+                    body.appendChild(aLink);
+                    aLink.click();
                 }
 
                 // Android chrome 不支持iframe 方式唤醒
