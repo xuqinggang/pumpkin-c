@@ -37,9 +37,9 @@
 
         // 唤起失败时的跳转链接
         FAILBACK: {
-            WXANDROID: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653",
-            ANDROID: "http://app-1252921496.costj.myqcloud.com/nangua/app-anzhuo-daily2.apk",
-            IOS: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653"
+            // WXANDROID: "",
+            ANDROID: "",
+            IOS: ""
         },
 
         // Android apk 相关信息
@@ -76,12 +76,16 @@
             AppConfig.LOAD_WAITING = config.loadWaiting || AppConfig.LOAD_WAITING;
 
             if (browser.isIOS()) {
-                AppConfig.FAILBACK.IOS = config.iosFailUrl || AppConfig.FAILBACK.IOS;
+                if (browser.isWx()) {
+                    AppConfig.FAILBACK.IOS = config.wxIosFailUrl || config.iosFailUrl;
+                } else {
+                    AppConfig.FAILBACK.IOS = config.iosFailUrl;
+                }
             } else if (browser.isAndroid()) {
                 if (browser.isWx()) {
-                    AppConfig.FAILBACK.WXANDROID = config.wxAndroidFailUrl || AppConfig.FAILBACK.WXANDROID;
+                    AppConfig.FAILBACK.ANDROID = config.wxAndroidFailUrl || config.androidFailUrl;
                 } else {
-                    AppConfig.FAILBACK.ANDROID = config.androidFailUrl || AppConfig.FAILBACK.ANDROID;
+                    AppConfig.FAILBACK.ANDROID = config.androidFailUrl;
                 }
                 AppConfig.APK_INFO = config.apkInfo || AppConfig.APK_INFO;
             }
@@ -145,19 +149,21 @@
 
             // Android 微信不支持schema唤醒，必须提前加入腾讯的白名单
             if (browser.isWx() && browser.isAndroid()) {
-                window.location.href = AppConfig.FAILBACK.WXANDROID;
+                window.location.href = AppConfig.FAILBACK.ANDROID;
                 return;
 
                 // ios 9 safari 不支持iframe的方式跳转
             } else if (browser.isIOS()) {
                 if (browser.isWx()) {
                     window.location.href = AppConfig.FAILBACK.IOS;
+                    return;
                 } else {
-                    body.appendChild(iframe);
-                    iframe.src = schemaUrl;
-                    // aLink.href = schemaUrl;
-                    // body.appendChild(aLink);
-                    // aLink.click();
+                    console.log('schemaUrl', schemaUrl);
+                    // body.appendChild(iframe);
+                    // iframe.src = schemaUrl;
+                    aLink.href = schemaUrl;
+                    body.appendChild(aLink);
+                    aLink.click();
                 }
 
                 // Android chrome 不支持iframe 方式唤醒

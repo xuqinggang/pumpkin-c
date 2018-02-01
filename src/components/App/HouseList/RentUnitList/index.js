@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rentUnitShape, pagerShape } from 'base/propTypes';
+import { rentUnitShape, pagerShape } from 'baseData/propTypes';
 import { getDocHeight, getScrollTop } from 'lib/util';
 import RentUnitPlaceHolder from '../RentUnitPlaceHolder';
 import RentUnitItem from '../RentUnitItem';

@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom'
-import { withRouter } from 'react-router'
+import { withRouter, Route } from 'react-router';
 
-import HouseMeIndex from 'components/App/HouseMeIndex/HouseMeIndex';
-import HouseMeWish from 'components/App/HouseMeWish/HouseMeWish';
-import HouseMeFeedBack from 'components/App/HouseMeFeedBack/HouseMeFeedBack';
-import HouseMeInfo from 'components/App/HouseMeInfo/HouseMeInfo';
+import HouseMeIndex from 'components/App/HouseMe/HouseMeIndex/HouseMeIndex';
+import HouseMeWish from 'components/App/HouseMe/HouseMeWish/HouseMeWish';
+import HouseMeFeedBack from 'components/App/HouseMe/HouseMeFeedBack/HouseMeFeedBack';
+import HouseMeInfo from 'components/App/HouseMe/HouseMeInfo/HouseMeInfo';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-import { isHasCookie } from 'lib/util';
+import { isHasCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -28,7 +27,7 @@ export default class HouseMe extends PureComponent {
     componentWillMount() {
         // 进入组件之前判断是否登录
         if (!isHasCookie('sid')) {
-            this.props.history.replace(`${this.urlPrefix}/login`);
+            this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
         }
 
         const meInfoStore = window.getStore('meInfo');
@@ -55,11 +54,8 @@ export default class HouseMe extends PureComponent {
             match,
             history,
         } = this.props;
-        const {
-            meInfoObj,
-        } = this.state;
 
-        console.log('meInfoObj', this.state.meInfoObj);
+        const meInfoObj = window.getStore('meInfo') || {};
 
         return (
             <div className={`${classPrefix}`}>

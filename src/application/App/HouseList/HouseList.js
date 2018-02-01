@@ -83,6 +83,7 @@ export default class HouseList extends PureComponent {
         });
 
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
+        console.log('onFilterConfirm', filterUrlFragment);
         let link = '';
 
         // 筛选url片段
@@ -95,32 +96,8 @@ export default class HouseList extends PureComponent {
             clearTimeout(timer);
             this.wxShare();
         }, 500);
-        
-        // const newFilterParams = Object.assign({}, this.state.filterParamsObj, filterParams);
-
-        // if (!shallowEqual(this.state.filterParamsObj, newFilterParams)) {
-        //     this.setState({
-        //         filterParamsObj: newFilterParams,
-        //     }, () => {
-        //         const filterUrlFragment = stringifyStateObjToUrl(filterStateObj);
-        //         if (filterUrlFragment) {
-        //             let link = '';
-
-        //             // 筛选url片段
-        //             const rtFilterUrl = this._genHouseListFilterUrlFragment(filterUrlFragment);
-        //             console.log('rtFilterUrl', rtFilterUrl);
-        //             link = urlJoin(this.curUrlPrefix, rtFilterUrl);
-
-        //             this.props.history.push(link);
-        //             // 未知原因，需要设置延时来确保微信分享正常
-        //             const timer = setTimeout(() => {
-        //                 clearTimeout(timer);
-        //                 this.wxShare();
-        //             }, 500);
-        //         }
-        //     });
-        // }
     }
+
     // 生成列表页筛选url片段，包括apartment查询字符串
     _genHouseListFilterUrlFragment(filterUrlFragment) {
         let rt = '';
@@ -180,9 +157,12 @@ export default class HouseList extends PureComponent {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
         if (curFilterUrlFragment !== nextFilterUrlFragment) {
+
             this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
 
-            this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
+            // 每生成一个新的url发送一次pv请求
+            window.send_stat_pv && window.send_stat_pv();
+            // this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
         }
     }
 
@@ -197,7 +177,7 @@ export default class HouseList extends PureComponent {
             match,
             history,
         } = this.props;
-console.log('HouseList render');
+
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>

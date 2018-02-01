@@ -1,29 +1,5 @@
 @import (reference) '~styles/lib.less';
 
-// .wrap {
-//     display: flex;
-//     flex-direction: row;
-
-//     .child1 {
-//         display: flex;
-//         flex-direction: column;
-//         width: 300px;
-//         flex-basis: 300px;
-//         background: red;
-//         line-height: 80px;
-//     }
-
-//     .child2 {
-//         flex: 1;
-//         background: black;
-//     }
-
-//     .item {
-//         display: block;
-//         height: 100px;
-//     }
-// }
-
 .m-ptfilter {
     width: 100%;
     height: 800px;
@@ -32,8 +8,10 @@
     .font-size(28);
 
     &-nav {
+        display: inline-block;
         box-sizing: border-box;
         width: 260px;
+        height: 800px;
         flex-basis: 260px;
         background-color: #f8f8f8;
     }
@@ -41,11 +19,8 @@
     &-content {
         box-sizing: border-box;
         flex: 1;
-        // flex-basis: 490px;
         background-color: #fff;
-        // & > &-item {
-        //     background: red;               
-        // }
+
         .m-ptfilter-nav {
             box-sizing: boder-box;
             flex: 1;

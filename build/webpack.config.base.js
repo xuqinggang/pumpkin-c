@@ -49,7 +49,7 @@ const webpackBaseConf = {
             Shared: resolve('src/components/Shared'),
             components: resolve('src/components'),
             application: resolve('src/application'),
-            base: resolve('src/base'),
+            baseData: resolve('src/baseData'),
             App: resolve('src/application/App'),
             Map: resolve('src/application/Map'),
             styles: resolve('src/styles'),
@@ -60,6 +60,12 @@ const webpackBaseConf = {
     },
 
     plugins: [
+        new webpack.ProvidePlugin({
+            // ReactJS module name in node_modules folder
+            React: 'react',
+            // ReactDom module name in node_modules folder
+            ReactDOM: 'react-dom',
+        }),
 
         new ExtractTextPlugin({
             filename: 'css/[name].[contenthash:8].css',

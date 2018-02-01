@@ -1,5 +1,5 @@
 import Service from 'lib/Service';
-import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'base/MapData';
+import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'baseData/MapData';
 
 // 收藏房源
 export function ajaxCollectHouse(rentUnitId) {
@@ -25,6 +25,17 @@ export function ajaxCancelCollectHouse(rentUnitId) {
         })
 }
 
+// 举报房源
+export function ajaxHouseReport(rentUnitId, paramsObj) {
+    return Service.post(`/api/v1/rentUnits/${rentUnitId}/reports`, paramsObj)
+        .then((data) => {
+            if (data.code === 200) {
+                return true;
+            }
+
+            throw new Error(data);
+        })
+}
 
 export default function ajaxInitHouseDetailData(rentUnitId) {
     // if (rentUnitId == undefined) { return; }
@@ -186,7 +197,7 @@ function genHouseProfile(houseDetailData) {
     let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
     let location = `${districtName}-${blockName}`;
     if (subwayLine != null && subwayDistance != null && subwayStation != null) {
-        location = `${location}-距${subwayLine}${subwayStation}站${subwayDistance}米`;
+        location = `${location}-距${subwayLine}${subwayStation}${subwayDistance}米`;
     }
 
     // 合租的话，标题添加 '-01卧室'

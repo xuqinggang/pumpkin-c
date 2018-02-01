@@ -2,6 +2,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import webpackMerge from 'webpack-merge';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import AssetsPlugin from 'assets-webpack-plugin';
 import path from 'path';
 
 import webpackBaseConf from './webpack.config.base';
@@ -43,6 +44,14 @@ const webpackProConf = webpackMerge(webpackBaseConf, {
     },
 
     plugins: [
+
+        // 生成asserts json
+        new AssetsPlugin({
+            filename: 'assets.json',
+            path: path.resolve(baseConfig.rootDir, 'server-render/dist'),
+            prettyPrint: true,
+        }),
+
         // 代码中注入变量
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(baseConfig.env),

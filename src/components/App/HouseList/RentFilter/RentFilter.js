@@ -64,8 +64,11 @@ class RentFilter extends PureComponent {
 
     // 清空state
     _clearState = () => {
-        this.setState(this.initialState);
+        this.setState({
+            rangeValueArr: this.initialState,
+        });
     }
+
     // 确认state
     _confirmState = () => {
         this.props.onFilterConfirm(this.state.rangeValueArr);

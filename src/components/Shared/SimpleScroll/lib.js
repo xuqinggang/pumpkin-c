@@ -78,7 +78,7 @@ const prefix = (function () {
         transform = vendors[i] + 'ransform'
         if (transform in sty) return vendors[i]
     }
-})();
+})() || 't';
 
 const utils = {
     TSF: prefix + 'ransform',

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+
 import BottomDialog from 'Shared/BottomDialog';
-import headImg from 'components/App/HouseDetail/RoommateInfo/images/male.png';
+import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/images/male.png';
 import { isAndroid } from 'lib/const';
 
 import './styles.less';

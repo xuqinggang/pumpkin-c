@@ -3,23 +3,26 @@ import classnames from 'classnames';
 
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
-import { isHasCookie } from 'lib/util';
+import { isHasCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
 
 const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
-
     handleNavigateMe = () => {
         const urlPrefix = window.getStore('url').urlPrefix;
 
         // 跳转前判断是否登录，利用cookie中是否含有sid判断
         if (isHasCookie('sid')) {
-            this.props.history.push(`${urlPrefix}/me`);
+            this.props.history.push(urlJoin(urlPrefix, 'me'));
         } else {
-            this.props.history.push(`${urlPrefix}/login`);
+            this.props.history.push(urlJoin(urlPrefix, 'login'));
         }
+    }
+
+    handleLogTap = () => {
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -33,7 +36,7 @@ export default class IndexHead extends PureComponent {
                     <span className="f-vertical-middle location-text">北京</span>
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
-                <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" />
+                <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" onTouchTap={this.handleLogTap}/>
                 <a 
                     href="javascript:void(0)"
                     className={`f-dispaly-inlineblock ${classPrefix}-me-wrap`}

@@ -33,7 +33,6 @@ export default class PositionFilterWrap extends PureComponent {
             .then((positionFilterDataArr) => {
                 if (positionFilterDataArr) {
                     const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
-                    console.log('PositionFilterWrap', newPositionFilterDataArr);
                     window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
 
                     this.setState({
@@ -43,7 +42,6 @@ export default class PositionFilterWrap extends PureComponent {
                     const { label } = positionFilterStateToParams(this.props.filterState);
                     this.props.onDynamicSetLabel(label);
                 }
-                console.log('ajax positionData', positionFilterDataArr);
             });
 
         // 手动添加附近相关数据
@@ -57,6 +55,16 @@ export default class PositionFilterWrap extends PureComponent {
                     });
 
                     window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
+
+                    const { label } = positionFilterStateToParams(this.props.filterState);
+                    this.props.onDynamicSetLabel(label);
+                }
+            })
+            .catch((err) => {
+                // 如果地理位置没有获取权限
+                const { firstItemSelectedIndex, secondItemSelectedIndex, thirdItemSelectedIndex } = this.props.filterState;
+                if (firstItemSelectedIndex === 2 && secondItemSelectedIndex) {
+                    this.props.onDynamicSetLabel(`${secondItemSelectedIndex}km`);
                 }
             })
     }
