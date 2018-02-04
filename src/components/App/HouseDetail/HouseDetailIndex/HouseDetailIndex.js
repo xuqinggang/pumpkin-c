@@ -19,6 +19,7 @@ import OpenNative from 'Shared/OpenNative/OpenNative';
 
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { dynamicDocTitle } from 'lib/util';
+import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
@@ -150,7 +151,11 @@ export default class HouseDetailIndex extends PureComponent {
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
-                <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
+                {
+                    isApp ?
+                    null :
+                    <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
+                }
                 <HouseHead
                     headData={headData || {}}
                     rentUnitId={this.rentUnitId}
