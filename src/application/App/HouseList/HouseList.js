@@ -120,18 +120,19 @@ export default class HouseList extends PureComponent {
         const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
         const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
         const filterParamsAndLabel = filterStateToParams(newFilterState);
+        console.log('filterStateToParams', filterUrlFragment, filterParamsAndLabel, filterState);
 
-        if (filterState) {
-            this.setState({
-                filterState: Object.assign({}, this.state.filterState, newFilterState),
-                filterParamsObj: Object.assign({},
-                    this.state.filterParamsObj,
-                    filterParamsAndLabel.filterParams,
-                    positionStateAndParams && positionStateAndParams.params,
-                ),
-                filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-            });
-        }
+        this.setState({
+            filterState: Object.assign({}, this.state.filterState, newFilterState),
+            filterParamsObj: Object.assign({},
+                this.state.filterParamsObj,
+                filterParamsAndLabel.filterParams,
+                positionStateAndParams && positionStateAndParams.params,
+            ),
+            filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
+        }, () => {
+            window.setStore('filter', this.state);
+        });
     }
 
     wxShare() {
@@ -148,7 +149,16 @@ export default class HouseList extends PureComponent {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
         this._genHouseListFilterUrlFragment(filterUrlFragment);
 
-        this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
+        const filterStore = window.getStore('filter');
+        if (filterStore) {
+            this.setState(filterStore);
+        } else {
+            console.log('componentWillMount');
+            this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
+        }
+    }
+
+    componentDidMount() {
         this.wxShare();
     }
 

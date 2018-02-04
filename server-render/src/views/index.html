@@ -17,10 +17,16 @@
         <!-- <meta property="og:image" content=""> -->
         <!-- <meta property="og:url" content=""> -->
         <title>{{title}}</title>
+        <script>
+            window.customStore = {{{customStore}}};
+            console.log('window.customStore', window.customStore);
+        </script>
         <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script> -->
         <!-- <script>eruda.init();</script> -->
         <link rel="stylesheet" href="{{assets.common.css}}" />
         <link rel="stylesheet" href="{{assets.index.css}}" />
+    </head>
+    <body>
         <script>
             ;(function(win, lib) {
                 var doc = win.document;
@@ -83,20 +89,22 @@
                         tid = setTimeout(refreshRem, 300);
                     }
                 }, false);
-                if (doc.readyState === 'complete') {
-                    doc.body.style.fontSize = 12 * dpr + 'px';
-                } else {
-                    doc.addEventListener('DOMContentLoaded', function(e) {
-                        doc.body.style.fontSize = 12 * dpr + 'px';
-                    }, false);
-                }
+
+                doc.body.style.fontSize = 12 * dpr + 'px';
+                <!-- // 由于body的font-size是在dom加载完设置的，导致服务器端渲染，页面直出的时候 -->
+                <!-- // ，dom有默认的font-size,dom加载完又设置新的font-size,导致页面结构闪动了一下 -->
+                <!-- // 所以把bod的font-size设置在body元素的后面而不是DomContentLoaded后 -->
+                <!-- if (doc.readyState === 'complete') { -->
+                <!-- } else { -->
+                <!--     doc.addEventListener('DOMContentLoaded', function(e) { -->
+                <!--         doc.body.style.fontSize = 12 * dpr + 'px'; -->
+                <!--     }, false); -->
+                <!-- } -->
                 refreshRem();
                 flexible.dpr = win.dpr = dpr;
                 flexible.refreshRem = refreshRem;
             })(window, window['lib'] || (window['lib'] = {}));
         </script>
-    </head>
-    <body>
         <div id="root">{{{content}}}</div>
         <script type="text/javascript" src="{{assets.vendors.js}}"></script>
         <script type="text/javascript" src="{{assets.common.js}}"></script>

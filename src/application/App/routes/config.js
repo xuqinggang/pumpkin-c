@@ -27,7 +27,7 @@ class WrapRouter extends PureComponent {
             urlPrefix: this.urlPrefix,
         };
 
-        ajaxInit();
+        // ajaxInit();
     }
 
     render() {

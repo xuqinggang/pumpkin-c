@@ -11,21 +11,17 @@ const KoaStatic = require('koa-static');
 const Router = require('koa-router');
 const mount = require('koa-mount');
 const path = require('path');
-const httpProxy = require('http-proxy');
+
 // import logger from './util/log';
 const errorHandleMiddle = require('./middleware/error.middleware');
 const config = require('./config/env');
 const koaConf = require('./config/koa');
 
-const routerConf = require('./routes');
-const proxyRouterConf = require('./routes/proxyRouter');
-
-const proxy = httpProxy.createProxyServer();
-const serverRouter = new Router();
+// const routerConf = require('./routes');
 
 const app = new Koa();
 
-//错误处理中间件
+//错误处理中间件,放在最开始的时候
 app.use(errorHandleMiddle());
 
 // koa基本配置
@@ -38,16 +34,24 @@ koaConf(app);
 // 	await next()
 // });
 
-// 静态资源文件 router
-app.use(mount('/bj/nangua', KoaStatic('dist')));
+// 没有服务器端渲染的配置
+// router配置
+// routerConf(app);
 
 // 本地server test环境测试router配置
 if (config.env === 'test') {
+    const proxyRouterConf = require('./routes/proxyRouter');
+
     proxyRouterConf(app);
 }
 
-// router配置
-routerConf(app);
+if (config.env === 'test' || config.env === 'production') {
+    const serverRenderConf = require('../server-render/dist/js/index.js');
+    serverRenderConf(app);
+}
+
+// 静态资源文件 router
+// app.use(mount('/bj/nangua', KoaStatic('dist')));
 
 app.listen(config.port, function(err) {
     if (err) {

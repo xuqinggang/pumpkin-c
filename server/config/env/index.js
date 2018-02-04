@@ -10,7 +10,7 @@ const path = require('path');
 const config = {
     env: process.env.NODE_ENV || 'production',
     port: 3000,
-    root: path.join(__dirname, '../../'),
+    root: path.join(__dirname, '../../../'),
     //mongodb配置
 };
 

@@ -2,8 +2,18 @@
 npm install pumpkin-font-c --registry=http://10.10.126.140:4873
 npm install
 
-# 开发环境
+# 开发环境(客户端渲染)
 npm run dev
+
+# 本地server测试环境(服务器端渲染)
+npm run build_test
+npm run server_render
+npm run server_test
+
+# docker 测试环境和线上环境(测试环境和线上环境代码一致) 通过nginx代理不同环境的接口
+npm run build_production
+npm run server_render
+npm run server
 
 # 筛选参数，转换成url
 竖线|当做分隔符

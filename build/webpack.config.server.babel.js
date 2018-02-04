@@ -16,6 +16,11 @@ const includePaths = [
 const webpackServerConf = {
     target: 'node',
     externals: [nodeExternals()],
+    context: __dirname,
+    node: {
+        __filename: false,
+        __dirname: false
+    },
     entry: {
         index: resolve('server-render/src/index.js'),
         // index: resolve('src/application/App/routes/config.js'),
@@ -24,6 +29,7 @@ const webpackServerConf = {
         path: resolve('server-render/dist'),
         // publicPath: baseConfig.publicPath,
         filename: 'js/[name].js',
+        libraryTarget: 'umd',
     },
     resolve: {
         // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口 
