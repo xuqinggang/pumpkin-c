@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
 import { isHasCookie, urlJoin } from 'lib/util';
+import { isApp } from 'lib/const';
 
 import './styles.less';
 
@@ -36,7 +37,15 @@ export default class IndexHead extends PureComponent {
                     <span className="f-vertical-middle location-text">北京</span>
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
-                <img className={`f-display-flex ${classPrefix}-logo`} src={logoImg} alt="" onTouchTap={this.handleLogTap}/>
+                {
+                    isApp ?
+                        null : 
+                        <img
+                            className={`f-display-flex ${classPrefix}-logo`}
+                            src={logoImg}
+                            onTouchTap={this.handleLogTap}
+                        />
+                }
                 <a 
                     href="javascript:void(0)"
                     className={`f-dispaly-inlineblock ${classPrefix}-me-wrap`}

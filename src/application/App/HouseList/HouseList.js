@@ -197,9 +197,13 @@ export default class HouseList extends PureComponent {
                 <HouseLists
                     filterParams={filterParamsObj}
                 />
-                <BottomOpenNative
-                    schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(filterParamsObj)}`}
-                />
+                {
+                    isApp ? 
+                        null : 
+                        <BottomOpenNative
+                            schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(filterParamsObj)}`}
+                        />
+                }
             </div>
         );
     }
