@@ -1,19 +1,8 @@
 import Router from 'koa-router';
-import ajaxInitHouseDetailData from 'application/App/HouseDetail/ajaxInitHouseDetail'
+import detailContro from './detail.controller';
 
 const router = new Router();
 
-router.get('/:rentUnitId', async (ctx, next) => {
-    const houseDetailData = await ajaxInitHouseDetailData(ctx.params.rentUnitId);
-    const { title, description, keywords } = houseDetailData.seoData;
-    ctx.state.title = title;
-    ctx.state.description = description;
-    ctx.state.keywords = keywords;
+router.get('/:rentUnitId', detailContro);
 
-    window.setStore('houseDetail', {
-        [ctx.params.rentUnitId]: houseDetailData
-    });
-
-    await next();
-});
 export default router;
