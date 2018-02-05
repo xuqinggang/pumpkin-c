@@ -47,6 +47,7 @@ const webpackServerConf = {
             config: resolve('src/config'),
             lib: resolve('src/lib'),
             images: resolve('src/images'),
+            server: resolve('server'),
         },
     },
     module: {

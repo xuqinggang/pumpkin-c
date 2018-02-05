@@ -7,11 +7,21 @@
 
 const path = require('path');
 
+const env = process.env.NODE_ENV || 'production';
+
 const config = {
-    env: process.env.NODE_ENV || 'production',
+    env,
     port: 3000,
     root: path.join(__dirname, '../../../'),
-    //mongodb配置
+    server: {
+        test: {
+            target: 'http://10.10.120.180',
+            host: 'm.nangua.test.cn',
+        },
+        production: {
+            target: 'https://m.focus.cn',
+        },
+    }[env],
 };
 
 module.exports = config;

@@ -38,7 +38,7 @@ koaConf(app);
 // router配置
 // routerConf(app);
 
-// 本地server test环境测试router配置
+// 本地server和线上test环境 router配置
 if (config.env === 'test') {
     const proxyRouterConf = require('./routes/proxyRouter');
 
