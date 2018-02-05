@@ -93,6 +93,9 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 lat,
             };
 
+            // 服务器端渲染seo相关数据
+            const seoData = genSeoData(houseDetailData);
+
             return {
                 headData: { isCollected, },
                 sliderImgArr,
@@ -111,6 +114,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 extraData: {
                     rentalType,
                 },
+                seoData,
             };
         })
         .catch((err) => {
@@ -119,6 +123,37 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
         })
 }
 
+function genSeoData(houseDetailData) {
+    const {
+        // 合租(SHARED)整租(WHOLE)
+        rentalType = 'SHARED',
+        bedroomCount,
+        livingRoomCount,
+        // 区域
+        districtName = '',
+        // 小区
+        blockName = '',
+        subwayLine = '',
+        subwayStation = '',
+        subwayDistance = '',
+    } = houseDetailData;
+
+    let title = '',
+        keywords = '',
+        description = '';
+
+    const houseDetailTitle = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
+
+    title = `${houseDetailTitle}-南瓜租房北京租房`;
+    keywords = `北京${districtName}${blockName}租房,${subwayLine}${subwayStation}租房,品质租房${houseDetailTitle}`;
+    description = `北京南瓜租房提供${houseDetailTitle},距${subwayLine}${subwayStation}${subwayDistance}米`;
+
+    return {
+        title,
+        keywords,
+        description,
+    };
+}
 function genContactButler(houseDetailData) {
     const {
         superName,
@@ -165,9 +200,9 @@ function genHouseProfile(houseDetailData) {
         // 小区
         blockName,
         bedrooms,
-        subwayLine = 'xxx',
-        subwayStation = 'xxx',
-        subwayDistance = 'xxx',
+        subwayLine,
+        subwayStation,
+        subwayDistance,
     } = houseDetailData;
 
     // 付款方式数据组织, 公寓名称-----------

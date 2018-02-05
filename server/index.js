@@ -51,7 +51,7 @@ if (config.env === 'test' || config.env === 'production') {
 }
 
 // 静态资源文件 router
-// app.use(mount('/bj/nangua', KoaStatic('dist')));
+app.use(mount('/bj/nangua', KoaStatic('dist')));
 
 app.listen(config.port, function(err) {
     if (err) {

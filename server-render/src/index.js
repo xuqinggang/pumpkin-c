@@ -14,7 +14,7 @@ import assets from '../dist/assets.json';
 const router = new Router();
 
 function serverRenderConf(app) {
-    console.log('serverRenderConf')
+    console.log('serverRenderConf');
     // views template
     app.use(views(path.resolve(__dirname, '../../src/views'), {
         map: {
