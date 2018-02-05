@@ -62,7 +62,7 @@ const featureTagsArr = [
 const areaTagsArr = [
     {
         text: '20m²以下',
-        value: { 'ceil': 20 },
+        value: { 'floor': null, 'ceil': 20 },
     },
     {
         text: '20-40m²',
@@ -74,7 +74,7 @@ const areaTagsArr = [
     },
     {
         text: '60m²以上',
-        value: { 'floor': 60 },
+        value: { 'floor': 60, 'ceil': null },
     },
 ];
 
