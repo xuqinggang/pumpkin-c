@@ -23,13 +23,14 @@ const webpackServerConf = {
     },
     entry: {
         index: resolve('server-render/src/index.js'),
+        // index: resolve('test2.js'),
         // index: resolve('src/application/App/routes/config.js'),
     },
     output: {
         path: resolve('server-render/dist'),
         // publicPath: baseConfig.publicPath,
         filename: 'js/[name].js',
-        libraryTarget: 'umd',
+        libraryTarget: 'commonjs2',
     },
     resolve: {
         // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口 
@@ -60,6 +61,22 @@ const webpackServerConf = {
                     {
                         // babel编译过程很耗时，好在babel-loader提供缓存编译结果选项，在重启webpack时不需要创新编译而是复用缓存结果减少编译流程。babel-loader缓存机制默认是关闭的
                         loader: 'babel-loader?cacheDirectory',
+                        options: {
+                            babelrc: false,
+                            presets: ['react'],
+                            plugins: [
+                                ["transform-runtime", {
+                                    "helpers": true,
+                                    "polyfill": false,
+                                    "regenerator": false,
+                                }],
+                                'add-module-exports',
+                                'transform-es2015-modules-commonjs',
+                                'transform-class-properties',
+                                'transform-object-rest-spread',
+                                'transform-export-extensions',
+                            ],
+                        }
                     },
                 ],
             },
