@@ -7,7 +7,7 @@ import HouseLogin from 'application/App/HouseLogin/HouseLogin';
 import HouseMe from 'application/App/HouseMe/HouseMe';
 import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 
-import ajaxInit from  '../ajaxInit';
+// import ajaxInit from  '../ajaxInit';
 
 import Service from 'lib/Service';
 
@@ -26,8 +26,6 @@ class WrapRouter extends PureComponent {
         Service.baseConfig = {
             urlPrefix: this.urlPrefix,
         };
-
-        ajaxInit();
     }
 
     render() {

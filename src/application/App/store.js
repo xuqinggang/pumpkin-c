@@ -1,5 +1,5 @@
 // 自定义数据存储，存放到window上
-window.customStore = {};
+window.customStore = window.customStore || {};
 
 window.setStore = function (key, dataObj) {
     if (dataObj === null) {
@@ -20,7 +20,10 @@ window.getStore = function (key) {
     try {
         let keyCorrespondValueObj = window.customStore[key];
         if (!keyCorrespondValueObj) {
-            throw new Error('window变量上，没有相应的键值')
+            if (window.isServerRender) return null;
+            else {
+                throw new Error('window变量上，没有相应的键值')
+            }
         }
 
         return keyCorrespondValueObj;

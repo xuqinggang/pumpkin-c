@@ -16,6 +16,11 @@ const includePaths = [
 const webpackServerConf = {
     target: 'node',
     externals: [nodeExternals()],
+    context: __dirname,
+    node: {
+        __filename: false,
+        __dirname: false
+    },
     entry: {
         index: resolve('server-render/src/index.js'),
         // index: resolve('src/application/App/routes/config.js'),
@@ -24,6 +29,7 @@ const webpackServerConf = {
         path: resolve('server-render/dist'),
         // publicPath: baseConfig.publicPath,
         filename: 'js/[name].js',
+        libraryTarget: 'umd',
     },
     resolve: {
         // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口 
@@ -41,6 +47,7 @@ const webpackServerConf = {
             config: resolve('src/config'),
             lib: resolve('src/lib'),
             images: resolve('src/images'),
+            server: resolve('server'),
         },
     },
     module: {
@@ -82,33 +89,36 @@ const webpackServerConf = {
     plugins: [
         // 代码中注入变量
         new webpack.DefinePlugin({
+            // 打包的环境变量
             'process.env.NODE_ENV': JSON.stringify(baseConfig.env),
+            // server配置的环境变量
+            'process.env.SERVER_ENV': JSON.stringify(process.env.SERVER_ENV),
         }),
         // js压缩 此插件压缩比下面的更好
-        // new UglifyJsPlugin({
-        //     uglifyOptions: {
-        //         cache: true,
-        //         warnings: false,
-        //         compress: {
-        //             warnings: false,
-        //             // 内嵌定义了但是只用到一次的变量
-        //             collapse_vars: true,
-        //             // 提取出出现多次但是没有定义成变量去引用的静态值
-        //             reduce_vars: true,
-        //             // 删除所有的 `console` 语句
-        //             // 还可以兼容ie浏览器
-        //             drop_console: true,
-        //             // 死代码消除
-        //             dead_code: true,  
-        //         },
-        //         output: {
-        //             // 删除所有的注释
-        //             comments: false,
-        //             // 最紧凑的输出
-        //             beautify: false,
-        //         },
-        //     }
-        // }),
+        new UglifyJsPlugin({
+            uglifyOptions: {
+                cache: true,
+                warnings: false,
+                compress: {
+                    warnings: false,
+                    // 内嵌定义了但是只用到一次的变量
+                    collapse_vars: true,
+                    // 提取出出现多次但是没有定义成变量去引用的静态值
+                    reduce_vars: true,
+                    // 删除所有的 `console` 语句
+                    // 还可以兼容ie浏览器
+                    drop_console: true,
+                    // 死代码消除
+                    dead_code: true,  
+                },
+                output: {
+                    // 删除所有的注释
+                    comments: false,
+                    // 最紧凑的输出
+                    beautify: false,
+                },
+            }
+        }),
     ]
 };
 export default webpackServerConf;

@@ -1,7 +1,9 @@
 const Router = require('koa-router');
 const path = require('path');
 const httpProxy = require('http-proxy');
+const config = require('../config/env');
 
+// (线上和本地)test测试环境
 module.exports = function(app) {
     const proxy = httpProxy.createProxyServer();
     const serverRouter = new Router();
@@ -10,9 +12,9 @@ module.exports = function(app) {
     serverRouter.all(/\/v1/, (ctx) => {
         ctx.respond = false;
         proxy.web(ctx.req, ctx.res, {
-            target: 'http://10.10.120.180',
+            target: config.server[config.env].target,
             headers: {
-                host: 'm.nangua.test.cn',
+                host: config.server[config.env].host,
             },
         });
     });

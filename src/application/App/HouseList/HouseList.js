@@ -12,7 +12,7 @@ import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
 import Service from 'lib/Service';
-import { shallowEqual, dynamicDocTitle, urlJoin } from 'lib/util';
+import { shallowEqual, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 
@@ -46,7 +46,7 @@ export default class HouseList extends PureComponent {
             },
         };
         // 动态更改标题
-        dynamicDocTitle('南瓜租房');
+        // dynamicDocTitle('南瓜租房');
 
         this.curUrlPrefix = window.getStore('url').urlPrefix;
     }
@@ -120,18 +120,19 @@ export default class HouseList extends PureComponent {
         const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
         const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
         const filterParamsAndLabel = filterStateToParams(newFilterState);
+        console.log('filterStateToParams', filterUrlFragment, filterParamsAndLabel, filterState);
 
-        if (filterState) {
-            this.setState({
-                filterState: Object.assign({}, this.state.filterState, newFilterState),
-                filterParamsObj: Object.assign({},
-                    this.state.filterParamsObj,
-                    filterParamsAndLabel.filterParams,
-                    positionStateAndParams && positionStateAndParams.params,
-                ),
-                filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-            });
-        }
+        this.setState({
+            filterState: Object.assign({}, this.state.filterState, newFilterState),
+            filterParamsObj: Object.assign({},
+                this.state.filterParamsObj,
+                filterParamsAndLabel.filterParams,
+                positionStateAndParams && positionStateAndParams.params,
+            ),
+            filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
+        }, () => {
+            window.setStore('filter', this.state);
+        });
     }
 
     wxShare() {
@@ -148,7 +149,16 @@ export default class HouseList extends PureComponent {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
         this._genHouseListFilterUrlFragment(filterUrlFragment);
 
-        this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
+        const filterStore = window.getStore('filter');
+        if (filterStore) {
+            this.setState(filterStore);
+        } else {
+            console.log('componentWillMount');
+            this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
+        }
+    }
+
+    componentDidMount() {
         this.wxShare();
     }
 
@@ -196,9 +206,13 @@ export default class HouseList extends PureComponent {
                 <HouseLists
                     filterParams={filterParamsObj}
                 />
-                <BottomOpenNative
-                    schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(filterParamsObj)}`}
-                />
+                {
+                    isApp ? 
+                        null : 
+                        <BottomOpenNative
+                            schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(filterParamsObj)}`}
+                        />
+                }
             </div>
         );
     }

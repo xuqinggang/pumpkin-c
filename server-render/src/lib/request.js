@@ -1,15 +1,14 @@
 import requestPromise from 'request-promise';
+import serverConfig from 'server/config/env';
 
 export default function nodeRequest(url, paramters, type, contentType) {
-    console.log('nodeRequest', url, paramters, type, contentType);
-    console.log('')
+    // console.log('url', url, paramters, type);
     const options = {
-        uri: 'https://m.focus.cn/bj/nangua/api/v1/rentUnits/153502009364865024',
-        method: 'GET',
-        json: true,
+        uri: `${serverConfig.server[process.env.SERVER_ENV].target}/bj/nangua${url}`,
+        method: type.toUpperCase(),
+        body: paramters,
+        json: true, // Automatically parses the JSON string in the response
     };
+
     return requestPromise(options)
-    // .then((data) => {
-    // console.log('da', typeof data);
-    // })
 }
