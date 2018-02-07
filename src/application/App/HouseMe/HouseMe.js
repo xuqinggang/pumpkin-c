@@ -41,15 +41,16 @@ export default class HouseMe extends PureComponent {
 
         ajaxGetMeInfo()
             .then((meInfoObj) => {
+                window.setStore('meInfo', meInfoObj);
+
                 this.setState({
                     meInfoObj,
                 });
-
-                window.setStore('meInfo', meInfoObj);
             })
     }
 
     render() {
+        console.log('HouseMe render', window.getStore('meInfo'))
         const {
             match,
             history,

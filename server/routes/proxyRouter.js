@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const path = require('path');
 const httpProxy = require('http-proxy');
-const { server } = require('../config/env');
+const config = require('../config/env');
 
 // (线上和本地)test测试环境
 module.exports = function(app) {
@@ -12,9 +12,9 @@ module.exports = function(app) {
     serverRouter.all(/\/v1/, (ctx) => {
         ctx.respond = false;
         proxy.web(ctx.req, ctx.res, {
-            target: server.target,
+            target: config.server[config.env].target,
             headers: {
-                host: server.host,
+                host: config.server[config.env].host,
             },
         });
     });

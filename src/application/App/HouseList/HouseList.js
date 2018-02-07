@@ -12,7 +12,7 @@ import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
 import Service from 'lib/Service';
-import { shallowEqual, dynamicDocTitle, urlJoin } from 'lib/util';
+import { shallowEqual, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 
@@ -46,7 +46,7 @@ export default class HouseList extends PureComponent {
             },
         };
         // 动态更改标题
-        dynamicDocTitle('南瓜租房');
+        // dynamicDocTitle('南瓜租房');
 
         this.curUrlPrefix = window.getStore('url').urlPrefix;
     }

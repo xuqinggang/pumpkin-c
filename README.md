@@ -5,14 +5,19 @@ npm install
 # 开发环境(客户端渲染)
 npm run dev
 
-# 本地server和线上test环境(服务器端渲染)
+# 本地server(服务器端渲染)
 npm run build_test
-npm run server_render
+npm run server_render_test
 npm run server_test
+
+# 线上test环境(服务器端渲染) nginx代理接口
+npm run build_test
+npm run server_render_test
+npm run server
 
 # docker 线上production环境 nginx代理接口
 npm run build_production
-npm run server_render
+npm run server_render_production
 npm run server
 
 # 筛选参数，转换成url

@@ -21,7 +21,7 @@ const config = {
         production: {
             target: 'https://m.focus.cn',
         },
-    }[env],
+    },
 };
 
 module.exports = config;
