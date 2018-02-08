@@ -47,6 +47,9 @@ export default class HouseMe extends PureComponent {
                     meInfoObj,
                 });
             })
+            .catch((err) => {
+                this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
+            })
     }
 
     render() {
