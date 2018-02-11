@@ -1,3 +1,5 @@
+'use strict';
+
 import requestPromise from 'request-promise';
 import serverConfig from 'server/config/env';
 

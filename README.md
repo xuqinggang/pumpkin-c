@@ -20,8 +20,11 @@ npm run build_production
 npm run server_render_production
 npm run server
 
+# 生产环境sentry日志
+http://sentryjs.kuaizhan.sohuno.com/sentry/nanguapumpkin-c-online/
+
 # 筛选参数，转换成url
-竖线|当做分隔符
+竖线|当做一个筛选条件内部的分隔符
 ## 更多筛选面板
 朝向 - d
 url片段：d1|1|2

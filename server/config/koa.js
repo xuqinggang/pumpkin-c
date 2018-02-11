@@ -3,7 +3,7 @@
  * author xuqinggang
  * @date 2017-10-19 21:57
  */
-'use strict'
+'use strict';
 
 // import path from 'path';
 const logger = require('koa-logger');
