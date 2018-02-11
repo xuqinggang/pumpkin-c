@@ -44,8 +44,9 @@ class RentFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.initialState = [0, 20000];
+
         this.state = {
-            rangeValueArr: this.initialState,
+            rangeValueArr: props.filterState || this.initialState,
         };
     }
 
@@ -78,15 +79,6 @@ class RentFilter extends PureComponent {
         this.setState({
             rangeValueArr: nextProps.filterState,
         });
-    }
-
-    componentWillMount() {
-        const filterState = this.props.filterState;
-        if (filterState) {
-            this.setState({
-                rangeValueArr: filterState,
-            });
-        }
     }
 
     render() {
