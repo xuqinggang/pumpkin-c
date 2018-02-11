@@ -1,3 +1,5 @@
+'use strict';
+
 import Router from 'koa-router';
 import detailContro from './detail.controller';
 
