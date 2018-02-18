@@ -1,3 +1,5 @@
+const ua = window.navigator.userAgent.toLowerCase();
+
 // 获得父元素下，所有子元素的宽度和(包括margin right/left)
 function getTotalWidth(children) {
     let totalWidth = 0;
@@ -82,6 +84,8 @@ const prefix = (function () {
 
 const utils = {
     TSF: prefix + 'ransform',
+    isMobile: /mobile|phone|android|pad/.test(ua),
+
     // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
     translateZ: (function (pre) {
       var f
@@ -104,8 +108,8 @@ export default class SimpleScroll {
         // 标志信息
         // 是否正在移动
         this.isMoving = false;
-        // 是否正在回弹
-        this.isBouncing = false;
+        // 是否达到边界
+        this.isReachBorder = false;
 
         // 配置项
         this.options = {
@@ -114,6 +118,10 @@ export default class SimpleScroll {
             isScrollX: false, // 是否开启横向滚动
             isScrollY: true,
             isMomentum: true, // 是否惯性滑动
+            // 触摸超过边界阻力值
+            boundaryResistLevel: 4,
+            // 惯性滚动阻力值
+            inertiaResistLevel: 18,
         };
         this.options = Object.assign(this.options, options);
 
@@ -205,7 +213,7 @@ export default class SimpleScroll {
     _compute(val, min, max, isBounce) {
         if (val > min) {
             if (isBounce && (val > (min + 10))) {
-                return Math.round(min + ((val - min) / 4));
+                return Math.round(min + ((val - min) / this.options.boundaryResistLevel));
             } else {
                 return min;
             }
@@ -213,7 +221,7 @@ export default class SimpleScroll {
 
         if (val < max) {
             if (isBounce && (val < (max - 10))) {
-                return Math.round(max + ((val - max) / 4));
+                return Math.round(max + ((val - max) / this.options.boundaryResistLevel));
             } else {
                 return max;
             }
@@ -282,8 +290,7 @@ export default class SimpleScroll {
 
             el.style[utils.TSF] = 'translate(' + endX + 'px, ' + endY + 'px)' + utils.translateZ;
             // el.style.transform = `translate3d(${endX}px, ${endY}px, 0px)`;
-
-            if (duration > 0 && !(endX === translateX && endY === translateY)) {
+            if (this.isMoving && duration > 0 && !(endX === translateX && endY === translateY)) {
                 rAF(moving);
             } else if (typeof callback === "function") {
                 callback();
@@ -317,18 +324,18 @@ export default class SimpleScroll {
             this.position.translateEndX = tmpX;
             this.position.translateEndY = tmpY;
         }
-
         if (timing) {
             this._moveTo(this.scrollerDom, this.position.translateX, this.position.translateY, timing, callback);
         } else {
-            this._scrollTo(this.position.translateX, this.position.translateY);
+            this._scrollTo(this.position.translateX, this.position.translateY, callback);
         }
 
         return this;
     }
 
-    _scrollTo(translateX, translateY) {
+    _scrollTo(translateX, translateY, callback) {
         this.scrollerDom.style[utils.TSF] = 'translate(' + translateX + 'px, ' + translateY + 'px)' + utils.translateZ;
+        callback && callback();
     }
 
     // touchmove 实时滚动
@@ -353,7 +360,8 @@ export default class SimpleScroll {
                 this.position.translateX = this._compute(this.position.translateX, minScrollX, maxScrollX, isBounce);
             }
         }
-
+        // 实时滚动过程中
+        // allow：true允许超出边界
         this.scrollTo(this.position.translateX, this.position.translateY, 0, true, null, true)
     }
     _endAction() {
@@ -369,7 +377,8 @@ export default class SimpleScroll {
             this.position.translateY = tmpY;
 
             if (tmpY >= this.minScrollY || tmpY <= this.maxScrollY) {
-                this.isBouncing = true;
+                // 是否达到边界
+                this.isReachBorder = true;
             }
         }
     }
@@ -381,22 +390,42 @@ export default class SimpleScroll {
             this.position.translateX = tmpX;
 
             if (tmpX >= this.minScrollX || tmpX <= this.maxScrollX) {
-                this.isBouncing = true;
+                this.isReachBorder = true;
             }
         }
     }
     // 惯性滚动，触摸边界回弹
     _momentumBounce() {
-        this.isBouncing = false;
-        this.scrollTo(this.position.translateX, this.position.translateY, 10000, false)
+        const {
+            isScrollX,
+            isScrollY,
+        } = this.options;
+        this.isReachBorder = false;
+        // 惯性滚动时候达到边界
+        function over() {
+            // allow: false，不允许超出边界,会自动回弹
+            this.scrollTo(this.position.translateX, this.position.translateY, 100, false, this._endAction.bind(this));
+        }
+        if ((isScrollX && this.status === 'SCROLLINGX')) {
+            // allow: true，允许超出边界
+            this.scrollTo(this.position.translateX + (this.directionX * 20), this.position.translateY, 
+                100, true, over.bind(this));
+        }
+
+        if ((isScrollY && this.status === 'SCROLLINGY')) {
+            // allow: true，允许超出边界
+            this.scrollTo(this.position.translateX, this.position.translateY + (this.directionY * 20), 
+                100, true, over.bind(this));
+        }
     }
+
     // 在惯性滚动的过程中
     _step(time) {
         const now = Date.now();
         const deltaTime = now - time;
 
         // 如果达到边界被标记为回弹,则执行回弹，并终止
-        if (this.isBouncing) {
+        if (this.isReachBorder) {
             this._momentumBounce();
             return;
         }
@@ -406,7 +435,8 @@ export default class SimpleScroll {
             return;
         }
         if (deltaTime > 0) {
-            this.speed = this.speed - deltaTime * (this.speed > 1.2 ? 0.001 : (this.speed > 0.6 ? 0.0008 : 0.0006));
+            // this.speed = this.speed - deltaTime * (this.speed > 1.2 ? 0.001 : (this.speed > 0.6 ? 0.0008 : 0.0006));
+            this.speed = this.speed - deltaTime * (this.options.inertiaResistLevel / 10000);
             const stepDistance = Math.round(this.speed * deltaTime);
             if (this.speed <= 0 || stepDistance <= 0) {
                 this._endAction();
@@ -450,10 +480,11 @@ export default class SimpleScroll {
 
         this.position.lastX = x;
         this.position.lastY = y;
-
         const now = Date.now();
         // 在移动过程中如果停下来但未释放，或者移动过程中方向改变，则把该位置重新当做起点
-        if (now - this.lastTime > 200 || this.directionY !== directionY || this.directionX !== directionX) {
+        if (now - this.lastTime > 200 || 
+            (this.options.isScrollY && this.directionY !== directionY) ||
+            (this.options.isScrollX && this.directionX !== directionX)) {
             this.startTime = now;
             this.position.tmpStartX = x;
             this.position.tmpStartY = y;
@@ -516,12 +547,15 @@ export default class SimpleScroll {
         }
 
         if (this.status === 'SCROLLINGY' || this.status === 'SCROLLINGX') {
+            // 标识是在moveing
+            this.isMoving = true;
             isBeyoundY = translateY > this.minScrollY || translateY < this.maxScrollY;
             isBeyoundX = translateX > this.minScrollX || translateX < this.maxScrollX;
 
             if ((isScrollX && isBeyoundX) || (isScrollY && isBeyoundY)) {
-                // 超出边界
-                this.scrollTo(translateX, translateY, 300, false)._endAction();
+                // 超出边界,释放结束,回弹
+                // allow：false，不允许超出边界会自动回弹
+                this.scrollTo(translateX, translateY, 300, false, this._endAction.bind(this), false);
             } else if (isMomentum && duration && duration < 200 && this.deltaDistance) {
                 this.speed = Math.abs(this.deltaDistance / duration);
                 this.speed = this.speed > 1.5 ? 1.5 : this.speed;
@@ -539,8 +573,8 @@ export default class SimpleScroll {
         }
 
         if (this.isMoving) {
-            e.preventDefault();
-            this.isMoving = false;
+            e.preventDefault(); // 防止在滑动过程中再次触摸误触a连接等
+            this.isMoving = false; // 停止移动
         }
 
         this._start(e);
@@ -550,6 +584,11 @@ export default class SimpleScroll {
 
     _touchMove = (e) => {
         e.preventDefault();
+        const activeElement = document.activeElement;
+        if (utils.isMobile && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+            activeElement.blur();
+        }
+
         this._move(e);
     }
 
