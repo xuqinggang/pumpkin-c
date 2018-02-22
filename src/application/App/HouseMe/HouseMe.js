@@ -5,6 +5,7 @@ import HouseMeIndex from 'components/App/HouseMe/HouseMeIndex/HouseMeIndex';
 import HouseMeWish from 'components/App/HouseMe/HouseMeWish/HouseMeWish';
 import HouseMeFeedBack from 'components/App/HouseMe/HouseMeFeedBack/HouseMeFeedBack';
 import HouseMeInfo from 'components/App/HouseMe/HouseMeInfo/HouseMeInfo';
+import HouseMeCoupon from 'components/App/HouseMe/HouseMeCoupon/HouseMeCoupon';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import { isHasCookie, urlJoin } from 'lib/util';
@@ -85,6 +86,7 @@ export default class HouseMe extends PureComponent {
                     }}
                 />
                 <Route exact path={`${match.url}/feedback`} component={HouseMeFeedBack} />
+                <Route exact path={`${match.url}/coupon`} component={HouseMeCoupon} />
             </div>
         );
     }
