@@ -48,7 +48,7 @@ export default class HouseList extends PureComponent {
         // 动态更改标题
         // dynamicDocTitle('南瓜租房');
 
-        this.curUrlPrefix = window.getStore('url').urlPrefix;
+        this.urlPrefix = window.getStore('url').urlPrefix;
     }
 
     _getGetParams() {
@@ -87,7 +87,7 @@ export default class HouseList extends PureComponent {
 
         // 筛选url片段
         const rtFilterUrl = this._genHouseListFilterUrlFragment(filterUrlFragment);
-        link = urlJoin(this.curUrlPrefix, rtFilterUrl);
+        link = urlJoin(this.urlPrefix, 'list', rtFilterUrl);
 
         this.props.history.push(link);
         // 未知原因，需要设置延时来确保微信分享正常

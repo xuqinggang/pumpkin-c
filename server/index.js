@@ -12,8 +12,6 @@ const Router = require('koa-router');
 const mount = require('koa-mount');
 const path = require('path');
 
-const errorHandleMiddle = require('./middleware/error.middleware');
-const cacheMiddle = require('./middleware/cache.middleware');
 const config = require('./config/env');
 const koaConf = require('./config/koa');
 
@@ -24,13 +22,7 @@ const sentry = require('./lib/sentry');
 
 const app = new Koa();
 
-//中间件-错误处理,放在最开始的时候
-app.use(errorHandleMiddle());
-
-// 中间件-缓存
-app.use(cacheMiddle());
-
-// koa基本配置
+// koa基本配置(各个中间件)
 koaConf(app);
 
 // 客户端渲染的router配置

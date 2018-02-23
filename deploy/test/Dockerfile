@@ -7,7 +7,7 @@ RUN npm install pumpkin-font-c --registry=http://10.10.126.140:4873 && \
  
 COPY ./ /pumpkin-c/
 RUN npm run build_test && \
-        npm run server_render_test
+        npm run build_render_test
 
 EXPOSE 3000
 ENTRYPOINT cd /pumpkin-c/ && \

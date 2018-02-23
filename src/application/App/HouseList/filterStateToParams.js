@@ -208,7 +208,7 @@ export function rentFilterStateToParams(rentState) {
     // 20000标志着不限
     if (rentState.length) {
         if (rentState[1] == 20000) {
-            filterParams.priceInfo = { floor: rentState[0], ceil: null }
+            filterParams.priceInfo = { floor: rentState[0], ceil: null };
             if (rentState[0] === 0) {
                 label = '租金';
             } else {

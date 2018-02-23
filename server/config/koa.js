@@ -5,15 +5,17 @@
  */
 'use strict';
 
-// import path from 'path';
 const logger = require('koa-logger');
-// import json from 'koa-json';
-// import bodyParser from 'koa-bodyparser';
-const conf = require('./env');
+const errorHandleMiddle = require('../middleware/error.middleware');
+const cacheMiddle = require('../middleware/cache.middleware');
+const responseTimeMiddleware = require('../middleware/responseTime.middleware');
 
 module.exports = function(app) {
-    // app.use(responseTime());
+    //中间件-错误处理,放在最开始的时候
+    app.use(errorHandleMiddle());
+    app.use(responseTimeMiddleware());
+    // 中间件-日志
     app.use(logger());
-    // app.use(bodyParser());
-    // app.use(json());
+    // 中间件-缓存
+    app.use(cacheMiddle());
 }
