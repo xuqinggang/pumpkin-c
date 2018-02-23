@@ -12,7 +12,7 @@ const config = {
     },
     dev: {
         port: 8888,
-        host: '10.0.120.35',
+        host: '10.0.117.121',
         proxy: {
             '/bj/nangua/api/v1': {
                 target: 'http://10.10.120.180',
