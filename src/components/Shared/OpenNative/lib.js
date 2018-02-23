@@ -158,7 +158,6 @@
                     window.location.href = AppConfig.FAILBACK.IOS;
                     return;
                 } else {
-                    console.log('schemaUrl', schemaUrl);
                     // body.appendChild(iframe);
                     // iframe.src = schemaUrl;
                     aLink.href = schemaUrl;
