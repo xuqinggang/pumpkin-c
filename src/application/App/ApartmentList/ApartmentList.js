@@ -8,7 +8,7 @@ import {
 
 import './styles.less';
 
-const classPrefix = 'm-apartmentlist';
+const classPrefix = 'g-apartmentlist';
 
 export default class ApartmentList extends PureComponent {
     constructor(props) {
