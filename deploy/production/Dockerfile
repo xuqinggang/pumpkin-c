@@ -6,7 +6,8 @@ RUN npm install pumpkin-font-c --registry=http://10.10.126.140:4873 && \
         npm install
  
 COPY ./ /pumpkin-c/
-RUN npm run build_production
+RUN npm run build_production && \
+        npm run build_render_production
 
 RUN chmod +x ./deploy_front.sh
 RUN ./deploy_front.sh
