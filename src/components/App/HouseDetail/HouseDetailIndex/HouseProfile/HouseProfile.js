@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import BottomDialog from 'Shared/BottomDialog';
-import { PayTypeMapName } from 'base/MapData';
+import { PayTypeMapName } from 'baseData/MapData';
 
 import './styles.less';
 

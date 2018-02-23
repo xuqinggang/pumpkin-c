@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router'
 
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import RoomSlider from 'components/App/HouseDetail/HouseDetailIndex/RoomSlider/RoomSlider';

@@ -15,25 +15,34 @@ export function filterStateToParams(filterState) {
     // 初始值
     const newFilterParams = {};
     const newLabel = {};
+    // seoData用于服务器端渲染时，生成meta标签相关数据
+    const newSeoData = {};
 
-    const { label: moreLabel, filterParams: moreFilterParams } = moreFilterStateToParams(more);
+    const { label: moreLabel, filterParams: moreFilterParams, seoData: moreSeoData } = moreFilterStateToParams(more);
     Object.assign(newFilterParams, moreFilterParams);
+    Object.assign(newSeoData, { more: moreSeoData });
     newLabel.more = moreLabel;
 
-    const { label: rentLabel, filterParams: rentFilterParams } = rentFilterStateToParams(rent);
+    const { label: rentLabel, filterParams: rentFilterParams, seoData: rentSeoData } = rentFilterStateToParams(rent);
     Object.assign(newFilterParams, rentFilterParams);
+    Object.assign(newSeoData, { rent: rentSeoData });
     newLabel.rent = rentLabel;
 
-    const { label: houseTypeLabel, filterParams: houseTypeFilterParams } = houseTypeFilterStateToParams(houseType);
+    const { label: houseTypeLabel, filterParams: houseTypeFilterParams, seoData: houseTypeSeoData }
+        = houseTypeFilterStateToParams(houseType);
     Object.assign(newFilterParams, houseTypeFilterParams);
+    Object.assign(newSeoData, { houseType: houseTypeSeoData });
     newLabel.houseType = houseTypeLabel;
 
-    const { label: positionLabel, filterParams: positionFilterParams } = positionFilterStateToParams(position);
+    const { label: positionLabel, filterParams: positionFilterParams, seoData: positionSeoData }
+        = positionFilterStateToParams(position);
     Object.assign(newFilterParams, positionFilterParams);
+    Object.assign(newSeoData, { position: positionSeoData });
     newLabel.position = positionLabel;
 
     return {
         label: newLabel,
+        seoData: newSeoData,
         filterParams: newFilterParams,
     };
 }
@@ -56,6 +65,8 @@ export function moreFilterStateToParams(moreFilterStateObj) {
         areaInfo: null,
         floorInfo: null,
     };
+
+    const seoData = {};
     
     let label = '更多';
 
@@ -63,6 +74,7 @@ export function moreFilterStateToParams(moreFilterStateObj) {
         return {
             label,
             filterParams,
+            seoData,
         };
     }
 
@@ -83,8 +95,10 @@ export function moreFilterStateToParams(moreFilterStateObj) {
 
                 // 如果没有，初始化为数组
                 if (!filterParams[paramKey]) {
+                    seoData[paramKey] = [label]
                     filterParams[paramKey] = [tagValue];
                 } else {
+                    seoData[paramKey].push(label);
                     filterParams[paramKey].push(tagValue);
                 }
             }
@@ -97,6 +111,7 @@ export function moreFilterStateToParams(moreFilterStateObj) {
 
     return {
         label,
+        seoData,
         filterParams,
     };
 }
@@ -116,6 +131,7 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
     // 总共选中的tag数量
     let totalCount = 0;
 
+    const seoData = {};
     const filterParams = {
         sharedRooms: null,
         wholeRooms: null,
@@ -126,14 +142,13 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
         return {
             filterParams,
             label,
+            seoData,
         };
     }
 
     for(let tagGroupType in houseTypeFilterStateObj) {
         const tagStateObj = houseTypeFilterStateObj[tagGroupType];
         const paramKey = `${tagGroupType}Rooms`;
-        // 临时存储tag text
-        let tmpValue = null;
 
         Object.keys(tagStateObj).forEach((tagIndex) => {
             const isSelected = tagStateObj[tagIndex];
@@ -142,19 +157,21 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
 
                 const tagItem = HouseTypeFilterTagData[`${tagGroupType}TagsArr`][tagIndex];
                 const tagValue = tagItem.value;
-                tmpValue = tagItem.value;
+                const tagText = HouseTypeMapLabel[tagValue];
 
                 // 如果没有，初始化为数组
                 if (!filterParams[paramKey]) {
+                    seoData[paramKey] = [tagText];
                     filterParams[paramKey] = [tagValue];
                 } else {
+                    seoData[paramKey].push(tagText);
                     filterParams[paramKey].push(tagValue);
                 }
 
                 if (totalCount === 1) {
                     label = (
                         tagGroupType == 'shared' ? '合租' : '整租'
-                    ) + HouseTypeMapLabel[tmpValue];
+                    ) + tagText;
                 }
             }
         });
@@ -167,12 +184,14 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
 
     return {
         label,
+        seoData,
         filterParams,
     };
 }
 
 // rentState, ex: [0-3000]
 export function rentFilterStateToParams(rentState) {
+    const seoData = '';
     const filterParams = {
         priceInfo: null, 
     };
@@ -181,6 +200,7 @@ export function rentFilterStateToParams(rentState) {
     if (!rentState) {
         return {
             label,
+            seoData,
             filterParams,
         };
     }
@@ -205,6 +225,7 @@ export function rentFilterStateToParams(rentState) {
 
     return {
         label,
+        seoData: label === '租金' ? '' : label,
         filterParams,
     };
 }
@@ -217,6 +238,7 @@ const PtTypeMapParamsKey = {
 };
 
 export function positionFilterStateToParams(positinFilterStateObj) {
+    const seoData = [];
     const filterParams = {
         districtId: null,
         circleId: null,
@@ -232,6 +254,7 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         return {
             label,
             filterParams,
+            seoData,
         };
     }
 
@@ -258,6 +281,7 @@ export function positionFilterStateToParams(positinFilterStateObj) {
     if (secondItemSelectedIndex != undefined && secondItemSelectedIndex !== -1) {
         if (secondItem.id != -1) {
             label = secondItem.text;
+            seoData.push(label);
             filterParams[correspondParamsKeyArr[0]] = parseInt(secondItem.id, 10);
         }
     }
@@ -266,12 +290,14 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
         if (thirdItem.id != -1) {
             label = thirdItem.text;
+            seoData.push(label);
             filterParams[correspondParamsKeyArr[1]] = parseInt(thirdItem.id, 10);
         }
     }
 
     return {
         label,
+        seoData,
         filterParams,
     };
 }

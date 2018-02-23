@@ -1,3 +1,5 @@
+const ua = window.navigator.userAgent.toLowerCase();
+
 // 获得父元素下，所有子元素的宽度和(包括margin right/left)
 function getTotalWidth(children) {
     let totalWidth = 0;
@@ -78,10 +80,12 @@ const prefix = (function () {
         transform = vendors[i] + 'ransform'
         if (transform in sty) return vendors[i]
     }
-})();
+})() || 't';
 
 const utils = {
     TSF: prefix + 'ransform',
+    isMobile: /mobile|phone|android|pad/.test(ua),
+
     // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
     translateZ: (function (pre) {
       var f
@@ -104,8 +108,8 @@ export default class SimpleScroll {
         // 标志信息
         // 是否正在移动
         this.isMoving = false;
-        // 是否正在回弹
-        this.isBouncing = false;
+        // 是否达到边界
+        this.isReachBorder = false;
 
         // 配置项
         this.options = {
@@ -114,6 +118,10 @@ export default class SimpleScroll {
             isScrollX: false, // 是否开启横向滚动
             isScrollY: true,
             isMomentum: true, // 是否惯性滑动
+            // 触摸超过边界阻力值
+            boundaryResistLevel: 4,
+            // 惯性滚动阻力值
+            inertiaResistLevel: 18,
         };
         this.options = Object.assign(this.options, options);
 
@@ -148,6 +156,13 @@ export default class SimpleScroll {
             translateEndY: 0,
         };
 
+        // 注册事件
+        this.event = {
+            scrollStart: [],
+            scroll: [],
+            scrollEnd: [],
+        }
+
         this._initStyle();
         this._initEvent();
         this._refresh();
@@ -158,6 +173,26 @@ export default class SimpleScroll {
     }
     _initEvent() {
         this.wrapperDom.addEventListener('touchstart', this._touchStart, false);
+    }
+    _dispatch(eventName, event) {
+        const dispatchEvent = this.event[eventName];
+        for(let i = 0; i < dispatchEvent.length; i++) {
+            dispatchEvent[i](event);
+        }
+    }
+    // 对外暴露注册事件
+    on(eventName, callback) {
+        switch (eventName) {
+            case "scrollStart":
+                this.event.scrollStart.push(callback);
+                break;
+            case "scroll":
+                this.event.scroll.push(callback);
+                break;
+            case "scrollEnd":
+                this.event.scrollEnd.push(callback);
+                break;
+        }
     }
     // 刷新wrapper和scroller的宽高
     _refresh(isExecRefreshEvent) {
@@ -205,7 +240,7 @@ export default class SimpleScroll {
     _compute(val, min, max, isBounce) {
         if (val > min) {
             if (isBounce && (val > (min + 10))) {
-                return Math.round(min + ((val - min) / 4));
+                return Math.round(min + ((val - min) / this.options.boundaryResistLevel));
             } else {
                 return min;
             }
@@ -213,7 +248,7 @@ export default class SimpleScroll {
 
         if (val < max) {
             if (isBounce && (val < (max - 10))) {
-                return Math.round(max + ((val - max) / 4));
+                return Math.round(max + ((val - max) / this.options.boundaryResistLevel));
             } else {
                 return max;
             }
@@ -255,6 +290,7 @@ export default class SimpleScroll {
         endX = startX;
         endY = startY;
 
+
         let moving = () => {
             if (duration < 17) {
                 endX = translateX;
@@ -279,10 +315,8 @@ export default class SimpleScroll {
                 
                 endY = tmpY;
             }
-
             el.style[utils.TSF] = 'translate(' + endX + 'px, ' + endY + 'px)' + utils.translateZ;
             // el.style.transform = `translate3d(${endX}px, ${endY}px, 0px)`;
-
             if (duration > 0 && !(endX === translateX && endY === translateY)) {
                 rAF(moving);
             } else if (typeof callback === "function") {
@@ -297,7 +331,7 @@ export default class SimpleScroll {
      * allow: 是否允许超出边界。false:释放回弹
      * system: false: 手动调用或者move结束时调用
      */
-    scrollTo(translateX, translateY, timing, allow, callback, system) {
+    scrollTo(translateX, translateY, timing, allow, callback, system, e) {
         let tmpY = translateY,
             tmpX = translateX;
         if (!allow) {
@@ -317,22 +351,23 @@ export default class SimpleScroll {
             this.position.translateEndX = tmpX;
             this.position.translateEndY = tmpY;
         }
-
         if (timing) {
             this._moveTo(this.scrollerDom, this.position.translateX, this.position.translateY, timing, callback);
         } else {
-            this._scrollTo(this.position.translateX, this.position.translateY);
+            this._scrollTo(this.position.translateX, this.position.translateY, callback);
         }
 
+        this._dispatch('scroll', e);
         return this;
     }
 
-    _scrollTo(translateX, translateY) {
+    _scrollTo(translateX, translateY, callback) {
         this.scrollerDom.style[utils.TSF] = 'translate(' + translateX + 'px, ' + translateY + 'px)' + utils.translateZ;
+        callback && callback();
     }
 
     // touchmove 实时滚动
-    _doScroll() {
+    _doScroll(e) {
         const {
             minScrollX,
             maxScrollX,
@@ -353,13 +388,15 @@ export default class SimpleScroll {
                 this.position.translateX = this._compute(this.position.translateX, minScrollX, maxScrollX, isBounce);
             }
         }
-
-        this.scrollTo(this.position.translateX, this.position.translateY, 0, true, null, true)
+        // 实时滚动过程中
+        // allow：true允许超出边界
+        this.scrollTo(this.position.translateX, this.position.translateY, 0, isBounce, null, true, e);
     }
     _endAction() {
-      this.position.translateEndY = this.position.translateY;
-      this.position.translateEndX = this.position.translateX;
-      this.isMoving = false;
+        this.position.translateEndY = this.position.translateY;
+        this.position.translateEndX = this.position.translateX;
+        this.isMoving = false;
+        this._dispatch("scrollEnd");
     }
     // y轴动量滚动(惯性)
     _momentumY(stepDistance) {
@@ -369,7 +406,8 @@ export default class SimpleScroll {
             this.position.translateY = tmpY;
 
             if (tmpY >= this.minScrollY || tmpY <= this.maxScrollY) {
-                this.isBouncing = true;
+                // 是否达到边界
+                this.isReachBorder = true;
             }
         }
     }
@@ -381,22 +419,43 @@ export default class SimpleScroll {
             this.position.translateX = tmpX;
 
             if (tmpX >= this.minScrollX || tmpX <= this.maxScrollX) {
-                this.isBouncing = true;
+                this.isReachBorder = true;
             }
         }
     }
-    // 惯性滚动，触摸边界回弹
+    // 边界回弹
     _momentumBounce() {
-        this.isBouncing = false;
-        this.scrollTo(this.position.translateX, this.position.translateY, 10000, false)
+        const {
+            isScrollX,
+            isScrollY,
+            isBounce,
+        } = this.options;
+        this.isReachBorder = false;
+        // 惯性滚动时候达到边界
+        function over() {
+            // allow: false，不允许超出边界,会自动回弹
+            this.scrollTo(this.position.translateX, this.position.translateY, 100, false, this._endAction.bind(this));
+        }
+        if ((isScrollX && this.status === 'SCROLLINGX')) {
+            // allow: true，允许超出边界
+            this.scrollTo(this.position.translateX + (this.directionX * 20), this.position.translateY, 
+                100, isBounce, over.bind(this));
+        }
+
+        if ((isScrollY && this.status === 'SCROLLINGY')) {
+            // allow: true，允许超出边界
+            this.scrollTo(this.position.translateX, this.position.translateY + (this.directionY * 20), 
+                100, isBounce, over.bind(this));
+        }
     }
+
     // 在惯性滚动的过程中
     _step(time) {
         const now = Date.now();
         const deltaTime = now - time;
 
         // 如果达到边界被标记为回弹,则执行回弹，并终止
-        if (this.isBouncing) {
+        if (this.isReachBorder && this.options.isBounce) {
             this._momentumBounce();
             return;
         }
@@ -406,7 +465,8 @@ export default class SimpleScroll {
             return;
         }
         if (deltaTime > 0) {
-            this.speed = this.speed - deltaTime * (this.speed > 1.2 ? 0.001 : (this.speed > 0.6 ? 0.0008 : 0.0006));
+            // this.speed = this.speed - deltaTime * (this.speed > 1.2 ? 0.001 : (this.speed > 0.6 ? 0.0008 : 0.0006));
+            this.speed = this.speed - deltaTime * (this.options.inertiaResistLevel / 10000);
             const stepDistance = Math.round(this.speed * deltaTime);
             if (this.speed <= 0 || stepDistance <= 0) {
                 this._endAction();
@@ -414,7 +474,7 @@ export default class SimpleScroll {
             }
             // _momentumDistance是可变方法，可为_momentumX,_momentumY，在判断方向时判断为何值，避免在次处进行过多的判断操作
             this._momentumDistance(stepDistance);
-            this.scrollTo(this.position.translateX, this.position.translateY, 0, true, null, false);
+            this.scrollTo(this.position.translateX, this.position.translateY, 0, this.options.isBounce, null, false);
         }
 
         rAF(this._step.bind(this, now));
@@ -432,6 +492,7 @@ export default class SimpleScroll {
 
             this.position.lastX = this.position.startX = this.position.tmpStartX = touches[0].pageX;
             this.position.lastY = this.position.startY = this.position.tmpStartY = touches[0].pageY;
+            this._dispatch("scrollStart", e);
         }
     }
     _move(e) {
@@ -450,10 +511,11 @@ export default class SimpleScroll {
 
         this.position.lastX = x;
         this.position.lastY = y;
-
         const now = Date.now();
         // 在移动过程中如果停下来但未释放，或者移动过程中方向改变，则把该位置重新当做起点
-        if (now - this.lastTime > 200 || this.directionY !== directionY || this.directionX !== directionX) {
+        if (now - this.lastTime > 200 || 
+            (this.options.isScrollY && this.directionY !== directionY) ||
+            (this.options.isScrollX && this.directionX !== directionX)) {
             this.startTime = now;
             this.position.tmpStartX = x;
             this.position.tmpStartY = y;
@@ -484,14 +546,14 @@ export default class SimpleScroll {
             // move时的位置和起点的距离
             this.deltaDistance = y - this.position.tmpStartY;
             this.position.translateY = y - this.position.startY + this.position.translateEndY;
-            this._doScroll();
+            this._doScroll(e);
             return;
         }
         if (this.status === 'SCROLLINGX') {
             // move时的位置和起点的距离
             this.deltaDistance = x - this.position.tmpStartX;
             this.position.translateX = x - this.position.startX + this.position.translateEndX;
-            this._doScroll();
+            this._doScroll(e);
             return;
         }
     }
@@ -516,16 +578,19 @@ export default class SimpleScroll {
         }
 
         if (this.status === 'SCROLLINGY' || this.status === 'SCROLLINGX') {
+            // 标识是在moveing
+            this.isMoving = true;
             isBeyoundY = translateY > this.minScrollY || translateY < this.maxScrollY;
             isBeyoundX = translateX > this.minScrollX || translateX < this.maxScrollX;
 
             if ((isScrollX && isBeyoundX) || (isScrollY && isBeyoundY)) {
-                // 超出边界
-                this.scrollTo(translateX, translateY, 300, false)._endAction();
+                // 超出边界,释放结束,回弹
+                // allow：false，不允许超出边界会自动回弹
+                // system: false, 来实时确定translateEndY的位置
+                this.scrollTo(translateX, translateY, 300, false, this._endAction.bind(this), false);
             } else if (isMomentum && duration && duration < 200 && this.deltaDistance) {
                 this.speed = Math.abs(this.deltaDistance / duration);
                 this.speed = this.speed > 1.5 ? 1.5 : this.speed;
-                this.isMoving = true;
                 rAF(this._step.bind(this, this.endTime));
             } else {
                 this._endAction();
@@ -539,8 +604,8 @@ export default class SimpleScroll {
         }
 
         if (this.isMoving) {
-            e.preventDefault();
-            this.isMoving = false;
+            e.preventDefault(); // 防止在滑动过程中再次触摸误触a连接等
+            this.isMoving = false; // 停止移动
         }
 
         this._start(e);
@@ -550,6 +615,11 @@ export default class SimpleScroll {
 
     _touchMove = (e) => {
         e.preventDefault();
+        const activeElement = document.activeElement;
+        if (utils.isMobile && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+            activeElement.blur();
+        }
+
         this._move(e);
     }
 

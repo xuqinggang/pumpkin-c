@@ -98,4 +98,10 @@ Service.put = (url, paramters) => {
 Service.delete = (url) => {
     return Service.reqServer(url, {}, 'DELETE');
 }
+
+// for node environment
+if (typeof XMLHttpRequest === 'undefined') {
+    Service.reqServer = global.nodeRequest; 
+}
+
 export default Service;

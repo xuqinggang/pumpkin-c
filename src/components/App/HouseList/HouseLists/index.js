@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import RentUnitList from '../RentUnitList';
 import RentUnitsSuggest from '../RentUnitsSuggest';
 import SingnalLessNote from '../SingnalLessNote';
-import { rentUnitShape, pagerShape } from 'base/propTypes';
+import { rentUnitShape, pagerShape } from 'baseData/propTypes';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 import { isApp } from 'lib/const';
 import { shallowEqual, getScrollTop } from 'lib/util';

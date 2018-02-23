@@ -1,26 +1,29 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
 
-import { rentUnitShape } from 'base/propTypes';
-import { RentalTypeMapText, DirectTypeMapText } from 'base/MapData';
-import { ModListImgUrl } from 'base/modUrlForCropImage';
+import { rentUnitShape } from 'baseData/propTypes';
+import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
+import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { urlJoin } from 'lib/util';
 import './style.less';
 
 const itemClassPrefix = 'm-houseitem';
 
-class RentUnitItem extends Component {
+class RentUnitItem extends PureComponent {
     constructor(props) {
         super(props);
+        // window.isServerRender 标识是服务器端渲染
         this.state = {
-            imgLoading: true,
+            imgLoading: window.isServerRender ? false : true,
         };
+
         this.handleImageLoad = this.handleImageLoad.bind(this);
         this.handleTouchTap = this.handleTouchTap.bind(this);
     }
 
     handleImageLoad() {
+        console.log('handleImageLoad');
         this.setState({
             imgLoading: false,
         });
@@ -51,6 +54,7 @@ class RentUnitItem extends Component {
         const imgCls = classNames(imgClsPrefix, {
             [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
+
         return (
             <div
                 onTouchTap={this.handleTouchTap}

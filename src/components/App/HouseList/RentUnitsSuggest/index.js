@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rentUnitShape } from 'base/propTypes';
+import { rentUnitShape } from 'baseData/propTypes';
 import RentUnitItem from '../RentUnitItem/index';
 import './style.less';
 

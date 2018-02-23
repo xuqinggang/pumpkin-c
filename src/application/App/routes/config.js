@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import { Router, Switch, Route } from 'react-router';
 
-import HouseDetail from 'App/HouseDetail/HouseDetail';
-import HouseList from 'App/HouseList/HouseList';
-import HouseLogin from 'App/HouseLogin/HouseLogin';
-import HouseMe from 'App/HouseMe/HouseMe';
-import HouseAboutUs from 'App/HouseAboutUs/HouseAboutUs';
+import HouseDetail from 'application/App/HouseDetail/HouseDetail';
+import HouseList from 'application/App/HouseList/HouseList';
+import HouseLogin from 'application/App/HouseLogin/HouseLogin';
+import HouseMe from 'application/App/HouseMe/HouseMe';
+import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 
-import ajaxInit from  '../ajaxInit';
+// import ajaxInit from  '../ajaxInit';
 
 import Service from 'lib/Service';
 
@@ -26,8 +26,6 @@ class WrapRouter extends PureComponent {
         Service.baseConfig = {
             urlPrefix: this.urlPrefix,
         };
-
-        ajaxInit();
     }
 
     render() {

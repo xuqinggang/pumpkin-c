@@ -1,5 +1,5 @@
 import Service from 'lib/Service';
-import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'base/MapData';
+import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'baseData/MapData';
 
 // 获取登录用户信息
 export function ajaxGetMeInfo() {
