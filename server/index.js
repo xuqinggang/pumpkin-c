@@ -12,29 +12,20 @@ const Router = require('koa-router');
 const mount = require('koa-mount');
 const path = require('path');
 
-// import logger from './util/log';
-const errorHandleMiddle = require('./middleware/error.middleware');
 const config = require('./config/env');
 const koaConf = require('./config/koa');
+
+// sentry log
+const sentry = require('./lib/sentry');
 
 // const routerConf = require('./routes');
 
 const app = new Koa();
 
-//错误处理中间件,放在最开始的时候
-app.use(errorHandleMiddle());
-
-// koa基本配置
+// koa基本配置(各个中间件)
 koaConf(app);
 
-// log记录
-// router use : this.logger.error('msg')
-// app.use(async (ctx, next) => {
-// 	ctx.logger = logger
-// 	await next()
-// });
-
-// 没有服务器端渲染的配置
+// 客户端渲染的router配置
 // router配置
 // routerConf(app);
 
@@ -63,8 +54,9 @@ app.listen(config.port, function(err) {
 
 //错误监听
 app.on('error', (err, ctx) => {
-	if (process.env.NODE_ENV != 'test') {
-		console.error('error', err)
-        ctx.logger.error({ url: ctx.req.url }, err);
-	}
+    console.error('error', err);
+    // 生产环境发送error到sentry
+    if (process.env.NODE_ENV === 'production') {
+        sentry.captureException(err);
+    }
 });

@@ -8,6 +8,11 @@ let TypeAndPrefixMap = {
     whole: 'w'
 };
 
+// 每个筛选条件内部的分隔符
+const FILTER_ITEM_SEPARATOR = '$';
+// 各个筛选条件连接的分隔符
+const FILTER_SEPARATOR = '~';
+
 // const SEPARATOR = 'I';
 
 // 反转对象的属性和值
@@ -40,7 +45,7 @@ export function stringifyTagsStateToUrl(stateObj) {
             }
         });
 
-        const urlJoinStr = urlArr.join('|');
+        const urlJoinStr = urlArr.join(FILTER_ITEM_SEPARATOR);
         if (!urlJoinStr) {
             return '';
         }
@@ -54,7 +59,9 @@ export function stringifyTagsStateToUrl(stateObj) {
 export function parseTagsUrlToState(filterUrl) {
     let stateObj = {};
     if (!filterUrl) { return null; }
-    const regRtArr = filterUrl.match(/(\w[\d\|]*)/g);
+    var reg = new RegExp(`(\\w[\\d\\${FILTER_ITEM_SEPARATOR}]*)`, 'g');
+    // const regRtArr = filterUrl.match(/(\w[\d\|]*)/g);
+    const regRtArr = filterUrl.match(reg);
     regRtArr.forEach((regRtItem) => {
         // regRtItem,ex: d1|2
         if (regRtItem) {
@@ -65,7 +72,7 @@ export function parseTagsUrlToState(filterUrl) {
 
             // ex:1|2
             const leftStr = regRtItem.substr(1);
-            const valueArr = leftStr.split('|');
+            const valueArr = leftStr.split(FILTER_ITEM_SEPARATOR);
             valueArr.forEach((value) => {
                 correspondStateObj[value] = true;
             });
@@ -80,6 +87,8 @@ export function parseTagsUrlToState(filterUrl) {
 // return 'p0-3300'
 export function stringifyRentStateToUrl(rentValArr) {
     if (rentValArr && rentValArr.length) {
+        // [0, 20000] 代表无限，不拼接到url中
+        if (rentValArr[0] === 0 && rentValArr[1] === 20000) return '';
         return 'p' + rentValArr.join('-')
     }
 
@@ -97,7 +106,11 @@ export function parseRentUrlToState(rentUrl) {
 
 //positionFilterState, eg: {firstItemSelectedIndex: 0, secondItemSelectedIndex: 1, thirdItemSelectedIndex: 2} 
 export function stringifyPositionStateToUrl(positinFilterStateObj) {
-    if (!Object.keys(positinFilterStateObj).length) return '';
+    if (positinFilterStateObj &&
+        (!Object.keys(positinFilterStateObj).length ||
+            positinFilterStateObj.secondItemSelectedIndex === 0)
+    ) return '';
+
     const {
         firstItemSelectedIndex,
         secondItemSelectedIndex,
@@ -143,7 +156,7 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
         }
     }
         
-    return positionUrlArr.join('|');
+    return positionUrlArr.join(FILTER_ITEM_SEPARATOR);
 }
 
 // 位置类型对应接口参数key
@@ -172,7 +185,7 @@ export function parsePositionUrlToState(positionUrl) {
         around: 2,
     };
 
-    const positionUrlArr = positionUrl.split('|');
+    const positionUrlArr = positionUrl.split(FILTER_ITEM_SEPARATOR);
     if (positionUrlArr[0]) {
         positionState.firstItemSelectedIndex = TypeMapIndex[positionUrlArr[0]];
         positionParamsKey = PtTypeMapParamsKey[positionUrlArr[0]];

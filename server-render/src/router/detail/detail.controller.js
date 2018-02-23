@@ -1,3 +1,5 @@
+'use strict';
+
 import ajaxInitHouseDetailData from 'application/App/HouseDetail/ajaxInitHouseDetail'
 
 export default async (ctx, next) => {

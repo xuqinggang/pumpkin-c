@@ -23,9 +23,7 @@ const webpackBaseConf = {
         vendors: [
             'babel-polyfill',
             'react',
-            'redux',
             'react-dom',
-            'react-redux',
             'react-router',
             'prop-types',
             'react-tap-event-plugin',

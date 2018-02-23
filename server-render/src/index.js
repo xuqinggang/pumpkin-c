@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter, Switch } from 'react-router';
@@ -14,18 +16,16 @@ import assets from '../dist/assets.json';
 const router = new Router();
 
 function serverRenderConf(app) {
-    console.log('serverRenderConf');
     // views template
     app.use(views(path.resolve(__dirname, '../../src/views'), {
         map: {
-            html: 'handlebars'
+            html: 'handlebars',
         }
     }));
 
     // router entry
     router.use('/:cityName/nangua',
         async (ctx, next) => {
-            console.log('ctx', ctx.request.url);
             window.location.href = ctx.request.url;
             Service.baseConfig = {
                 urlPrefix: '/bj/nangua',
@@ -37,7 +37,6 @@ function serverRenderConf(app) {
         allRouters.routes(),
         allRouters.allowedMethods(),
         async (ctx, next) => {
-            console.log('server ctx')
             const context = {};
             const content = ReactDOMServer.renderToString(
                 <StaticRouter

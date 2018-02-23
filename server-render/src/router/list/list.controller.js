@@ -1,3 +1,5 @@
+'use strict';
+
 import { parseUrlToState } from 'application/App/HouseList/filterStateToUrl';
 import { filterStateToParams } from 'application/App/HouseList/filterStateToParams';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';

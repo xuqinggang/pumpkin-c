@@ -7,13 +7,10 @@ export default class SimpleScroll extends PureComponent {
         this.activeIndex = props.activeIndex;
     }
     componentDidMount() {
-        console.log('SimpleScroll componentDidMount');
         this.scrollIns = new PRoll(this.wrapperDom, {
             isScrollY: false,
             isScrollX: true,
         });
-    }
-    componentWillReceiveProps(nextProps) {
     }
     render() {
         const { 
