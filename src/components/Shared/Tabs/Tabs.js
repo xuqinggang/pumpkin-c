@@ -26,12 +26,14 @@ class Tabs extends PureComponent {
 		]),
 		activeIndex: PropTypes.number,
 		defaultActiveIndex : PropTypes.number,
-		onChange: PropTypes.func,
+        onChange: PropTypes.func,
+        direction: PropTypes.string,
 	};
 
 	// 默认 props
 	static defaultProps = {
-		defaultActiveIndex: 0,
+        defaultActiveIndex: 0,
+        direction: 'horizon',
 		onChange: () => {},
 	};
 	
@@ -51,27 +53,6 @@ class Tabs extends PureComponent {
 		}
 	}
 
-	getTabs(props = this.props) {
-		const tabs = [];
-		// 处理了props.children为undefined和数组和单一对象的情况
-		Children.forEach(props.children, tab => {
-			if(isValidElement(tab)) {
-				tabs.push(tab)
-			}
-		});
-		
-		return tabs;
-    }
-
-	// 由外组件更新时才会调用此方法
-	componentWillReceiveProps(nextProps) {
-		if('activeIndex' in nextProps) {
-			this.setState({
-				selectedIndex: nextProps.activeIndex,
-			});
-		}
-	}
-
     // 回调函数-每一个tab的点击
     onTouchTab = (event, activeIndex, itemData) => {
         const prevIndex = this.state.selectedIndex;
@@ -86,17 +67,38 @@ class Tabs extends PureComponent {
         }
     }
 
+    _translateTabBar(activeDom) {
+        setTimeout(() => {
+            const barDom = this.barDom;
+            const translateX = activeDom.offsetLeft + (activeDom.offsetWidth - barDom.offsetWidth) / 2;
+            this.barDom.style.transform = `translate3d(${translateX}px, 0, 0)`;
+        }, 0)
+    }
+
+	getTabs(props = this.props) {
+		const tabs = [];
+		// 处理了props.children为undefined和数组和单一对象的情况
+		Children.forEach(props.children, tab => {
+			if(isValidElement(tab)) {
+				tabs.push(tab)
+			}
+		});
+		
+		return tabs;
+    }
+
 	renderTabNavAndContent() {
 		const tabs = this.getTabs();
         const tabContent = [];
 
 		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
-		const tabNav = tabs.map((tab, index) => {
+        const tabNav = tabs.map((tab, index) => {
+            const isSelected = this.state.selectedIndex === index;
             if (tab.props.children) {
                 tabContent.push(
                     createElement(TabTemplate, {
                         key: tab.props.order || index,
-                        isSelected: this.state.selectedIndex === index,
+                        isSelected,
                         contentItemClass: tab.props.contentItemClass,
                     }, tab.props.children)
                 );
@@ -107,7 +109,8 @@ class Tabs extends PureComponent {
 			return cloneElement(tab, {
 				key: tab.props.order || index,
 				index: index, // 组件的索引
-				isSelected: this.state.selectedIndex === index,
+                isSelected,
+                customRef: (dom) => { if (isSelected) this.activeTabDom = dom; },
 				onTouchTab: this.onTouchTab,
 			});
 		});
@@ -116,13 +119,30 @@ class Tabs extends PureComponent {
 			tabContent,
 			tabNav
 		}
-	}
+    }
 
+	// 由外组件更新时才会调用此方法
+	componentWillReceiveProps(nextProps) {
+		if('activeIndex' in nextProps) {
+			this.setState({
+				selectedIndex: nextProps.activeIndex,
+			});
+        }
+    }
+
+    componentDidMount() {
+        this._translateTabBar(this.activeTabDom);
+    }
+    componentDidUpdate() {
+        this._translateTabBar(this.activeTabDom);
+    }
+    
     render() {
         const { 
             className,
             navClassName,
             contentClassName,
+            direction,
         } = this.props;
 
         const {
@@ -130,7 +150,7 @@ class Tabs extends PureComponent {
             prevIndex,
         } = this.state;
 
-        const classPrefix = verticalPrefix;
+        const classPrefix = direction === 'horizon' ? horizonPrefix : verticalPrefix;
 
         const { tabContent, tabNav } = this.renderTabNavAndContent();
 
@@ -144,6 +164,7 @@ class Tabs extends PureComponent {
                     {
                         tabNav
                     }
+                    <span ref={(dom) => {this.barDom = dom;}} className={`${classPrefix}-bar`}></span>
                 </ul>
                 {
                     (selectedIndex != prevIndex && tabContent[selectedIndex] != null) ?

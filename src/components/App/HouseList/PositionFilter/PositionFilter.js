@@ -123,6 +123,7 @@ export default class PositionFilter extends PureComponent {
                 navClassName={`${ptClass}-nav`}
                 contentClassName={`${ptClass}-content`}
                 onChange={this.onFirstItemTap}
+                direction='vertical'
             >
                 {
                     positionFilterDataArr.length && positionFilterDataArr.map((firstItemObj, index) => {

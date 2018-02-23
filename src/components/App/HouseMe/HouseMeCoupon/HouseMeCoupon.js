@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import MeCouponBack from './MeCouponBack/MeCouponBack';
+import MeCoupon from './MeCoupon/MeCoupon';
 import QRCode from 'qrcode';
 
 import './styles.less';
@@ -18,6 +19,7 @@ export default class HouseMeCoupon extends PureComponent {
         return (
             <div>
                 <MeCouponBack />
+                <MeCoupon />
                 <canvas ref={(dom) => { this.canvasDom = dom; } }></canvas>
             </div>
         );

@@ -1,0 +1,71 @@
+@import (reference) '~styles/lib.less';
+
+.m-mecouponitem {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 42px 32px 40px;
+
+    &-title {
+        font-family: PingFangSC-Medium;
+        .font-size(34);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-price {
+        font-family: PingFangSC-Medium;
+        color: #f38d39;
+        .font-size(48);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-expiretime-wrapper {
+        padding-top: 16px;
+    }
+
+    &-btn-rules {
+        margin-right: 12px;
+        .font-size(28);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-expiretime {
+        color: #999;
+        .font-size(28);
+    }
+
+    &-rules {
+        margin-top: 20px;
+        line-height: 36px;
+        color: #999;
+        .font-size(22);
+    }
+}
+
+.m-mecouponitem-use {
+    &-line {
+        margin-top: 40px;
+        height: 0;
+        border: 2px dashed #d8d8d8;
+    }
+
+    &-btn-use {
+        width: 288px;
+        margin: 40px auto;
+        padding: 12px;
+        line-height: 45px;
+        border-radius: 67px;
+        text-align: center;
+        background: #f38d39;
+        color: #fff;
+        .font-size(32);
+    }
+}
