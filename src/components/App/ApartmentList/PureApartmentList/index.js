@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
+import ApartmentItem from '../ApartmentItem';
+
 import './styles.less';
 
-export default class ApartmentHead extends PureComponent {
+export default class PureApartmentList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
@@ -12,7 +14,8 @@ export default class ApartmentHead extends PureComponent {
     render() {
         return (
             <div>
-                <p>集中式公寓头部</p>
+                <ApartmentItem />
+                <ApartmentItem />
             </div>
         );
     }

@@ -1,18 +1,23 @@
 import React, { PureComponent } from 'react';
+
 import './styles.less';
 
-export default class PureApartmentList extends PureComponent {
+const classPrefix = 'm-apartmentitem';
+
+export default class ApartmentItem extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    componentWillMount() {}
+    componentWillMount() {
+
+    } 
 
     render() {
         return (
             <div>
-                <p>集中式公寓列表</p>
+                <p>一个公寓</p>
             </div>
         );
     }

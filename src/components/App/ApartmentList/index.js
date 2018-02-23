@@ -1,6 +1,6 @@
-import ApartmentHead from './ApartmentHead/ApartmentHead';
-import ApartmentFilter from './ApartmentFilter/ApartmentFilter';
-import PureApartmentList from './PureApartmentList/PureApartmentList';
+import ApartmentHead from './ApartmentHead';
+import ApartmentFilter from './ApartmentFilter';
+import PureApartmentList from './PureApartmentList';
 
 export {
     ApartmentHead,
