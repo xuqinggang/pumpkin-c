@@ -10,10 +10,12 @@ const errorHandleMiddle = () => (
         try {
             await next();
         } catch (err) {
-            ctx.status = err.status || 500;
-            let error_msg = err.message;
-
-            ctx.body = { error_msg: error_msg }
+            // ctx.status = err.status || 500;
+            // 所有错误统一显示404;
+            ctx.status = 404;
+            ctx.body = 'Sorry! Not Found';
+            // let error_msg = err.message;
+            // ctx.body = { error_msg: error_msg }
             ctx.app.emit('error', err, ctx)
         }
     }
