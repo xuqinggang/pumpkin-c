@@ -14,8 +14,14 @@ export default class PureApartmentList extends PureComponent {
     render() {
         return (
             <div>
-                <ApartmentItem />
-                <ApartmentItem />
+                {
+                    new Array(89).fill(1).map((x, i) => (
+                        <div>
+                            <ApartmentItem />
+                            <p>{i + 1}</p>
+                        </div>
+                    ))
+                }
             </div>
         );
     }

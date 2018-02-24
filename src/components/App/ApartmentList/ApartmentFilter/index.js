@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
 
 // 两种筛选组件
 import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
+import BrandFilter from '../BrandFilter';
 
 import { scrollTo, getScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
@@ -15,10 +17,9 @@ export default class ApartmentFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            // 滚动时filterDom是否fixed
-            isFixed: false,
             filterShow: {
                 position: false,
+                brand: false,
             },
         };
     }
@@ -26,16 +27,8 @@ export default class ApartmentFilter extends PureComponent {
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-apartmentlist');
         // 头部高度
-        // this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
-        // this.bannerDomHeight = Math.round(document.querySelector('.m-indexbanner').offsetHeight);
-        // this.recommendDomHeight = Math.round(document.querySelector('.m-indexrecommend').offsetHeight);
-        // this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
-
-        window.addEventListener('scroll', this._fixFilterDom);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this._fixFilterDom);
+        this.headDomHeight = Math.round(document.querySelector('.m-apartmenthead').offsetHeight);
+        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
     }
 
     // 回调函数-弹层是否展现
@@ -49,29 +42,17 @@ export default class ApartmentFilter extends PureComponent {
 
         newFilterShowState[type] = !preFilterShowState[type];
 
-        // 点击filter先滚动到顶部
-        // 起始scrollTop
-        let srcScrollTop = getScrollTop();
-        if (this.isForbide) {
-            srcScrollTop = this.scrollTop;
-        }
-
-        // TODO
         this._filterShow(newFilterShowState, type, isResetScrollTop);
     }
 
     _filterShow(newFilterShowState, type, isResetScrollTop) {
-        console.log('_filterShow')
         if (!this.isForbide) {
             this.scrollTop = getScrollTop();
         }
-
+        
+        console.log('newFilterShowState', newFilterShowState);
         this.setState({
             filterShow: newFilterShowState,
-            isFixed: true,
-        }, () => {
-            // this._toggleForbideScrollThrough(newFilterShowState[type], isResetScrollTop);
-            this.listWrapDom.classList.add('f-list-addpadding');
         });
     }
 
@@ -85,8 +66,11 @@ export default class ApartmentFilter extends PureComponent {
             filterShow,
             isFixed,
         } = this.state;
+        const filterListClass = classnames('g-grid-row f-flex-justify-between', `${classPrefix}`, className);
         return (
-            <ul className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
+            <ul 
+                ref={(dom) => { this.filterDom = dom; }}
+                className={filterListClass}>
                 <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
                     <DropDownScreen
                         className={`${classPrefix}-dropscreen-position`}
@@ -101,6 +85,25 @@ export default class ApartmentFilter extends PureComponent {
                         <PositionFilterWrap
                             type="position"
                             filterState={filterState.position}
+                            onFilterConfirm={this.onFilterPositionConfirm}
+                            onDynamicSetLabel={this.props.onDynamicSetLabel}
+                        />
+                    </DropDownScreen>
+                </li>
+                <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                    <DropDownScreen
+                        className={`${classPrefix}-dropscreen-brand`}
+                        show={filterShow.brand}
+                        type="brand"
+                        label={filterLabel.brand}
+                        isMask={true}
+                        screenHeight="10.66667rem"
+                        isFullScreen={false}
+                        onTouchTap={this.handleFilterShowTap}
+                    >
+                        <BrandFilter
+                            type="brand"
+                            filterState={filterState.brand}
                             onFilterConfirm={this.onFilterPositionConfirm}
                             onDynamicSetLabel={this.props.onDynamicSetLabel}
                         />
