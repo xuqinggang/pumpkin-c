@@ -4,7 +4,7 @@ import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
 
 // 两种筛选组件
 import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
-import BrandFilter from '../BrandFilter';
+import BrandFilterWrap from '../BrandFilter';
 
 import { scrollTo, getScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
@@ -50,10 +50,25 @@ export default class ApartmentFilter extends PureComponent {
             this.scrollTop = getScrollTop();
         }
         
-        console.log('newFilterShowState', newFilterShowState);
         this.setState({
             filterShow: newFilterShowState,
         });
+    }
+
+
+    // brandFilterState, ex:  { brand: {1:true, 2:false} }
+    onFilterBrandConfirm = (brandFilterState) => {
+        this.props.onFilterConfirm({ brand: brandFilterState });
+
+        // 隐藏弹层
+        this.handleFilterShowTap('brand', true);
+    }
+
+    onFilterPositionConfirm = (positionFilterState) => {
+        this.props.onFilterConfirm({ position: positionFilterState });
+        
+        // 隐藏弹层
+        this.handleFilterShowTap('position', true);
     }
 
     render() {
@@ -101,10 +116,10 @@ export default class ApartmentFilter extends PureComponent {
                         isFullScreen={false}
                         onTouchTap={this.handleFilterShowTap}
                     >
-                        <BrandFilter
+                        <BrandFilterWrap
                             type="brand"
                             filterState={filterState.brand}
-                            onFilterConfirm={this.onFilterPositionConfirm}
+                            onFilterConfirm={this.onFilterBrandConfirm}
                             onDynamicSetLabel={this.props.onDynamicSetLabel}
                         />
                     </DropDownScreen>

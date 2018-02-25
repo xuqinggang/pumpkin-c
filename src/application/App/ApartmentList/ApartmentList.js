@@ -22,7 +22,7 @@ export default class ApartmentList extends PureComponent {
             // 筛选初始状态
             filterState: {
                 position: {},
-                brand: [],
+                brand: {},
             },
         };
     }
@@ -32,6 +32,10 @@ export default class ApartmentList extends PureComponent {
         this.setState({
             filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
         });
+    }
+
+    onFilterConfirm = (state) => {
+        console.log(state, 'state', 'onFilterConfirm');
     }
 
     render() {
