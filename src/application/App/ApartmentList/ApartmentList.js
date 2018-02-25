@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import {
     ApartmentHead,
     ApartmentFilter,
-    PureApartmentList,
+    PureApartmentListWrap,
 } from 'components/App/ApartmentList';
 
 import './styles.less';
@@ -54,7 +54,7 @@ export default class ApartmentList extends PureComponent {
                     />
                 </div>
                 <div className={`${classPrefix}-padding-top`}>
-                    <PureApartmentList />
+                    <PureApartmentListWrap />
                 </div>
             </div>
         );

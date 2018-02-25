@@ -27,19 +27,19 @@ export default class PureApartmentList extends PureComponent {
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
                 const { curPage, totalPage } = this.props.pager;
                 if (curPage < totalPage) {
-                    console.log('ssss-0---');
-                    // this.props.onLoadMore();
+                    this.props.onLoadMore();
                 }
             }
         }
         this.lastScrollTop = scrollTop;
     }
     render() {
+        const { list } = this.props;
         return (
             <div className={`${classPrefix}`}>
                 {
-                    new Array(89).fill(1).map(() => (
-                        <ApartmentItem />
+                    list.map((apartment, index) => (
+                        <ApartmentItem key={index} />
                     ))
                 }
             </div>
@@ -48,10 +48,10 @@ export default class PureApartmentList extends PureComponent {
 }
 
 PureApartmentList.propTypes = {
-    list: PropTypes.arrayOf({}),
+    list: PropTypes.array,  // TODO
     onLoadMore: PropTypes.func,
     loading: PropTypes.bool,
-    pager: PropTypes.object,
+    pager: PropTypes.object, // TODO
 };
 
 PureApartmentList.defaultProps = {
