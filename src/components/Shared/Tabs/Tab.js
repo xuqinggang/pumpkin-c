@@ -55,7 +55,7 @@ class Tab extends Component {
             isSelected,
             customRef,
 		} = this.props;
-console.log('ref', customRef)
+
         const itemClass = classnames('nav-item', navItemClass, {
             active: isSelected,
         });

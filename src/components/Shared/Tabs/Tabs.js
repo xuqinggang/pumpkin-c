@@ -28,12 +28,14 @@ class Tabs extends PureComponent {
 		defaultActiveIndex : PropTypes.number,
         onChange: PropTypes.func,
         direction: PropTypes.string,
+        isBar: PropTypes.bool,
 	};
 
 	// 默认 props
 	static defaultProps = {
         defaultActiveIndex: 0,
         direction: 'horizon',
+        isBar: false,
 		onChange: () => {},
 	};
 	
@@ -131,10 +133,15 @@ class Tabs extends PureComponent {
     }
 
     componentDidMount() {
-        this._translateTabBar(this.activeTabDom);
+        if (this.props.isBar) {
+            this._translateTabBar(this.activeTabDom);
+        }
     }
+
     componentDidUpdate() {
-        this._translateTabBar(this.activeTabDom);
+        if (this.props.isBar) {
+            this._translateTabBar(this.activeTabDom);
+        }
     }
     
     render() {
@@ -142,7 +149,9 @@ class Tabs extends PureComponent {
             className,
             navClassName,
             contentClassName,
+            barClassName,
             direction,
+            isBar,
         } = this.props;
 
         const {
@@ -164,7 +173,12 @@ class Tabs extends PureComponent {
                     {
                         tabNav
                     }
-                    <span ref={(dom) => {this.barDom = dom;}} className={`${classPrefix}-bar`}></span>
+                    {
+                        isBar ? 
+                            <span ref={(dom) => {this.barDom = dom;}} className={`${barClassName} ${classPrefix}-bar`}>
+                            </span>
+                            : null
+                    }
                 </ul>
                 {
                     (selectedIndex != prevIndex && tabContent[selectedIndex] != null) ?
