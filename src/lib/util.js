@@ -58,6 +58,13 @@ export function clearCookie(key) {
     }
 }
 
+export function setCookie(key, value) {
+    const deltaDay = 30;
+    const exp = new Date();
+    exp.setTime(exp.getTime() + deltaDay*24*60*60*1000);
+    document.cookie = key + "="+ value + ";expires=" + exp.toGMTString() + ";path=/";
+}
+
 export function isHasCookie(key) {
     const cookieStr = document.cookie;
     if (!cookieStr) return false;

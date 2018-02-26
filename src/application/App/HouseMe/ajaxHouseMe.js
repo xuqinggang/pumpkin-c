@@ -1,6 +1,30 @@
 import Service from 'lib/Service';
 import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'baseData/MapData';
 
+// 获取用户过期优惠券
+export function ajaxMeExpireCoupon() {
+    return Service.get(`/api/v1/coupon/expire`)
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+
+            throw new Error(data);
+        })
+}
+
+// 获取用户待使用优惠券
+export function ajaxMeUseCoupon() {
+    return Service.get(`/api/v1/coupon/unUsed`)
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+
+            throw new Error(data);
+        })
+}
+
 // 获取登录用户信息
 export function ajaxGetMeInfo() {
     return Service.get(`/api/v1/user/info`)

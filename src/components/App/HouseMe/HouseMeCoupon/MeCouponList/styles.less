@@ -4,6 +4,7 @@
     box-sizing: border-box;
     width: 100%;
     padding: 42px 32px 40px;
+    background: #fff;
 
     &-title {
         font-family: PingFangSC-Medium;
@@ -51,10 +52,14 @@
 }
 
 .m-mecouponitem-use {
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+
     &-line {
-        margin-top: 40px;
         height: 0;
-        border: 2px dashed #d8d8d8;
+        border: 1px dashed #d8d8d8;
     }
 
     &-btn-use {
@@ -63,9 +68,52 @@
         padding: 12px;
         line-height: 45px;
         border-radius: 67px;
-        text-align: center;
         background: #f38d39;
+        text-align: center;
         color: #fff;
         .font-size(32);
     }
+}
+
+.m-mecouponitem-expired {
+    margin-bottom: 30px;
+    border-radius: 8px;
+
+    &-wrapper {
+        width: 100%;
+    }
+
+    &-scroller {
+        width: 118%;
+        height: 100%;
+
+        .wrapper {
+            padding: 0 30px;
+        }
+
+        .content  {
+            box-sizing: border-box;
+            width: 84.7%;
+        }
+
+        .del {
+            width: 15.3%;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            background: #999;
+            .font-size(28);
+        }
+    }
+}
+
+.m-mecouponlist-use {
+    box-sizing: border-box;
+    padding: 30px 30px 0;
+}
+
+.m-mecouponlist-expired {
+    box-sizing: border-box;
+    padding-top: 30px;
+
 }

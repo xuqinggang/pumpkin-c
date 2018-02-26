@@ -12,15 +12,26 @@ export default class MeCouponItem extends PureComponent {
             isExpand: false,
         };
     }
+
     onRuleBtnTap = () => {
         this.setState({
             isExpand: !this.state.isExpand,
         });
     }
+
     render() {
         const {
             type,
+            couponItem = {},
         } = this.props;
+
+        const {
+            quota,
+            name,
+            ruleDesc,
+            dateEnd,
+            statusCode,
+        } = couponItem;
 
         const isExpired = type === 'expired';
 
@@ -28,9 +39,9 @@ export default class MeCouponItem extends PureComponent {
             <div className={classPrefix}>
                 <div className="g-grid-row f-flex-align-center f-flex-justify-between">
                     <span className={classnames(`${classPrefix}-title`, { expired: isExpired })}>
-                        xxxxx活动租房券
+                        {name}
                     </span>
-                    <span className={classnames(`${classPrefix}-price`, { expired: isExpired })}>¥1000</span>
+                    <span className={classnames(`${classPrefix}-price`, { expired: isExpired })}>¥{quota}</span>
                 </div>
                 <div className={`g-grid-row f-flex-align-center f-flex-justify-between ${classPrefix}-expiretime-wrapper`}>
                     <div className="f-display-inlineblock" onTouchTap={this.onRuleBtnTap}>
@@ -38,16 +49,13 @@ export default class MeCouponItem extends PureComponent {
                         <span></span>
                     </div>
                     <span className={`${classPrefix}-expiretime`}>
-                        有效期至2018-03-07
+                        {dateEnd}
                     </span>
                 </div>
                 {
                     this.state.isExpand ?
                         (
-                            <div className={`${classPrefix}-rules`}>
-                                1.不可与其他优惠券共享<br/>
-                                2.一家公寓同时只使用一张租房券<br/>
-                                3.对方；哈古湖泊为第九期撒娇发哈上班<br/>
+                            <div className={`${classPrefix}-rules`} dangerouslySetInnerHTML={{__html: ruleDesc}}>
                             </div>
                         ) : null
                 }

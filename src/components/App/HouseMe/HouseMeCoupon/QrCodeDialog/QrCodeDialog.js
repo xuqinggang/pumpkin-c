@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+import QRCode from 'qrcode';
 
 import BottomDialog from 'Shared/BottomDialog';
 
@@ -8,26 +9,10 @@ import './styles.less';
 const classPrefix = 'm-qrcodedialog';
 
 export default class QrCodeDialog extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-        };
-    }
-
-    handleConcatTap = (e) => {
-        this.setState({
-            show: true,
-        });
-    }
-
-    handleNoContactTap = (e) => {
-        this.onCloseDialogTap();
-    }
-
-    onCloseDialogTap = () => {
-        this.setState({
-            show: false,
+    componentDidMount() {
+        QRCode.toCanvas(this.canvasDom, '64776392', { width: 480 }, function (error) {
+            // if (error) console.error(error)
+            // console.log('success!');
         });
     }
 
@@ -44,12 +29,13 @@ export default class QrCodeDialog extends PureComponent {
                 className={`${classPrefix}`}
             >
                 <BottomDialog.Body className={`${classPrefix}-body`}>
-                    <h2>请向公寓出示以下优惠码</h2>
-                    <canvas ref={(dom) => { this.canvasDom = dom; } } />
-                    <span>64776392</span>
+                    <h2 className="body-title">请向公寓出示以下优惠码</h2>
+                    <canvas className="body-qrcode" ref={(dom) => { this.canvasDom = dom; } } />
+                    <span className="body-couponnumber">64776392</span>
                 </BottomDialog.Body>
                 <BottomDialog.Footer className={`${classPrefix}-footer`}>
-                    <span onTouchTap={onClose}>
+                    <hr className="footer-line" />
+                    <span onTouchTap={onClose} className="footer-text">
                         知道了
                     </span>
                 </BottomDialog.Footer>

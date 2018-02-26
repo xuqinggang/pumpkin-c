@@ -32,12 +32,22 @@ export default class MeUseCouponItem extends PureComponent {
             show,
         } = this.state;
 
+        const {
+            couponItem,
+        } = this.props;
+
+        console.log('couponItem', couponItem);
+
         return (
             <div className={classPrefix}>
-                <MeCouponItem type='use' />
+                <MeCouponItem type='use' couponItem={couponItem} />
                 <hr className={`${classPrefix}-line`} />
                 <span className={`f-display-block ${classPrefix}-btn-use`} onTouchTap={this.onOpenDialogTap}>立即使用</span>
-                <QrCodeDialog show={show} onClose={this.onCloseDialogTap}/>
+                {
+                    show ?
+                        <QrCodeDialog show={show} onClose={this.onCloseDialogTap}/>
+                        : null
+                }
             </div>
         );
     }
