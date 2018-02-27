@@ -1,4 +1,7 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router';
+
+import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -12,12 +15,19 @@ const Mdata = {
     title: '乐乎公寓立水桥店',
     price: 3500,
     location: '昌平区立水桥东小口镇中滩村105号',
+    shopId: '1111',
 };
 
-export default class ApartmentItem extends PureComponent {
+class ApartmentItem extends PureComponent {
+    handleTouchTap = () => {
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(urlJoin(urlPrefix, `apartment/detail/${Mdata.shopId}`));
+        // TODO 每次进入详情页，发送一次pv请求
+        // window.send_stat_pv && window.send_stat_pv();
+    }
     render() {
         return (
-            <div className={`${classPrefix}`}>
+            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}            >
                 <div className={`${classPrefix}-image`}>
                     <img src={Mdata.image} alt="优质公寓" />
                     <div className={'tip'}>
@@ -31,11 +41,13 @@ export default class ApartmentItem extends PureComponent {
                         <span className={`${classPrefix}-unit`}>元/月</span>
                     </span>
                 </div>
-                <div>
-                    <span className={'icon-region'} />
+                <div className={`f-display-flex ${classPrefix}-location`}>
+                    <span className={`icon-region`} />
                     <span>{Mdata.location}</span>
                 </div>
             </div>
         );
     }
 }
+
+export default withRouter(ApartmentItem);

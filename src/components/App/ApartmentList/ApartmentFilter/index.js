@@ -81,7 +81,7 @@ export default class ApartmentFilter extends PureComponent {
             filterShow,
             isFixed,
         } = this.state;
-        const filterListClass = classnames('g-grid-row f-flex-justify-between', `${classPrefix}`, className);
+        const filterListClass = classnames('g-grid-row', `${classPrefix}`, className);
         return (
             <ul 
                 ref={(dom) => { this.filterDom = dom; }}

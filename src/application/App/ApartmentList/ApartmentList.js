@@ -6,6 +6,8 @@ import {
     PureApartmentListWrap,
 } from 'components/App/ApartmentList';
 
+import { execWxShare } from 'lib/wxShare';
+
 import './styles.less';
 
 const classPrefix = 'g-apartmentlist';
@@ -27,6 +29,10 @@ export default class ApartmentList extends PureComponent {
         };
     }
 
+    componentDidMount() {
+        this.wxShare();
+    }
+
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
     _dynamicSetPositionFilterLabel = (label) => {
         this.setState({
@@ -36,6 +42,16 @@ export default class ApartmentList extends PureComponent {
 
     onFilterConfirm = (state) => {
         console.log(state, 'state', 'onFilterConfirm');
+    }
+
+    wxShare() {
+        // 分享
+        execWxShare({
+            title: '上南瓜租房，找品牌公寓',
+            link: window.location.href.split('#')[0],
+            imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
+            desc: '南瓜租房，只租真房源！',
+        });
     }
 
     render() {
