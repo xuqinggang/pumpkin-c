@@ -8,7 +8,8 @@ import HouseMeInfo from 'components/App/HouseMe/HouseMeInfo/HouseMeInfo';
 import HouseMeCoupon from 'components/App/HouseMe/HouseMeCoupon/HouseMeCoupon';
 
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-import { isHasCookie, urlJoin } from 'lib/util';
+import { isHasCookie, setCookie, urlJoin } from 'lib/util';
+import { isApp, isRmHead } from 'lib/const';
 
 import './styles.less';
 
@@ -26,6 +27,18 @@ export default class HouseMe extends PureComponent {
     }
 
     componentWillMount() {
+        // 向app中注入cookie
+        if (isApp && isRmHead) {
+            let sidVal = null;
+            if (window.iOS && iOS.getSessionId) {
+                sidVal = iOS.getSessionId();
+            }
+            if (window.android && android.getSessionId) {
+                sidVal = android.getSessionId();
+            }
+            sidVal && setCookie('sid', sidVal);
+        }
+
         // 进入组件之前判断是否登录
         if (!isHasCookie('sid')) {
             this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
@@ -53,8 +66,13 @@ export default class HouseMe extends PureComponent {
             })
     }
 
+    componentDidMount() {
+        if (isApp && isRmHead) {
+            this.wrapperDom.style.paddingTop = '0px';
+        }
+    }
+
     render() {
-        console.log('HouseMe render', window.getStore('meInfo'))
         const {
             match,
             history,
@@ -63,7 +81,7 @@ export default class HouseMe extends PureComponent {
         const meInfoObj = window.getStore('meInfo') || {};
 
         return (
-            <div className={`${classPrefix}`}>
+            <div className={`${classPrefix}`} ref={(dom) => { this.wrapperDom = dom; }}>
                 <Route exact path={match.url}
                     render={(props) => {
                         return (

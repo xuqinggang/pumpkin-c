@@ -14,14 +14,14 @@ export function ajaxDelExpireCoupon(couponUserId) {
 }
 
 // 获取用户过期优惠券
-export function ajaxMeExpireCoupon({curPage, offset}) {
+export function ajaxMeExpireCoupon({nextPage, offset}) {
     return Service.get(`/api/v1/coupon/expire`, {
-        offset: curPage * offset,
+        offset: (nextPage - 1) * offset,
         limit: offset,
     })
         .then((data) => {
             if (data.code === 200) {
-                return data.data.couponBOList;
+                return data.data;
             }
 
             throw new Error(data);
@@ -29,14 +29,14 @@ export function ajaxMeExpireCoupon({curPage, offset}) {
 }
 
 // 获取用户待使用优惠券
-export function ajaxMeUseCoupon({curPage, offset}) {
+export function ajaxMeUseCoupon({nextPage, offset}) {
     return Service.get(`/api/v1/coupon/unUsed`, {
-        offset: curPage * offset,
+        offset: (nextPage - 1) * offset,
         limit: offset,
     })
         .then((data) => {
             if (data.code === 200) {
-                return data.data.couponBOList;
+                return data.data;
             }
 
             throw new Error(data);

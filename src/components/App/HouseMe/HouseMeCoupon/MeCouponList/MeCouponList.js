@@ -29,19 +29,20 @@ export default class MeCouponList extends PureComponent {
         this.state = {
             couponList: [],
             isFetching: false,
-            curPage: 0,
+            nextPage: 1,
             offset: 6,
+            totalPage: 1,
         };
     }
 
     ajaxLoadCouponList = () => {
-        console.log('ajaxLoadCouponList')
         const {
             isFetching,
-            curPage,
+            nextPage,
+            totalPage,
             offset,
         } = this.state;
-        if (isFetching) return;
+        if (isFetching || nextPage > totalPage) return;
 
         this.setState({
             isFetching: true,
@@ -53,13 +54,21 @@ export default class MeCouponList extends PureComponent {
         
         const ajaxRequest = CouponTypeMap[type].ajaxRequest;
 
-        ajaxRequest({curPage, offset})
-            .then((couponList) => {
-                this.setState({
-                    couponList: this.state.couponList.concat(...couponList),
-                    curPage: curPage + 1,
-                    isFetching: false,
-                });
+        ajaxRequest({nextPage, offset})
+            .then((data) => {
+                const couponList = data.couponBOList;
+                if (!couponList) {
+                    this.setState({
+                        isFetching: false,
+                    });
+                } else {
+                    this.setState({
+                        couponList: this.state.couponList.concat(...couponList),
+                        nextPage: nextPage + 1,
+                        totalPage: Math.ceil(data.count / offset),
+                        isFetching: false,
+                    });
+                }
 
                 window.setStore('mecoupon', {
                     [type]: this.state,
@@ -68,7 +77,6 @@ export default class MeCouponList extends PureComponent {
     }
 
     onDelTap = (index, couponUserId) => {
-        console.log('index', couponUserId, index);
         ajaxDelExpireCoupon(couponUserId);
 
         const couponList = this.state.couponList;
@@ -97,6 +105,8 @@ export default class MeCouponList extends PureComponent {
         } = this.props;
 
         const {
+            nextPage,
+            totalPage,
             couponList,
             isFetching,
         } = this.state;
@@ -109,9 +119,11 @@ export default class MeCouponList extends PureComponent {
                 expired: type === 'expired', })}
             >
                 {
-                    <ScrollContainer onBottomLoad={this.ajaxLoadCouponList}
+                    <ScrollContainer
+                        onlyOnce={true}
+                        onBottomLoad={this.ajaxLoadCouponList}
                         style={{height: (window.innerHeight / window.lib.flexible.rem) - 2.6133 + 'rem'}}
-                        className={`scrollcontainer`}
+                        className="scrollcontainer"
                     >
                         {
                             couponList.map((couponItem, index) => 
@@ -124,17 +136,21 @@ export default class MeCouponList extends PureComponent {
                             )
                         }
                         {
-                            isFetching ? 
-                                <div className="f-align-center nocoupon-loading">正在加载...</div>
-                                : null
-                        }
-                        {
                             !isFetching && couponList.length === 0 ?
                                 <div className="f-align-center">
                                     <img className="nocoupon-image" src={nocouponImg} alt="" />
                                     <span className="f-display-block f-align-center nocoupon-text">无相应卡券</span>
                                 </div>
-                                : null
+                                : (
+                                    <div className="f-align-center nocoupon-tip">
+                                        {
+                                            nextPage > totalPage ?
+                                                '亲，已拉到最底部~^o^~'
+                                                : '正在加载...'
+                                        }
+                                    </div>
+                                )
+
                         }
                     </ScrollContainer>
                 }

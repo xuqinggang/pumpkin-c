@@ -39,6 +39,15 @@ export default class MeEntry extends PureComponent {
                         <span className="icon-next item-iconnext"></span>
                     </li>
                 </Link>
+                <Link to={urlJoin(matchUrl, 'coupon')}>
+                    <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
+                        <div>
+                            <span className="icon-my-coupons item-icon"></span>
+                            <span className="item-text">我的卡券</span>
+                        </div>
+                        <span className="icon-next item-iconnext"></span>
+                    </li>
+                </Link>
                 <Link to={urlJoin(matchUrl, 'info')}>
                     <li className={`${classPrefix}-item  g-grid-row f-flex-justify-between f-flex-align-center`}>
                         <div>
