@@ -12,29 +12,26 @@ export default class MeExpireCouponItem extends PureComponent {
         const {
             onDelTap,
             index,
-        } = this.props;
-
-        onDelTap(index);
-    }
-
-    render() {
-        const {
             couponItem,
         } = this.props;
 
+        onDelTap(index, couponItem.couponUserId);
+    }
+
+    render() {
         return (
             <div className={classPrefix}>
                 <SlideSide className={`${classPrefix}-wrapper`}>
                     <div className={`${classPrefix}-scroller g-grid-row`}>
                         <div className="content">
                             <div className="wrapper">
-                                <MeCouponItem type='expired' />
+                                <MeCouponItem type='expired' couponItem={this.props.couponItem} />
                             </div> 
                         </div>
                         <div className="f-display-flex f-flex-align-center f-flex-justify-center del"
                             onTouchTap={this.handleDelTap}
                         >
-                            删除{couponItem}
+                            删除
                         </div>
                     </div>
                 </SlideSide>
@@ -42,4 +39,3 @@ export default class MeExpireCouponItem extends PureComponent {
         );
     }
 }
-

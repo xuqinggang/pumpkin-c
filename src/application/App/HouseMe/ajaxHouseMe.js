@@ -1,12 +1,27 @@
 import Service from 'lib/Service';
 import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'baseData/MapData';
 
-// 获取用户过期优惠券
-export function ajaxMeExpireCoupon() {
-    return Service.get(`/api/v1/coupon/expire`)
+// 删除过期优惠券
+export function ajaxDelExpireCoupon(couponUserId) {
+    return Service.delete(`/api/v1/coupon/${couponUserId}`)
         .then((data) => {
             if (data.code === 200) {
-                return data.data;
+                return true;
+            }
+
+            throw new Error(data);
+        })
+}
+
+// 获取用户过期优惠券
+export function ajaxMeExpireCoupon({curPage, offset}) {
+    return Service.get(`/api/v1/coupon/expire`, {
+        offset: curPage * offset,
+        limit: offset,
+    })
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data.couponBOList;
             }
 
             throw new Error(data);
@@ -14,11 +29,14 @@ export function ajaxMeExpireCoupon() {
 }
 
 // 获取用户待使用优惠券
-export function ajaxMeUseCoupon() {
-    return Service.get(`/api/v1/coupon/unUsed`)
+export function ajaxMeUseCoupon({curPage, offset}) {
+    return Service.get(`/api/v1/coupon/unUsed`, {
+        offset: curPage * offset,
+        limit: offset,
+    })
         .then((data) => {
             if (data.code === 200) {
-                return data.data;
+                return data.data.couponBOList;
             }
 
             throw new Error(data);

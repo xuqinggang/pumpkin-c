@@ -10,7 +10,7 @@ const classPrefix = 'm-qrcodedialog';
 
 export default class QrCodeDialog extends PureComponent {
     componentDidMount() {
-        QRCode.toCanvas(this.canvasDom, '64776392', { width: 480 }, function (error) {
+        QRCode.toCanvas(this.canvasDom, '64776392', { width: 6.4 * window.lib.flexible.rem }, function (error) {
             // if (error) console.error(error)
             // console.log('success!');
         });
