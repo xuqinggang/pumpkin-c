@@ -1,0 +1,158 @@
+@import (reference) '~styles/lib.less';
+
+.m-mecouponitem {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 42px 32px 40px;
+    background: #fff;
+
+    &-title {
+        font-family: PingFangSC-Medium;
+        .font-size(34);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-price {
+        font-family: PingFangSC-Medium;
+        color: #f38d39;
+        .font-size(48);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-expiretime-wrapper {
+        padding-top: 16px;
+    }
+
+    &-btn-rules {
+        display: inline-block;
+        margin-right: 12px;
+        // line-height: 40px;
+        vertical-align: middle;
+        .font-size(28);
+
+        &.expired {
+            color: #999;
+        }
+    }
+
+    &-icon-rules {
+        display: inline-block;
+        vertical-align: middle;
+        color: #dfdfdf;
+        transform: rotate(90deg);
+        .font-size(20);
+
+        &.active {
+            transform: rotate(-90deg);
+        }
+    }
+
+    &-expiretime {
+        color: #999;
+        .font-size(28);
+    }
+
+    &-rules {
+        margin-top: 20px;
+        line-height: 36px;
+        color: #999;
+        .font-size(22);
+    }
+}
+
+.m-mecouponitem-use {
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+
+    &-line {
+        height: 0;
+        border: 1px dashed #d8d8d8;
+    }
+
+    &-btn-use {
+        width: 288px;
+        margin: 40px auto;
+        padding: 12px;
+        line-height: 45px;
+        border-radius: 67px;
+        background: #f38d39;
+        text-align: center;
+        color: #fff;
+        .font-size(32);
+    }
+}
+
+.m-mecouponitem-expired {
+    margin-bottom: 30px;
+    border-radius: 8px;
+
+    &-wrapper {
+        width: 100%;
+    }
+
+    &-scroller {
+        width: 118%;
+        height: 100%;
+
+        .wrapper {
+            padding: 0 30px;
+        }
+
+        .content  {
+            box-sizing: border-box;
+            width: 84.7%;
+        }
+
+        .del {
+            width: 15.3%;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            background: #999;
+            .font-size(28);
+        }
+    }
+}
+
+.m-mecouponlist {
+    .scrollcontainer {
+        box-sizing: border-box;
+    }
+
+    &.use {
+        .scrollcontainer {
+            padding: 30px 30px 0;
+        }
+    }
+
+    &.expired {
+        .scrollcontainer {
+            padding-top: 30px;
+        }
+    }
+}
+
+.nocoupon-tip {
+    color: #999;
+    .font-size(28);
+}
+
+.nocoupon-image {
+    width: 270px;
+    margin-top: 240px;
+    height: 220px;
+}
+
+.nocoupon-text {
+    margin-top: 20px;
+    color: #999;
+    .font-size(28);
+}

@@ -53,6 +53,7 @@ class Tab extends Component {
 			label,
             navItemClass,
             isSelected,
+            customRef,
 		} = this.props;
 
         const itemClass = classnames('nav-item', navItemClass, {
@@ -62,6 +63,7 @@ class Tab extends Component {
 		return (
             <li className={itemClass}
                 onTouchTap={this.handleTouchTap}
+                ref={customRef}
             >
 				{label}
 			</li>

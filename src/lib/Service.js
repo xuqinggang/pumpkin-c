@@ -1,6 +1,6 @@
 const Service = {};
 
-Service.reqServer = (url, paramters, type = 'GET', contentType) => {
+Service.reqServer = (url, paramters, type = 'GET', contentType = 'json') => {
     const {
         urlPrefix,
     } = Service.baseConfig;
@@ -59,19 +59,16 @@ Service.reqServer = (url, paramters, type = 'GET', contentType) => {
                 reject('timeout');
             };
         }
+
+        if (type === 'GET' && reqData.length) {
+            url = url + '?' + reqData;
+        }
+        xmlHttp.open(type, url, true);
+
         // 发送请求
-        if (type === 'GET') {
-            if (reqData.length) {
-                url = url + '?' + reqData;
-            }
-            xmlHttp.open(type, url, true);
-            xmlHttp.send(null);
-        } else if (type === 'DELETE') {
-            xmlHttp.open(type, url, true);
+        if (type === 'GET' || type === 'DELETE') {
             xmlHttp.send(null);
         } else if (type === 'PUT' || type === 'POST') {
-            xmlHttp.open(type, url, true);
-
             if (contentType === 'form') {
                 xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 xmlHttp.send(reqData);
@@ -89,12 +86,15 @@ Service.reqServer = (url, paramters, type = 'GET', contentType) => {
 Service.get = (url, paramters) => {
     return Service.reqServer(url, paramters, 'GET');
 }
-Service.post = (url, paramters, contentType = 'json') => {
+
+Service.post = (url, paramters, contentType) => {
     return Service.reqServer(url, paramters, 'POST', contentType);
 }
+
 Service.put = (url, paramters) => {
     return Service.reqServer(url, paramters, 'PUT');
 }
+
 Service.delete = (url) => {
     return Service.reqServer(url, {}, 'DELETE');
 }

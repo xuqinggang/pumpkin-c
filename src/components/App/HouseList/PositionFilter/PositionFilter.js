@@ -123,6 +123,7 @@ export default class PositionFilter extends PureComponent {
                 navClassName={`${ptClass}-nav`}
                 contentClassName={`${ptClass}-content`}
                 onChange={this.onFirstItemTap}
+                direction='vertical'
             >
                 {
                     positionFilterDataArr.length && positionFilterDataArr.map((firstItemObj, index) => {
@@ -141,31 +142,32 @@ export default class PositionFilter extends PureComponent {
                                     navClassName={`${ptClass}-nav`}
                                     contentClassName={`${ptClass}-content`}
                                     onChange={this.onSecondItemTap}
+                                    direction='vertical'
                                 >
                                     {
                                         firstItemObj.itemArr && firstItemObj.itemArr.length &&
                                             firstItemObj.itemArr.map((secondItemObj, index) => {
-                                            return (
-                                                // 第二级别 item
-                                                <Tab
-                                                    label={secondItemObj.text}
-                                                    key={index}
-                                                    order={index}
-                                                    navItemClass={`${ptClass}-nav-item`}
-                                                    contentItemClass={`${ptClass}-content-item`}
-                                                >
-                                                    {
-                                                        //第三级内容 列表list
-                                                        secondItemObj.itemArr && secondItemObj.itemArr.length ?
-                                                            <ThirdItemList thirdItemArr={secondItemObj.itemArr}
-                                                                selectItemIndex={thirdItemSelectedIndex}
-                                                                onChange={this.onThirdItemTap}
-                                                            />
-                                                            : null
-                                                    }
-                                                </Tab>
-                                            );
-                                        })
+                                                return (
+                                                    // 第二级别 item
+                                                    <Tab
+                                                        label={secondItemObj.text}
+                                                        key={index}
+                                                        order={index}
+                                                        navItemClass={`${ptClass}-nav-item`}
+                                                        contentItemClass={`${ptClass}-content-item`}
+                                                    >
+                                                        {
+                                                            //第三级内容 列表list
+                                                            secondItemObj.itemArr && secondItemObj.itemArr.length ?
+                                                                <ThirdItemList thirdItemArr={secondItemObj.itemArr}
+                                                                    selectItemIndex={thirdItemSelectedIndex}
+                                                                    onChange={this.onThirdItemTap}
+                                                                />
+                                                                : null
+                                                        }
+                                                    </Tab>
+                                                );
+                                            })
                                     }
                                 </Tabs>
                             </Tab>

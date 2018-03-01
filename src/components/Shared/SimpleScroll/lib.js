@@ -614,7 +614,7 @@ export default class SimpleScroll {
     }
 
     _touchMove = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         const activeElement = document.activeElement;
         if (utils.isMobile && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
             activeElement.blur();
