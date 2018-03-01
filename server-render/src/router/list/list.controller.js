@@ -16,6 +16,10 @@ export default async (ctx, next) => {
     const newFilterParamsObj = setFilterData(filterUrlFragment, ctx);
 
     // 设置列表页数据
+    const apartmentId = ctx.query.aprtment;
+    apartmentId !== undefined && Object.assign(newFilterParamsObj, {
+        apartmentId: apartmentId,
+    });
     await setHouseListData(newFilterParamsObj);
 
     // 首页的banner和recommend
