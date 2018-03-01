@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PureApartmentList from '../PureApartmentList';
+import NoApartment from '../NoApartment';
 
 // import './styles.less';
 
@@ -9,19 +10,7 @@ const classPrefix = 'm-pureapartmentlistwrap';
 const fetchApi = () => {
     return new Promise((resolve, reject) => {
         resolve({
-            list: [{
-                x: 1,
-                y: 2,
-            }, {
-                x: 1,
-                y: 2,
-            }, {
-                x: 1,
-                y: 2,
-            }, {
-                x: 1,
-                y: 2,
-            }],
+            list: [],
             total: 80,
         })
     });
@@ -72,6 +61,14 @@ export default class PureApartmentListWrap extends PureComponent {
             loading,
             pager,
         } = this.state;
+
+        // 没有公寓
+        if (apartmentList.length === 0) {
+            return (
+                <NoApartment />
+            )
+        }
+
         return (
             <PureApartmentList
                 list={apartmentList}

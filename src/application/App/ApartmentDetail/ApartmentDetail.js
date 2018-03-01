@@ -8,25 +8,56 @@ import {
 import ApartmentIntro from 'components/App/HouseDetail/HouseDetailIndex/ApartmentIntro/ApartmentIntro';
 
 import { execWxShare } from 'lib/wxShare';
+import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentdetail';
 
-// MOCK data
-const apartmentIntroData = {
-    name: '乐乎公寓',
-    intro: '燕郊现代服务产业园启动区分产业办公区和生活配套区两部分，其中产业办公区占地188亩，总建筑面积36万平米，其中地上建筑面积22万平',
-}
-
 export default class ApartmentDetail extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            apartmentDetailData: {},
+        };
+
+        this.shopId = props.match.params.shopId;
+
+        window.setStore('shopId', {
+            shopId: this.shopId,
+        });
+    }
+
+    componentWillMount() {
+        // TODO store 最后统一管理, 避免以后多了会覆盖以前的
+        // 如果store没有数据，则请求
+        const apartmentDetailStore = window.getStore('apartmentDetail');
+        const curHouseDetailData = apartmentDetailStore && apartmentDetailStore[this.shopId];
+        if (curHouseDetailData) {
+            this.setState({
+                apartmentDetailData: curHouseDetailData,
+            });
+
+            this.wxShare();
+
+            return;
+        }
+
+        ajaxGetApartmentDetail(this.shopId).then(apartmentDetailData => {
+            this.setState({
+                apartmentDetailData,
+            });
+
+            window.setStore('apartmentDetail', {
+                [this.shopId]: apartmentDetailData,
+            });
+
+            this.wxShare();
+        });
     }
 
     componentDidMount() {
-        this.wxShare();
+        // this.wxShare();
     }
 
     wxShare() {
@@ -39,13 +70,27 @@ export default class ApartmentDetail extends PureComponent {
         });
     }
 
+    get apartmentIntroData() {
+        const { apartmentDetailData } = this.state;
+        const { name, intro } = apartmentDetailData;   
+        return {
+            name,
+            intro,
+        }
+    }
+
     render() {
+        const { apartmentDetailData } = this.state;
+        const { images, blockName } = apartmentDetailData;
+
         return (
             <div className={`${classPrefix}`}>
-                <p>公寓详情页</p>
-                <RoomSlider />
-                <Location />
-                <ApartmentIntro apartmentIntroData={apartmentIntroData} />
+                <RoomSlider images={images} />
+                <Location blockName={blockName} />
+                <ApartmentIntro 
+                    withoutImage={true} 
+                    apartmentIntroData={this.apartmentIntroData} 
+                />
                 <ApartmentHouseList />
             </div>
         );
