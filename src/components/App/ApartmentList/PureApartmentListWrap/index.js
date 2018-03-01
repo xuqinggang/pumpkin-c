@@ -10,7 +10,7 @@ const classPrefix = 'm-pureapartmentlistwrap';
 const fetchApi = () => {
     return new Promise((resolve, reject) => {
         resolve({
-            list: [],
+            list: [{},{},{},{},{},{}],
             total: 80,
         })
     });
@@ -56,8 +56,8 @@ export default class PureApartmentListWrap extends PureComponent {
         this.fetchData();
     }
     render() {
-        const { 
-            apartmentList, 
+        const {
+            apartmentList,
             loading,
             pager,
         } = this.state;

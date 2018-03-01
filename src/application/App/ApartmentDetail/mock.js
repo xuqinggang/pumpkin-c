@@ -34,7 +34,21 @@ export default {
                 "totalFloor": 19,
                 "area": 18.3,
                 "direct": "MULTI"
-
+            },
+            {
+                "id": 156837268136386560,
+                "name": "梦幻紫罗兰开间大床房",
+                "bedroomCount": 1,
+                "livingRoomCount": 1,
+                "bathroomCount": 1,
+                "totalCount": 53,
+                "onsaleCount": 22,
+                "price": 4500,
+                "deposit": 4500,
+                "floor": null,
+                "totalFloor": 19,
+                "area": 18.3,
+                "direct": "MULTI"
             }
         ],
     }

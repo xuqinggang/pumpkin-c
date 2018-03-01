@@ -1,12 +1,10 @@
-import ApartmentHouseList from './ApartmentHouseList/ApartmentHouseList';
+import RoomTypeList from './RoomTypeList/RoomTypeList';
 import Location from './Location/Location';
 import RoomSlider from './RoomSlider/RoomSlider';
-import NoApartment from './NoApartment';
 
 
 export {
-    ApartmentHouseList,
+    RoomTypeList,
     Location,
     RoomSlider,
-    NoApartment,
 }

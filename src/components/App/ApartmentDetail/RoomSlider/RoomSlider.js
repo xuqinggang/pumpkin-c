@@ -20,7 +20,7 @@ export default class RoomSlider extends PureComponent {
                 <ReactSwipe
                     className={`${classPrefix}-images`}
                     swipeOptions={{continuous: false}}
-                    key={images.length}              
+                    key={images.length}
                 >
                     {
                         images.map((img, index) => (

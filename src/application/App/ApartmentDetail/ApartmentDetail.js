@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import {
-    ApartmentHouseList,
+    RoomTypeList,
     Location,
     RoomSlider,
 } from 'components/App/ApartmentDetail';
@@ -81,17 +81,17 @@ export default class ApartmentDetail extends PureComponent {
 
     render() {
         const { apartmentDetailData } = this.state;
-        const { images, blockName } = apartmentDetailData;
+        const { images, blockName, centralHouses } = apartmentDetailData;
 
         return (
             <div className={`${classPrefix}`}>
                 <RoomSlider images={images} />
                 <Location blockName={blockName} />
-                <ApartmentIntro 
-                    withoutImage={true} 
-                    apartmentIntroData={this.apartmentIntroData} 
+                <ApartmentIntro
+                    withoutImage={true}
+                    apartmentIntroData={this.apartmentIntroData}
                 />
-                <ApartmentHouseList />
+                <RoomTypeList centralHouses={centralHouses} />
             </div>
         );
     }
