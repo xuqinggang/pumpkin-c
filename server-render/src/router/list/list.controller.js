@@ -16,7 +16,7 @@ export default async (ctx, next) => {
     const newFilterParamsObj = setFilterData(filterUrlFragment, ctx);
 
     // 设置列表页数据
-    const apartmentId = ctx.query.aprtment;
+    const apartmentId = ctx.query.apartment;
     apartmentId !== undefined && Object.assign(newFilterParamsObj, {
         apartmentId: apartmentId,
     });
