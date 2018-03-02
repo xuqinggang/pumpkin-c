@@ -201,3 +201,6 @@ export function scrollTo(scrollTop) {
 export function getScrollTop() {
     return document.body.scrollTop || document.documentElement.scrollTop;
 }
+
+export const isNumber = value => typeof value === 'number';
+export const isString = value => typeof value === 'string';
