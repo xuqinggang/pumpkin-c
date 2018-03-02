@@ -11,6 +11,7 @@ const KoaStatic = require('koa-static');
 const Router = require('koa-router');
 const mount = require('koa-mount');
 const path = require('path');
+const chalk = require('chalk');
 
 const config = require('./config/env');
 const koaConf = require('./config/koa');
@@ -59,4 +60,14 @@ app.on('error', (err, ctx) => {
     if (process.env.NODE_ENV === 'production') {
         sentry.captureException(err);
     }
+});
+
+// api接口log
+app.on('api', (info) => {
+    console.log(chalk.red(info));
+});
+
+// ReactDOMServer renderToString
+app.on('render', (info) => {
+    console.log(chalk.red(info));
 });
