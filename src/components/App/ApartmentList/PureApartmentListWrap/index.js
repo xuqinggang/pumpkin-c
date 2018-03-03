@@ -53,6 +53,10 @@ export default class PureApartmentListWrap extends PureComponent {
                     totalPage: data.total,
                 },
                 apartmentList: newApartmentLists,
+            }, () => {
+                if (renew) {
+                    window.scrollTo(0, 0);
+                }
             });
         })
     }
@@ -65,6 +69,8 @@ export default class PureApartmentListWrap extends PureComponent {
             loading,
             pager,
         } = this.state;
+
+        console.log("apartmentList.length", apartmentList.length);
 
         // 没有公寓
         if (apartmentList.length === 0) {

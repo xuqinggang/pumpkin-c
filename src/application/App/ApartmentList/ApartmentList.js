@@ -6,6 +6,8 @@ import {
     PureApartmentListWrap,
 } from 'components/App/ApartmentList';
 
+import { paramStateToQuery } from './stateToParams';
+
 import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
@@ -24,7 +26,7 @@ export default class ApartmentList extends PureComponent {
             // 筛选初始状态
             filterState: {
                 position: {},
-                brand: {},
+                apartmentIds: [],
             },
             filterParamsObj: {}
         };
@@ -45,13 +47,17 @@ export default class ApartmentList extends PureComponent {
         });
     }
 
-    onFilterConfirm = (state) => {
-        console.log(state, 'state', 'onFilterConfirm');
+    onFilterConfirm = (newState) => {
+        console.log(newState, 'newState', 'onFilterConfirm');
+        const querys = paramStateToQuery(newState, this.state.filterState);
         this.setState({
             filterParamsObj: {
                 ...this.state.filterParamsObj,
-                ...state,
-            }
+                ...newState,
+            },
+            filterState: querys,
+        }, () => {
+            window.setStore('apartmentFilter', this.state);
         })
     }
 
