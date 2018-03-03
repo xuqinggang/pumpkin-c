@@ -2,19 +2,12 @@ import React, { PureComponent } from 'react';
 import PureApartmentList from '../PureApartmentList';
 import NoApartment from '../NoApartment';
 
+import { ajaxGetApartmentList } from 'application/App/ApartmentList/ajaxInitApartmentList';
+import { shallowEqual } from 'lib/util';
+
 // import './styles.less';
 
 const classPrefix = 'm-pureapartmentlistwrap';
-
-// TODO mock api
-const fetchApi = () => {
-    return new Promise((resolve, reject) => {
-        resolve({
-            list: [{},{},{},{},{},{}],
-            total: 80,
-        })
-    });
-}
 
 export default class PureApartmentListWrap extends PureComponent {
     constructor(props) {
@@ -31,16 +24,27 @@ export default class PureApartmentListWrap extends PureComponent {
     componentDidMount() {
         this.fetchData(true);
     }
+    componentWillReceiveProps(nextProps, nextState) {
+        this.filterParams = nextProps.filterParams;
+        if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
+            this.fetchData(true);
+        }
+    }
     fetchData = (renew=false) => {
         const { pager, apartmentList } = this.state;
         let curPage = pager.curPage;
+
         // fetching
         this.setState({
             loading: true,
         });
-        fetchApi().then(data => {
+        ajaxGetApartmentList().then(data => {
+            let newApartmentLists= [];
             if (!renew) {
                 curPage += 1;
+                newApartmentLists = apartmentList.concat(data.list);
+            } else {
+                newApartmentLists = data.list;
             }
             this.setState({
                 loading: false,
@@ -48,7 +52,7 @@ export default class PureApartmentListWrap extends PureComponent {
                     curPage,
                     totalPage: data.total,
                 },
-                apartmentList: apartmentList.concat(data.list),
+                apartmentList: newApartmentLists,
             });
         })
     }

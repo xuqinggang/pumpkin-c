@@ -12,7 +12,7 @@ export const getTitle = (bedroomCount, livingRoomCount, name) => {
     }
 
     if (isString(name)) {
-        title = `${title} • ${name}`;
+        title = `${title} ・ ${name}`;
     }
 
     return title;

@@ -15,7 +15,7 @@ export default class Location extends PureComponent {
         const { blockName, location } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <div className={`f-display-inlineblock ${classPrefix}-location`}>
+                <div className={`f-singletext-ellipsis f-display-inlineblock ${classPrefix}-location`}>
                     <span className={`icon-region`} />
                     <span>{location}</span>
                 </div>

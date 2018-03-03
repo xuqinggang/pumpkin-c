@@ -58,7 +58,7 @@ export default class ApartmentFilter extends PureComponent {
 
     // brandFilterState, ex:  { brand: {1:true, 2:false} }
     onFilterBrandConfirm = (brandFilterState) => {
-        this.props.onFilterConfirm({ brand: brandFilterState });
+        this.props.onFilterConfirm(brandFilterState);
 
         // 隐藏弹层
         this.handleFilterShowTap('brand', true);

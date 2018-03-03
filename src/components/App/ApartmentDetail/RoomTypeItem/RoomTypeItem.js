@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import classNames from 'classnames';
 
+import { urlJoin } from 'lib/util';
 import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { getTitle, getFloors, getDirect } from './formatData';
 
@@ -9,12 +11,18 @@ import './styles.less';
 
 const classPrefix = 'm-roomtypeitem';
 
-export default class RoomTypeItem extends PureComponent {
+class RoomTypeItem extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             imgLoading: true,
         };
+    }
+
+    handleTouchTap = () => {
+        const { id } = this.props.house;
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(urlJoin(urlPrefix, `detail/${id}`));
     }
 
     render() {
@@ -30,7 +38,7 @@ export default class RoomTypeItem extends PureComponent {
             price,
             onsaleCount,
 
-            imgUrl,
+            imgUrl, // TODO
         } = house;
         const imgClsPrefix = `${classPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
@@ -75,7 +83,7 @@ export default class RoomTypeItem extends PureComponent {
                             <span>/月</span>
                         </li>
                     </ul>
-                    <li>剩余{onsaleCount}套</li>
+                    <li className="onsale-count">剩余{onsaleCount}套</li>
                 </ul>
             </div>
         );
@@ -100,3 +108,5 @@ RoomTypeItem.defaultProps = {
     house: [],
 };
 
+
+export default withRouter(RoomTypeItem);

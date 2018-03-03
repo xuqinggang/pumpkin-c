@@ -86,12 +86,16 @@ export default class ApartmentDetail extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 <RoomSlider images={images} />
-                <div className={`${classPrefix}-content`}>
+                <div className={`${classPrefix}-module ${classPrefix}-location`}>
                     <Location blockName={blockName} />
+                </div>
+                <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro
                         withoutImage={true}
                         apartmentIntroData={this.apartmentIntroData}
                     />
+                </div>
+                <div className={`${classPrefix}-module ${classPrefix}-roomtype`}>
                     <RoomTypeList centralHouses={centralHouses} />
                 </div>
             </div>

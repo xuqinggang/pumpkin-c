@@ -26,7 +26,12 @@ export default class ApartmentList extends PureComponent {
                 position: {},
                 brand: {},
             },
+            filterParamsObj: {}
         };
+    }
+
+    componentWillMount() {
+
     }
 
     componentDidMount() {
@@ -42,6 +47,12 @@ export default class ApartmentList extends PureComponent {
 
     onFilterConfirm = (state) => {
         console.log(state, 'state', 'onFilterConfirm');
+        this.setState({
+            filterParamsObj: {
+                ...this.state.filterParamsObj,
+                ...state,
+            }
+        })
     }
 
     wxShare() {
@@ -58,7 +69,10 @@ export default class ApartmentList extends PureComponent {
         const {
             filterState,
             filterLabel,
+            filterParamsObj,
         } = this.state;
+
+        console.log('filterParamsObj => ', filterParamsObj);
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
@@ -74,7 +88,7 @@ export default class ApartmentList extends PureComponent {
                     />
                 </div>
                 <div className={`${classPrefix}-padding-top`}>
-                    <PureApartmentListWrap />
+                    <PureApartmentListWrap filterParams={filterParamsObj} />
                 </div>
             </div>
         );

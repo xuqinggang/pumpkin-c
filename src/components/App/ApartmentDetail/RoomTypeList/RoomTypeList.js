@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import RoomTypeItem from '../RoomTypeItem/RoomTypeItem';
 
+import './styles.less';
+
 const classPrefix = 'm-roomtypelist';
 
 export default class RoomTypeList extends PureComponent {
@@ -15,7 +17,9 @@ export default class RoomTypeList extends PureComponent {
         const { centralHouses } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <p>房型列表</p>
+                <div className={`${classPrefix}-head`}>
+                    <h1 className={`f-vertical-middle ${classPrefix}-title`}>房型列表</h1>
+                </div>
                 {
                     centralHouses.map((house, index) => (
                         <RoomTypeItem house={house} key={index} />
@@ -26,6 +30,7 @@ export default class RoomTypeList extends PureComponent {
     }
 }
 
+// TODO
 RoomTypeList.propTypes = {
     centralHouses: PropTypes.arrayOf(RoomTypeItem.propTypes),
 };
