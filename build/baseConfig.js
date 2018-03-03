@@ -16,8 +16,10 @@ const config = {
         proxy: {
             '/bj/nangua/api/v1': {
                 target: 'http://10.10.120.180',
+                // target: 'http://10.23.64.8',
                 headers: {
                     host: 'm.nangua.test.cn',
+                    // host: 'dev.api.nanguazufang.cn',
                 },
             },
         },

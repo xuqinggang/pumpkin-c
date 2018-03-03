@@ -48,7 +48,6 @@ export default class ApartmentList extends PureComponent {
     }
 
     onFilterConfirm = (newState) => {
-        console.log(newState, 'newState', 'onFilterConfirm');
         const querys = paramStateToQuery(newState, this.state.filterState);
         this.setState({
             filterParamsObj: {
