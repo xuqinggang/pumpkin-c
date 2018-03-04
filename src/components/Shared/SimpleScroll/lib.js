@@ -1,5 +1,22 @@
 const ua = window.navigator.userAgent.toLowerCase();
 
+// 一层层向上找到所有的滚动实例
+function findAllScrolls(el) {
+    const scrolls = [];
+    let id;
+    // 遇到document或带垂直滚动条的textarea终止查找
+    // if (force || !(el.tagName === 'TEXTAREA' && (el.scrollHeight > el.clientHeight) && (el.scrollTop > 0 && el.scrollTop < el.scrollHeight - el.clientHeight))) {
+    while (el !== document) {
+        id = el.getAttribute('scroll-id');
+        if (id) {
+            scrolls.push(PScroll.IdMapScrollIns[id]);
+        }
+        el = el.parentNode;
+    }
+    // }
+    return scrolls;
+}
+
 // 获得父元素下，所有子元素的宽度和(包括margin right/left)
 function getTotalWidth(children) {
     let totalWidth = 0;
@@ -60,14 +77,12 @@ const rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame |
     setTimeout(callback, 17);
 };
 
-function addEvent (el, type, method) {
-    el = el || document;
-    el.addEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
+function addEvent (type, method) {
+    document.addEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
 }
 
-function removeEvent (el, type, method) {
-    el = el || document;
-    el.removeEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
+function removeEvent (type, method) {
+    document.removeEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
 }
 
 const sty = document.createElement('div').style;
@@ -88,17 +103,24 @@ const utils = {
 
     // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
     translateZ: (function (pre) {
-      var f
-      if (pre) {
-        f = pre + 'Perspective' in sty
-      } else {
-        f = 'perspective' in sty
-      }
-      return f ? ' translateZ(0px)' : ''
+        var f
+        if (pre) {
+            f = pre + 'Perspective' in sty
+        } else {
+            f = 'perspective' in sty
+        }
+        return f ? ' translateZ(0px)' : ''
     })(prefix.substr(0, prefix.length - 1)),
 }
 
-export default class SimpleScroll {
+addEvent('touchstart', _touchStart);
+addEvent('touchmove', _touchMove);
+addEvent('touchend', _touchEnd);
+
+export default class PScroll {
+    static scrollInsActive = null;
+    static id = 0;
+    static IdMapScrollIns = {};
     constructor(wrapperDom, options) {
 
         // 包裹容器dom和滚动元素dom
@@ -166,13 +188,18 @@ export default class SimpleScroll {
         this._initStyle();
         this._initEvent();
         this._refresh();
+
+
+        this._id = PScroll.id++;
+        this.scrollerDom.setAttribute('scroll-id', this._id);
+        PScroll.IdMapScrollIns[this._id] = this;
     }
     _initStyle() {
         this.wrapperDom.style.overflow = "hidden";
         this.scrollerDom.style.minHeight = "100%";
     }
     _initEvent() {
-        this.wrapperDom.addEventListener('touchstart', this._touchStart, false);
+        addEvent('touchstart', this._touchStart);
     }
     _dispatch(eventName, event) {
         const dispatchEvent = this.event[eventName];
@@ -363,6 +390,7 @@ export default class SimpleScroll {
 
     _scrollTo(translateX, translateY, callback) {
         this.scrollerDom.style[utils.TSF] = 'translate(' + translateX + 'px, ' + translateY + 'px)' + utils.translateZ;
+        
         callback && callback();
     }
 
@@ -598,34 +626,36 @@ export default class SimpleScroll {
         }
     }
 
-    _touchStart = (e) => {
-        if (!this.options.isScroll) {
-            return;
-        }
+}
 
-        if (this.isMoving) {
-            e.preventDefault(); // 防止在滑动过程中再次触摸误触a连接等
-            this.isMoving = false; // 停止移动
-        }
-
-        this._start(e);
-        addEvent(this.wrapperDom, 'touchmove', this._touchMove);
-        addEvent(this.wrapperDom, 'touchend', this._touchEnd);
+function _touchStart(e) {
+    const scrollsIns = findAllScrolls(e.target);
+    PScroll.scrollInsActive = scrollsIns[0];
+    console.log('PScroll.scrollInsActive', PScroll.scrollInsActive);
+    if (!PScroll.scrollInsActive || !PScroll.scrollInsActive.options.isScroll) {
+        return;
     }
 
-    _touchMove = (e) => {
-        // e.preventDefault();
+    if (PScroll.scrollInsActive.isMoving) {
+        e.preventDefault(); // 防止在滑动过程中再次触摸误触a连接等
+        PScroll.scrollInsActive.isMoving = false; // 停止移动
+    }
+
+    PScroll.scrollInsActive._start(e);
+}
+
+function _touchMove(e) {
+    if (PScroll.scrollInsActive) {
+        e.preventDefault();
         const activeElement = document.activeElement;
         if (utils.isMobile && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
             activeElement.blur();
         }
 
-        this._move(e);
+        PScroll.scrollInsActive._move(e);
     }
+}
 
-    _touchEnd = (e) => {
-        this._end(e);
-        removeEvent(this.wrapperDom, 'touchmove', this._touchMove);
-        removeEvent(this.wrapperDom, 'touchend', this._touchEnd);
-    }
+function _touchEnd(e) {
+    PScroll.scrollInsActive && PScroll.scrollInsActive._end(e);
 }

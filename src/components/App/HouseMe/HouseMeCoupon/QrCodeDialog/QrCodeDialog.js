@@ -10,7 +10,7 @@ const classPrefix = 'm-qrcodedialog';
 
 export default class QrCodeDialog extends PureComponent {
     componentDidMount() {
-        QRCode.toCanvas(this.canvasDom, '64776392', { width: 6.4 * window.lib.flexible.rem }, function (error) {
+        QRCode.toCanvas(this.canvasDom, this.props.code+'', { width: 6.4 * window.lib.flexible.rem }, function (error) {
             // if (error) console.error(error)
             // console.log('success!');
         });
@@ -20,6 +20,7 @@ export default class QrCodeDialog extends PureComponent {
         const {
             show,
             onClose,
+            code,
         } = this.props;
 
         return (
@@ -31,7 +32,7 @@ export default class QrCodeDialog extends PureComponent {
                 <BottomDialog.Body className={`${classPrefix}-body`}>
                     <h2 className="body-title">请向公寓出示以下优惠码</h2>
                     <canvas className="body-qrcode" ref={(dom) => { this.canvasDom = dom; } } />
-                    <span className="body-couponnumber">64776392</span>
+                    <span className="body-couponnumber">{code}</span>
                 </BottomDialog.Body>
                 <BottomDialog.Footer className={`${classPrefix}-footer`}>
                     <hr className="footer-line" />

@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import TabTemplate from './TabTemplate.js'
+import { TSF, TRANSLATEZ } from 'lib/css3Hooks';
 
 import './styles.less';
 
@@ -73,7 +74,7 @@ class Tabs extends PureComponent {
         setTimeout(() => {
             const barDom = this.barDom;
             const translateX = activeDom.offsetLeft + (activeDom.offsetWidth - barDom.offsetWidth) / 2;
-            this.barDom.style.transform = `translate3d(${translateX}px, 0, 0)`;
+            this.barDom.style[TSF] = `translate(${translateX}px, 0) ` + TRANSLATEZ('0');
         }, 0)
     }
 

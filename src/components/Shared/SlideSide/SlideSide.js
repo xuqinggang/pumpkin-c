@@ -21,7 +21,7 @@ export default class SlideSide extends PureComponent {
     }
 
     render() {
-        const { 
+        const {
             children,
             className,
         } = this.props;
