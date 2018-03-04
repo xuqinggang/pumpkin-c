@@ -39,7 +39,7 @@ export default class MeUseCouponItem extends PureComponent {
                 <span className={`f-display-block ${classPrefix}-btn-use`} onTouchTap={this.onOpenDialogTap}>立即使用</span>
                 {
                     show ?
-                        <QrCodeDialog show={show} onClose={this.onCloseDialogTap}/>
+                        <QrCodeDialog show={show} onClose={this.onCloseDialogTap} code={this.props.couponItem.code}/>
                         : null
                 }
             </div>

@@ -88,13 +88,13 @@ const utils = {
 
     // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
     translateZ: (function (pre) {
-      var f
-      if (pre) {
-        f = pre + 'Perspective' in sty
-      } else {
-        f = 'perspective' in sty
-      }
-      return f ? ' translateZ(0px)' : ''
+        var f
+        if (pre) {
+            f = pre + 'Perspective' in sty
+        } else {
+            f = 'perspective' in sty
+        }
+        return f ? ' translateZ(0px)' : ''
     })(prefix.substr(0, prefix.length - 1)),
 }
 
@@ -363,6 +363,7 @@ export default class SimpleScroll {
 
     _scrollTo(translateX, translateY, callback) {
         this.scrollerDom.style[utils.TSF] = 'translate(' + translateX + 'px, ' + translateY + 'px)' + utils.translateZ;
+        
         callback && callback();
     }
 

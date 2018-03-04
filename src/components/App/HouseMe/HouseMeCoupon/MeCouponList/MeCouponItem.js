@@ -43,26 +43,26 @@ export default class MeCouponItem extends PureComponent {
 
         return (
             <div className={classPrefix}>
-                <div className="g-grid-row f-flex-align-center f-flex-justify-between">
-                    <span className={classnames(`${classPrefix}-title`, { expired: isExpired })}>
+                <ul className="g-grid-row f-flex-align-center f-flex-justify-between">
+                    <li className={classnames(`${classPrefix}-title`, { expired: isExpired })}>
                         {name}
-                    </span>
-                    <span className={classnames(`${classPrefix}-price`, { expired: isExpired })}>¥{quota}</span>
-                </div>
-                <div className={`g-grid-row f-flex-align-center f-flex-justify-between ${classPrefix}-expiretime-wrapper`}>
-                    <div className="f-display-inlineblock" onTouchTap={this.onRuleBtnTap}>
+                    </li>
+                    <li className={classnames(`${classPrefix}-price`, { expired: isExpired })}>¥{quota}</li>
+                </ul>
+                <ul className={`g-grid-row f-flex-align-center f-flex-justify-between ${classPrefix}-expiretime-wrapper`}>
+                    <li className="f-display-inlineblock" onTouchTap={this.onRuleBtnTap}>
                         <span className={classnames(`${classPrefix}-btn-rules`, { expired: isExpired })}>使用规则</span>
                         <span className={classnames('icon-next', `${classPrefix}-icon-rules`, {
                             active: isExpand,
                         })} />
-                    </div>
-                    <span className={`${classPrefix}-expiretime`}>
+                    </li>
+                    <li className={`${classPrefix}-expiretime`}>
                         {
-                            type === 'use' ? dateFormat(parseInt(dateEnd * 1000, 10))
+                            type === 'use' ? ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10)))
                             : status === 'USE' ? '已使用' : '已过期'
                         }
-                    </span>
-                </div>
+                    </li>
+                </ul>
                 {
                     isExpand ?
                         (

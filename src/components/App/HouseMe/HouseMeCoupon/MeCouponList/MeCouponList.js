@@ -30,7 +30,7 @@ export default class MeCouponList extends PureComponent {
             couponList: [],
             isFetching: false,
             nextPage: 1,
-            offset: 6,
+            offset: 10,
             totalPage: 1,
         };
     }
