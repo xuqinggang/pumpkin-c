@@ -126,7 +126,7 @@ const webpackServerConf = {
                     // 还可以兼容ie浏览器
                     drop_console: true,
                     // 死代码消除
-                    dead_code: true,  
+                    dead_code: true,
                 },
                 output: {
                     // 删除所有的注释
@@ -138,4 +138,5 @@ const webpackServerConf = {
         }),
     ]
 };
+
 export default webpackServerConf;

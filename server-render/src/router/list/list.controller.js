@@ -14,12 +14,18 @@ export default async (ctx, next) => {
 
     // 设置筛选数据
     const newFilterParamsObj = setFilterData(filterUrlFragment, ctx);
+    const apartmentId = ctx.query.apartment;
+    apartmentId !== undefined && Object.assign(newFilterParamsObj, {
+        apartmentId: apartmentId,
+    });
 
+    // 设置列表页数据 和 首页的banner和recommend 
+    await Promise.all([setHouseListData(newFilterParamsObj), setHouseIndexBannerAndRecommend()])
     // 设置列表页数据
-    await setHouseListData(newFilterParamsObj);
+    // await setHouseListData(newFilterParamsObj);
 
-    // 首页的banner和recommend
-    await setHouseIndexBannerAndRecommend();
+    // // 首页的banner和recommend
+    // await setHouseIndexBannerAndRecommend();
 
     await next();
 };

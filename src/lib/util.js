@@ -48,6 +48,28 @@ export function debounce(func, waitms, immediate) {
     }
 }
 
+export function parseUrlParams() {
+    let urlQuery = '';
+    const urlParamsObj = {};
+    const url = decodeURIComponent(window.location.href);
+    const pt = url.indexOf('?');
+    if (pt === -1) return {
+        urlParamsObj,
+        urlQuery,
+    };
+    urlQuery = url.substr(pt+1);
+    const urlParamsArr = urlQuery.split('&');
+    urlParamsArr.forEach((paramStr) => {
+        if (!paramStr) return;
+        const keyAndValueArr = paramStr.split('=');
+        urlParamsObj[keyAndValueArr[0]] = keyAndValueArr[1];
+    });
+    return {
+        urlParamsObj,
+        urlQuery,
+    };
+}
+
 // 来自哪个页
 export function getPageFrom(search) {
     const regRt = search && search.match(/(pagefrom)=(\b\S+\b)/);
