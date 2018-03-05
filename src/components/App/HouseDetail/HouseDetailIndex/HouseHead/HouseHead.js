@@ -24,7 +24,8 @@ export default class HouseHead extends PureComponent {
 
         this.curUrl = match.url;
 
-        this.rootUrlPrefix = window.getStore('url').urlPrefix;
+        const urlStore = window.getStore('url');
+        this.rootUrlPrefix = urlStore && urlStore.urlPrefix;
 
         const search = props.history.location.search;
         // 来自哪个页面
@@ -37,8 +38,8 @@ export default class HouseHead extends PureComponent {
         this.isFrom = search.indexOf('from') !== -1;
 
         // 筛选url片段
-        const urlInfo = window.getStore('url');
-        this.filterUrlFragment = urlInfo && urlInfo.filterUrlFragment || '';
+        this.filterUrlFragment = urlStore && urlStore.filterUrlFragment || '';
+        this.urlQuery = urlStore && urlStore.urlQuery || '';
     }
 
     componentWillReceiveProps(nextProps) {
@@ -135,7 +136,7 @@ export default class HouseHead extends PureComponent {
                     this.isShareFrom || this.pageFrom === 'login' || isWeiXin || this.isFrom ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
-                            to={`${this.rootUrlPrefix}/${this.filterUrlFragment}`}>
+                            to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + `?${this.urlQuery}`}>
                             <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
                             <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
                         </Link>
