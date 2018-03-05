@@ -140,6 +140,7 @@ export default class PScroll {
             isScrollX: false, // 是否开启横向滚动
             isScrollY: true,
             isMomentum: true, // 是否惯性滑动
+            preventDefault: true,
             // 触摸超过边界阻力值
             boundaryResistLevel: 4,
             // 惯性滚动阻力值
@@ -646,7 +647,9 @@ function _touchStart(e) {
 
 function _touchMove(e) {
     if (PScroll.scrollInsActive) {
-        e.preventDefault();
+        if (PScroll.scrollInsActive.options.preventDefault) {
+            e.preventDefault()
+        }
         const activeElement = document.activeElement;
         if (utils.isMobile && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
             activeElement.blur();
