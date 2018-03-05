@@ -6,7 +6,7 @@ const cache = LRU({
     // 缓存的条数
     max: 20,
     // 缓存时间
-    maxAge: 1000 * 60 * 10,
+    maxAge: 1000 * 60,
 });
 
 module.exports = cache;

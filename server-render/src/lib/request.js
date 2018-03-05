@@ -12,5 +12,11 @@ export default function nodeRequest(url, paramters, type, contentType) {
         json: true, // Automatically parses the JSON string in the response
     };
 
+    const start = Date.now();
     return requestPromise(options)
+        .then((data) => {
+            const end = Date.now();
+            global.app.emit('api', `API-${url} responseTime-${end-start}ms`);
+            return data;
+        });
 }

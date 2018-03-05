@@ -6,6 +6,7 @@ import { rentUnitShape } from 'baseData/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
 import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { urlJoin } from 'lib/util';
+import { kzPv } from 'lib/pv';
 import './style.less';
 
 const itemClassPrefix = 'm-houseitem';
@@ -32,6 +33,11 @@ class RentUnitItem extends PureComponent {
     handleTouchTap() {
         const urlPrefix = window.getStore('url').urlPrefix;
         this.props.history.push(urlJoin(urlPrefix, `detail/${this.props.rentUnitId}`));
+
+        const urlStore = window.getStore('url');
+        if (urlStore && urlStore.urlParamsObj && urlStore.urlParamsObj.daili) {
+            kzPv(urlStore.urlParamsObj.daili, 'nangua_daili_detail');
+        }
         // 每次进入详情页，发送一次pv请求
         window.send_stat_pv && window.send_stat_pv();
     }

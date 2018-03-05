@@ -17,5 +17,5 @@ module.exports = function(app) {
     // 中间件-日志
     app.use(logger());
     // 中间件-缓存
-    app.use(cacheMiddle());
+    // app.use(cacheMiddle());
 }
