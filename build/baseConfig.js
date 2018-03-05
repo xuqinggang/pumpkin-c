@@ -12,13 +12,18 @@ const config = {
     },
     dev: {
         port: 8888,
-        host: '10.0.120.35',
+        host: '10.0.117.121',
         proxy: {
             '/bj/nangua/api/v1': {
                 target: 'http://10.10.120.180',
+                // target: 'http://10.23.64.8',
                 headers: {
                     host: 'm.nangua.test.cn',
+                    // host: 'dev.api.nanguazufang.cn',
                 },
+                // pathRewrite: {
+                //     '/bj/nangua': '',
+                // },
             },
         },
         publicPath: '/',
