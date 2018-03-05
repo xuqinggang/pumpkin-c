@@ -25,6 +25,12 @@ class RoomTypeItem extends PureComponent {
         this.props.history.push(urlJoin(urlPrefix, `detail/${id}`));
     }
 
+    handleImageLoad = () => {
+        this.setState({
+            imgLoading: false,
+        })
+    }
+
     render() {
         const { house } = this.props;
         const {
@@ -37,8 +43,7 @@ class RoomTypeItem extends PureComponent {
             totalFloor,
             price,
             onsaleCount,
-
-            imgUrl, // TODO
+            headImage,
         } = house;
         const imgClsPrefix = `${classPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
@@ -52,7 +57,7 @@ class RoomTypeItem extends PureComponent {
                 <div className={`${classPrefix}-img-wrap`}>
                     <img
                         className={imgCls}
-                        src={ModListImgUrl(imgUrl)}
+                        src={ModListImgUrl(headImage)}
                         alt="房源图片"
                         onLoad={this.handleImageLoad}
                     />

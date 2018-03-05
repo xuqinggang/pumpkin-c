@@ -1,18 +1,15 @@
 import Service from 'lib/Service';
 
-// import MockData from './mock';
 
 // 请求特定城市下的集中式公寓名称列表
 export function ajaxGetBrandList(cityId) {
-    // return Promise.resolve(MockData.brands);
-
     return Service.get(`/api/v1/centralShops/brandList?cityId=${cityId}`)
-        .then((data) => {
-            if (data.code === 200) {
-                return data;
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data;
             }
 
-            throw new Error(data);
+            throw new Error(res);
         });
 }
 
@@ -29,7 +26,6 @@ export function ajaxGetApartmentList({ filter, pager } = {}) {
         offset: (curPage - 1) * perPage,
         limit: perPage,
     }).then((res) => {
-        // console.log('res => ', res);
 
         if (res.code === 200) {
             apartmentList = res.data.centralShops || [];

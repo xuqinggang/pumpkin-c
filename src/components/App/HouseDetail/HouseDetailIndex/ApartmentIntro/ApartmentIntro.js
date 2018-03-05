@@ -32,7 +32,7 @@ export default class ApartmentIntro extends PureComponent {
 ApartmentIntro.propTypes = {
     withoutImage: PropTypes.bool,
     className: PropTypes.string,
-    apartmentIntroData: PropTypes.objectOf({
+    apartmentIntroData: PropTypes.shape({
         name: PropTypes.string,
         intro: PropTypes.string,
         image: PropTypes.string,

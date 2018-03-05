@@ -21,6 +21,9 @@ const config = {
                     host: 'm.nangua.test.cn',
                     // host: 'dev.api.nanguazufang.cn',
                 },
+                // pathRewrite: {
+                //     '/bj/nangua': '',
+                // },
             },
         },
         publicPath: '/',

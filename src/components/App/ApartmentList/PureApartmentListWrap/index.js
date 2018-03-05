@@ -38,7 +38,14 @@ export default class PureApartmentListWrap extends PureComponent {
         this.setState({
             loading: true,
         });
-        ajaxGetApartmentList().then(data => {
+
+        const apartmentFilter = window.getStore('apartmentFilter');
+        const filter = (apartmentFilter && apartmentFilter.filterParamsObj) || {};
+
+        ajaxGetApartmentList({
+            filter,
+            pager,
+        }).then(data => {
             let newApartmentLists= [];
             if (!renew) {
                 curPage += 1;

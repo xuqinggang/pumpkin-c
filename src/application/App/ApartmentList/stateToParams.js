@@ -1,31 +1,65 @@
 import { positionFilterStateToParams } from 'application/App/HouseList/filterStateToParams';
 
-export const paramStateToQuery = (newState, filterState) => {
+// newBrands: Array<number>
+const setBrandLabel = (newBrands, label) => {
+    if (newBrands.length === 0) {
+        return '品牌';
+    }
+
+    if (newBrands.length === 1) {
+        return label;
+    }
+
+    if (newBrands.length > 1) {
+        return '多选';
+    }
+}
+
+export const paramStateToQuery = (newState, filterParamsObj, filterLabel) => {
     const apartmentBrandLabels = (window.getStore('apartmentBrandLabels') || { list: [] }).list;
     // init
-    let newfilterState = { ...filterState };
+    let newfilterParams = { ...filterParamsObj };
+    let newfilterLabel = { ...filterLabel };
 
     const { brand, position } = newState;
+
+    console.log('newState =>', newState);
+
     // 按所选公寓添加公寓id
     if (brand) {
         let newBrands = [];
+        let label = '品牌';
         Object.keys(brand).forEach((index, i) => {
             if (brand[index]) {
-                newBrands = newBrands.concat(apartmentBrandLabels[index] && apartmentBrandLabels[index].value);
+                const apartment = apartmentBrandLabels[index];
+                newBrands = newBrands.concat(apartment && apartment.value);
+                label = setBrandLabel(newBrands, apartment && apartment.text);
             }
         });
-        newfilterState = {
-            ...filterState,
+        newfilterParams = {
+            ...filterParamsObj,
             apartmentIds: newBrands,
         };
-    }
-    
-    if (position) {
-        newfilterState = {
-            ...newfilterState,
-            position: positionFilterStateToParams(position).filterParams,
+        newfilterLabel = {
+            ...filterLabel,
+            brand: label,
         };
     }
 
-    return newfilterState;
-}
+    if (position) {
+        const { filterParams, label } = positionFilterStateToParams(position);
+        newfilterParams = {
+            ...newfilterParams,
+            position: filterParams,
+        };
+        newfilterLabel = {
+            ...filterLabel,
+            position: label,
+        };
+    }
+
+    return {
+        params: newfilterParams,
+        label: newfilterLabel,
+    };
+};

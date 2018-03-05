@@ -72,7 +72,6 @@ class BrandFilter extends PureComponent {
 
     render() {
         const { brand, brandLabels } = this.state;
-        console.log('brandLabels', brandLabels);
         return (
             <div className={`${brandClass}`}>
                 {

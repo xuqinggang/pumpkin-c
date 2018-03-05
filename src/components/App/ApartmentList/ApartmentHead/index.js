@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-
-import { isWeiXin } from 'lib/const';
+import PropTypes from 'prop-types';
 
 import './styles.less';
 
 const classPrefix = 'm-apartmenthead';
 
-export default class ApartmentHead extends PureComponent {
+class ApartmentHead extends PureComponent {
     constructor(props) {
         super(props);
     
@@ -20,11 +19,9 @@ export default class ApartmentHead extends PureComponent {
 
     }
 
-    componentWillMount() {
-
-    } 
-
     render() {
+        const { title } = this.props;
+
         return (
             <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
                 <div className={'f-display-flex f-flex-align-center'}>
@@ -36,9 +33,19 @@ export default class ApartmentHead extends PureComponent {
                         >
                         </span>                    
                     </Link>
-                    <span className={`${classPrefix}-title`}>集中式公寓</span>
+                    <span className={`${classPrefix}-title`}>{title}</span>
                 </div>
             </div>
         );
     }
 }
+
+ApartmentHead.defaultProps = {
+    title: '集中式公寓',
+};
+
+ApartmentHead.propTypes = {
+    title: PropTypes.string,
+};
+
+export default ApartmentHead;

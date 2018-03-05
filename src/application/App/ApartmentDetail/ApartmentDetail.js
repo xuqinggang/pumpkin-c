@@ -5,7 +5,9 @@ import {
     Location,
     RoomSlider,
 } from 'components/App/ApartmentDetail';
+import { ApartmentHead } from 'components/App/ApartmentList';
 import ApartmentIntro from 'components/App/HouseDetail/HouseDetailIndex/ApartmentIntro/ApartmentIntro';
+import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
 import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
@@ -72,22 +74,26 @@ export default class ApartmentDetail extends PureComponent {
 
     get apartmentIntroData() {
         const { apartmentDetailData } = this.state;
-        const { name, intro } = apartmentDetailData;   
+        const { apartmentName, apartmentIntro } = apartmentDetailData;   
         return {
-            name,
-            intro,
+            name: apartmentName,
+            intro: apartmentIntro,
         }
     }
 
     render() {
+        const { history } = this.props;
+        console.log('his =>', history);
+
         const { apartmentDetailData } = this.state;
-        const { images, blockName, centralHouses } = apartmentDetailData;
+        const { images, blockName, centralHouses, name, address } = apartmentDetailData;
 
         return (
             <div className={`${classPrefix}`}>
+                <HouseHead type="apartment" title={name} history={history} />
                 <RoomSlider images={images} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
-                    <Location blockName={blockName} />
+                    <Location blockName={blockName} address={address}/>
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro

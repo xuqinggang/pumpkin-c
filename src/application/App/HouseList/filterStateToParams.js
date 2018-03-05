@@ -238,7 +238,6 @@ const PtTypeMapParamsKey = {
 };
 
 export function positionFilterStateToParams(positinFilterStateObj) {
-    console.log(positinFilterStateObj, 'positinFilterStateObj');
     const seoData = [];
     const filterParams = {
         districtId: null,

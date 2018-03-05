@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 
 import {
-    ApartmentHead,
+    // ApartmentHead,
     ApartmentFilter,
     PureApartmentListWrap,
 } from 'components/App/ApartmentList';
+import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
 import { paramStateToQuery } from './stateToParams';
 
@@ -26,18 +27,21 @@ export default class ApartmentList extends PureComponent {
             // 筛选初始状态
             filterState: {
                 position: {},
-                apartmentIds: [],
+                brand: {},
             },
             filterParamsObj: {}
         };
     }
 
-    componentWillMount() {
-
-    }
-
     componentDidMount() {
         this.wxShare();
+    }
+
+    componentWillMount() {
+        const filterStore = window.getStore('apartmentFilter');
+        if (filterStore) {
+            this.setState(filterStore);
+        }
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -48,16 +52,22 @@ export default class ApartmentList extends PureComponent {
     }
 
     onFilterConfirm = (newState) => {
-        const querys = paramStateToQuery(newState, this.state.filterState);
-        this.setState({
-            filterParamsObj: {
-                ...this.state.filterParamsObj,
+        const { filterState, filterLabel, filterParamsObj } = this.state;
+
+        const querys = paramStateToQuery(newState, filterParamsObj, filterLabel);
+
+        const filter = {
+            ...this.state,
+            filterParamsObj: querys.params,
+            filterState: {
+                ...filterState,
                 ...newState,
             },
-            filterState: querys,
-        }, () => {
-            window.setStore('apartmentFilter', this.state);
-        })
+            filterLabel: querys.label,
+        };
+
+        window.setStore('apartmentFilter', filter);
+        this.setState(filter);
     }
 
     wxShare() {
@@ -71,17 +81,18 @@ export default class ApartmentList extends PureComponent {
     }
 
     render() {
+        const { history } = this.props;
+
         const {
             filterState,
             filterLabel,
             filterParamsObj,
         } = this.state;
 
-        console.log('filterParamsObj => ', filterParamsObj);
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
-                    <ApartmentHead />
+                    <HouseHead type="apartment" title="集中式公寓" history={history} />
                     <ApartmentFilter
                         className="apartmentfilter"
                         filterState={filterState}

@@ -32,7 +32,7 @@ export default class RoomTypeList extends PureComponent {
 
 // TODO
 RoomTypeList.propTypes = {
-    centralHouses: PropTypes.arrayOf(RoomTypeItem.propTypes),
+    centralHouses: PropTypes.arrayOf(RoomTypeItem.propTypes.house),
 };
 
 RoomTypeList.defaultProps = {
