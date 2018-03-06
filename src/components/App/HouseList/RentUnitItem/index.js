@@ -55,6 +55,7 @@ class RentUnitItem extends PureComponent {
             bedroomCount,
             direct,
             price,
+            aptType,
         } = this.props;
         const imgClsPrefix = `${itemClassPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
@@ -73,6 +74,11 @@ class RentUnitItem extends PureComponent {
                         alt="房源图片"
                         onLoad={this.handleImageLoad}
                     />
+                    {
+                        aptType === 'CENTRALIZED' ?
+                            <span className={`${itemClassPrefix}-apttype`}>集中式</span> :
+                        null
+                    }
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
