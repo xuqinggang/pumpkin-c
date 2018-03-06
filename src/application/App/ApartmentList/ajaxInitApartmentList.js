@@ -16,13 +16,24 @@ export function ajaxGetBrandList(cityId) {
 // 获取公寓列表
 export function ajaxGetApartmentList({ filter, pager } = {}) {
 
+    // {position: {cityId: 1}} => {cityId: 1}
+    let filterParams = filter;
+    if (filter && filter.position) {
+        const { position } = filter;
+        delete filterParams.position;
+        filterParams = {
+            ...filterParams,
+            ...position,
+        };
+    }
+
     const { curPage = 1, perPage = 20 } = pager || {};
     let { totalPage = 1 } = pager || {};
 
     let apartmentList = [];
 
     return Service.post(`/api/v1/centralShops`, {
-        ...(filter || {}),
+        ...(filterParams || {}),
         offset: (curPage - 1) * perPage,
         limit: perPage,
     }).then((res) => {
