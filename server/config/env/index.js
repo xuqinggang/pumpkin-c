@@ -19,7 +19,7 @@ const config = {
             host: 'm.nangua.test.cn',
         },
         production: {
-            target: 'https://m.focus.cn',
+            target: 'http://nangua.kuaizhan.sohuno.com',
         },
     },
 };
