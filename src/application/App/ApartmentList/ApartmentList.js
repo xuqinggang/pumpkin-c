@@ -73,10 +73,10 @@ export default class ApartmentList extends PureComponent {
     wxShare() {
         // 分享
         execWxShare({
-            title: '上南瓜租房，找品牌公寓',
+            title: '北京 - 品质生活独栋公寓', // TODO city
             link: window.location.href.split('#')[0],
             imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
-            desc: '南瓜租房，只租真房源！',
+            desc: '生活不止眼前的苟且，还有诗和远方，快来这里看看高品质的集中式公寓吧。',
         });
     }
 

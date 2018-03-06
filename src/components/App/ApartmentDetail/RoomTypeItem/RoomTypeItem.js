@@ -97,7 +97,7 @@ class RoomTypeItem extends PureComponent {
 
 RoomTypeItem.propTypes = {
     house: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         name: PropTypes.string,
         blockName: PropTypes.string,
         address: PropTypes.string,
