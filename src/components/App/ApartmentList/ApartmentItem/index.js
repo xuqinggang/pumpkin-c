@@ -17,7 +17,7 @@ class ApartmentItem extends PureComponent {
     render() {
         const { apartment } = this.props;
         return (
-            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}            >
+            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 <div className={`${classPrefix}-image`}>
                     <img src={apartment.headImage} alt="" />
                     <div className={'tip'}>
