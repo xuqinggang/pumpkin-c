@@ -12,9 +12,10 @@ import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
 import Service from 'lib/Service';
-import { shallowEqual, urlJoin } from 'lib/util';
+import { shallowEqual, urlJoin, parseUrlParams } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
+import { kzPv } from 'lib/pv';
 
 import './styles.less';
 
@@ -24,7 +25,18 @@ export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.getParamsObj = this._getGetParams();
+        const {
+            urlParamsObj,
+            urlQuery,
+        } = parseUrlParams();
+        this.urlQuery = urlQuery;
+        this.urlParamsObj = urlParamsObj;
+
+        window.setStore('url', {
+            urlParamsObj,
+            urlQuery,
+        });
+
         this.state = {
             // 4个筛选面板的state
             filterLabel: {
@@ -42,28 +54,13 @@ export default class HouseList extends PureComponent {
             },
             // 筛选的请求参数
             filterParamsObj: {
-                apartmentId: this.getParamsObj.apartment || null,
+                apartmentId: this.urlParamsObj.apartment || null,
             },
         };
         // 动态更改标题
         // dynamicDocTitle('南瓜租房');
 
         this.urlPrefix = window.getStore('url').urlPrefix;
-    }
-
-    _getGetParams() {
-        const getParamsObj = {};
-        const url = decodeURIComponent(window.location.href);
-        const pt = url.indexOf('?');
-        if (pt === -1) return getParamsObj;
-        const getParamsArr = url.substr(pt+1).split('&');
-        getParamsArr.forEach((paramStr) => {
-            if (!paramStr) return;
-            const keyAndValueArr = paramStr.split('=');
-            getParamsObj[keyAndValueArr[0]] = keyAndValueArr[1];
-        });
-
-        return getParamsObj;
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -83,11 +80,11 @@ export default class HouseList extends PureComponent {
         });
 
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
+        this._setStoreFilterUrlFragment(filterUrlFragment);
         let link = '';
 
         // 筛选url片段
-        const rtFilterUrl = this._genHouseListFilterUrlFragment(filterUrlFragment);
-        link = urlJoin(this.urlPrefix, 'list', rtFilterUrl);
+        link = urlJoin(this.urlPrefix, 'list', filterUrlFragment) + `?${this.urlQuery}`;
 
         this.props.history.push(link);
         // 未知原因，需要设置延时来确保微信分享正常
@@ -97,20 +94,10 @@ export default class HouseList extends PureComponent {
         }, 500);
     }
 
-    // 生成列表页筛选url片段，包括apartment查询字符串
-    _genHouseListFilterUrlFragment(filterUrlFragment) {
-        let rt = '';
-        if (this.getParamsObj.apartment) {
-            rt = `${filterUrlFragment}?apartment=${this.getParamsObj.apartment}`;
-        } else {
-            rt = filterUrlFragment;
-        }
-
+    _setStoreFilterUrlFragment(filterUrlFragment) {
         window.setStore('url', {
-            filterUrlFragment: rt,
+            filterUrlFragment,
         });
-
-        return rt;
     }
 
     // 根据url片段生成state和params
@@ -120,7 +107,6 @@ export default class HouseList extends PureComponent {
         const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
         const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
         const filterParamsAndLabel = filterStateToParams(newFilterState);
-        console.log('filterStateToParams', filterUrlFragment, filterParamsAndLabel, filterState);
 
         this.setState({
             filterState: Object.assign({}, this.state.filterState, newFilterState),
@@ -147,19 +133,22 @@ export default class HouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        this._genHouseListFilterUrlFragment(filterUrlFragment);
+        this._setStoreFilterUrlFragment(filterUrlFragment);
 
         const filterStore = window.getStore('filter');
         if (filterStore) {
             this.setState(filterStore);
         } else {
-            console.log('componentWillMount');
             this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
         }
     }
 
     componentDidMount() {
         this.wxShare();
+
+        if (this.urlParamsObj.daili) {
+            kzPv(this.urlParamsObj.daili, 'nangua_daili_list');
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -171,7 +160,6 @@ export default class HouseList extends PureComponent {
 
             // 每生成一个新的url发送一次pv请求
             window.send_stat_pv && window.send_stat_pv();
-            // this._genHouseListFilterUrlFragment(nextFilterUrlFragment);
         }
     }
 
