@@ -38,9 +38,9 @@ export default class ApartmentDetail extends PureComponent {
         if (curHouseDetailData) {
             this.setState({
                 apartmentDetailData: curHouseDetailData,
+            }, () => {
+                this.wxShare();
             });
-
-            this.wxShare();
 
             return;
         }
@@ -48,13 +48,13 @@ export default class ApartmentDetail extends PureComponent {
         ajaxGetApartmentDetail(this.shopId).then(apartmentDetailData => {
             this.setState({
                 apartmentDetailData,
+            }, () => {
+                this.wxShare();
             });
 
             window.setStore('apartmentDetail', {
                 [this.shopId]: apartmentDetailData,
             });
-
-            this.wxShare();
         });
     }
 
@@ -63,12 +63,14 @@ export default class ApartmentDetail extends PureComponent {
     }
 
     wxShare() {
+        const { apartmentDetailData } = this.state;
+        const { name, images, minPrice, address } = apartmentDetailData;
         // 分享
         execWxShare({
-            title: '上南瓜租房，找品牌公寓',
+            title: name || '精品公寓',
             link: window.location.href.split('#')[0],
-            imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
-            desc: '南瓜租房，只租真房源！',
+            imgUrl: (images && images[0]) || 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
+            desc: `${minPrice} ${address}`,
         });
     }
 
@@ -83,7 +85,6 @@ export default class ApartmentDetail extends PureComponent {
 
     render() {
         const { history } = this.props;
-        console.log('his =>', history);
 
         const { apartmentDetailData } = this.state;
         const { images, blockName, centralHouses, name, address } = apartmentDetailData;
