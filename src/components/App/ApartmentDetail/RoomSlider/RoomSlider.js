@@ -24,6 +24,9 @@ export default class RoomSlider extends PureComponent {
     render() {
         const { images } = this.props;
         const { curIndex } = this.state;
+
+        let B_images = images.concat(images);
+
         return (
             <div className={`${classPrefix}`}>
                 <ReactSwipe
@@ -45,7 +48,7 @@ export default class RoomSlider extends PureComponent {
                 </ReactSwipe>
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {
-                        images.map((_, index) => (
+                        B_images.map((_, index) => (
                             <div className={index === curIndex ? 'ring' : 'point'} key={index}></div>
                         ))
                     }
