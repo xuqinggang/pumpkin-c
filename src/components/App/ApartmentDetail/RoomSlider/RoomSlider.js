@@ -24,6 +24,7 @@ export default class RoomSlider extends PureComponent {
     render() {
         const { images } = this.props;
         const { curIndex } = this.state;
+
         return (
             <div className={`${classPrefix}`}>
                 <ReactSwipe
