@@ -58,7 +58,7 @@ export default class MeCouponItem extends PureComponent {
                     </li>
                     <li className={`${classPrefix}-expiretime`}>
                         {
-                            type === 'use' ? ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10)))
+                            type === 'use' ? ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10) - 24 * 60 * 60))
                             : status === 'USE' ? '已使用' : '已过期'
                         }
                     </li>
