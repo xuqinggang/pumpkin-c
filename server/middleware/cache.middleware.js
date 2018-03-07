@@ -5,7 +5,6 @@
  */
 
 const lruCache = require('../lib/lruCache');
-var pathToRegexp = require('path-to-regexp');
 
 // 对列表页和详情页，进行缓存
 // url中存在'list'or'detail'标识，则分别代表列表页和详情页
