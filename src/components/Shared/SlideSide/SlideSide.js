@@ -8,21 +8,21 @@ export default class SlideSide extends PureComponent {
             isScrollX: true,
             isBounce: false,
         });
-        
-        this.scrollIns.on('scroll', () => {
-            console.log(this.scrollIns.position.translateX, 'scroll');
-            if (this.scrollIns.position.translateX === 0) {
-                this.scrollIns.options.preventDefault = false;
-            } else {
-                this.scrollIns.options.preventDefault = true;
-            }
+        this.scrollIns.on('scrollStart', () => {
+            this.scrollIns.options.preventDefault = false;
         });
+
+        this.scrollIns.on('scroll', () => {
+            this.scrollIns.options.preventDefault = true;
+        });
+
         this.scrollIns.on('scrollEnd', () => {
             if (this.scrollIns.position.translateX < -20) {
                 this.scrollIns.scrollTo(this.scrollIns.maxScrollX, 0, 100);
             } else {
                 this.scrollIns.scrollTo(0, 0, 100);
             }
+            this.scrollIns.options.preventDefault = false;
         })
     }
 
