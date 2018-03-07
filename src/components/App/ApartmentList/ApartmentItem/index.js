@@ -28,7 +28,7 @@ class ApartmentItem extends PureComponent {
                 <div className={`g-grid-row f-flex-justify-between ${classPrefix}-title-price`}>
                     <span className={`${classPrefix}-title`}>{apartment.name}</span>
                     <span className={`${classPrefix}-price`}>{apartment.minPrice}
-                        <span className={`${classPrefix}-unit`}>元/月 起</span>
+                        <span className={`${classPrefix}-unit`}>元/月起</span>
                     </span>
                 </div>
                 <div className={`f-display-flex ${classPrefix}-location`}>
