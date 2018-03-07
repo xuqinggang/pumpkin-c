@@ -557,12 +557,13 @@ export default class PScroll {
             const { isScrollY, isScrollX } = this.options;
 
             //判断为y方向，y方向滑动较常使用，因此优先判断
-            if (isScrollY) {
+            if (isScrollY && Math.abs(y - this.position.startY) >= Math.abs(x - this.position.startX)) {
                 this._momentumDistance = this._momentumY;
                 this.status = 'SCROLLINGY';
                 return;
             }
-            if (isScrollX) {
+
+            if (isScrollX && Math.abs(x - this.position.startX) >= Math.abs(y - this.position.startY)) {
                 this._momentumDistance = this._momentumX;
                 this.status = 'SCROLLINGX';
                 return;
@@ -578,6 +579,7 @@ export default class PScroll {
             this._doScroll(e);
             return;
         }
+
         if (this.status === 'SCROLLINGX') {
             // move时的位置和起点的距离
             this.deltaDistance = x - this.position.tmpStartX;
