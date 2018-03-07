@@ -8,8 +8,8 @@ import {
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
 import { paramStateToQuery } from './stateToParams';
-
 import { execWxShare } from 'lib/wxShare';
+import { dynamicDocTitle } from 'lib/util';
 
 import './styles.less';
 
@@ -35,6 +35,7 @@ export default class ApartmentList extends PureComponent {
 
     componentDidMount() {
         this.wxShare();
+        dynamicDocTitle('南瓜租房');
     }
 
     componentWillMount() {

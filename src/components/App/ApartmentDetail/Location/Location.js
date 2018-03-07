@@ -15,7 +15,10 @@ export default class Location extends PureComponent {
         const { blockName, address } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <div className={`f-singletext-ellipsis f-display-inlineblock ${classPrefix}-location`}>
+                <div
+                    className={`f-singletext-ellipsis f-display-inlineblock ${classPrefix}-location`}
+                    onTouchTap={this.props.onTouchTap}
+                >
                     <span className={`icon-region`} />
                     <span>{address}</span>
                 </div>
@@ -30,9 +33,11 @@ export default class Location extends PureComponent {
 Location.propTypes = {
     blockName: PropTypes.string,
     address: PropTypes.string,
+    onTouchTap: PropTypes.func,
 };
 
 Location.defaultProps = {
     blockName: '',
     address: '',
+    onTouchTap: () => null
 };

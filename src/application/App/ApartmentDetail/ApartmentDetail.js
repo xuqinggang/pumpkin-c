@@ -11,6 +11,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 
 import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
+import { dynamicDocTitle } from 'lib/util';
 
 import './styles.less';
 
@@ -28,6 +29,21 @@ export default class ApartmentDetail extends PureComponent {
         window.setStore('shopId', {
             shopId: this.shopId,
         });
+    }
+
+    handleJumpMapTap = () => {
+        // 经纬度
+        const { apartmentDetailData } = this.state;
+        const { lon, lat } = apartmentDetailData;
+        
+        if (lon && lat) {
+            const pos = `${lon},${lat}`;
+        
+            const urlInfo = window.getStore('url');
+            const urlPrefix = urlInfo && urlInfo.urlPrefix;
+
+            window.location.href = `${urlPrefix}/map?pos=${pos}`;
+        }
     }
 
     componentWillMount() {
@@ -59,7 +75,7 @@ export default class ApartmentDetail extends PureComponent {
     }
 
     componentDidMount() {
-        // this.wxShare();
+        dynamicDocTitle('南瓜租房');
     }
 
     wxShare() {
@@ -94,7 +110,7 @@ export default class ApartmentDetail extends PureComponent {
                 <HouseHead type="apartment" title={name} history={history} />
                 <RoomSlider images={images} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
-                    <Location blockName={blockName} address={address}/>
+                    <Location blockName={blockName} address={address} onTouchTap={this.handleJumpMapTap}/>
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro
