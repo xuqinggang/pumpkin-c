@@ -103,14 +103,14 @@ export default class ApartmentDetail extends PureComponent {
         const { history } = this.props;
 
         const { apartmentDetailData } = this.state;
-        const { images, blockName, centralHouses, name, address } = apartmentDetailData;
+        const { images, apartmentName, centralHouses, name, address } = apartmentDetailData;
 
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead type="apartment" title={name} history={history} />
                 <RoomSlider images={images} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
-                    <Location blockName={blockName} address={address} onTouchTap={this.handleJumpMapTap}/>
+                    <Location apartmentName={apartmentName} address={address} onTouchTap={this.handleJumpMapTap}/>
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro
