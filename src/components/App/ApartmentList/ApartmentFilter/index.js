@@ -120,7 +120,7 @@ export default class ApartmentFilter extends PureComponent {
                             type="brand"
                             filterState={filterState.brand}
                             onFilterConfirm={this.onFilterBrandConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetLabel}
+                            onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
                         />
                     </DropDownScreen>
                 </li>

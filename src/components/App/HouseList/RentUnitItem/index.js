@@ -24,7 +24,6 @@ class RentUnitItem extends PureComponent {
     }
 
     handleImageLoad() {
-        console.log('handleImageLoad');
         this.setState({
             imgLoading: false,
         });

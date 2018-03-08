@@ -12,7 +12,7 @@ export default class Location extends PureComponent {
     }
 
     render() {
-        const { blockName, address } = this.props;
+        const { apartmentName, address } = this.props;
         return (
             <div className={`${classPrefix}`}>
                 <div
@@ -23,7 +23,7 @@ export default class Location extends PureComponent {
                     <span>{address}</span>
                 </div>
                 <div className={`f-display-inlineblock head-apartname-wrap`}>
-                    <span className={`f-singletext-ellipsis head-apartname`}>{blockName}</span>
+                    <span className={`f-singletext-ellipsis head-apartname`}>{apartmentName}</span>
                 </div>
             </div>
         );
@@ -31,13 +31,13 @@ export default class Location extends PureComponent {
 }
 
 Location.propTypes = {
-    blockName: PropTypes.string,
+    apartmentName: PropTypes.string,
     address: PropTypes.string,
     onTouchTap: PropTypes.func,
 };
 
 Location.defaultProps = {
-    blockName: '',
+    apartmentName: '',
     address: '',
     onTouchTap: () => null
 };
