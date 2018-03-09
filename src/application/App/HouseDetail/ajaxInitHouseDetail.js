@@ -335,7 +335,7 @@ function genRoomSlider(houseDetailData) {
     stuffData(livingRooms, '客厅');
     stuffData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
-    stuffData(othersRooms, '其他');
+    stuffData(othersRooms, '更多');
 
     return {
         sliderImgArr,
