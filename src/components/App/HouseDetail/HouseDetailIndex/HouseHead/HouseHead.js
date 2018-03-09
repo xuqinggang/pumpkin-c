@@ -169,7 +169,7 @@ class HouseHead extends PureComponent {
                 }
                 {
                     type === 'apartment' ?
-                    <span className={`${classPrefix}-title`}>{title}</span> :
+                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span> :
                     null
                 }
             </div>

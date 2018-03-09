@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
 import classnames from 'classnames';
+import { ApartmentType } from 'baseData/MapData';
 
 import './styles.less';
 
@@ -196,7 +197,7 @@ class RoomSlider extends PureComponent {
     
     render() {
         const { activeIndex } = this.state;
-        const { sliderImgArr } = this.props;
+        const { sliderImgArr, aptType, onsaleCount } = this.props;
 
         return (
             <div className={classPrefix}>
@@ -210,6 +211,11 @@ class RoomSlider extends PureComponent {
                         this.renderSliderImg(sliderImgArr)
                     }
                 </ReactSwipe>
+                {
+                    aptType === ApartmentType.CENTRALIZED && onsaleCount > 0 ?
+                    <span className="tip">剩余{onsaleCount}套可租</span> :
+                    null
+                }
                 <div className={`${classPrefix}-list-text`}>
                     <Scroll
                         activeIndex={this.state.activeIndex}
