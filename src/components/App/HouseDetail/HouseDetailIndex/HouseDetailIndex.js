@@ -79,7 +79,7 @@ export default class HouseDetailIndex extends PureComponent {
     callWxShareAgain(houseDetailData) {
         const { sliderImgArr, houseProfileData } = houseDetailData;
         const title = houseProfileData.title;
-        const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
+        const imgInfo = sliderImgArr && sliderImgArr[0] && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
 
         // 分享
         execWxShare({

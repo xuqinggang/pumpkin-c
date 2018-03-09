@@ -43,13 +43,27 @@ export default class ApartmentFilter extends PureComponent {
         newFilterShowState[type] = !preFilterShowState[type];
 
         this._filterShow(newFilterShowState, type, isResetScrollTop);
+
+    }
+
+    // 禁止滚动穿透
+    _toggleForbideScrollThrough(isForbide, isResetScrollTop) {
+        const body = document.body;
+        const { filterShow } = this.state;
+        const isFiltering = filterShow.position || filterShow.brand;
+
+        if (isFiltering) {
+            body.classList.add('f-disscroll-through');
+        } else {
+            body.classList.remove('f-disscroll-through');
+        }
     }
 
     _filterShow(newFilterShowState, type, isResetScrollTop) {
         if (!this.isForbide) {
             this.scrollTop = getScrollTop();
         }
-        
+
         this.setState({
             filterShow: newFilterShowState,
         });
@@ -66,7 +80,7 @@ export default class ApartmentFilter extends PureComponent {
 
     onFilterPositionConfirm = (positionFilterState) => {
         this.props.onFilterConfirm({ position: positionFilterState });
-        
+
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
     }
@@ -82,8 +96,10 @@ export default class ApartmentFilter extends PureComponent {
             isFixed,
         } = this.state;
         const filterListClass = classnames('g-grid-row', `${classPrefix}`, className);
+        // 滚动穿透处理
+        this._toggleForbideScrollThrough();
         return (
-            <ul 
+            <ul
                 ref={(dom) => { this.filterDom = dom; }}
                 className={filterListClass}>
                 <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
