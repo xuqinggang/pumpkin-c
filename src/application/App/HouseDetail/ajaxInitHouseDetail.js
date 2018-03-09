@@ -63,6 +63,10 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
 
                 // 是否收藏（登录下）
                 isCollected,
+
+                // 集中式公寓
+                aptType,
+                onsaleCount,
             } = houseDetailData;
 
 
@@ -113,6 +117,8 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 houseTrafficData,
                 extraData: {
                     rentalType,
+                    aptType,
+                    onsaleCount,
                 },
                 seoData,
             };

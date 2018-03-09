@@ -147,6 +147,8 @@ export default class HouseDetailIndex extends PureComponent {
 
         const {
             rentalType,
+            aptType,
+            onsaleCount,
         } = extraData || {};
 
         return (
@@ -162,7 +164,7 @@ export default class HouseDetailIndex extends PureComponent {
                     history={history}
                     match={match}
                 />
-                <RoomSlider sliderImgArr={sliderImgArr || []} />
+                <RoomSlider sliderImgArr={sliderImgArr || []} aptType={aptType} onsaleCount={onsaleCount} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
                     houseProfileData={houseProfileData || {}}
