@@ -178,7 +178,16 @@ class RoomSlider extends PureComponent {
 
     renderSliderText(sliderImgArr) {
         // const sliderImgArr = this.state.sliderImgArr || [];
-        return sliderImgArr && sliderImgArr.map((imgInfo, index) => {
+        if (!Array.isArray(sliderImgArr) || sliderImgArr.length === 0) {
+            return null;
+        }
+
+        // 只有更多的时候不显示
+        if (sliderImgArr.length === 1 && sliderImgArr[0] && sliderImgArr[0].text === '更多') {
+            return null;
+        }
+
+        return sliderImgArr.map((imgInfo, index) => {
             const itemClass = classnames(`${classPrefix}-item-text`, {
                 'text-active': this.state.activeIndex === index,
             });
