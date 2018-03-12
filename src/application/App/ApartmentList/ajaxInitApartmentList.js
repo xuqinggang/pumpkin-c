@@ -17,7 +17,9 @@ export function ajaxGetBrandList(cityId) {
 export function ajaxGetApartmentList({ filter, pager } = {}) {
 
     // {position: {cityId: 1}} => {cityId: 1}
-    let filterParams = filter;
+    let filterParams = {
+        ...filter,
+    };
     if (filter && filter.position) {
         const { position } = filter;
         delete filterParams.position;

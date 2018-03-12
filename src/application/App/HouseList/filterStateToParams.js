@@ -67,7 +67,7 @@ export function moreFilterStateToParams(moreFilterStateObj) {
     };
 
     const seoData = {};
-    
+
     let label = '更多';
 
     if (!moreFilterStateObj) {
@@ -193,7 +193,7 @@ export function houseTypeFilterStateToParams(houseTypeFilterStateObj) {
 export function rentFilterStateToParams(rentState) {
     const seoData = '';
     const filterParams = {
-        priceInfo: null, 
+        priceInfo: null,
     };
     let label = '租金';
 
@@ -282,7 +282,11 @@ export function positionFilterStateToParams(positinFilterStateObj) {
         if (secondItem.id != -1) {
             label = secondItem.text;
             seoData.push(label);
-            filterParams[correspondParamsKeyArr[0]] = parseInt(secondItem.id, 10);
+            if (typeof secondItem.id === 'object') {
+                filterParams[correspondParamsKeyArr[0]] = secondItem.id;
+            } else {
+                filterParams[correspondParamsKeyArr[0]] = parseInt(secondItem.id, 10);
+            }
         }
     }
 
