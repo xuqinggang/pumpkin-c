@@ -4,6 +4,7 @@ import NoApartment from '../NoApartment';
 
 import { ajaxGetApartmentList } from 'application/App/ApartmentList/ajaxInitApartmentList';
 import { shallowEqual } from 'lib/util';
+import { stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
 
 // import './styles.less';
 
@@ -40,6 +41,7 @@ export default class PureApartmentListWrap extends PureComponent {
         });
 
         const apartmentFilter = window.getStore('apartmentFilter');
+        console.log('filterParamsObj =>', apartmentFilter.filterParamsObj);
         const filter = (apartmentFilter && apartmentFilter.filterParamsObj) || {};
 
         ajaxGetApartmentList({

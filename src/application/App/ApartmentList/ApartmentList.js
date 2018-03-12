@@ -126,9 +126,6 @@ export default class ApartmentList extends PureComponent {
             apartmentIds: brandParams && brandParams.params,
         }
 
-
-        console.log(newFilterState, newParams);
-
         this.setFilterStateAndStore(newFilterState, newParams)
     }
 
