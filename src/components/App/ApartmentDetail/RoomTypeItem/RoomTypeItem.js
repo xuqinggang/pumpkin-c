@@ -40,9 +40,9 @@ class RoomTypeItem extends PureComponent {
             area,
             direct,
             floor,
-            totalFloor,
             price,
             onsaleCount,
+            totalFloor,
             headImage,
         } = house;
         const imgClsPrefix = `${classPrefix}-img`;

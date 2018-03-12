@@ -12,6 +12,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
 import { dynamicDocTitle } from 'lib/util';
+import { stuffTotalFloorTOCentralHouses } from './dataAdapter';
 
 import './styles.less';
 
@@ -94,9 +95,15 @@ export default class ApartmentDetail extends PureComponent {
         const { apartmentDetailData } = this.state;
         const { apartmentName, apartmentIntro } = apartmentDetailData;   
         return {
-            name: apartmentName,
+            name: '公寓介绍',
             intro: apartmentIntro,
         }
+    }
+
+    get centralHouses() {
+        const { apartmentDetailData } = this.state;
+        const { centralHouses, totalFloor } = apartmentDetailData;
+        return stuffTotalFloorTOCentralHouses(centralHouses || [], totalFloor);
     }
 
     render() {
@@ -106,7 +113,6 @@ export default class ApartmentDetail extends PureComponent {
         const { 
             images, 
             apartmentName, 
-            centralHouses, 
             name, 
             address,
             totalOnsaleCount,
@@ -126,7 +132,7 @@ export default class ApartmentDetail extends PureComponent {
                     />
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-roomtype`}>
-                    <RoomTypeList centralHouses={centralHouses} />
+                    <RoomTypeList centralHouses={this.centralHouses} />
                 </div>
             </div>
         );

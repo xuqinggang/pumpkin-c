@@ -159,6 +159,7 @@ export default class HouseList extends PureComponent {
             this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
 
             // 每生成一个新的url发送一次pv请求
+            alert('sss')
             window.send_stat_pv && window.send_stat_pv();
         }
     }
