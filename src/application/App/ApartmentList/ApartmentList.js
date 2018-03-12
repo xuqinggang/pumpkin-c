@@ -61,6 +61,15 @@ export default class ApartmentList extends PureComponent {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
+        const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
+        if (curFilterUrlFragment !== nextFilterUrlFragment) {
+            // 每生成一个新的url发送一次pv请求
+            window.send_stat_pv && window.send_stat_pv();
+        }
+    }
+
     _setStoreFilterUrlFragment = (filterUrlFragment) => {
         window.setStore('url', {
             filterUrlFragment,
