@@ -160,7 +160,7 @@ export function dynamicScript(src, callback) {
         if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete" ) {
             callback();
             dynamicScriptObj[src] = true;
-            // Handle memory leak in IE 
+            // Handle memory leak in IE
             script.onload = script.onreadystatechange = null; 
         }
     };
@@ -283,3 +283,22 @@ export function getScrollTop() {
 
 export const isNumber = value => typeof value === 'number';
 export const isString = value => typeof value === 'string';
+
+export function getWithDefault(obj, key, defaultVal) {
+    /* key  a.b.c */
+    try {
+        const keys = key.split('.');
+        let r = obj;
+        let k = keys.shift();
+        while (k) {
+            r = r[k];
+            k = keys.shift();
+        }
+        if (r === undefined || r === null) {
+            return defaultVal;
+        }
+        return r;
+    } catch (e) {
+        return defaultVal;
+    }
+}

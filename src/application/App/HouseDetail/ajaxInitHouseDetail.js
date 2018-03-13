@@ -1,4 +1,5 @@
 import Service from 'lib/Service';
+import  { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'baseData/MapData';
 
 // 收藏房源
@@ -278,13 +279,15 @@ function genHouseBrief(houseDetailData) {
         livingRoomCount,
     } = houseDetailData;
 
+    const directText = getWithDefault(DirectTypeMapText, direct, '多个朝向');
+
     return {
         area,
         bedroomCount,
         livingRoomCount,
         floor,
         totalFloor,
-        direct: `${DirectTypeMapText[direct]}`,
+        direct: directText,
     };
 }
 
