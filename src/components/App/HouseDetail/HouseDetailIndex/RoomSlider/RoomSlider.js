@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
 import classnames from 'classnames';
+import { ApartmentType } from 'baseData/MapData';
 
 import './styles.less';
 
@@ -177,7 +178,16 @@ class RoomSlider extends PureComponent {
 
     renderSliderText(sliderImgArr) {
         // const sliderImgArr = this.state.sliderImgArr || [];
-        return sliderImgArr && sliderImgArr.map((imgInfo, index) => {
+        if (!Array.isArray(sliderImgArr) || sliderImgArr.length === 0) {
+            return null;
+        }
+
+        // 只有更多的时候不显示
+        if (sliderImgArr.length === 1 && sliderImgArr[0] && sliderImgArr[0].text === '更多') {
+            return null;
+        }
+
+        return sliderImgArr.map((imgInfo, index) => {
             const itemClass = classnames(`${classPrefix}-item-text`, {
                 'text-active': this.state.activeIndex === index,
             });
@@ -196,7 +206,7 @@ class RoomSlider extends PureComponent {
     
     render() {
         const { activeIndex } = this.state;
-        const { sliderImgArr } = this.props;
+        const { sliderImgArr, aptType, onsaleCount } = this.props;
 
         return (
             <div className={classPrefix}>
@@ -210,6 +220,11 @@ class RoomSlider extends PureComponent {
                         this.renderSliderImg(sliderImgArr)
                     }
                 </ReactSwipe>
+                {
+                    aptType === ApartmentType.CENTRALIZED && onsaleCount > 0 ?
+                    <span className="tip">剩余{onsaleCount}套可租</span> :
+                    null
+                }
                 <div className={`${classPrefix}-list-text`}>
                     <Scroll
                         activeIndex={this.state.activeIndex}

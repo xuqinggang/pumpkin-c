@@ -16,13 +16,13 @@ window.setStore = function (key, dataObj) {
     window.customStore[key] = Object.assign({}, keyCorrespondValueObj, dataObj);
 }
 
-window.getStore = function (key) {
+ window.getStore = function (key) {
     try {
         let keyCorrespondValueObj = window.customStore[key];
         if (!keyCorrespondValueObj) {
             if (window.isServerRender) return null;
             else {
-                throw new Error('window变量上，没有相应的键值')
+                throw new Error(`window变量上，没有相应的键值 => ${key}`);
             }
         }
 

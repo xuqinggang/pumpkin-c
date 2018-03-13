@@ -1,3 +1,53 @@
+// 时间格式化
+export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
+    const date = new Date(timestamp);
+    const o = {
+        // 月份
+        'M+': date.getMonth()  +  1,
+        // 日
+        'd+': date.getDate(),
+        // 小时
+        'h+': date.getHours(),
+        // 分
+        'm+': date.getMinutes(),
+        // 秒
+        's+': date.getSeconds(),
+        //季度 
+        'q+': Math.floor((date.getMonth()  +  3)  /  3),
+        // 毫秒
+        'S': date.getMilliseconds(),
+    };
+    if (/(y+)/.test(fmt)) {
+        fmt  =  fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (let k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+    }
+    return fmt;
+}
+
+// 防抖
+export function debounce(func, waitms, immediate) {
+    let timer;
+    return function() {
+        timer && clearTimeout(timer);
+
+        if (immediate && !timer) {
+            func();
+            immediate = false;
+            return;
+        }
+
+        timer = setTimeout(function() {
+            clearTimeout(timer);
+            timer = null;
+            func();
+        }, waitms);
+    }
+}
+
 export function parseUrlParams() {
     let urlQuery = '';
     const urlParamsObj = {};
@@ -78,6 +128,13 @@ export function clearCookie(key) {
     if(cval != null) {
         document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
     }
+}
+
+export function setCookie(key, value) {
+    const deltaDay = 30;
+    const exp = new Date();
+    exp.setTime(exp.getTime() + deltaDay*24*60*60*1000);
+    document.cookie = key + "="+ value + ";expires=" + exp.toGMTString() + ";path=/";
 }
 
 export function isHasCookie(key) {
@@ -223,3 +280,6 @@ export function scrollTo(scrollTop) {
 export function getScrollTop() {
     return document.body.scrollTop || document.documentElement.scrollTop;
 }
+
+export const isNumber = value => typeof value === 'number';
+export const isString = value => typeof value === 'string';

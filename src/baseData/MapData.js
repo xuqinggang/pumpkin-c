@@ -42,3 +42,8 @@ export const DirectTypeMapText = {
     WESTEAST: '东西',
     NORTHSOUTH: '南北',
 };
+
+export const ApartmentType = {
+    CENTRALIZED: 'CENTRALIZED',
+    DISTRIBUTED: 'DISTRIBUTED',
+};

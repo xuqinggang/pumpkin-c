@@ -213,7 +213,7 @@ class PayTypeItem extends PureComponent {
                     <li className="text">{PayTypeMapName[payType]}</li>
                     <li className="price">¥{payData.price} / 月</li>
                 </ul>
-                <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit}元</span>
+                <span className="deposit f-float-right f-display-inlineblock">押金：¥{payData.deposit ? payData.deposit : 0}元</span> :
             </div>
         );
     }

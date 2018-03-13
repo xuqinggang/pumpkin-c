@@ -27,6 +27,7 @@ export default function() {
             render() {
                 const {
                     filterState,
+                    onDynamicSetLabel,
                 } = this.props;
 
                 return (
@@ -35,6 +36,7 @@ export default function() {
                             ref='wrappedInstance'
                             filterState={filterState}
                             onFilterConfirm={this.props.onFilterConfirm}
+                            onDynamicSetLabel={onDynamicSetLabel || (() => null)}
                         />
                         <div className={`${classPrefix}-footer`}>
                             <span

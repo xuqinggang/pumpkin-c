@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { ajaxCollectHouse, ajaxCancelCollectHouse } from 'application/App/HouseDetail/ajaxInitHouseDetail';
@@ -11,7 +12,7 @@ import './styles.less';
 
 const classPrefix = 'm-househead';
 
-export default class HouseHead extends PureComponent {
+class HouseHead extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -120,6 +121,8 @@ export default class HouseHead extends PureComponent {
     }
 
     render() {
+        const { type, title } = this.props;
+
         const {
             isCollected,
         } = this.state;
@@ -130,14 +133,19 @@ export default class HouseHead extends PureComponent {
             'active': isCollected,
         });
 
+        const containerClass = classnames(`${classPrefix}`, {
+            'g-grid-row f-flex-justify-between': type === 'default',
+            'f-display-flex f-flex-align-center': type === 'apartment',
+        })
+
         return (
-            <div className={`g-grid-row f-flex-justify-between ${classPrefix}`}>
+            <div className={containerClass}>
                 {
                     this.isShareFrom || this.pageFrom === 'login' || isWeiXin || this.isFrom ? (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + `?${this.urlQuery}`}>
-                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
+                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}></span> 
                             <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
                         </Link>
                     )
@@ -149,13 +157,44 @@ export default class HouseHead extends PureComponent {
                         </a>
                     )
                 }
-                <div className={`f-display-flex f-flex-align-center`}>
-                    <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
-                    <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
-                        onTouchTap={this.handleReportTap}
-                    ></span>
-                </div>
+                {
+                    type === 'default' ?
+                        <div className={`f-display-flex f-flex-align-center`}>
+                            <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
+                            <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
+                                onTouchTap={this.handleReportTap}
+                            ></span>
+                        </div> :
+                    null
+                }
+                {
+                    type === 'apartment' ?
+                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span> :
+                    null
+                }
             </div>
         );
     }
 }
+
+HouseHead.propTypes = {
+    type: PropTypes.oneOf([
+        'default',
+        'apartment',
+    ]),
+    title: PropTypes.string,
+    headData: PropTypes.any,
+    match: PropTypes.any,
+    history: PropTypes.any,
+};
+
+HouseHead.defaultProps = {
+    type: 'default',
+    title: '',
+    headData: {},
+    match: {},
+    history: {},
+};
+
+
+export default HouseHead;

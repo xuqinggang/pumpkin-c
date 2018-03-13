@@ -5,7 +5,7 @@ import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 class MeCouponBack extends PureComponent {
     render() {
         return (
-            <h1 className="m-headJump-title">意见反馈</h1>
+            <h1 className="m-headJump-title">我的卡券</h1>
         );
     }
 }

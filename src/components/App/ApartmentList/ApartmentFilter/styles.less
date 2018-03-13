@@ -1,0 +1,28 @@
+.m-apartmentfilter {
+    box-sizing: border-box;
+    height: 88px;
+    padding: 0 46px;
+    background-color: #fff;
+
+    &::after {
+        content: '';
+        display: block;
+        height: 0;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    &::before {
+        content: '';
+        display: block;
+        height: 0;
+        width: 100%;
+        position: absolute;
+        top: 0%;
+        left: 0;
+        border-bottom: 1px solid #eee;
+    }
+}
