@@ -43,7 +43,7 @@ export default class RoomSlider extends PureComponent {
                     swipeOptions={{
                         // continuous: true, 
                         callback: this.handleSlideChange,
-                        auto: 1000,
+                        auto: 2000,
                     }}
                     key={images.length}
                 >
