@@ -40,15 +40,18 @@ class RoomTypeItem extends PureComponent {
             area,
             direct,
             floor,
-            totalFloor,
             price,
             onsaleCount,
+            totalFloor,
             headImage,
         } = house;
         const imgClsPrefix = `${classPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
             [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
+        const renderfloor = getFloors(floor, totalFloor);
+        const renderDirect = getDirect(direct);
+
         return (
             <div
                 onTouchTap={this.handleTouchTap}
@@ -72,12 +75,26 @@ class RoomTypeItem extends PureComponent {
                                 <span className="f-display-inlineblock tags-item">
                                     {area}㎡
                                 </span>
-                                <span className="f-display-inlineblock tags-item">
-                                    {getFloors(floor, totalFloor)}
-                                </span>
-                                <span className="f-display-inlineblock tags-item">
-                                    {getDirect(direct)}
-                                </span>
+                                {
+                                    renderfloor ? 
+                                    <span>
+                                        <i className="m-roomtype--gap">/</i>
+                                        <span className="f-display-inlineblock tags-item">
+                                            {renderfloor}
+                                        </span> 
+                                    </span> :
+                                    null
+                                }
+                                {
+                                    renderDirect ? 
+                                    <span>
+                                        <i className="m-roomtype--gap">/</i>
+                                        <span className="f-display-inlineblock tags-item">
+                                            {renderDirect}
+                                        </span> 
+                                    </span> :
+                                    null
+                                }
                             </div>
                         </li>
                         <li className="intro-price">
@@ -97,7 +114,7 @@ class RoomTypeItem extends PureComponent {
 
 RoomTypeItem.propTypes = {
     house: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         name: PropTypes.string,
         blockName: PropTypes.string,
         address: PropTypes.string,

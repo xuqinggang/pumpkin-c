@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import ReactSwipe from 'react-swipe';
 import Scroll from 'Shared/Scroll/Scroll';
+import { ApartmentType } from 'baseData/MapData';
 
 import FurnitureMapIcon from './FurnitureMapIcon';
 
@@ -122,16 +123,25 @@ export default class HouseFurniture extends PureComponent {
         this.reactswipe.slide(index, 300);
     }
 
+    renderRoomTypeHead() {
+        return (
+            <h1 className={`g-housedetail-module-padding s-housedetail-comptitle`}>房型配置</h1>
+        )
+    }
+
     render() {
-        const { furnitureSliderArrData } = this.props;
+        const { furnitureSliderArrData, aptType } = this.props;
         console.log('furnitureSliderArrData', furnitureSliderArrData)
         this.initGeneFurnitureData(furnitureSliderArrData);
         const swipeChildren = this.renderMultiSliderFurniture();
         const scrollChildren = this.renderScrollFurniture();
+        const roomTypeHeadChildren = this.renderRoomTypeHead();
 
         return (
             <div>
                 {
+                    aptType === ApartmentType.CENTRALIZED ?
+                    roomTypeHeadChildren :
                     scrollChildren
                 }
                 {

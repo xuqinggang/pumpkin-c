@@ -16,22 +16,34 @@ export default class RoomSlider extends PureComponent {
     }
 
     handleSlideChange = (curIndex) => {
+        // FIX react-swipe Bug
+        // when images length is 2, curIndex may be 0, 1, 2, 3
+        const { images } = this.props;
+        const len = images.length;
+        let index;
+
+        if (curIndex >= len) {
+            index = curIndex % len;
+        } else {
+            index = curIndex;
+        }
         this.setState({
-            curIndex,
+            curIndex: index,
         })
     }
 
     render() {
-        const { images } = this.props;
+        const { images, totalOnsaleCount } = this.props;
         const { curIndex } = this.state;
+
         return (
             <div className={`${classPrefix}`}>
                 <ReactSwipe
                     className={`${classPrefix}-images`}
                     swipeOptions={{
-                        continuous: true, 
+                        // continuous: true, 
                         callback: this.handleSlideChange,
-                        auto: 1000,
+                        auto: 2000,
                     }}
                     key={images.length}
                 >
@@ -43,6 +55,11 @@ export default class RoomSlider extends PureComponent {
                         ))
                     }
                 </ReactSwipe>
+                {
+                    totalOnsaleCount > 0 ?
+                    <span className="tip">剩余{totalOnsaleCount}套可租</span> :
+                    null
+                }
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {
                         images.map((_, index) => (
@@ -57,10 +74,10 @@ export default class RoomSlider extends PureComponent {
 
 RoomSlider.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
-    // onsaleCount: PropTypes.number,
+    totalOnsaleCount: PropTypes.number,
 };
 
 RoomSlider.defaultProps = {
     images: [],
-    // onsaleCount: 0,
+    totalOnsaleCount: 0,
 };

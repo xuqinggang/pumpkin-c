@@ -12,15 +12,18 @@ export default class Location extends PureComponent {
     }
 
     render() {
-        const { blockName, address } = this.props;
+        const { apartmentName, address } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <div className={`f-singletext-ellipsis f-display-inlineblock ${classPrefix}-location`}>
+                <div
+                    className={`f-singletext-ellipsis f-display-inlineblock ${classPrefix}-location`}
+                    onTouchTap={this.props.onTouchTap}
+                >
                     <span className={`icon-region`} />
                     <span>{address}</span>
                 </div>
                 <div className={`f-display-inlineblock head-apartname-wrap`}>
-                    <span className={`f-singletext-ellipsis head-apartname`}>{blockName}</span>
+                    <span className={`f-singletext-ellipsis head-apartname`}>{apartmentName}</span>
                 </div>
             </div>
         );
@@ -28,11 +31,13 @@ export default class Location extends PureComponent {
 }
 
 Location.propTypes = {
-    blockName: PropTypes.string,
+    apartmentName: PropTypes.string,
     address: PropTypes.string,
+    onTouchTap: PropTypes.func,
 };
 
 Location.defaultProps = {
-    blockName: '',
+    apartmentName: '',
     address: '',
+    onTouchTap: () => null
 };

@@ -79,7 +79,7 @@ export default class HouseDetailIndex extends PureComponent {
     callWxShareAgain(houseDetailData) {
         const { sliderImgArr, houseProfileData } = houseDetailData;
         const title = houseProfileData.title;
-        const imgInfo = sliderImgArr && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
+        const imgInfo = sliderImgArr && sliderImgArr[0] && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
 
         // 分享
         execWxShare({
@@ -147,6 +147,8 @@ export default class HouseDetailIndex extends PureComponent {
 
         const {
             rentalType,
+            aptType,
+            onsaleCount,
         } = extraData || {};
 
         return (
@@ -162,7 +164,7 @@ export default class HouseDetailIndex extends PureComponent {
                     history={history}
                     match={match}
                 />
-                <RoomSlider sliderImgArr={sliderImgArr || []} />
+                <RoomSlider sliderImgArr={sliderImgArr || []} aptType={aptType} onsaleCount={onsaleCount} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
                     houseProfileData={houseProfileData || {}}
@@ -176,7 +178,7 @@ export default class HouseDetailIndex extends PureComponent {
                     houseBriefData={houseBriefData || {}}
                     className={`${classPrefix}-housebrief`}
                 />
-                <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} />
+                <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} aptType={aptType} />
                 <HouseIntro
                     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
                     houseIntroStr={houseIntroStr}

@@ -14,7 +14,7 @@ export default class PureApartmentListWrap extends PureComponent {
         super(props);
         this.state = {
             apartmentList: [],
-            loading: false,
+            loading: true,
             pager: {
                 curPage: 1,
                 totalPage: 1,
@@ -78,7 +78,7 @@ export default class PureApartmentListWrap extends PureComponent {
         } = this.state;
 
         // 没有公寓
-        if (apartmentList.length === 0) {
+        if (apartmentList.length === 0 && !loading) {
             return (
                 <NoApartment />
             )

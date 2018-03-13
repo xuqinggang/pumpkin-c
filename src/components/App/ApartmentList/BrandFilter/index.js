@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 import { ajaxGetBrandList } from 'application/App/ApartmentList/ajaxInitApartmentList';
+import { brandParamsToStateLabels } from 'application/App/ApartmentList/stateToParams';
+import { shallowEqual } from 'lib/util';
 
 import './styles.less';
 
@@ -50,7 +52,32 @@ class BrandFilter extends PureComponent {
             this.setState({
                 brandLabels: formattedBrands,
             });
+
+            this.setParentsStateAndLabel(brandLabels);
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!shallowEqual(nextProps.filterState, this.props.filterState)) {
+            this.setState({
+                brand: nextProps.filterState,
+            })
+        }
+    }
+
+    setParentsStateAndLabel = (brandLabels) => {
+
+        const apartmentFilter = window.getStore('apartmentFilter');
+
+        // TODO 这段语法重构
+        if (apartmentFilter
+             && apartmentFilter.filterParamsObj &&
+             apartmentFilter.filterParamsObj.apartmentIds) {
+
+            const apartmentIds = apartmentFilter.filterParamsObj.apartmentIds;
+            const { state, label } = brandParamsToStateLabels(apartmentIds);
+            this.props.onDynamicSetLabel(state, label);
+        }
     }
 
     // 清空state
@@ -72,6 +99,8 @@ class BrandFilter extends PureComponent {
 
     render() {
         const { brand, brandLabels } = this.state;
+        const { filterState } = this.props;
+        
         return (
             <div className={`${brandClass}`}>
                 {

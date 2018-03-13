@@ -63,6 +63,10 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
 
                 // 是否收藏（登录下）
                 isCollected,
+
+                // 集中式公寓
+                aptType,
+                onsaleCount,
             } = houseDetailData;
 
 
@@ -80,7 +84,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
 
             // ApartmentIntro公寓相关信息
             const apartmentIntroData = genApartmentIntro(houseDetailData);
-            
+
             // CommunityIntro小区相关信息
             const communityIntroData = genCommunityIntro(houseDetailData);
 
@@ -113,6 +117,8 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 houseTrafficData,
                 extraData: {
                     rentalType,
+                    aptType,
+                    onsaleCount,
                 },
                 seoData,
             };
@@ -295,14 +301,15 @@ function genRoomSlider(houseDetailData) {
     const livingRooms = houseDetailData.livingRooms;
     const bathrooms = houseDetailData.bathrooms;
     const kitchens = houseDetailData.kitchens;
+    const othersRooms = houseDetailData.othersRooms;
 
     // 公共空间家具
     const publicFurniture = houseDetailData.publicFurniture;
 
-    // 向公共空间，填充家具 
+    // 向公共空间，填充家具
     stuffRoomFurniture('公共空间', publicFurniture);
-    
-    
+
+
     // 顺序: 卧室 户型图 客厅 卫生间 厨房
     stuffData(bedrooms, '卧');
 
@@ -322,20 +329,20 @@ function genRoomSlider(houseDetailData) {
         );
 
         aboveImgLength++;
-        activeIndex++; 
+        activeIndex++;
     }
 
     stuffData(livingRooms, '客厅');
     stuffData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
-
+    stuffData(othersRooms, '更多');
 
     return {
         sliderImgArr,
         furnitureSliderArrData,
     };
-    
-    // 向家具轮播填充数据 
+
+    // 向家具轮播填充数据
     function stuffRoomFurniture(text, furniture = []) {
         if (furniture.length) {
             furnitureSliderArrData.push({
@@ -383,7 +390,7 @@ function genRoomSlider(houseDetailData) {
 
             sliderImgItem.imgInfo = imgInfo;
             sliderImgArr.push(sliderImgItem);
-            activeIndex++; 
+            activeIndex++;
         }
     }
 
@@ -429,7 +436,7 @@ function genRoomSlider(houseDetailData) {
 
                 // push
                 sliderImgArr.push(sliderImgItem);
-                activeIndex++; 
+                activeIndex++;
             });
         }
     }

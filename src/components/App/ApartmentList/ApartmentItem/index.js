@@ -11,13 +11,13 @@ class ApartmentItem extends PureComponent {
     handleTouchTap = () => {
         const urlPrefix = window.getStore('url').urlPrefix;
         this.props.history.push(urlJoin(urlPrefix, `apartment/detail/${this.props.apartment.id}`));
-        // TODO 每次进入详情页，发送一次pv请求
-        // window.send_stat_pv && window.send_stat_pv();
+        // 每次进入详情页，发送一次pv请求
+        window.send_stat_pv && window.send_stat_pv();
     }
     render() {
         const { apartment } = this.props;
         return (
-            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}            >
+            <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 <div className={`${classPrefix}-image`}>
                     <img src={apartment.headImage} alt="" />
                     <div className={'tip'}>
@@ -28,7 +28,7 @@ class ApartmentItem extends PureComponent {
                 <div className={`g-grid-row f-flex-justify-between ${classPrefix}-title-price`}>
                     <span className={`${classPrefix}-title`}>{apartment.name}</span>
                     <span className={`${classPrefix}-price`}>{apartment.minPrice}
-                        <span className={`${classPrefix}-unit`}>元/月 起</span>
+                        <span className={`${classPrefix}-unit`}>元/月起</span>
                     </span>
                 </div>
                 <div className={`f-display-flex ${classPrefix}-location`}>

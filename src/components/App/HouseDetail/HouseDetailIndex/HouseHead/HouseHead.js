@@ -145,7 +145,7 @@ class HouseHead extends PureComponent {
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + `?${this.urlQuery}`}>
-                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}> </span> 
+                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}></span> 
                             <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
                         </Link>
                     )
@@ -169,7 +169,7 @@ class HouseHead extends PureComponent {
                 }
                 {
                     type === 'apartment' ?
-                    <span className={`${classPrefix}-title`}>{title}</span> :
+                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span> :
                     null
                 }
             </div>
