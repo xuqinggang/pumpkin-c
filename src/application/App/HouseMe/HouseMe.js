@@ -27,11 +27,13 @@ export default class HouseMe extends PureComponent {
     }
 
     componentWillMount() {
+        alert('isRmHead'+isRmHead+isApp);
         // 向app中注入cookie
         if (isApp && isRmHead) {
             let sidVal = null;
             if (window.iOS && iOS.getSessionId) {
                 sidVal = iOS.getSessionId();
+                alert('sidVal'+sidVal);
             }
             if (window.android && android.getSessionId) {
                 sidVal = android.getSessionId();
