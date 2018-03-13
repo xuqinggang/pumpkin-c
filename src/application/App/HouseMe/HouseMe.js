@@ -27,13 +27,11 @@ export default class HouseMe extends PureComponent {
     }
 
     componentWillMount() {
-        alert('isRmHead'+isRmHead+isApp);
         // 向app中注入cookie
         if (isApp && isRmHead) {
             let sidVal = null;
             if (window.iOS && iOS.getSessionId) {
                 sidVal = iOS.getSessionId();
-                alert('sidVal'+sidVal);
             }
             if (window.android && android.getSessionId) {
                 sidVal = android.getSessionId();
@@ -43,6 +41,7 @@ export default class HouseMe extends PureComponent {
 
         // 进入组件之前判断是否登录
         if (!isHasCookie('sid')) {
+            alert('!isHasCookie');
             this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
         }
 
@@ -64,6 +63,7 @@ export default class HouseMe extends PureComponent {
                 });
             })
             .catch((err) => {
+                alert(err.toString());
                 this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
             })
     }
