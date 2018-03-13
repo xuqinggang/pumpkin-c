@@ -6,6 +6,7 @@ import { urlJoin } from 'lib/util';
 import './styles.less';
 
 const classPrefix = 'm-apartmentitem';
+const imgCutModifier = '?crop=1&cpos=middle&w=720&h=370';
 
 class ApartmentItem extends PureComponent {
     handleTouchTap = () => {
@@ -19,7 +20,7 @@ class ApartmentItem extends PureComponent {
         return (
             <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 <div className={`${classPrefix}-image`}>
-                    <img src={apartment.headImage} alt="" />
+                    <img src={`${apartment.headImage}${imgCutModifier}`} alt="" />
                     <div className={'tip'}>
                         <span>户型/{apartment.houseCount}个 </span>
                         <span>可租/{apartment.totalOnsaleCount}套</span>
