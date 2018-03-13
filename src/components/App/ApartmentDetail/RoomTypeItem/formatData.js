@@ -1,7 +1,7 @@
 import { isString, isNumber } from 'lib/util';
 import { DirectTypeMapText } from 'baseData/MapData';
 
-export const getTitle = (bedroomCount, livingRoomCount, name) => {
+export const getTitle = (bedroomCount, livingRoomCount, bathroomCount, name) => {
     let title = '';
     if (isNumber(bedroomCount)) {
         title = `${title}${bedroomCount}室`;
@@ -9,6 +9,10 @@ export const getTitle = (bedroomCount, livingRoomCount, name) => {
 
     if (isNumber(livingRoomCount)) {
         title = `${title}${livingRoomCount}厅`;
+    }
+
+    if (isNumber(bathroomCount)) {
+        title = `${title}${bathroomCount}卫`;
     }
 
     if (isString(name) && name !== '') {
