@@ -8,6 +8,8 @@ export default class HouseBrief extends PureComponent {
     render() {
         const { className, houseBriefData } = this.props;
 
+        const floor = houseBriefData.floor ? `${houseBriefData.floor}/` : '';
+
         return (
             <div className={`${classPrefix} ${className}`}>
                 <ul className={`${classPrefix}-list g-grid-row f-flex-justify-start`}>
@@ -19,7 +21,8 @@ export default class HouseBrief extends PureComponent {
                         <b className="bold">{houseBriefData.livingRoomCount}</b>厅
                     </li>
                     <li className={`${classPrefix}-item grid-col grid-col-25 f-flex-justify-center`}>
-                        <b className="bold">{houseBriefData.floor}</b>/{houseBriefData.totalFloor}层
+                        <b className="bold">{floor}</b>
+                        {houseBriefData.totalFloor}层
                     </li>
                     <li className={`${classPrefix}-item grid-col grid-col-25 f-flex-justify-center`}>
                         {houseBriefData.direct}
