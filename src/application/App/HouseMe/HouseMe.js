@@ -32,6 +32,7 @@ export default class HouseMe extends PureComponent {
             let sidVal = null;
             if (window.iOS && iOS.getSessionId) {
                 sidVal = iOS.getSessionId();
+                alert(sidVal);
             }
             if (window.android && android.getSessionId) {
                 sidVal = android.getSessionId();
@@ -41,7 +42,6 @@ export default class HouseMe extends PureComponent {
 
         // 进入组件之前判断是否登录
         if (!isHasCookie('sid')) {
-            alert('!isHasCookie');
             this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
         }
 
@@ -63,7 +63,6 @@ export default class HouseMe extends PureComponent {
                 });
             })
             .catch((err) => {
-                alert(JSON.stringify(err));
                 this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
             })
     }
