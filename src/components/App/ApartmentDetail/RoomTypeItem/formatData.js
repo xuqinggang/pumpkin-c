@@ -11,7 +11,7 @@ export const getTitle = (bedroomCount, livingRoomCount, name) => {
         title = `${title}${livingRoomCount}厅`;
     }
 
-    if (isString(name)) {
+    if (isString(name) && name !== '') {
         title = `${title} ・ ${name}`;
     }
 

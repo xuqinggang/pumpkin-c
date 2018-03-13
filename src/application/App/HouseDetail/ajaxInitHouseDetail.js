@@ -1,6 +1,6 @@
 import Service from 'lib/Service';
 import  { getWithDefault } from 'lib/util';
-import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'baseData/MapData';
+import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 
 // 收藏房源
 export function ajaxCollectHouse(rentUnitId) {
@@ -210,6 +210,8 @@ function genHouseProfile(houseDetailData) {
         subwayLine,
         subwayStation,
         subwayDistance,
+        aptType,
+        name,
     } = houseDetailData;
 
     // 付款方式数据组织, 公寓名称-----------
@@ -237,6 +239,12 @@ function genHouseProfile(houseDetailData) {
 
     // title location ------------
     let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
+
+    // title is different when aptType is 
+    if (aptType === ApartmentType.CENTRALIZED) {
+        title = `${RentalTypeMapText[rentalType]}·${bedroomCount}室${livingRoomCount}厅 (${name})`;
+    }
+
     let location = `${districtName}-${blockName}`;
     if (subwayLine != null && subwayDistance != null && subwayStation != null) {
         location = `${location}-距${subwayLine}${subwayStation}${subwayDistance}米`;
