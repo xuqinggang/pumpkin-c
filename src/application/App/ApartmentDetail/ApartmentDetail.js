@@ -12,7 +12,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
 import { dynamicDocTitle } from 'lib/util';
-import { stuffTotalFloorTOCentralHouses } from './dataAdapter';
+import { stuffTotalFloorTOCentralHouses, getLocation } from './dataAdapter';
 
 import './styles.less';
 
@@ -116,14 +116,20 @@ export default class ApartmentDetail extends PureComponent {
             name, 
             address,
             totalOnsaleCount,
+            distance,
+            districtName,
+            subwayName,
+            stationName,
         } = apartmentDetailData;
+
+        const location = getLocation(districtName, subwayName, stationName, distance);
 
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead type="apartment" title={name} history={history} />
                 <RoomSlider images={images} totalOnsaleCount={totalOnsaleCount} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
-                    <Location apartmentName={apartmentName} address={address} onTouchTap={this.handleJumpMapTap}/>
+                    <Location apartmentName={apartmentName} address={location} onTouchTap={this.handleJumpMapTap}/>
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro

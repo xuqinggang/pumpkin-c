@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { rentUnitShape } from 'baseData/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
 import { ModListImgUrl } from 'baseData/modUrlForCropImage';
-import { urlJoin } from 'lib/util';
+import { urlJoin, getWithDefault } from 'lib/util';
 import { kzPv } from 'lib/pv';
 import './style.less';
 
@@ -81,7 +81,7 @@ class RentUnitItem extends PureComponent {
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
-                        {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
+                        {blockName}-{bedroomCount}居室-{getWithDefault(DirectTypeMapText, direct, '多个朝向')}
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">
                         <li>
@@ -97,7 +97,7 @@ class RentUnitItem extends PureComponent {
                                 </span>
                                 <i className={`${itemClassPrefix}--gap`}>/</i>
                                 <span className="f-display-inlineblock tags-item">
-                                    {floor}/{totalFloor}层
+                                    {floor ? `${floor}/` : ''}{totalFloor}层
                                 </span>
                             </div>
                             <div className="f-display-inlineblock intro-pt">{address}</div>
