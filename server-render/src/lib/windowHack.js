@@ -1,6 +1,7 @@
 'use strict';
 
 global.window = {
+    addEventListener: () => {},
     // 标识是服务器端渲染
     isServerRender: true,
     document: {
@@ -28,3 +29,4 @@ global.window = {
 };
 
 global.document = window.document;
+global.navigator = global.window.navigator;
