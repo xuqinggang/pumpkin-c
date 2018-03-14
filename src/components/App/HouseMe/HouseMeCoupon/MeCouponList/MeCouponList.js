@@ -74,6 +74,11 @@ export default class MeCouponList extends PureComponent {
                     [type]: this.state,
                 });
             })
+            .catch((err) => {
+                this.setState({
+                    isFetching: false,
+                });
+            })
     }
 
     onDelTap = (index, couponUserId) => {
@@ -136,11 +141,13 @@ export default class MeCouponList extends PureComponent {
                             )
                         }
                         {
-                            !isFetching && couponList.length === 0 ?
-                                <div className="f-align-center">
-                                    <img className="nocoupon-image" src={nocouponImg} alt="" />
-                                    <span className="f-display-block f-align-center nocoupon-text">无相应卡券</span>
-                                </div>
+                            (!isFetching && couponList.length === 0) ?
+                                (
+                                    <div className="f-align-center">
+                                        <img className="nocoupon-image" src={nocouponImg} alt="" />
+                                        <span className="f-display-block f-align-center nocoupon-text">无相应卡券</span>
+                                    </div>
+                                )
                                 : (
                                     <div className="f-align-center nocoupon-tip">
                                         {

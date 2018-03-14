@@ -100,7 +100,9 @@ export function ajaxFeedBack(msg = '') {
 export function ajaxEditNickName(nickname) {
     return Service.post(`/api/v1/user/nickname`, {
         nickname,
-    }, 'form')
+    }, {
+        contentType: 'form',
+    })
         .then((data) => {
             if (data.code === 200) return true;
 

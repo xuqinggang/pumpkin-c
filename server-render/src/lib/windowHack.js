@@ -4,6 +4,9 @@ global.window = {
     // 标识是服务器端渲染
     isServerRender: true,
     document: {
+        getElementsByTagName: () => ([{
+            appendChild: () => {},
+        }]),
         addEventListener: () => {},
         createElement: () => ({
             setAttribute: () => {}, 
@@ -18,6 +21,8 @@ global.window = {
     location: {
         href: '',
     },
+
+    screen: {},
 
     scrollTo: () => {},
 };

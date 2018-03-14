@@ -28,7 +28,7 @@ export default class HouseMe extends PureComponent {
 
     componentWillMount() {
         // 向app中注入cookie
-        if (isApp && isRmHead) {
+        if (isApp() && isRmHead()) {
             let sidVal = null;
             if (window.iOS && iOS.getSessionId) {
                 sidVal = iOS.getSessionId();
@@ -67,7 +67,7 @@ export default class HouseMe extends PureComponent {
     }
 
     componentDidMount() {
-        if (isApp && isRmHead) {
+        if (isApp() && isRmHead()) {
             this.wrapperDom.style.paddingTop = '0px';
         }
     }

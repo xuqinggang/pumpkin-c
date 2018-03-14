@@ -2,6 +2,22 @@ import Service from 'lib/Service';
 import  { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 
+// 通过管家id动态请求虚拟手机号
+export function ajaxDynamicTel(supervisorId) {
+    return Service.get('/api/v1/common/getDynamicPhone', {
+        supervisorId,
+    }, {
+        timeout: 1000,
+    })
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+
+            throw new Error(data);
+        })
+}
+
 // 收藏房源
 export function ajaxCollectHouse(rentUnitId) {
     return Service.post(`/api/v1/rentUnits/${rentUnitId}/collections`)
@@ -166,12 +182,14 @@ function genContactButler(houseDetailData) {
         superName,
         superTel,
         superHeadImg,
+        supervisorId,
     } = houseDetailData;
 
     return {
         name: superName,
         img: superHeadImg,
         tel: superTel,
+        id: supervisorId
     };
 }
 
