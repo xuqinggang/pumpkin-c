@@ -10,7 +10,7 @@ export default class HouseMeCoupon extends PureComponent {
         return (
             <div>
                 {
-                    isApp && isRmHead ?
+                    isApp() && isRmHead() ?
                         null :
                         <MeCouponBack />
                 }

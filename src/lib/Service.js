@@ -1,9 +1,14 @@
 const Service = {};
 
-Service.reqServer = (url, paramters, type = 'GET', contentType = 'json') => {
+Service.reqServer = (url, paramters, type = 'GET', extraConf = {}) => {
     const {
         urlPrefix,
     } = Service.baseConfig;
+
+    const {
+        contentType = 'json',
+        timeout = 10000,
+    } = extraConf;
 
     if (url.indexOf('http') === -1 && urlPrefix) {
         url = urlPrefix + url;
@@ -54,7 +59,7 @@ Service.reqServer = (url, paramters, type = 'GET', contentType = 'json') => {
         };
 
         if ('timeout' in xmlHttp && 'ontimeout' in xmlHttp) {
-            xmlHttp.timeout = 10000;
+            xmlHttp.timeout = timeout;
             xmlHttp.ontimeout = () => {
                 reject('timeout');
             };
@@ -83,12 +88,12 @@ Service.reqServer = (url, paramters, type = 'GET', contentType = 'json') => {
     return promise;
 };
 
-Service.get = (url, paramters) => {
-    return Service.reqServer(url, paramters, 'GET');
+Service.get = (url, paramters, extraConf) => {
+    return Service.reqServer(url, paramters, 'GET', extraConf);
 }
 
-Service.post = (url, paramters, contentType) => {
-    return Service.reqServer(url, paramters, 'POST', contentType);
+Service.post = (url, paramters, extraConf) => {
+    return Service.reqServer(url, paramters, 'POST', extraConf);
 }
 
 Service.put = (url, paramters) => {

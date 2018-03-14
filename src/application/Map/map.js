@@ -18,7 +18,7 @@ injectTapEventPlugin();
 render(
     <div className="m-map">
         {
-            !isApp ?
+            !isApp() ?
                 <HeadNavigate />
                 : null
         }

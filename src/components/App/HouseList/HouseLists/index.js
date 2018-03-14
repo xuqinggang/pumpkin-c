@@ -64,6 +64,7 @@ export default class HouseLists extends PureComponent {
 
         fetchRentUnitList({ filter: this.filterParams, pager: { curPage, totalPage } })
             .then((res) => {
+                console.log('this.props.res', res)
                 let rentUnitList = this.state.rentUnitList;
                 // 请求为初始化请求，需要设置rentUnitList为空
                 if (fetchType === 'INIT') {
@@ -117,7 +118,7 @@ export default class HouseLists extends PureComponent {
     }
 
     componentDidMount() {
-        if (isApp) {
+        if (isApp()) {
             // 在app中把头部去掉
             this.listDom.style.marginTop = '1.12rem';
         }

@@ -43,15 +43,6 @@ class HouseHead extends PureComponent {
         this.urlQuery = urlStore && urlStore.urlQuery || '';
     }
 
-    componentWillReceiveProps(nextProps) {
-        const headData = nextProps.headData;
-        if (headData) {
-            this.setState({
-                isCollected: headData.isCollected,
-            });
-        }
-    }
-
     // 是否收藏
     _collectHouse(isCollected) {
         const {
@@ -120,6 +111,15 @@ class HouseHead extends PureComponent {
         this.props.history.push(urlJoin(this.curUrl, 'report'));
     }
 
+    componentWillReceiveProps(nextProps) {
+        const headData = nextProps.headData;
+        if (headData) {
+            this.setState({
+                isCollected: headData.isCollected,
+            });
+        }
+    }
+
     render() {
         const { type, title } = this.props;
 
@@ -136,12 +136,13 @@ class HouseHead extends PureComponent {
         const containerClass = classnames(`${classPrefix}`, {
             'g-grid-row f-flex-justify-between': type === 'default',
             'f-display-flex f-flex-align-center': type === 'apartment',
-        })
+        });
 
         return (
             <div className={containerClass}>
                 {
-                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin || this.isFrom ? (
+                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin() || this.isFrom ? 
+                    (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
                             to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + `?${this.urlQuery}`}>

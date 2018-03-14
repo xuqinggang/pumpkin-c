@@ -154,7 +154,7 @@ export default class HouseDetailIndex extends PureComponent {
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
-                    isApp ?
+                    isApp() ?
                     null :
                     <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
                 }
