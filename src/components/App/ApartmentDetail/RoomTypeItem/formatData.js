@@ -7,11 +7,11 @@ export const getTitle = (bedroomCount, livingRoomCount, bathroomCount, name) => 
         title = `${title}${bedroomCount}室`;
     }
 
-    if (isNumber(livingRoomCount)) {
+    if (isNumber(livingRoomCount) && livingRoomCount > 0) {
         title = `${title}${livingRoomCount}厅`;
     }
 
-    if (isNumber(bathroomCount)) {
+    if (isNumber(bathroomCount) && bathroomCount > 0) {
         title = `${title}${bathroomCount}卫`;
     }
 

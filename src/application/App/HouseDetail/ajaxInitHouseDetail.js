@@ -1,5 +1,5 @@
 import Service from 'lib/Service';
-import  { getWithDefault } from 'lib/util';
+import { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 
 // 通过管家id动态请求虚拟手机号
@@ -258,8 +258,8 @@ function genHouseProfile(houseDetailData) {
     // title location ------------
     let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
 
-    // title is different when aptType is 
-    if (aptType === ApartmentType.CENTRALIZED) {
+    // title is different when aptType is CENTRALIZED
+    if (aptType === ApartmentType.CENTRALIZED && name) {
         title = `${RentalTypeMapText[rentalType]}·${bedroomCount}室${livingRoomCount}厅 (${name})`;
     }
 
@@ -332,6 +332,8 @@ function genRoomSlider(houseDetailData) {
     const kitchens = houseDetailData.kitchens;
     const othersRooms = houseDetailData.othersRooms;
 
+    const apartmentImages = houseDetailData.apartmentImages;
+
     // 公共空间家具
     const publicFurniture = houseDetailData.publicFurniture;
 
@@ -364,6 +366,9 @@ function genRoomSlider(houseDetailData) {
     stuffData(livingRooms, '客厅');
     stuffData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
+
+    // more
+    stuffData([{ images: apartmentImages }], '更多');
     stuffData(othersRooms, '更多');
 
     return {
