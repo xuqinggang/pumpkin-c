@@ -41,7 +41,7 @@ router.get('/about/:xx*', (ctx, next) => {
     ctx.body = indexHtml;
 });
 
-router.get('/apartment/:xx*', (ctx, next) => {
+router.get('/shop/:xx*', (ctx, next) => {
     ctx.type = 'html';
     ctx.body = indexHtml;
 });
