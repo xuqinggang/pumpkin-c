@@ -5,6 +5,8 @@ import BottomDialog from 'Shared/BottomDialog';
 import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/images/male.png';
 import { isAndroid } from 'lib/const';
 
+import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
+
 import './styles.less';
 
 const btnPrefix = 'm-contactbutler-btn';
@@ -15,13 +17,29 @@ export default class ContactButler extends PureComponent {
         super(props);
         this.state = {
             show: false,
+            dynamicTel: '',
         };
     }
 
     handleConcatTap = (e) => {
-        this.setState({
-            show: true,
-        });
+        const {
+            id,
+            tel,
+        } = this.props.contactButlerData;
+
+        ajaxDynamicTel(id)
+            .then((data) => {
+                this.setState({
+                    show: true,
+                    dynamicTel: data.phoneNumber,
+                });
+            })
+            .catch((err) => {
+                this.setState({
+                    show: true,
+                    dynamicTel: tel,
+                })
+            })
     }
 
     handleNoContactTap = (e) => {
@@ -35,31 +53,32 @@ export default class ContactButler extends PureComponent {
     }
 
     render() {
-        const { show } = this.state;
-        const { name, img, tel } = this.props.contactButlerData;
+        const { show, dynamicTel } = this.state;
+        const { name, img } = this.props.contactButlerData;
 
-        const tmpArr = tel && tel.split(',');
+        const tmpArr = dynamicTel && dynamicTel.split(',');
         // 分机号
         const extTel = tmpArr && tmpArr[1];
 
         return (
-            !isAndroid() ?
-            <a
-                href={`tel:${tel}`} 
-                className="f-display-inlineblock"
-                event-tracking-click=""
-                event-tracking-param-tel={tel}
-                event-tracking-param-rentunitid={window.rentUnitId}
-                event-tracking-param-eventname="detailtel" 
-            >
-                <span
-                    className={`f-display-inlineblock ${btnPrefix}`}
-                    onTouchTap={this.handleConcatTap}
-                    key={0}>
-                    联系管家
-                </span>
-            </a>
-            : [
+            // !isAndroid() ?
+            // <a
+            //     href={`tel:${tel}`} 
+            //     className="f-display-inlineblock"
+            //     event-tracking-click=""
+            //     event-tracking-param-tel={tel}
+            //     event-tracking-param-rentunitid={window.rentUnitId}
+            //     event-tracking-param-eventname="detailtel" 
+            // >
+            //     <span
+            //         className={`f-display-inlineblock ${btnPrefix}`}
+            //         onTouchTap={this.handleConcatTap}
+            //         key={0}>
+            //         联系管家
+            //     </span>
+            // </a> 
+            // : 
+            [
                 <span
                     className={`f-display-inlineblock ${btnPrefix}`}
                     onTouchTap={this.handleConcatTap}
@@ -84,20 +103,30 @@ export default class ContactButler extends PureComponent {
                         </div>
                         <div className={`${dialogPrefix}-tel-wrap`}>
                             <span className={`${dialogPrefix}-tel-text`}>电话号码：</span>
-                            <a href={`tel:${tel}`} className={`f-display-inlineblock ${dialogPrefix}-tel`}>{tel}</a>
+                            <a href={`tel:${dynamicTel}`} className={`f-display-inlineblock ${dialogPrefix}-tel`}>
+                                {dynamicTel}
+                            </a>
                         </div>
-                        <div className={`${dialogPrefix}-extTel-wrap`}>
-                            <span className={`${dialogPrefix}-tel-text`}>分机号：</span>
-                            <span className={`${dialogPrefix}-tel ${dialogPrefix}-extTel`}>{ extTel }&nbsp;</span>
-                            <span className={`${dialogPrefix}-tel-text ${dialogPrefix}-extTel-text`}>
-                                (拨打后需要用到哦)
-                            </span>
-                        </div>
+                        {
+                            extTel ? 
+                                (
+                                    <div className={`${dialogPrefix}-extTel-wrap`}>
+                                        <span className={`${dialogPrefix}-tel-text`}>分机号：</span>
+                                        <span className={`${dialogPrefix}-tel ${dialogPrefix}-extTel`}>
+                                            { extTel }&nbsp;
+                                        </span>
+                                        <span className={`${dialogPrefix}-tel-text ${dialogPrefix}-extTel-text`}>
+                                            (拨打后需要用到哦)
+                                        </span>
+                                    </div>
+                                )
+                                : null
+                        }
                     </BottomDialog.Body>
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
                         <div className="f-display-inlineblock line" />
                         <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
-                        <a href={`tel:${tel}`} className="f-display-inlineblock text">立即联系</a>
+                        <a href={`tel:${dynamicTel}`} className="f-display-inlineblock text">立即联系</a>
                     </BottomDialog.Footer>
                 </BottomDialog>
             ]

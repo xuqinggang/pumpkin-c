@@ -55,6 +55,7 @@ class RentUnitItem extends PureComponent {
             direct,
             price,
             aptType,
+            apartmentName,
         } = this.props;
         const imgClsPrefix = `${itemClassPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
@@ -80,8 +81,11 @@ class RentUnitItem extends PureComponent {
                     }
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
-                    <li className="intro-title" >
-                        {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
+                    <li className="intro-title">
+                        <span className="title-apart f-vertical-middle">{apartmentName}</span>
+                        <span className="f-vertical-middle">
+                            {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
+                        </span> 
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">
                         <li>
