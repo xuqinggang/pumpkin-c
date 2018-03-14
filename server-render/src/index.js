@@ -10,9 +10,14 @@ import views from 'koa-views';
 import './lib/hack';
 import logTime from './lib/logTime';
 import Service from 'lib/Service';
+
 import routerConfig from 'application/App/routes/config';
 import allRouters from './router';
+
 import assets from '../dist/assets.json';
+
+import windowMiddle from './middleware/window.middle';
+
 const router = new Router();
 
 function serverRenderConf(app) {
@@ -26,6 +31,7 @@ function serverRenderConf(app) {
 
     // router entry
     router.use('/:cityName/nangua',
+        windowMiddle(),
         async (ctx, next) => {
             window.location.href = ctx.request.url;
             Service.baseConfig = {
@@ -47,11 +53,12 @@ function serverRenderConf(app) {
                     { routerConfig() }
                 </StaticRouter>
             );
+            // log
             const end = Date.now();
             global.app.emit('render', `ReactDOMServer renderToString-${ctx.request.url} responseTime-${end-start}ms`);
+
             ctx.state.content = content;
             ctx.state.customStore = JSON.stringify(window.customStore);
-
             await ctx.render('index');
         });
     

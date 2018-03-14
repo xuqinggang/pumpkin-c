@@ -117,7 +117,7 @@ export default class HouseLists extends PureComponent {
     }
 
     componentDidMount() {
-        if (isApp) {
+        if (isApp()) {
             // 在app中把头部去掉
             this.listDom.style.marginTop = '1.12rem';
         }

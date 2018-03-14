@@ -43,7 +43,7 @@ export default class ContactButler extends PureComponent {
         const extTel = tmpArr && tmpArr[1];
 
         return (
-            !isAndroid ? 
+            !isAndroid() ?
             <a
                 href={`tel:${tel}`} 
                 className="f-display-inlineblock"
@@ -59,8 +59,7 @@ export default class ContactButler extends PureComponent {
                     联系管家
                 </span>
             </a>
-            :
-            [
+            : [
                 <span
                     className={`f-display-inlineblock ${btnPrefix}`}
                     onTouchTap={this.handleConcatTap}
