@@ -8,6 +8,7 @@ const windowMiddle = () => (
     async (ctx, next) => {
         const headers = ctx.request.header;
         global.window.navigator.userAgent = headers['user-agent'];
+        global.navigator = global.window.navigator;
         global.window.location.href = ctx.request.href;
         console.log(headers['user-agent'],'xx');
         await next();
