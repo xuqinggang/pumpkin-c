@@ -25,7 +25,6 @@ function _genCouponListDataArr(couponListArr, couponType = 'use') {
             code,
         } = couponItem;
 
-
         const expiredTime = couponType === 'use' ?
             ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10) - 24 * 60 * 60))
             : status === 'USE' ? '已使用' : '已过期';
@@ -34,9 +33,9 @@ function _genCouponListDataArr(couponListArr, couponType = 'use') {
         if (type === PRICE_REDUCE) {
             price = `¥${quota}`;
         } else if (type === DATE_REDUCE) {
-            price = `${quota}折`;
-        } else if (type === DISCOUNT_REDUCE) {
             price = `减${quota}天`;
+        } else if (type === DISCOUNT_REDUCE) {
+            price = `${quota}折`;
         }
 
         return {
