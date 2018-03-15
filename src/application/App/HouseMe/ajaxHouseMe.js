@@ -1,6 +1,42 @@
 import Service from 'lib/Service';
 import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'baseData/MapData';
+import { dateFormat } from 'lib/util';
 
+// 生成优惠券列表数据
+// type: 优惠券类型（use:待使用，expired:已失效）
+function _genCouponListDataArr(couponListArr, couponType = 'use') {
+    if (!couponListArr || couponListArr.length === 0) return null;
+
+    // 按金额减免
+    const PRICE_REDUCE = 'PRICE_REDUCE';
+    // 按天数减免
+    const DATE_REDUCE = 'DATE_REDUCE';
+    // 折扣减免
+    const DISCOUNT_REDUCE = 'DISCOUNT_REDUCE';
+
+    return couponListArr.map(couponItem => {
+        const {
+            name,
+            quota,
+            ruleDesc,
+            dateEnd,
+            status,
+            type,
+        } = couponItem;
+
+
+        const expiredTime = couponType === 'use' ?
+            ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10) - 24 * 60 * 60))
+            : status === 'USE' ? '已使用' : '已过期';
+
+        return {
+            title: name,
+            expiredTime,
+            price: '123',
+            ruleDesc,
+        };  
+    });
+}
 // 删除过期优惠券
 export function ajaxDelExpireCoupon(couponUserId) {
     return Service.delete(`/api/v1/coupon/${couponUserId}`)

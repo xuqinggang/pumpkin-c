@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import { dateFormat } from 'lib/util';
-
 import './styles.less';
 
 const classPrefix = 'm-mecouponitem';
@@ -32,11 +30,10 @@ export default class MeCouponItem extends PureComponent {
         } = this.props;
 
         const {
-            quota,
-            name,
+            title,
             ruleDesc,
-            dateEnd,
-            status,
+            price,
+            expiredTime,
         } = couponItem;
 
         const isExpired = type === 'expired';
@@ -45,9 +42,9 @@ export default class MeCouponItem extends PureComponent {
             <div className={classPrefix}>
                 <ul className="g-grid-row f-flex-align-center f-flex-justify-between">
                     <li className={classnames(`${classPrefix}-title`, { expired: isExpired })}>
-                        {name}
+                        {title}
                     </li>
-                    <li className={classnames(`${classPrefix}-price`, { expired: isExpired })}>¥{quota}</li>
+                    <li className={classnames(`${classPrefix}-price`, { expired: isExpired })}>{price}</li>
                 </ul>
                 <ul className={`g-grid-row f-flex-align-center f-flex-justify-between ${classPrefix}-expiretime-wrapper`}>
                     <li className="f-display-inlineblock" onTouchTap={this.onRuleBtnTap}>
@@ -57,10 +54,7 @@ export default class MeCouponItem extends PureComponent {
                         })} />
                     </li>
                     <li className={`${classPrefix}-expiretime`}>
-                        {
-                            type === 'use' ? ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10) - 24 * 60 * 60))
-                            : status === 'USE' ? '已使用' : '已过期'
-                        }
+                        {expiredTime}
                     </li>
                 </ul>
                 {
