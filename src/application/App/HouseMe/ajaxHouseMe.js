@@ -3,7 +3,7 @@ import { RentalTypeMapText, DirectTypeMapText, PayTypeMapName } from 'baseData/M
 import { dateFormat } from 'lib/util';
 
 // 生成优惠券列表数据
-// type: 优惠券类型（use:待使用，expired:已失效）
+// couponType: 优惠券类型（use:待使用，expired:已失效）
 function _genCouponListDataArr(couponListArr, couponType = 'use') {
     if (!couponListArr || couponListArr.length === 0) return null;
 
@@ -22,6 +22,7 @@ function _genCouponListDataArr(couponListArr, couponType = 'use') {
             dateEnd,
             status,
             type,
+            code,
         } = couponItem;
 
 
@@ -29,10 +30,20 @@ function _genCouponListDataArr(couponListArr, couponType = 'use') {
             ('有效期至' + dateFormat(parseInt(dateEnd * 1000, 10) - 24 * 60 * 60))
             : status === 'USE' ? '已使用' : '已过期';
 
+        let price = '';
+        if (type === PRICE_REDUCE) {
+            price = `¥${quota}`;
+        } else if (type === DATE_REDUCE) {
+            price = `${quota}折`;
+        } else if (type === DISCOUNT_REDUCE) {
+            price = `减${quota}天`;
+        }
+
         return {
+            code,
             title: name,
             expiredTime,
-            price: '123',
+            price,
             ruleDesc,
         };  
     });
@@ -57,7 +68,9 @@ export function ajaxMeExpireCoupon({nextPage, offset}) {
     })
         .then((data) => {
             if (data.code === 200) {
-                return data.data;
+                return Object.assign(data.data, {
+                    couponBOList: _genCouponListDataArr(data.data.couponBOList, 'expired'),
+                });
             }
 
             throw new Error(data);
@@ -72,7 +85,9 @@ export function ajaxMeUseCoupon({nextPage, offset}) {
     })
         .then((data) => {
             if (data.code === 200) {
-                return data.data;
+                return Object.assign(data.data, {
+                    couponBOList: _genCouponListDataArr(data.data.couponBOList, 'use'),
+                });
             }
 
             throw new Error(data);
