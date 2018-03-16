@@ -3,14 +3,14 @@
 import { parseUrlToState } from 'application/App/HouseList/filterStateToUrl';
 import { filterStateToParams } from 'application/App/HouseList/filterStateToParams';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
-import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
+// import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxInitHouseIndexBanner, ajaxInitHouseIndexRecommend } from 'application/App/HouseIndex/ajaxInitHouseIndex';
 
 export default async (ctx, next) => {
     const filterUrlFragment = ctx.params.filterUrlFragment;
 
     // 设置位置相关数据
-    await setPositionData();
+    // await setPositionData();
 
     // 设置筛选数据
     const newFilterParamsObj = setFilterData(filterUrlFragment, ctx);
@@ -21,19 +21,14 @@ export default async (ctx, next) => {
 
     // 设置列表页数据 和 首页的banner和recommend 
     await Promise.all([setHouseListData(newFilterParamsObj), setHouseIndexBannerAndRecommend()])
-    // 设置列表页数据
-    // await setHouseListData(newFilterParamsObj);
-
-    // // 首页的banner和recommend
-    // await setHouseIndexBannerAndRecommend();
 
     await next();
 };
 
-async function setPositionData() {
-    const positionFilterDataArr = await ajaxInitPositionData();
-    window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
-}
+// async function setPositionData() {
+//     const positionFilterDataArr = await ajaxInitPositionData();
+//     window.setStore('positionFilterDataArr', { data: positionFilterDataArr });
+// }
 
 function setFilterData(filterUrlFragment, ctx) {
     // gen state

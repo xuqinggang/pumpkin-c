@@ -17,6 +17,10 @@ export default class PositionFilterWrap extends PureComponent {
         };
     }
 
+    onFilterConfirm = (positionFilterStateObj) => {
+        this.props.onFilterConfirm(positionFilterStateObj);
+    }
+
     componentWillMount() {
         const positionFilterDataArrStore = window.getStore('positionFilterDataArr');
 
@@ -29,6 +33,9 @@ export default class PositionFilterWrap extends PureComponent {
             return;
         }
         
+    }
+
+    componentDidMount() {
         ajaxInitPositionData()
             .then((positionFilterDataArr) => {
                 if (positionFilterDataArr) {
@@ -67,10 +74,6 @@ export default class PositionFilterWrap extends PureComponent {
                     this.props.onDynamicSetLabel(`${secondItemSelectedIndex}km`);
                 }
             })
-    }
-
-    onFilterConfirm = (positionFilterStateObj) => {
-        this.props.onFilterConfirm(positionFilterStateObj);
     }
 
     render() {
