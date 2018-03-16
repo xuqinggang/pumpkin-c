@@ -1,5 +1,6 @@
 import Service from 'lib/Service';
-import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText } from 'baseData/MapData';
+import { getWithDefault } from 'lib/util';
+import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 
 // 通过管家id动态请求虚拟手机号
 export function ajaxDynamicTel(supervisorId) {
@@ -227,6 +228,8 @@ function genHouseProfile(houseDetailData) {
         subwayLine,
         subwayStation,
         subwayDistance,
+        aptType,
+        name,
     } = houseDetailData;
 
     // 付款方式数据组织, 公寓名称-----------
@@ -254,6 +257,12 @@ function genHouseProfile(houseDetailData) {
 
     // title location ------------
     let title = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
+
+    // title is different when aptType is CENTRALIZED
+    if (aptType === ApartmentType.CENTRALIZED && name) {
+        title = `${RentalTypeMapText[rentalType]}·${bedroomCount}室${livingRoomCount}厅 (${name})`;
+    }
+
     let location = `${districtName}-${blockName}`;
     if (subwayLine != null && subwayDistance != null && subwayStation != null) {
         location = `${location}-距${subwayLine}${subwayStation}${subwayDistance}米`;
@@ -296,13 +305,15 @@ function genHouseBrief(houseDetailData) {
         livingRoomCount,
     } = houseDetailData;
 
+    const directText = getWithDefault(DirectTypeMapText, direct, '多个朝向');
+
     return {
         area,
         bedroomCount,
         livingRoomCount,
         floor,
         totalFloor,
-        direct: `${DirectTypeMapText[direct]}`,
+        direct: directText,
     };
 }
 
@@ -320,6 +331,8 @@ function genRoomSlider(houseDetailData) {
     const bathrooms = houseDetailData.bathrooms;
     const kitchens = houseDetailData.kitchens;
     const othersRooms = houseDetailData.othersRooms;
+
+    const apartmentImages = houseDetailData.apartmentImages;
 
     // 公共空间家具
     const publicFurniture = houseDetailData.publicFurniture;
@@ -353,6 +366,9 @@ function genRoomSlider(houseDetailData) {
     stuffData(livingRooms, '客厅');
     stuffData(bathrooms, '卫生间');
     stuffData(kitchens, '厨房');
+
+    // more
+    stuffData([{ images: apartmentImages }], '更多');
     stuffData(othersRooms, '更多');
 
     return {

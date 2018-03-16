@@ -221,7 +221,7 @@ class RoomSlider extends PureComponent {
                     }
                 </ReactSwipe>
                 {
-                    aptType === ApartmentType.CENTRALIZED && onsaleCount > 0 ?
+                    aptType === ApartmentType.CENTRALIZED ?
                     <span className="tip">剩余{onsaleCount}套可租</span> :
                     null
                 }

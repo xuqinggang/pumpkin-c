@@ -44,6 +44,7 @@ class RoomTypeItem extends PureComponent {
             onsaleCount,
             totalFloor,
             headImage,
+            bathroomCount,
         } = house;
         const imgClsPrefix = `${classPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
@@ -67,7 +68,7 @@ class RoomTypeItem extends PureComponent {
                 </div>
                 <ul className={`${classPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
-                        {getTitle(bedroomCount, livingRoomCount, name)}
+                        {getTitle(bedroomCount, livingRoomCount, bathroomCount, name)}
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">
                         <li>

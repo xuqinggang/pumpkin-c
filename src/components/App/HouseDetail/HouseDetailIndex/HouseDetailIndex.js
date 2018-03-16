@@ -181,6 +181,7 @@ export default class HouseDetailIndex extends PureComponent {
                 <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} aptType={aptType} />
                 <HouseIntro
                     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
+                    aptType={aptType}
                     houseIntroStr={houseIntroStr}
                 />
                 <HouseTraffic className={`${classPrefix}-housetraffic`} houseTrafficData={houseTrafficData || {}} />
