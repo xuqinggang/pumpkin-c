@@ -11,6 +11,7 @@ import { stateToParams } from './stateToParams';
 import { stringifyStateObjToUrl, parseUrlToState } from './stateToUrl';
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
+import { isRmHead } from 'lib/const';
 
 import './styles.less';
 
@@ -115,7 +116,7 @@ export default class ApartmentList extends PureComponent {
 
         // filter state to url
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState, newParams);
-        const link = urlJoin(this.urlPrefix, 'apartment/list', filterUrlFragment) + `?${this.urlQuery}`;
+        const link = urlJoin(this.urlPrefix, 'shop/list', filterUrlFragment) + `?${this.urlQuery}`;
         this.props.history.push(link);
     }
 
@@ -183,7 +184,11 @@ export default class ApartmentList extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
-                    <HouseHead type="apartment" title="集中式公寓" history={history} />
+                    {
+                        !isRmHead() ?
+                        <HouseHead type="apartment" title="集中式公寓" history={history} /> : 
+                        null
+                    }
                     <ApartmentFilter
                         className="apartmentfilter"
                         filterState={filterState}
