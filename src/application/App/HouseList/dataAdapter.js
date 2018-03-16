@@ -1,6 +1,7 @@
 import { isValidValue } from 'lib/util';
 
 const cvtBe2feRentUnit = data => ({
+    apartmentName: data.apartmentName,
     area: data.area,
     address: (isValidValue(data.subwayLine)
         && isValidValue(data.subwayStation)
@@ -17,6 +18,7 @@ const cvtBe2feRentUnit = data => ({
     direct: data.direct,
     price: data.price,
     rentUnitId: data.rentUnitId,
+    aptType: data.aptType,
 });
 
 export default {

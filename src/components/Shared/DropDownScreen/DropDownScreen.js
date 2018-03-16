@@ -73,7 +73,7 @@ export default class DropDownScreen extends PureComponent {
                 maskDom.style.left = -this.headDomLeft + 'px';
             }
 
-            if (isiPhoneX) {
+            if (isiPhoneX()) {
                 const timer = setTimeout(() => {
                     clearTimeout(timer);
                     this._reSetScreenDomHeight();
@@ -124,7 +124,7 @@ export default class DropDownScreen extends PureComponent {
     componentDidMount() {
         window.addEventListener('resize', this._reSetScreenDomHeight);
 
-        if (isiPhoneX) {
+        if (isiPhoneX()) {
             this.screenDom.style.transition = 'height 0.8s ease-in-out 0s';
         }
     }

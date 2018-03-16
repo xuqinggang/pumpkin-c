@@ -131,6 +131,10 @@ export default class HouseFurniture extends PureComponent {
 
     render() {
         const { furnitureSliderArrData, aptType } = this.props;
+
+        // furnitureSliderArrData is empty, no render
+        if (furnitureSliderArrData && furnitureSliderArrData.length <= 0) return null;
+
         console.log('furnitureSliderArrData', furnitureSliderArrData)
         this.initGeneFurnitureData(furnitureSliderArrData);
         const swipeChildren = this.renderMultiSliderFurniture();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate } from 'react-dom';
 import injectTapEventPlugin from "react-tap-event-plugin";
 import createHistory from 'history/createBrowserHistory';
 
@@ -15,7 +15,7 @@ const history = createHistory();
 // 注册onTouchTap
 injectTapEventPlugin();
 
-render(
+hydrate(
     routes(history),
     document.getElementById('root'),
 );

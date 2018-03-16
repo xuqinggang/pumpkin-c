@@ -45,7 +45,7 @@ export function wxShare(shareObj = {}) {
 }
 
 export function execWxShare(shareObj) {
-    if (isWeiXin) {
+    if (isWeiXin()) {
         dynamicScript('//res.wx.qq.com/open/js/jweixin-1.0.0.js', function() {
             wxShare(shareObj);
         });

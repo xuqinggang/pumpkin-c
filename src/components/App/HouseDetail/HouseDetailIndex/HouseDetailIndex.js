@@ -154,7 +154,7 @@ export default class HouseDetailIndex extends PureComponent {
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
                 {
-                    isApp ?
+                    isApp() ?
                     null :
                     <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
                 }
@@ -181,6 +181,7 @@ export default class HouseDetailIndex extends PureComponent {
                 <HouseFurniture furnitureSliderArrData={furnitureSliderArrData || []} aptType={aptType} />
                 <HouseIntro
                     className={`g-housedetail-module-padding ${classPrefix}-houseinfo`}
+                    aptType={aptType}
                     houseIntroStr={houseIntroStr}
                 />
                 <HouseTraffic className={`${classPrefix}-housetraffic`} houseTrafficData={houseTrafficData || {}} />

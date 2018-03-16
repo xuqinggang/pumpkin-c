@@ -38,7 +38,7 @@ export default class IndexHead extends PureComponent {
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
                 {
-                    isApp ?
+                    isApp() ?
                         null : 
                         <img
                             className={`f-display-flex ${classPrefix}-logo`}

@@ -1,4 +1,5 @@
 import React, { Component, Children } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import BottomDialogHeader from './BottomDialogHeader';
 import BottomDialogBody from './BottomDialogBody';
@@ -70,6 +71,8 @@ export default class BottomDialog extends Component {
     }
 
     render() {
+        if (window.isServerRender) { return null; }
+
         const { className, children, onClose, mask, show } = this.props;
 
         if (!this.node) {
