@@ -16,7 +16,7 @@ import allRouters from './router';
 
 import assets from '../dist/assets.json';
 
-// import windowMiddle from './middleware/window.middle';
+import windowMiddle from './middleware/window.middle';
 
 const router = new Router();
 
@@ -31,6 +31,7 @@ function serverRenderConf(app) {
 
     // router entry
     router.use('/:cityName/nangua',
+        windowMiddle(),
         async (ctx, next) => {
             window.location.href = ctx.request.url;
             Service.baseConfig = {
