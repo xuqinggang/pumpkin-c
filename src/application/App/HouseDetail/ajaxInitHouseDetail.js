@@ -434,7 +434,7 @@ function genRoomSlider(houseDetailData) {
         if (roomsLength) {
             rooms.forEach((room, index) => {
                 const roomImages = room.images;
-                if (roomImages && roomImages.length === 0) return;
+                if (!roomImages || (roomImages && roomImages.length === 0)) return;
                 // room text
                 let text = roomType;
 

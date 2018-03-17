@@ -22,7 +22,8 @@ class RoomTypeItem extends PureComponent {
     handleTouchTap = () => {
         const { id } = this.props.house;
         const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, `detail/${id}`));
+        const locationSearch = window.location.search;
+        this.props.history.push(urlJoin(urlPrefix, `detail/${id}`, `/${locationSearch}`));
     }
 
     handleImageLoad = () => {

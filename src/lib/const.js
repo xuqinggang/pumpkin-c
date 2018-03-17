@@ -12,4 +12,5 @@ export default {
     isiPhoneX: () => window.navigator.userAgent.indexOf('iPhone') !== -1 && window.screen.availHeight === 812 && window.screen.availWidth === 375,
     // eg:app中跳到h5优惠券需要去掉头部
     isRmHead: () => window.location.href.indexOf('rmhead') !== -1,
-}
+    isNanguaApp: () => window.navigator.userAgent.indexOf('NanguaApp') !== -1,
+};

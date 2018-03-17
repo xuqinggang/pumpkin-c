@@ -11,7 +11,8 @@ const imgCutModifier = '?crop=1&cpos=middle&w=720&h=370';
 class ApartmentItem extends PureComponent {
     handleTouchTap = () => {
         const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, `shop/detail/${this.props.apartment.id}`));
+        const locationSearch = window.location.search;
+        this.props.history.push(urlJoin(urlPrefix, `shop/detail/${this.props.apartment.id}`, `/${locationSearch}`));
         // 每次进入详情页，发送一次pv请求
         window.send_stat_pv && window.send_stat_pv();
     }

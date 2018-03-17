@@ -19,7 +19,7 @@ import OpenNative from 'Shared/OpenNative/OpenNative';
 
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { dynamicDocTitle } from 'lib/util';
-import { isApp } from 'lib/const';
+import { isApp, isRmHead } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
@@ -68,7 +68,7 @@ export default class HouseDetailIndex extends PureComponent {
                 });
 
                 this.callWxShareAgain(houseDetailData);
-            })
+            });
     }
 
     componentDidMount() {
@@ -158,12 +158,16 @@ export default class HouseDetailIndex extends PureComponent {
                     null :
                     <OpenNative schema={`api.nanguazufang.cn/main/rentUnit?rentUnitId=${this.rentUnitId}`} />
                 }
-                <HouseHead
-                    headData={headData || {}}
-                    rentUnitId={this.rentUnitId}
-                    history={history}
-                    match={match}
-                />
+                {
+                    !isRmHead() ?
+                        <HouseHead
+                            headData={headData || {}}
+                            rentUnitId={this.rentUnitId}
+                            history={history}
+                            match={match}
+                        /> :
+                    null
+                }
                 <RoomSlider sliderImgArr={sliderImgArr || []} aptType={aptType} onsaleCount={onsaleCount} />
                 <HouseProfile
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
