@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 
 import {
     // ApartmentHead,
@@ -11,11 +12,14 @@ import { stateToParams } from './stateToParams';
 import { stringifyStateObjToUrl, parseUrlToState } from './stateToUrl';
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
-import { isRmHead } from 'lib/const';
+import { isRmHead, isNanguaApp } from 'lib/const';
+import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentlist';
+
+const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ApartmentList extends PureComponent {
     constructor(props) {
@@ -42,6 +46,14 @@ export default class ApartmentList extends PureComponent {
         this.urlQuery = urlQuery;
         this.urlParamsObj = urlParamsObj;
         this.urlPrefix = window.getStore('url').urlPrefix;
+
+        // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
+        if (isSimulateNative()) {
+            postRouteChangToIOS({
+                canGoBack: false,
+            });
+        }
+
     }
 
     componentDidMount() {
@@ -181,6 +193,13 @@ export default class ApartmentList extends PureComponent {
             filterParamsObj,
         } = this.state;
 
+        const listClass = classnames(
+            `${classPrefix}-padding-top`,
+            {
+                [`${classPrefix}-no-head`]: isRmHead(),
+            }
+        )
+
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
@@ -200,7 +219,7 @@ export default class ApartmentList extends PureComponent {
                         onDynamicSetBrandLabel={this.dynamicSetBrandFilterLabelAndState}
                     />
                 </div>
-                <div className={`${classPrefix}-padding-top`}>
+                <div className={listClass}>
                     <PureApartmentListWrap filterParams={filterParamsObj} />
                 </div>
             </div>

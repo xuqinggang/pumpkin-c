@@ -27,7 +27,8 @@ export default class ApartmentFilter extends PureComponent {
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-apartmentlist');
         // 头部高度
-        this.headDomHeight = Math.round(document.querySelector('.m-househead').offsetHeight);
+        const head = document.querySelector('.m-househead') || {offsetHeight: 0};
+        this.headDomHeight = Math.round(head.offsetHeight);
         this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
     }
 
