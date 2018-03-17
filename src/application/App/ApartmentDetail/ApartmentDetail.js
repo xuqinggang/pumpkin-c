@@ -14,6 +14,7 @@ import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
 import { dynamicDocTitle } from 'lib/util';
 import { stuffTotalFloorTOCentralHouses, getLocation } from './dataAdapter';
 import { isRmHead, isNanguaApp } from 'lib/const';
+import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 
 import './styles.less';
 
