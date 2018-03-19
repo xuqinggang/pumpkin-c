@@ -13,10 +13,14 @@ import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitApartmentDetail';
 import { dynamicDocTitle } from 'lib/util';
 import { stuffTotalFloorTOCentralHouses, getLocation } from './dataAdapter';
+import { isRmHead, isNanguaApp } from 'lib/const';
+import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentdetail';
+
+const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ApartmentDetail extends PureComponent {
     constructor(props) {
@@ -30,6 +34,13 @@ export default class ApartmentDetail extends PureComponent {
         window.setStore('shopId', {
             shopId: this.shopId,
         });
+
+        if (isSimulateNative()) {
+            postRouteChangToIOS({
+                canGoBack: true,
+            });
+        }
+
     }
 
     handleJumpMapTap = () => {
@@ -126,7 +137,11 @@ export default class ApartmentDetail extends PureComponent {
 
         return (
             <div className={`${classPrefix}`}>
-                <HouseHead type="apartment" title={name} history={history} />
+                {
+                    !isRmHead() ?
+                    <HouseHead type="apartment" title={name} history={history} /> :
+                    null
+                }
                 <RoomSlider images={images} totalOnsaleCount={totalOnsaleCount} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
                     <Location apartmentName={apartmentName} address={location} onTouchTap={this.handleJumpMapTap}/>
