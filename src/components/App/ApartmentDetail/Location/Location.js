@@ -22,8 +22,8 @@ export default class Location extends PureComponent {
                     <span className={`icon-region`} />
                     <span>{address}</span>
                 </div>
-                <div className={`f-display-inlineblock head-apartname-wrap`}>
-                    <span className={`f-singletext-ellipsis head-apartname`}>{apartmentName}</span>
+                <div className={`f-display-inlineblock head-apartname-wrap f-singletext-ellipsis `}>
+                    <span className={`head-apartname`}>{apartmentName}</span>
                 </div>
             </div>
         );
