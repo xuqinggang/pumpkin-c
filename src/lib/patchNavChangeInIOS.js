@@ -7,6 +7,6 @@ export const postRouteChangToIOS = (data = {
             enent: 'ROUTE_CHNAGE',
         }), '*');
     } catch (e) {
-        window.alert(e);
+        console.log(e);
     }
 };
