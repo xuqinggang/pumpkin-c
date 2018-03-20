@@ -332,7 +332,7 @@ function genRoomSlider(houseDetailData) {
     const kitchens = houseDetailData.kitchens;
     const othersRooms = houseDetailData.othersRooms;
 
-    const apartmentImages = houseDetailData.apartmentImages;
+    const apartmentImages = houseDetailData.apartmentImages || [];
 
     // 公共空间家具
     const publicFurniture = houseDetailData.publicFurniture;
@@ -368,8 +368,17 @@ function genRoomSlider(houseDetailData) {
     stuffData(kitchens, '厨房');
 
     // more
-    stuffData([{ images: apartmentImages }], '更多');
-    stuffData(othersRooms, '更多');
+    const otherImages = (Array.isArray(othersRooms) &&
+                            othersRooms.length >= 1 &&
+                                othersRooms[0].images) || [];
+    const mergedOtherRoomImages = otherImages.concat(apartmentImages);
+    const mergedOthersRooms = [
+        {
+            images: mergedOtherRoomImages,
+            type: 'OTHERS',
+        },
+    ];
+    stuffData(mergedOthersRooms, '更多');
 
     return {
         sliderImgArr,
