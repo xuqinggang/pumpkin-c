@@ -19,12 +19,15 @@ import OpenNative from 'Shared/OpenNative/OpenNative';
 
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { dynamicDocTitle } from 'lib/util';
-import { isApp, isRmHead } from 'lib/const';
+import { isApp, isRmHead, isNanguaApp } from 'lib/const';
+import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
 
 import './styles.less';
 
 const classPrefix = 'g-housedetail';
+
+const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class HouseDetailIndex extends PureComponent {
     constructor(props) {
@@ -40,6 +43,13 @@ export default class HouseDetailIndex extends PureComponent {
         window.setStore('rentUnit', {
             rentUnitId: this.rentUnitId,
         });
+
+        if (isSimulateNative()) {
+            postRouteChangToIOS({
+                canGoBack: true,
+                url: window.location.href,
+            });
+        }
     }
 
     componentWillMount() {
