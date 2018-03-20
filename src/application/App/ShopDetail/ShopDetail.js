@@ -37,6 +37,7 @@ export default class ApartmentDetail extends PureComponent {
         if (isSimulateNative()) {
             postRouteChangToIOS({
                 canGoBack: true,
+                url: window.location.href
             });
         }
 

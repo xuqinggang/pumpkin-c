@@ -50,6 +50,7 @@ export default class ShopList extends PureComponent {
         if (isSimulateNative()) {
             postRouteChangToIOS({
                 canGoBack: false,
+                url: window.location.href
             });
         }
 

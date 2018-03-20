@@ -1,10 +1,11 @@
 export const postRouteChangToIOS = (data = {
     canGoBack: false,
+    url: null,
 }) => {
     try {
         window.postMessage(JSON.stringify({
             data,
-            enent: 'ROUTE_CHNAGE',
+            event: 'ROUTE_CHANGE',
         }), '*');
     } catch (e) {
         console.log(e);
