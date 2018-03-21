@@ -43,7 +43,9 @@ class BrandFilter extends PureComponent {
             });
             return;
         }
-        const cityId = 1;
+        // 南瓜租房 iOS APP 传来 cityId 等参数
+        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
+
         ajaxGetBrandList(cityId).then((brandLabels) => {
             const formattedBrands = formatBrands(brandLabels);
             window.setStore('apartmentBrandLabels', {

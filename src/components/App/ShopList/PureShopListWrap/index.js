@@ -20,6 +20,10 @@ export default class PureShopListWrap extends PureComponent {
         };
     }
     componentDidMount() {
+        // 南瓜租房 iOS APP 传来 cityId 等参数
+        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
+        this.cityId = cityId;
+
         this.fetchData(true);
     }
     componentWillReceiveProps(nextProps, nextState) {
@@ -37,11 +41,15 @@ export default class PureShopListWrap extends PureComponent {
             loading: true,
         });
 
+        const cityId = this.cityId;
         const apartmentFilter = window.getStore('apartmentFilter');
         const filter = (apartmentFilter && apartmentFilter.filterParamsObj) || {};
 
         ajaxGetShopList({
-            filter,
+            filter: {
+                ...filter,
+                cityId,
+            },
             pager,
         }).then(data => {
             let newApartmentLists= [];
