@@ -5,7 +5,7 @@ import NoShop from '../NoShop';
 import { ajaxGetShopList } from 'application/App/ShopList/ajaxInitShopList';
 import { shallowEqual } from 'lib/util';
 
-const classPrefix = 'm-pureapartmentlistwrap';
+const classPrefix = 'm-pureshoplistwrap';
 
 export default class PureShopListWrap extends PureComponent {
     constructor(props) {

@@ -209,7 +209,7 @@ export default class ShopList extends PureComponent {
                         null
                     }
                     <ShopFilter
-                        className="apartmentfilter"
+                        className="shopfilter"
                         filterState={filterState}
                         filterLabel={filterLabel}
                         onFilterConfirm={this.onFilterConfirm}
