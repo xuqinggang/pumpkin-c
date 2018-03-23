@@ -74,6 +74,10 @@ export function ajaxSearchHits(params = {}) {
 
                     newSeachData[type] = newTypeSearchDataArr;
                 });
+
+                // 将subways和stations合并，然后删除stations
+                newSeachData.subways.concat(newSeachData.stations);
+                delete newSeachData.stations;
                 console.log(newSeachData, 'newSeachData');
                 return newSeachData;
             }
@@ -83,8 +87,8 @@ export function ajaxSearchHits(params = {}) {
 }
 
 // 热门搜索
-export function ajaTopSearches() {
-    return Service.get('/api/v1/rentUnits/topSearches')
+export function ajaxTopSearches(params) {
+    return Service.get('/api/v1/rentUnits/topSearches', params)
         .then((data) => {
             if (data.code === 200) {
                 return data.data;

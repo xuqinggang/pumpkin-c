@@ -12,6 +12,7 @@ type PropType = {
     title: string,
     type: string,
     searchDataArr: Array<{
+        id: number,
         image?: string,
         iconClass?: string,
         name: string,
@@ -23,6 +24,7 @@ type PropType = {
 export default class SearchItem extends PureComponent<PropType> {
     render() {
         const {
+            type,
             className,
             title,
             searchDataArr = [],
@@ -37,7 +39,14 @@ export default class SearchItem extends PureComponent<PropType> {
                             className={`g-grid-row f-flex-align-center ${classPrefix}-item`}
                             key={index}
                         >
-                            <span className="item-icon icon-region" />
+                            {
+                                type === 'apartments' ?
+                                    <img
+                                        src={item.image}
+                                        className="item-icon"
+                                    /> :
+                                    <span className={classnames('item-icon', item.iconClass)} />
+                            }
                             <ul className="g-grid-row grid-col f-flex-justify-between f-flex-align-center item-right">
                                 <li className="g-grid-row f-flex-align-center">
                                     <div className="f-display-inlineblock">

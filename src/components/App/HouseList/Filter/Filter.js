@@ -145,7 +145,7 @@ export default class Filter extends PureComponent {
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionFilterState) => {
         this.props.onFilterConfirm({ position: positionFilterState });
-        
+
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
     }
@@ -173,7 +173,7 @@ export default class Filter extends PureComponent {
         // 隐藏弹层
         this.handleFilterShowTap('more', true);
     }
-    
+
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度

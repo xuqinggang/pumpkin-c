@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 
 import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
+import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 
 import { ajaxSearchHits } from './ajaxSearch';
 
@@ -47,6 +48,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                     <InputSearch onInputChange={this.onInputChange} />
                     <span className="head-btn-cancel">取消</span>
                 </div>
+                <HitSearch />
                 <SearchList searchData={searchData} />
             </div>
         );
