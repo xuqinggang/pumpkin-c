@@ -2,6 +2,30 @@ import Service from 'lib/Service';
 import { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 
+/**
+ * API: 保存用户电话记录
+ *
+ * DESC: 如果用户当时没有登录，应该先存在 localStorage 里
+ * 一旦用户登录会去 localStorage 取出拨打记录，然后发出该请求
+ *
+ * @param {Array} telList of {
+ *  apartmentId: string,
+ *  rentUnitId: string,
+ *  cityId: string,
+ *  timestamp: int, // 拨打电话的大概时间
+ * }
+ */
+export function ajaxSaveTel(telList) {
+    return Service.get('/api/v1/brandApartments/phoneRecord', telList)
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+
+            throw new Error(data);
+        });
+}
+
 // 通过管家id动态请求虚拟手机号
 export function ajaxDynamicTel(supervisorId) {
     return Service.get('/api/v1/common/getDynamicPhone', {

@@ -2,20 +2,23 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
 import { urlJoin } from 'lib/util';
+import { withHistory } from 'application/App/routes';
 
 import './styles.less';
 
 const classPrefix = 'm-shopitem';
 const imgCutModifier = '?crop=1&cpos=middle&w=720&h=370';
 
+const createShopDetailPath = apartmentId => `shop/detail/${apartmentId}`;
+
 class ShopItem extends PureComponent {
+
+    goShopDetail = (apartmentId) => withHistory(this.props.history)(createShopDetailPath)(apartmentId);
+    
     handleTouchTap = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
-        const locationSearch = window.location.search;
-        this.props.history.push(urlJoin(urlPrefix, `shop/detail/${this.props.apartment.id}`, `/${locationSearch}`));
-        // 每次进入详情页，发送一次pv请求
-        window.send_stat_pv && window.send_stat_pv();
+        this.goShopDetail(this.props.apartment.id);
     }
+
     render() {
         const { apartment } = this.props;
         return (

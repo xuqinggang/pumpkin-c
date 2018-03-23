@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
-import './styles.less';
 
-const classPrefix = 'm-commentcard';
+const classPrefix = 'g-commentinput';
 
-export default class CommentCard extends PureComponent {
+export default class CommentInput extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
@@ -12,7 +11,7 @@ export default class CommentCard extends PureComponent {
     render() {
         return (
             <div className={`${classPrefix}`}>
-                <p>批量</p>
+                <p>评论框就在这</p>
             </div>
         );
     }
