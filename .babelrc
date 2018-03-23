@@ -14,7 +14,9 @@
     "plugins": [
     [
         "transform-runtime", {
-        }
+        },
+        "@babel/plugin-syntax-flow",
+        "@babel/plugin-transform-flow-strip-types",
     ],
     "add-module-exports"
     ]
