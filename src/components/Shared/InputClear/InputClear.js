@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
+
 import { getByteLen } from 'lib/util';
 
 import './styles.less';
@@ -37,34 +39,37 @@ export default class InputClear extends PureComponent {
         }
     }
 
-    handleClearTap = (e) => {
+    handleClearTap = () => {
         this.setState({
             inputVal: '',
         }, () => {
             if (this.props.onChange) {
                 this.props.onChange(this.state.inputVal);
             }
-        })
+        });
     }
 
     render() {
         const {
             type,
             placeholder,
+            className,
         } = this.props;
 
         return (
-            <div className={`${classPrefix}`}>
+            <div className={classnames(`${classPrefix}`, className)}>
                 <input
                     type={type}
                     placeholder={placeholder}
                     className={`${classPrefix}-input`}
                     value={this.state.inputVal}
                     onChange={this.onInputChange}
-                    ref='inputDom'
                 />
-                <span className={`icon-big-close ${classPrefix}-btn-clear`} onTouchTap={this.handleClearTap}></span>
+                <span
+                    className={`icon-big-close ${classPrefix}-btn-clear`}
+                    onTouchTap={this.handleClearTap}
+                />
             </div>
-        )
+        );
     }
 }

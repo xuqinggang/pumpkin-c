@@ -8,6 +8,7 @@ import HouseMe from 'application/App/HouseMe/HouseMe';
 import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 import ApartmentList from 'application/App/ApartmentList/ApartmentList';
 import ApartmentDetail from 'application/App/ApartmentDetail/ApartmentDetail';
+import HouseSearch from 'application/App/HouseSearch/HouseSearch';
 
 // import ajaxInit from  '../ajaxInit';
 
@@ -41,6 +42,7 @@ class WrapRouter extends PureComponent {
                 <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />
                 <Route path={`${this.urlPrefix}/detail`} component={HouseDetail} />
                 <Route exact path={`${this.urlPrefix}/list/:filterUrlFragment?`} component={HouseList} />
+                <Route exact path={`${this.urlPrefix}/search`} component={HouseSearch} />
                 <Route exact path={`${this.urlPrefix}/:filterUrlFragment?`} component={HouseList} />
             </Switch>
         );

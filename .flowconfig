@@ -1,0 +1,22 @@
+[ignore]
+<PROJECT_ROOT>/dist/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.css
+module.file_ext=.less
+module.file_ext=.scss
+
+module.use_strict=true
+
+module.name_mapper='^Shared\/\(.*\)$' -> '<PROJECT_ROOT>/src/components/Shared/\1'
+
+[strict]
