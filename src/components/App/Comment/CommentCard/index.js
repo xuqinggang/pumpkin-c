@@ -17,7 +17,7 @@ class CommentCard extends PureComponent {
         this.goCommentInput('9090909090');
     }
 
-    goCommentInput = rentUnitId => withHistory(this.props.history)(createCommentInputPath)(rentUnitId)
+    goCommentInput = withHistory(this.props.history)(createCommentInputPath)
 
     render() {
         return (
