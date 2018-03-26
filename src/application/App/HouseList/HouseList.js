@@ -57,6 +57,7 @@ export default class HouseList extends PureComponent {
                 apartmentId: this.urlParamsObj.apartment || null,
             },
         };
+
         // 动态更改标题
         // dynamicDocTitle('南瓜租房');
 
@@ -72,21 +73,23 @@ export default class HouseList extends PureComponent {
 
     // 筛选确认回调
     onFilterConfirm = (filterStateObj) => {
-        const oldFilterState = this.state.filterState;
-        const newFilterState = Object.assign({}, oldFilterState, filterStateObj);
+        // const oldFilterState = this.state.filterState;
+        // const newFilterState = Object.assign({}, oldFilterState, filterStateObj);
 
-        this.setState({
-            filterState: newFilterState,
-        });
+        // this.setState({
+        //     filterState: newFilterState,
+        // });
 
+        // console.log('newFilterState', newFilterState);
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
         this._setStoreFilterUrlFragment(filterUrlFragment);
-        let link = '';
 
+        let link = '';
         // 筛选url片段
         link = urlJoin(this.urlPrefix, 'list', filterUrlFragment) + `?${this.urlQuery}`;
 
         this.props.history.push(link);
+
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
             clearTimeout(timer);
@@ -104,21 +107,21 @@ export default class HouseList extends PureComponent {
     _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
         const filterState = parseUrlToState(filterUrlFragment);
         // filterState中 position包含 state和params信息
-        const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
-        const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
-        const filterParamsAndLabel = filterStateToParams(newFilterState);
+        // const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
+        // const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
+        // const filterParamsAndLabel = filterStateToParams(newFilterState);
 
-        this.setState({
-            filterState: Object.assign({}, this.state.filterState, newFilterState),
-            filterParamsObj: Object.assign({},
-                this.state.filterParamsObj,
-                filterParamsAndLabel.filterParams,
-                positionStateAndParams && positionStateAndParams.params,
-            ),
-            filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-        }, () => {
-            window.setStore('filter', this.state);
-        });
+        // this.setState({
+        //     filterState: Object.assign({}, this.state.filterState, newFilterState),
+        //     filterParamsObj: Object.assign({},
+        //         this.state.filterParamsObj,
+        //         filterParamsAndLabel.filterParams,
+        //         positionStateAndParams && positionStateAndParams.params,
+        //     ),
+        //     filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
+        // }, () => {
+        //     window.setStore('filter', this.state);
+        // });
     }
 
     wxShare() {

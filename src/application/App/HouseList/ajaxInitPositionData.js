@@ -1,64 +1,84 @@
 import getCurrentPosition from 'lib/geolocation';
 import Service from 'lib/Service';
 
-const Map = {
+const TypeMapName = {
     districts: {
-        first: 'district',
-        second: 'circle',
-        text: '区域',
+        typeName: 'districtName',
+        subTypeName: 'circleName',
+        typeId: 'districtId',
+        subTypeId: 'circleId',
+        secondIndex: 'circles',
     },
     subways: {
-        first: 'subway',
-        second: 'station',
-        text: '地铁',
+        typeName: 'subwayName',
+        subTypeName: 'stationName',
+        typeId: 'subwayId',
+        subTypeId: 'stationId',
+        secondIndex: 'stations',
     },
 };
 
+const positionDataObj = {};
 
-function stuffDataToPosition(itemArr, type, positionDataArr) {
-    let firstItemsArr = itemArr && itemArr.map((item, index) => {
-        // 第一级的item
-        const itemFirst = {
-            text: item[`${Map[type].first}Name`],
-            id: item[`${Map[type].first}Id`],
-            itemArr: [],
+// 以id为索引的对象存储
+// const Test = {
+//     subways: {
+//         id1: {
+//             text: '1号线',
+//             sub: {
+//                 subid1: 'xx1站',
+//             },
+//         },
+//         id2: {
+//             text: '2号线',
+//             sub: {
+//                 subid1: 'xx1站',
+//             },
+//         },
+//     },
+// };
+
+function stuffDataToPosition(itemArr, type) {
+    const typeNameInfo = TypeMapName[type];
+    // 一级对象
+    const firstObj = {
+        '0': {
+            text: '不限',
+            sub: null,
+            isCanCancel: true,
+        },
+    };
+
+    itemArr && itemArr.map((item, index) => {
+        const {
+            typeName,
+            subTypeName,
+            typeId,
+            subTypeId,
+            secondIndex,
+        } = typeNameInfo;
+
+        firstObj[item[typeId]] = {
+            text: item[typeName],
+            sub: null,
         };
 
-        const secondItemsArr = item[`${Map[type].second}s`];
-        const newSecondItemsArr = secondItemsArr && secondItemsArr.map((secondItem, index) => {
-            // 第二级item
-            return {
-                text: secondItem[`${Map[type].second}Name`],
-                id: secondItem[`${Map[type].second}Id`],
-            };
+        // 原数组的二级
+        const tmpSecondItemArr = item[secondIndex];
+        // 二级对象
+        const secondObj = {
+            '0': '不限',
+        };
+
+        tmpSecondItemArr && tmpSecondItemArr.forEach((tmpSecondItem) => {
+            secondObj[tmpSecondItem[subTypeId]] = tmpSecondItem[subTypeName];
         });
-
-        if (newSecondItemsArr) {
-            newSecondItemsArr.unshift({
-                text: '不限',
-                id: -1,
-            });
-            itemFirst.itemArr = newSecondItemsArr;
-        }
-
-        return itemFirst;
+        firstObj[item[typeId]].sub = secondObj;
     });
 
-    if (firstItemsArr) {
-        firstItemsArr.unshift({
-            text: '不限',
-            id: -1,
-            isCanCancel: true,
-        });
+    positionDataObj[type] = firstObj;
 
-        positionDataArr.push({
-            id: {
-                type,
-            },
-            text: Map[type].text,
-            itemArr: firstItemsArr,
-        });
-    }
+    console.log(window.test = positionDataObj);
 }
 
 export function stuffAroundDataToPosition() {
@@ -131,10 +151,10 @@ export function ajaxInitPositionData(cityId = 1) {
     ])
         .then((datas) => {
             datas.forEach((data) => {
-                stuffDataToPosition(data.arr, data.type, positionDataArr);
+                stuffDataToPosition(data.arr, data.type);
             });
 
-            return positionDataArr;
+            return positionDataObj;
 
             // 手动添加附近相关数据
             // 如果地理位置权限允许，则添加附近数据

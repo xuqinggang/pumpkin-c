@@ -1,7 +1,6 @@
-import React, {
-    Component,
-    PureComponent,
-} from 'react';
+/* @flow */
+
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import TabTemplate from './TabTemplate.js'
@@ -10,43 +9,30 @@ import { shallowEqual } from 'lib/util';
 
 import './styles.less';
 
-class Tab extends Component {
-	static propTypes = {
-		index: PropTypes.number,
-		className: PropTypes.string,
-		onTouchTab: PropTypes.func,
-		isSelected: PropTypes.bool,
-		width: PropTypes.string,
-		label: PropTypes.node,
-		tab: PropTypes.node,
-    }
+type PropType = {
+    index: number,
+    className?: string,
+    navItemClass?: string,
+    onTouchTap: Function,
+    isSelected: boolean,
+    label: string,
+    customRef: Function,
+};
+
+class Tab extends PureComponent<PropType> {
+    static defaultProps = {
+        onTouchTap: () => {},
+    };
 
     // 事件处理程序-每一个tab的点击
-    handleTouchTap = (event) => {
+    handleTouchTap = (event: SyntheticEvent<>) => {
         const {
-            onTouchTab,
+            onTouchTap,
             index,
-            itemData,
         } = this.props;
 
-        if(onTouchTab) {
-            onTouchTab(event, index, itemData);
-        }
+        onTouchTap(event, index);
 	}
-
-    shouldComponentUpdate(nextProps, nextState) {
-        const {
-            children: nextChildren,
-            ...nextExtraProps,
-        } = nextProps;
-
-        const {
-            children,
-            ...extraProps,
-        } = this.props;
-
-        return !shallowEqual(nextExtraProps, extraProps);
-    }
 
     render() {
 		const {

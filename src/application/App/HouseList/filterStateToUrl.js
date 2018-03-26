@@ -1,19 +1,24 @@
 // 对象state的键名字，与url字母缩写Map
 let TypeAndPrefixMap = {
-    direction: 'd',
-    feature: 'b',
-    area: 'a',
-    floor: 'f',
-    shared: 's',
-    whole: 'w'
+    districtId: 'a',
+    circleId: 'b',
+    subwayId: 'c',
+    stationId: 'd',
+    subways: 'c',
+    direction: 'h',
+    feature: 'j',
+    area: 'k',
+    floor: 'n',
+    shared: 'f',
+    whole: 'g'
 };
 
-// 每个筛选条件内部的分隔符
-const FILTER_ITEM_SEPARATOR = '$';
-// 各个筛选条件连接的分隔符
-const FILTER_SEPARATOR = '~';
+TypeAndPrefixMap = Object.assign(TypeAndPrefixMap, reverseObjKeyValue(TypeAndPrefixMap));
 
-// const SEPARATOR = 'I';
+// 每个筛选条件内部的分隔符
+const FILTER_ITEM_SEPARATOR = 'l';
+// 各个筛选条件连接的分隔符
+const FILTER_SEPARATOR = '-';
 
 // 反转对象的属性和值
 function reverseObjKeyValue(obj) {
@@ -25,19 +30,20 @@ function reverseObjKeyValue(obj) {
     return reverseObj;
 }
 
-TypeAndPrefixMap = Object.assign(TypeAndPrefixMap, reverseObjKeyValue(TypeAndPrefixMap));
 
 // 将state对象转换成筛选url参数
-// ex: { direction: { 1: true, 2: true }, floor: { 2: true, 3: true } } to 'd1|2f2|3'
+// stateObj { direction: { 1: true, 2: true }, floor: { 2: true, 3: true } }
+// return f1l4-g3l5
 export function stringifyTagsStateToUrl(stateObj) {
     if (!stateObj) {
         return '';
     }
 
-    const urlArr = Object.keys(stateObj).map((stateName) => {
-        let urlPrefix = TypeAndPrefixMap[stateName];
+    const rtUrlArr = [];
+    Object.keys(stateObj).forEach((stateKey) => {
+        let alpha = TypeAndPrefixMap[stateKey];
         let urlArr = [];
-        const correspondState = stateObj[stateName];
+        const correspondState = stateObj[stateKey];
 
         Object.keys(correspondState).forEach((index) => {
             if (correspondState[index]) {
@@ -50,57 +56,50 @@ export function stringifyTagsStateToUrl(stateObj) {
             return '';
         }
 
-        return urlPrefix + urlJoinStr;
+        rtUrlArr.push(alpha + urlJoinStr);
     });
 
-    return urlArr.join('');
+    return rtUrlArr.join(FILTER_SEPARATOR);
 }
 
-export function parseTagsUrlToState(filterUrl) {
+// tagUrlObj: { f:3l4, g3 }
+export function parseTagsUrlToState(tagUrlObj) {
     let stateObj = {};
-    if (!filterUrl) { return null; }
-    var reg = new RegExp(`(\\w[\\d\\${FILTER_ITEM_SEPARATOR}]*)`, 'g');
-    // const regRtArr = filterUrl.match(/(\w[\d\|]*)/g);
-    const regRtArr = filterUrl.match(reg);
-    regRtArr.forEach((regRtItem) => {
-        // regRtItem,ex: d1|2
-        if (regRtItem) {
-            // 前缀,ex:d
-            const prefix = regRtItem[0];
-            // ex: {1:true, 2:true}
-            const correspondStateObj  = {};
 
-            // ex:1|2
-            const leftStr = regRtItem.substr(1);
-            const valueArr = leftStr.split(FILTER_ITEM_SEPARATOR);
-            valueArr.forEach((value) => {
-                correspondStateObj[value] = true;
-            });
-            // { direction: {1:true} }
-            stateObj[TypeAndPrefixMap[prefix]] = correspondStateObj;
-        }
+    tagUrlObj && Object.keys(tagUrlObj).forEach((alpha) => {
+        if (!alpha) return;
+        const valueStr = tagUrlObj[alpha];
+
+        const correspondStateObj = {};
+        const valueArr = valueStr.split(FILTER_ITEM_SEPARATOR);
+        valueArr.forEach((value) => {
+            correspondStateObj[value] = true;
+        });
+
+        stateObj[TypeAndPrefixMap[alpha]] = correspondStateObj;
+
     });
+
     return stateObj;
 }
 
 // rentValArr: [0-3300]
-// return 'p0-3300'
+// return 'e0l3000'
 export function stringifyRentStateToUrl(rentValArr) {
     if (rentValArr && rentValArr.length) {
         // [0, 20000] 代表无限，不拼接到url中
         if (rentValArr[0] === 0 && rentValArr[1] === 20000) return '';
-        return 'p' + rentValArr.join('-')
+        return 'e' + rentValArr.join('l')
     }
 
     return '';
 }
 
-// rentUrl: 'p4000-6000'
-// return: [4000-6000]
-export function parseRentUrlToState(rentUrl) {
-    if (rentUrl) {
-        const rentArr = rentUrl.substr(1).split('-');
-        return [parseInt(rentArr[0] ,10), parseInt(rentArr[1], 10)]
+// rentUrlObj: {e:1000l3000}
+function parseRentUrlToState(rentUrlObj) {
+    if (rentUrlObj && rentUrlObj.e) {
+        const rentArr = rentUrlObj.e.split(FILTER_ITEM_SEPARATOR);
+        return [parseInt(rentArr[0] ,10), parseInt(rentArr[1], 10)];
     }
 }
 
@@ -117,114 +116,43 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
         thirdItemSelectedIndex,
     } = positinFilterStateObj;
 
-    // 位置筛选的区域，地铁数据 [{ around: { text: '区域', itemArr: [] } }]
-    const positionFilterDataArr = window.getStore('positionFilterDataArr').data;
-    let positionUrlArr = [];
+    // positionFilterDataObj: {districts: { 2345: {text: '2号线'}, sub: {} }}
+    const positionFilterDataObj = window.getStore('positionFilterDataObj').data;
 
-    const firstItem = positionFilterDataArr[firstItemSelectedIndex];
-    // eg: 'districts', 'subways'
-    const positionType = firstItem.id.type;
-
-
-    let secondItem = null;
-    if (secondItemSelectedIndex != undefined && secondItemSelectedIndex != -1) {
-        secondItem = firstItem.itemArr[secondItemSelectedIndex];
-
-        positionUrlArr.push(positionType);
-        const secondItemId = secondItem.id;
-
-        if (secondItemId === -1) {
-            positionUrlArr.push(secondItemSelectedIndex);
-        } else {
-            // 如果是附近 需做特别处理
-            if (positionType === 'around') {
-                const { lon, lat, distance } = secondItemId;
-                positionUrlArr.push(`${secondItemSelectedIndex}-${lon},${lat},${distance}`);
-            } else {
-                positionUrlArr.push(`${secondItemSelectedIndex}-${secondItemId}`);
-            }
-        }
-    }
-
-    if (thirdItemSelectedIndex != undefined && thirdItemSelectedIndex != -1 && secondItem) {
-        const thirdItem = secondItem.itemArr[thirdItemSelectedIndex];
-        const thirdItemId = thirdItem.id;
-        if (thirdItemId === -1) {
-            positionUrlArr.push(thirdItemSelectedIndex);
-        } else {
-            positionUrlArr.push(`${thirdItemSelectedIndex}-${thirdItemId}`);
-        }
-    }
-        
-    return positionUrlArr.join(FILTER_ITEM_SEPARATOR);
-}
-
-// 位置类型对应接口参数key
-const PtTypeMapParamsKey = {
-    districts: ['districtId', 'circleId'],
-    subways: ['subwayId', 'stationId'],
-    around: ['nearByInfo'],
-};
-
-// 位置比较特殊，根据url生成state和params信息
-// 转换positionUrl->positionState和positionParams
-export function parsePositionUrlToState(positionUrl) {
-    if (!positionUrl) return ;
-    const positionState = {
-        firstItemSelectedIndex: 0,
-        secondItemSelectedIndex: -1,
-        thirdItemSelectedIndex: -1,
-    };
-    const positionParams = {};
-    let positionParamsKey = null;
-
-    // 类型对应索引
-    const TypeMapIndex = {
-        districts: 0,
-        subways: 1,
-        around: 2,
+    const IndexMapType = {
+        '0': 'districts',
+        '1': 'subways',
     };
 
-    const positionUrlArr = positionUrl.split(FILTER_ITEM_SEPARATOR);
-    if (positionUrlArr[0]) {
-        positionState.firstItemSelectedIndex = TypeMapIndex[positionUrlArr[0]];
-        positionParamsKey = PtTypeMapParamsKey[positionUrlArr[0]];
-    }
+    // 获取第一级索引对应的类型对象
+    const type = IndexMapType[firstItemSelectedIndex];
+    const typePositionObj = positionFilterDataObj[type];
 
-    if (positionUrlArr[1]) {
-        const indexAndIdArr = positionUrlArr[1].split('-');
-        positionState.secondItemSelectedIndex = parseInt(indexAndIdArr[0], 10);
+    // 获取第二级第三级索引对应的id
+    let firstId, secondId;
 
-        // id
-        if (indexAndIdArr[1] && positionParamsKey) {
-            // 对附近，做处理
-            if (positionParamsKey[0] === 'nearByInfo') {
-                const nearByInfoParams = indexAndIdArr[1].split(',');
-                positionParams[positionParamsKey[0]] = {
-                    lon: nearByInfoParams[0],
-                    lat: nearByInfoParams[1],
-                    distance: nearByInfoParams[2],
-                };
-            } else {
-                positionParams[positionParamsKey[0]] = parseInt(indexAndIdArr[1], 10);
-            }
-        }
-    }
+    const firstIdArr = Object.keys(typePositionObj);
+    firstId = firstIdArr[secondItemSelectedIndex];
 
-    if (positionUrlArr[2]) {
-        const indexAndIdArr = positionUrlArr[2].split('-');
-        positionState.thirdItemSelectedIndex = parseInt(indexAndIdArr[0], 10);
+    const secondIdArr = Object.keys(typePositionObj[firstId].sub);
+    secondId = secondIdArr[thirdItemSelectedIndex];
 
-        // id
-        if (indexAndIdArr[1] && positionParamsKey) {
-            positionParams[positionParamsKey[1]] = parseInt(indexAndIdArr[1], 10);
-        }
-    }
-
-    return {
-        state: positionState,
-        params: positionParams,
+    const TypeMapAlphaArr = {
+        districts: ['a', 'b'],
+        subways: ['c', 'd'],
     };
+
+    const urlArr = [];
+    const alphaArr = TypeMapAlphaArr[type];
+    if (firstId) {
+        urlArr.push(`${alphaArr[0]}${firstId}`);
+    }
+
+    if (secondId != 0) {
+        urlArr.push(`${alphaArr[1]}${secondId}`);
+    }
+
+    return urlArr.join(FILTER_SEPARATOR);
 }
 
 export function stringifyStateObjToUrl(filterStateObj) {
@@ -246,58 +174,124 @@ export function stringifyStateObjToUrl(filterStateObj) {
         rentUrl && urlArr.push(rentUrl);
     }
 
-    if (more) {
-        const moreUrl = stringifyTagsStateToUrl(more);
-        moreUrl && urlArr.push(moreUrl);
-    }
-
     if (houseType) {
         const houseTypeUrl = stringifyTagsStateToUrl(houseType);
         houseTypeUrl && urlArr.push(houseTypeUrl);
     }
 
-    return urlArr.join('~');
+    if (more) {
+        const moreUrl = stringifyTagsStateToUrl(more);
+        moreUrl && urlArr.push(moreUrl);
+    }
+
+    console.log('urlArr', urlArr);
+    return urlArr.join(FILTER_SEPARATOR);
 }
 
 export function parseUrlToState(filterUrlFragment) {
+    if (!filterUrlFragment) return;
+
     // 初始化的state
     const filterStateObj = {
-        rent: [0, 20000],
-        position: {
-            state: {},
-            params: {},
-        },
-        houseType: {},
-        more: {},
+        // rent: [0, 20000],
+        // houseType: {},
+        // more: {},
     };
 
-    if (filterUrlFragment) {
-        const filterUrlArr = filterUrlFragment.split('~');
-        filterUrlArr.forEach((filerUrlItem) => {
-            // 如果url第一个字母p,则为租金筛选
-            if (filerUrlItem[0] === 'p') {
-                filterStateObj.rent = parseRentUrlToState(filerUrlItem);
-                return;
-            }
+    const filterUrlArr = filterUrlFragment.split(FILTER_SEPARATOR);
 
-            // 如果url中含有'subways'和'districts'字段，则position筛选
-            if (filerUrlItem.indexOf('subways') !== -1 ||
-                filerUrlItem.indexOf('districts') !== -1 ||
-                filerUrlItem.indexOf('around') !== -1
-            ) {
-                filterStateObj.position = parsePositionUrlToState(filerUrlItem);
-                return;
-            }
+    // filterUrlObj: { e:3000l4000, f:4l1 }
+    const filterUrlObj = {};
+    filterUrlArr.forEach((filerUrlItem) => {
+        if (!filerUrlItem) return;
+        const alpha = filerUrlItem.substr(0, 1);
+        const value = filerUrlItem.substr(1);
+        filterUrlObj[alpha] = value;
+    });
 
-            if (filerUrlItem.indexOf('s') !=-1 || filerUrlItem.indexOf('w') != -1) {
-                filterStateObj.houseType = parseTagsUrlToState(filerUrlItem);
-                return;
-            }
+    const { a, b, c, d, e, ...tagUrlObj } = filterUrlObj;
 
-            filterStateObj.more = parseTagsUrlToState(filerUrlItem);
+    // 租金
+    const rentState = parseRentUrlToState({e});
+    rentState && Object.assign(filterStateObj, { rent: rentState });
 
-        });
-    }
+    const tagsStateObj = parseTagsUrlToState(tagUrlObj);
 
-    return filterStateObj;
+    const {
+        whole,
+        shared,
+        ...moreTagStateObj,
+    } = tagsStateObj;
+
+    // 房型
+    const houseTypeStateObj = {};
+    whole && Object.assign(houseTypeStateObj, { whole });
+    shared && Object.assign(houseTypeStateObj, { shared });
+    Object.assign(filterStateObj, { houseType: houseTypeStateObj });
+
+    // 更多
+    Object.assign(filterStateObj, { more: moreTagStateObj });
+
+    console.log('filterStateObj', filterStateObj);
+}
+
+function parsePositionUrlToState(filterUrlFragment) {
+    const ptStateObj = {};
+    let districtId, subwayId;
+
+    const positionFilterDataObj = window.getStore('positionFilterDataObj').data;
+    if (!positionFilterDataObj) return null;
+
+    const filterUrlArr = filterUrlFragment.split(FILTER_SEPARATOR);
+    filterUrlArr.forEach((filterUrlItem) => {
+        const alpha = filterUrlItem[0];
+        const idVal = filterUrlItem.substr(1);
+
+        // 区域
+        if (alpha === 'a') {
+            ptStateObj.firstItemSelectedIndex = 0;
+            const districtIdArr = Object.keys(positionFilterDataObj.districts);
+            districtId = idVal;
+            ptStateObj.secondItemSelectedIndex = districtIdArr.indexOf(idVal);
+            return;
+        } 
+
+        if (alpha === 'b') {
+            const circlesObj = positionFilterDataObj.districts[districtId].sub;
+            const circleIdArr = Object.keys(circlesObj);
+            ptStateObj.thirdItemSelectedIndex = circleIdArr.indexOf(idVal);
+            return;
+        }
+
+        // 地铁
+        if (alpha === 'c') {
+            ptStateObj.firstItemSelectedIndex = 1;
+            const subwayIdArr = Object.keys(positionFilterDataObj).subways;
+            subwayId = idVal;
+            ptStateObj.secondItemSelectedIndex = subwayIdArr.indexOf(idVal);
+            return;
+        }
+
+        if (alpha === 'd') {
+            const stationsObj = positionFilterDataObj.subways[subwayId].sub;
+            const stationIdArr = Object.keys(stationsObj);
+            ptStateObj.thirdItemSelectedIndex = stationIdArr.indexOf(idVal);
+            return;
+        }
+    });
+
+    return ptStateObj;
+}
+
+// ptUrlObj: {a:123, b:21 } or {c:1234: d:1234}
+function parsePositionUrlToParams(ptUrlObj) {
+    const paramsObj = {};
+
+    ptUrlObj && Object.keys(ptUrlObj).forEach((alpha) => {
+        if (ptUrlObj[alpha]) {
+            paramsObj[TypeAndPrefixMap[alpha]] = ptUrlObj[alpha];
+        }
+    });
+
+    return paramsObj;
 }
