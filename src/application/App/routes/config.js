@@ -9,6 +9,7 @@ import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 import ShopList from 'application/App/ShopList/ShopList';
 import ShopDetail from 'application/App/ShopDetail/ShopDetail';
 import Comment from 'application/App/Comment';
+import ApartmentIndex from 'application/App/ApartmentIndex/ApartmentIndex';
 
 import Service from 'lib/Service';
 
@@ -32,6 +33,7 @@ class WrapRouter extends PureComponent {
     render() {
         return (
             <Switch>
+                <Route path={`${this.urlPrefix}/apartment/:apartmentId`} component={ApartmentIndex} />
                 <Route path={`${this.urlPrefix}/comment/:rentUnitId`} component={Comment} />
                 <Route path={`${this.urlPrefix}/shop/detail/:shopId`} component={ShopDetail} />
                 <Route exact path={`${this.urlPrefix}/shop/list/:filterUrlFragment?`} component={ShopList} />

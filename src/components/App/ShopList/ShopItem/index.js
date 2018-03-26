@@ -9,36 +9,36 @@ import './styles.less';
 const classPrefix = 'm-shopitem';
 const imgCutModifier = '?crop=1&cpos=middle&w=720&h=370';
 
-const createShopDetailPath = apartmentId => `shop/detail/${apartmentId}`;
+const createShopDetailPath = shopId => `shop/detail/${shopId}`;
 
 class ShopItem extends PureComponent {
 
-    goShopDetail = (apartmentId) => withHistory(this.props.history)(createShopDetailPath)(apartmentId);
+    goShopDetail = (shopId) => withHistory(this.props.history)(createShopDetailPath)(shopId);
     
     handleTouchTap = () => {
-        this.goShopDetail(this.props.apartment.id);
+        this.goShopDetail(this.props.shop.id);
     }
 
     render() {
-        const { apartment } = this.props;
+        const { shop } = this.props;
         return (
             <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 <div className={`${classPrefix}-image`}>
-                    <img src={`${apartment.headImage}${imgCutModifier}`} alt="" />
+                    <img src={`${shop.headImage}${imgCutModifier}`} alt="" />
                     <div className={'tip'}>
-                        <span>户型/{apartment.houseCount}个 </span>
-                        <span>可租/{apartment.totalOnsaleCount}套</span>
+                        <span>户型/{shop.houseCount}个 </span>
+                        <span>可租/{shop.totalOnsaleCount}套</span>
                     </div>
                 </div>
                 <div className={`g-grid-row f-flex-justify-between ${classPrefix}-title-price`}>
-                    <span className={`${classPrefix}-title`}>{apartment.name}</span>
-                    <span className={`${classPrefix}-price`}>{apartment.minPrice}
+                    <span className={`${classPrefix}-title`}>{shop.name}</span>
+                    <span className={`${classPrefix}-price`}>{shop.minPrice}
                         <span className={`${classPrefix}-unit`}>元/月起</span>
                     </span>
                 </div>
                 <div className={`f-display-flex ${classPrefix}-location`}>
                     <span className={`icon-region`} />
-                    <span>{apartment.address}</span>
+                    <span>{shop.address}</span>
                 </div>
             </div>
         );
