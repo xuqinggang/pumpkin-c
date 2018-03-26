@@ -185,10 +185,7 @@ HouseHead.propTypes = {
     headData: PropTypes.any,
     match: PropTypes.any,
     history: PropTypes.any,
-    renderRight: PropTypes.oneOfType([
-        PropTypes.func,
-        null,
-    ]),
+    renderRight: PropTypes.func,
 };
 
 HouseHead.defaultProps = {

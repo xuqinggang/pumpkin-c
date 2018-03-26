@@ -4,16 +4,29 @@ import './styles';
 
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
+import { Stars, ImageUploadInput } from 'components/App/Comment'
+
 const classPrefix = 'g-commentinput';
 
 export default class CommentInput extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            comment: '',
+            images: [],
+        };
     }
 
     handleSubmit = () => {
         console.log('提交');
+    }
+
+    handleStars = (newRating) => {
+        console.log(newRating);
+    }
+
+    handleChange = (event) => {
+        this.setState({comment: event.target.value});
     }
 
     render() {
@@ -29,7 +42,18 @@ export default class CommentInput extends PureComponent {
                         </div>
                     )}
                 />
-                <p>评论框就在这</p>
+                <div className="main">
+                    <div className={`f-display-flex f-flex-align-center`}>
+                        <span className="rating-title">综合评分</span>
+                        <Stars   
+                            count={5}
+                            onChange={this.handleStars}
+                            size={48}
+                            color2={'#F38D39'} 
+                        />
+                    </div>
+                    <ImageUploadInput />
+                </div>
             </div>
         );
     }
