@@ -42,9 +42,9 @@ export default class ApartmentIndex extends PureComponent {
                 <RoomSlider images={images} />
                 <div className="main">
                     <ApartmentIntro {...apartment} />
-                    <ApartmentRecommend recommends={recommends} />
-                    <ApartmentShop shops={boutiqueShops} />
                 </div>
+                <ApartmentRecommend recommends={recommends} />
+                <ApartmentShop shops={boutiqueShops} />
             </div>
         );
     }

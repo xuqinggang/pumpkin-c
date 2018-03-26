@@ -31,7 +31,7 @@ class ShopItem extends PureComponent {
                     </div>
                 </div>
                 <div className={`g-grid-row f-flex-justify-between ${classPrefix}-title-price`}>
-                    <span className={`${classPrefix}-title`}>{shop.name}</span>
+                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{shop.name}</span>
                     <span className={`${classPrefix}-price`}>{shop.minPrice}
                         <span className={`${classPrefix}-unit`}>元/月起</span>
                     </span>

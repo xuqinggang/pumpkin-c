@@ -15,6 +15,26 @@ export const data = {
             "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
             "url":"http://nangua.focus.cn"
         },
+        {
+            "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
+            "url":"http://nangua.focus.cn"
+        },
+        {
+            "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
+            "url":"http://nangua.focus.cn"
+        },
+        {
+            "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
+            "url":"http://nangua.focus.cn"
+        },
+        {
+            "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
+            "url":"http://nangua.focus.cn"
+        },
+        {
+            "avatar":"https://pic.kuaizhan.com/g3/a1/b3/0133-aada-444d-b85c-890cea38c85e41",
+            "url":"http://nangua.focus.cn"
+        },
     ],
 　　"boutiqueShops":[
     　　　　{
