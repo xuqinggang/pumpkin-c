@@ -11,8 +11,9 @@ export default class Comment extends PureComponent {
 
         return (
             <Switch>
-                <Route exact path={`${url}/input`} component={CommentInput} />,
+                <Route exact path={`${url}/input`} component={CommentInput} />
                 <Route exact path={`${url}/list`} component={CommentList} />
+                <Route exact path={`${url}`} component={CommentList} />
             </Switch>
         );
     }

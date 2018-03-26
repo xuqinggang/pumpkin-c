@@ -205,7 +205,12 @@ export default class ShopList extends PureComponent {
                 <div className={`${classPrefix}-fixed-top`}>
                     {
                         !isRmHead() ?
-                        <HouseHead type="apartment" title="集中式公寓" history={history} /> : 
+                        <HouseHead 
+                            history={history}
+                            renderRight={() => (
+                                <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
+                            )}
+                        /> : 
                         null
                     }
                     <ShopFilter
