@@ -43,20 +43,23 @@ export function ajaxPostComment(apartmentId, { // isRequired
 
 // 上传图片
 export function ajaxPostImage(file) {
-    console.log('ssssss');
-    return Service.post('/api/v1/common/pics', {
-        file,
-    }, {
-        contentType: 'form',
-    })
-        .then((res) => {
-            console.log('ssss');
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('https://pic.kuaizhan.com/g3/17/d8/f361-a365-4e70-a2f7-a08a26f26f4058')
+        }, 1000);
+    });
 
-            if (res.code === 200) {
-                return res.data;
-            }
+    // return Service.post('/api/v1/common/pics', {
+    //     file,
+    // }, {
+    //     contentType: 'form',
+    // })
+    //     .then((res) => {
+    //         if (res.code === 200) {
+    //             return res.data;
+    //         }
 
-            throw new Error(res);
-        });
+    //         throw new Error(res);
+    //     });
 }
 

@@ -43,28 +43,41 @@ class PubImgUpload extends Component {
 
     uploadHandler = (e) => {
         const files = e.target.files;
-
         if (files.length < 0) return;
 
         const { limit, fetch: uploadImageFetch } = this.props;
         const { images } = this.state;
         let currentImageCount = images.length;
 
+        // 只上传 limit 以内的图片
+        let fileArray = Array.from(files);
+        fileArray = fileArray.slice(0, limit - currentImageCount);
+
         this.setState({
             loading: true,
         });
 
-        Array.from(files).forEach((file, index) => {            
-            if (currentImageCount.length >= limit) throw new Error('传图到达上限');
+        const uploadTasks = fileArray.map(file => {
+            return new Promise((resolve, reject) => {
+                uploadImageFetch(file)
+                    .then(data => resolve(data))
+                    .catch(error => reject(error))
+            })
+        });
 
-            uploadImageFetch(file).then(data => {
-                console.log('data', data);
-            }).catch(error => {
-                console.log(error);
+        // const uploadTasks = fileArray.map(file => uploadImageFetch(file));
+        Promise.all(uploadTasks).then(data => {
+            this.setState({
+                images: [...images, ...data]
+            })
+        }).catch(error => {
+            console.log(error, 'upload error');
+            // TODO
+        }).finally(() => {
+            this.setState({
+                loading: false,
             });
-
-        })
-
+        });
     }
 
     render() {
@@ -82,7 +95,7 @@ class PubImgUpload extends Component {
                     ))
                 }
                 {
-                    images.length <= limit &&
+                    images.length < limit &&
                     <div role="presentation" onClick={this.handleAddImage}>
                         add Image
                     </div>
