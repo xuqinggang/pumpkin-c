@@ -41,6 +41,19 @@ class PubImgUpload extends Component {
         this.props.onAdd(images, added);
     }
 
+    handleDelete = (index) => {
+        const { images } = this.state;
+
+        let newImages = [...images];
+        newImages.splice(index, 1);
+        
+        this.setState({
+            images: newImages
+        });
+        
+        this.props.ondelete(newImages, index);
+    }
+
     uploadHandler = (e) => {
         const files = e.target.files;
         if (files.length < 0) return;
@@ -57,15 +70,15 @@ class PubImgUpload extends Component {
             loading: true,
         });
 
-        const uploadTasks = fileArray.map(file => {
-            return new Promise((resolve, reject) => {
-                uploadImageFetch(file)
-                    .then(data => resolve(data))
-                    .catch(error => reject(error))
-            })
-        });
+        // const uploadTasks = fileArray.map(file => {
+        //     return new Promise((resolve, reject) => {
+        //         uploadImageFetch(file)
+        //             .then(data => resolve(data))
+        //             .catch(error => reject(error))
+        //     })
+        // });
 
-        // const uploadTasks = fileArray.map(file => uploadImageFetch(file));
+        const uploadTasks = fileArray.map(file => uploadImageFetch(file));
         Promise.all(uploadTasks).then(data => {
             this.setState({
                 images: [...images, ...data]
@@ -85,18 +98,20 @@ class PubImgUpload extends Component {
         const { images } = this.state;
 
         return (
-            <div className={classPrefix}>
+            <div className={`${classPrefix}`}>
                 {
                     images.map((image, index) => (
-                        <div key={index}>
-                            <img src={image} alt={index} />
-                            <div role="presentation" onClick={this.props.onDelete}>x</div>
+                        <div key={index} className="item">
+                            <div className="img-wrap">
+                                <img src={image} alt={index} />
+                                <div className="delete" role="presentation" onClick={() => this.handleDelete(index)}>x</div>
+                            </div>
                         </div>
                     ))
                 }
                 {
                     images.length < limit &&
-                    <div role="presentation" onClick={this.handleAddImage}>
+                    <div className="item add-image" role="presentation" onClick={this.handleAddImage}>
                         add Image
                     </div>
                 }

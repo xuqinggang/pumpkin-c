@@ -46,7 +46,7 @@ export function ajaxPostImage(file) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve('https://pic.kuaizhan.com/g3/17/d8/f361-a365-4e70-a2f7-a08a26f26f4058')
-        }, 1000);
+        }, 100);
     });
 
     // return Service.post('/api/v1/common/pics', {
