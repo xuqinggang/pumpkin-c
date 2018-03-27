@@ -121,13 +121,13 @@ export function stuffAroundDataToPosition() {
         });
 }
 
-export function ajaxInitPositionData(cityId = 1) {
+export function ajaxInitPositionData() {
     // 位置筛选的数据
     let positionDataArr = [];
 
     return Promise.all([
-        _ajaxDistricts(cityId),
-        _ajaxSubways(cityId),
+        _ajaxDistricts(),
+        _ajaxSubways(),
     ])
         .then((datas) => {
             datas.forEach((data) => {
@@ -152,8 +152,8 @@ export function ajaxInitPositionData(cityId = 1) {
         })
 }
 
-function _ajaxDistricts(cityId) {
-    return Service.get(`/api/v1/common/districts?cityId=${cityId}`)
+function _ajaxDistricts() {
+    return Service.get(`/api/v1/common/districts`)
         .then((data) => {
             if (data.code == 200) {
                 const districtsArr = data.data.districts;
@@ -165,8 +165,8 @@ function _ajaxDistricts(cityId) {
         });
 }
 
-function _ajaxSubways(cityId) {
-    return Service.get(`/api/v1/common/subways?cityId=${cityId}`)
+function _ajaxSubways() {
+    return Service.get(`/api/v1/common/subways`)
         .then((data) => {
             if (data.code === 200) {
                 const subwaysArr = data.data.subways;

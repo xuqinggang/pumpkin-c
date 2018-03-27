@@ -9,13 +9,13 @@ import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 import ApartmentList from 'application/App/ApartmentList/ApartmentList';
 import ApartmentDetail from 'application/App/ApartmentDetail/ApartmentDetail';
 
-// import ajaxInit from  '../ajaxInit';
-
 import Service from 'lib/Service';
+import { prefixMapCityId } from 'config/config';
 
 class WrapRouter extends PureComponent {
     componentWillMount() {
         const tmpUrl = this.props.match.url;
+        console.log('tmpUrl', this.props);
         // 去掉后缀'/'
         this.urlPrefix = tmpUrl.charAt(tmpUrl.length - 1) === '/' ? tmpUrl.substr(0, tmpUrl.length - 1) : tmpUrl;
 
@@ -27,6 +27,9 @@ class WrapRouter extends PureComponent {
         // Server配置ajax url前缀, /bj/nangua
         Service.baseConfig = {
             urlPrefix: this.urlPrefix,
+            commonParamters: {
+                cityId: prefixMapCityId[this.props.match.params.cityName],
+            },
         };
     }
 

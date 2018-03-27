@@ -43,8 +43,7 @@ class BrandFilter extends PureComponent {
             });
             return;
         }
-        const cityId = 1;
-        ajaxGetBrandList(cityId).then((brandLabels) => {
+        ajaxGetBrandList().then((brandLabels) => {
             const formattedBrands = formatBrands(brandLabels);
             window.setStore('apartmentBrandLabels', {
                 list: formattedBrands,
