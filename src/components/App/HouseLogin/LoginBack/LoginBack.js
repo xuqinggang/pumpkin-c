@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
 import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
-const classPrefix = 'm-loginback'
+const classPrefix = 'm-loginback';
 
 class LoginBack extends Component {
     handleNavigateAboutTap = () => {
@@ -20,7 +19,7 @@ class LoginBack extends Component {
 
     render() {
         return (
-            <a 
+            <a
                 href="javascript:void(0)"
                 className={`f-display-flex f-flex-align-center ${classPrefix}-about`}
                 onTouchTap={this.handleNavigateAboutTap}
