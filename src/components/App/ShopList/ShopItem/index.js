@@ -21,24 +21,27 @@ class ShopItem extends PureComponent {
 
     render() {
         const { shop } = this.props;
+
+        const { headImage, houseCount, totalOnsaleCount, name, address, minPrice } = shop || {};
+
         return (
             <div className={`${classPrefix}`} onTouchTap={this.handleTouchTap}>
                 <div className={`${classPrefix}-image`}>
-                    <img src={`${shop.headImage}${imgCutModifier}`} alt="" />
+                    <img src={`${headImage}${imgCutModifier}`} alt="" />
                     <div className={'tip'}>
-                        <span>户型/{shop.houseCount}个 </span>
-                        <span>可租/{shop.totalOnsaleCount}套</span>
+                        <span>户型/{houseCount}个 </span>
+                        <span>可租/{totalOnsaleCount}套</span>
                     </div>
                 </div>
                 <div className={`g-grid-row f-flex-justify-between ${classPrefix}-title-price`}>
-                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{shop.name}</span>
-                    <span className={`${classPrefix}-price`}>{shop.minPrice}
+                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{name}</span>
+                    <span className={`${classPrefix}-price`}>{minPrice}
                         <span className={`${classPrefix}-unit`}>元/月起</span>
                     </span>
                 </div>
                 <div className={`f-display-flex ${classPrefix}-location`}>
                     <span className={`icon-region`} />
-                    <span>{shop.address}</span>
+                    <span>{address}</span>
                 </div>
             </div>
         );

@@ -4,7 +4,12 @@ import {
     RoomSlider,
 } from 'components/App/ShopDetail';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
-import { ApartmentIntro, ApartmentRecommend, ApartmentShop } from 'components/App/ApartmentIndex';
+import {
+    ApartmentIntro,
+    ApartmentRecommend,
+    ApartmentShop,
+    RentUnitList,
+} from 'components/App/ApartmentIndex';
 
 import { ajaxGetApartmentIndex } from './ajaxInitApartmentIndex';
 
@@ -30,7 +35,7 @@ export default class ApartmentIndex extends PureComponent {
 
     render() {
         const { history } = this.props;
-        const { brandApartments: { images, apartment, recommends, boutiqueShops } } = this.state;
+        const { brandApartments: { images, apartment, recommends, boutiqueShops, boutiqueRentUnits, nearbyRentUnits } } = this.state;
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead
@@ -40,11 +45,15 @@ export default class ApartmentIndex extends PureComponent {
                     )}
                 />
                 <RoomSlider images={images} />
-                <div className="main">
+                <div className="content-padding">
                     <ApartmentIntro {...apartment} />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
                 <ApartmentShop shops={boutiqueShops} />
+                <div className="content-padding">
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" moreLink={'www.baidu.com'} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" moreLink={'www.sohu.com'} />
+                </div>
             </div>
         );
     }

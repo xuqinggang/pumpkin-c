@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 
-import { PureCommentList } from 'components/App/Comment'
+const classPrefix = 'm-purecommentlist';
 
-const classPrefix = 'g-commentlist';
-
-export default class CommentList extends PureComponent {
+export default class PureCommentList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
@@ -13,7 +11,7 @@ export default class CommentList extends PureComponent {
     render() {
         return (
             <div className={`${classPrefix}`}>
-                <PureCommentList />
+                <p>评论列表</p>
             </div>
         );
     }

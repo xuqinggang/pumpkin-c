@@ -43,10 +43,7 @@ export default class ApartmentShop extends PureComponent {
 }
 
 ApartmentShop.propTypes = {
-    shops: PropTypes.arrayOf({
-        avatar: PropTypes.string,
-        url: PropTypes.string,
-    }),
+    shops: PropTypes.arrayOf(PropTypes.any),
 };
 
 ApartmentShop.defaultProps = {

@@ -39,10 +39,10 @@ export default class ApartmentRecommend extends PureComponent {
 }
 
 ApartmentRecommend.propTypes = {
-    recommends: PropTypes.arrayOf({
+    recommends: PropTypes.arrayOf(PropTypes.shape({
         avatar: PropTypes.string,
         url: PropTypes.string,
-    }),
+    })),
 };
 
 ApartmentRecommend.defaultProps = {

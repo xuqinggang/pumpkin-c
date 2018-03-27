@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
 
+import PubImgUpload from 'components/Shared/PubImgUpload';
+import { ajaxPostImage } from 'application/App/Comment/ajaxInitComment';
+
 import './styles';
 
 const classPrefix = 'm-imageuploadinput';
@@ -25,6 +28,7 @@ export default class ImageUploadInput extends PureComponent {
                     <textarea
                         placeholder={'房源信息是否真实、管家服务态度 、居住体验等…'}
                         value={this.state.comment} onChange={this.handleChange} />
+                    <PubImgUpload fetch={ajaxPostImage} />
                 </div>
             </div>
         );
