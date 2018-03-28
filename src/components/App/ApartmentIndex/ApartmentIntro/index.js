@@ -7,22 +7,22 @@ const classPrefix = 'm-apartmentintro';
 
 export default class ApartmentIntro extends PureComponent {
     render() {
-        const { name, image, intro, minPrice, score } = this.props;
+        const { name, image, intro, minPrice, score, goCommentList } = this.props;
         return (
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
                 <img src={image} alt={name} />
                 <div className="intro-wrap">
                     <div>
-                        <span>{name}</span>
-                        <span>{minPrice}</span>
+                        <span className="name">{name}</span>
+                        <span className="price">¥{minPrice}元/月<span>起</span></span>
                     </div>
-                    <div>
+                    <div className="intro">
                         {intro}
                     </div>
                 </div>
                 <div className="score-wrap">
-                    <span>{score}</span>
-                    <div>查看评价</div>
+                    <div className="score">{score}</div>
+                    <div className="go-comments" onTouchTap={goCommentList}>查看评价<i className="icon-pull-down" /></div>
                 </div>
             </div>
         );
@@ -35,6 +35,8 @@ ApartmentIntro.propTypes = {
     intro: PropTypes.string,
     minPrice: PropTypes.number,
     score: PropTypes.number,
+
+    goCommentList: PropTypes.func,
 };
 
 ApartmentIntro.defaultProps = {
@@ -43,5 +45,7 @@ ApartmentIntro.defaultProps = {
     intro: '',
     minPrice: 0,
     score: 0,
+
+    goCommentList: () => null,
 };
 

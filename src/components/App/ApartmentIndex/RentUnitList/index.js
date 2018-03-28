@@ -3,6 +3,7 @@ import RentUnitItem from 'components/App/HouseList/RentUnitItem';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { rentUnitShape } from 'baseData/propTypes';
+import TitleWithMore from '../TitleWithMore';
 
 import './styles.less';
 
@@ -10,13 +11,10 @@ const clsPrefix = 'm-purerentUnit-list';
 
 export default class RentUnitList extends PureComponent {
     render() {
-        const { title, moreLink } = this.props;
+        const { title, goMore } = this.props;
         return (
             <div className={clsPrefix}>
-                <div>
-                    <span>{title}</span>
-                    <a src={moreLink} alt={title} />
-                </div>
+                <TitleWithMore title={title} goMore={goMore} />
                 {
                     this.props.list.map((rentalUnit, index) => (
                         <RentUnitItem key={index} {...rentalUnit} />
@@ -30,11 +28,11 @@ export default class RentUnitList extends PureComponent {
 RentUnitList.propTypes = {
     list: PropTypes.arrayOf(rentUnitShape),
     title: PropTypes.string,
-    moreLink: PropTypes.string,
+    goMore: PropTypes.func,
 };
 
 RentUnitList.defaultProps = {
     list: [],
     title: '',
-    moreLink: '',
+    goMore: () => null,
 };

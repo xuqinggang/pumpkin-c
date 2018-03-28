@@ -27,3 +27,5 @@ Comment.propTypes = {
 
 // useAge: withHistory(history)(createCommentInputPath)
 export const createCommentInputPath = rentUnitId => `comment/${rentUnitId}/input`;
+
+export const createCommentListPath = apartmentId => `comment/${apartmentId}/list`;

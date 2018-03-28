@@ -69,15 +69,7 @@ class PubImgUpload extends Component {
         this.setState({
             loading: true,
         });
-
-        // const uploadTasks = fileArray.map(file => {
-        //     return new Promise((resolve, reject) => {
-        //         uploadImageFetch(file)
-        //             .then(data => resolve(data))
-        //             .catch(error => reject(error))
-        //     })
-        // });
-
+        
         const uploadTasks = fileArray.map(file => uploadImageFetch(file));
         Promise.all(uploadTasks).then(data => {
             this.setState({

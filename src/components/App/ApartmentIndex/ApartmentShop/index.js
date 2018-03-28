@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import SimpleScroll from 'Shared/SimpleScroll/SimpleScroll';
 import ShopItem from 'components/App/ShopList/ShopItem';
+import TitleWithMore from '../TitleWithMore';
 
 import './styles.less';
 
@@ -26,17 +27,16 @@ export default class ApartmentShop extends PureComponent {
 
         return (
             <div className={classnames(classPrefix)}>
-                <div>
-                    <SimpleScroll key={shops.length} className={`${classPrefix}-wrapper`}>
-                        <ul className={`${classPrefix}-list`}>
-                            {
-                                shops.map((shop, index) => {
-                                    return this.renderShop(shop, index);
-                                })
-                            }
-                        </ul>
-                    </SimpleScroll>
-                </div>
+                <TitleWithMore title="精品门店" goMore={() => console.log('more')} />
+                <SimpleScroll key={shops.length} className={`${classPrefix}-wrapper`}>
+                    <ul className={`${classPrefix}-list`}>
+                        {
+                            shops.map((shop, index) => {
+                                return this.renderShop(shop, index);
+                            })
+                        }
+                    </ul>
+                </SimpleScroll>
             </div>
         );
     }

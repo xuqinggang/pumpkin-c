@@ -10,6 +10,8 @@ import {
     ApartmentShop,
     RentUnitList,
 } from 'components/App/ApartmentIndex';
+import { withHistory } from 'application/App/routes';
+import { createCommentListPath } from 'application/App/Comment';
 
 import { ajaxGetApartmentIndex } from './ajaxInitApartmentIndex';
 
@@ -33,6 +35,9 @@ export default class ApartmentIndex extends PureComponent {
         });
     }
 
+    withHistory = withHistory(this.props.history)
+    goCommentList = () => this.withHistory(createCommentListPath)('90909090')
+
     render() {
         const { history } = this.props;
         const { brandApartments: { images, apartment, recommends, boutiqueShops, boutiqueRentUnits, nearbyRentUnits } } = this.state;
@@ -46,13 +51,16 @@ export default class ApartmentIndex extends PureComponent {
                 />
                 <RoomSlider images={images} />
                 <div className="content-padding">
-                    <ApartmentIntro {...apartment} />
+                    <ApartmentIntro 
+                        {...apartment}
+                        goCommentList={this.goCommentList}
+                    />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
                 <ApartmentShop shops={boutiqueShops} />
                 <div className="content-padding">
-                    <RentUnitList list={boutiqueRentUnits} title="精品房源" moreLink={'www.baidu.com'} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" moreLink={'www.sohu.com'} />
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goCommentList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goCommentList} />
                 </div>
             </div>
         );
