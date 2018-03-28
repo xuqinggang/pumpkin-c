@@ -27,6 +27,9 @@ export default class ApartmentIndex extends PureComponent {
         };
     }
 
+    withHistory = withHistory(this.props.history)
+    goCommentList = () => this.withHistory(createCommentListPath)('90909090')
+
     componentDidMount() {
         ajaxGetApartmentIndex('sssss').then((brandApartments) => {
             this.setState({
@@ -35,12 +38,18 @@ export default class ApartmentIndex extends PureComponent {
         });
     }
 
-    withHistory = withHistory(this.props.history)
-    goCommentList = () => this.withHistory(createCommentListPath)('90909090')
-
     render() {
         const { history } = this.props;
-        const { brandApartments: { images, apartment, recommends, boutiqueShops, boutiqueRentUnits, nearbyRentUnits } } = this.state;
+        const {
+            brandApartments: {
+                images,
+                apartment,
+                recommends,
+                boutiqueShops,
+                boutiqueRentUnits,
+                nearbyRentUnits,
+            },
+        } = this.state;
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead

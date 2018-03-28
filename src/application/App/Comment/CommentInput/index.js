@@ -25,7 +25,7 @@ export default class CommentInput extends PureComponent {
     }
 
     handleChange = (event) => {
-        this.setState({comment: event.target.value});
+        this.setState({ comment: event.target.value });
     }
 
     render() {

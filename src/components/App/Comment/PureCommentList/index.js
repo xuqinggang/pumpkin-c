@@ -1,4 +1,7 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+
+import CommentItem from '../CommentItem';
 
 const classPrefix = 'm-purecommentlist';
 
@@ -9,10 +12,23 @@ export default class PureCommentList extends PureComponent {
     }
 
     render() {
+        const { comments } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <p>评论列表</p>
+                {
+                    comments.map((comment, index) => (
+                        <CommentItem comment={comment} key={index} />
+                    ))
+                }
             </div>
         );
     }
 }
+
+PureCommentList.propTypes = {
+    comments: PropTypes.arrayOf(PropTypes.any),
+};
+
+PureCommentList.defaultProps = {
+    comments: [],
+};

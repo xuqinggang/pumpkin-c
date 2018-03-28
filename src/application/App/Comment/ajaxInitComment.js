@@ -2,7 +2,7 @@ import Service from 'lib/Service';
 
 import { data } from './mock';
 
-// 获取品牌公寓首页
+// 获取评论列表
 export function ajaxGetCommentList(apartmentId) {
     return Promise.resolve(data);
 
