@@ -3,7 +3,11 @@ import Service from 'lib/Service';
 import { data } from './mock';
 
 // 获取评论列表
-export function ajaxGetCommentList(apartmentId) {
+export function ajaxGetCommentList(apartmentId, pager) {
+
+    // const { curPage } = pager;
+    // const perPage = 20;
+
     return Promise.resolve(data);
 
     // return Service.get(`/api/v1/brandApartments/comments/${apartmentId}`)

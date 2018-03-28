@@ -29,10 +29,12 @@ export default class CommentList extends PureComponent {
     handleLoadMore = () => {
         const reserveSize = 200;
         const scrollTop = getScrollTop();
+        console.log(scrollTop, this.lastScrollTop, getDocHeight(), getDocHeight() - window.innerHeight - scrollTop);
         if (scrollTop > this.lastScrollTop) {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
                 const { curPage, totalPage } = this.state.pager;
+                console.log(curPage, totalPage);
                 if (curPage < totalPage) {
                     this.onLoadMore();
                 }
@@ -52,13 +54,13 @@ export default class CommentList extends PureComponent {
                 newComments = [...comments, ...data.comments];
                 newPager = {
                     curPage: curPage + 1,
-                    totalPage: data.total,
+                    totalPage: data.totalPage,
                 };
             } else {
                 newComments = data.comments;
                 newPager = {
                     curPage: 1,
-                    totalPage: 1,
+                    totalPage: data.totalPage,
                 };
             }
 

@@ -107,9 +107,9 @@ export default class ShopList extends PureComponent {
         this.setState({
             filterState: {
                 ...this.state.filterState,
-                brand: state
-            }
-        })
+                brand: state,
+            },
+        });
     }
 
     onFilterConfirm = (newState) => {
@@ -204,14 +204,14 @@ export default class ShopList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
                     {
-                        !isRmHead() ?
-                        <HouseHead 
-                            history={history}
-                            renderRight={() => (
-                                <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
-                            )}
-                        /> : 
-                        null
+                        !isRmHead()
+                            ? <HouseHead 
+                                history={history}
+                                renderRight={() => (
+                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
+                                )}
+                            />
+                            : null
                     }
                     <ShopFilter
                         className="shopfilter"
