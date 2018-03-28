@@ -1,5 +1,5 @@
 module.exports = {
-    extends: 'xuqinggang',
+    extends: 'app',
     settings: {
         'import/resolver': {
             webpack: {
