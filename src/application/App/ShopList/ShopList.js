@@ -13,6 +13,7 @@ import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
+import { AbbrevMapCity } from 'config/config';
 
 import './styles.less';
 
@@ -175,9 +176,13 @@ export default class ShopList extends PureComponent {
     
 
     wxShare() {
+        const urlStore = window.getStore('url');
+        const cityName = urlStore.cityName;
+        const cityText = AbbrevMapCity[cityName].text;
+
         // 分享
         execWxShare({
-            title: '北京 - 品质生活独栋公寓', // TODO city
+            title: `${cityText} - 品质生活独栋公寓`,
             link: window.location.href.split('#')[0],
             imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
             desc: '生活不止眼前的苟且，还有诗和远方，快来这里看看高品质的集中式公寓吧。',

@@ -1,6 +1,7 @@
 import Service from 'lib/Service';
 import { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
+import { AbbrevMapCity } from 'config/config';
 
 // 通过管家id动态请求虚拟手机号
 export function ajaxDynamicTel(supervisorId) {
@@ -147,6 +148,10 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
 }
 
 function genSeoData(houseDetailData) {
+    const urlStore = window.getStore('url');
+    const cityName = urlStore.cityName;
+    const cityText = AbbrevMapCity[cityName].text;
+
     const {
         // 合租(SHARED)整租(WHOLE)
         rentalType = 'SHARED',
@@ -167,9 +172,9 @@ function genSeoData(houseDetailData) {
 
     const houseDetailTitle = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
 
-    title = `${houseDetailTitle}-南瓜租房北京租房`;
-    keywords = `北京${districtName}${blockName}租房,${subwayLine}${subwayStation}租房,品质租房${houseDetailTitle}`;
-    description = `北京南瓜租房提供${houseDetailTitle},距${subwayLine}${subwayStation}${subwayDistance}米`;
+    title = `${houseDetailTitle}-南瓜租房${cityText}租房`;
+    keywords = `${cityText}${districtName}${blockName}租房,${subwayLine}${subwayStation}租房,品质租房${houseDetailTitle}`;
+    description = `${cityText}南瓜租房提供${houseDetailTitle},距${subwayLine}${subwayStation}${subwayDistance}米`;
 
     return {
         title,

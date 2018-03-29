@@ -1,5 +1,6 @@
 'use strict';
 
+import { AbbrevMapCity } from 'config/config';
 import { parseUrlToState } from 'application/App/HouseList/filterStateToUrl';
 import { filterStateToParams } from 'application/App/HouseList/filterStateToParams';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
@@ -7,6 +8,7 @@ import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 import { ajaxInitHouseIndexBanner, ajaxInitHouseIndexRecommend } from 'application/App/HouseIndex/ajaxInitHouseIndex';
 
 export default async (ctx, next) => {
+    const cityId = AbbrevMapCity[ctx.params.cityName].id;
     const filterUrlFragment = ctx.params.filterUrlFragment;
 
     // 设置位置相关数据
@@ -20,8 +22,8 @@ export default async (ctx, next) => {
     });
 
     // 设置列表页数据 和 首页的banner和recommend 
-    await Promise.all([setHouseListData(newFilterParamsObj, ctx.state.cityId),
-        setHouseIndexBannerAndRecommend(ctx.state.cityId)]);
+    await Promise.all([setHouseListData(newFilterParamsObj, cityId),
+        setHouseIndexBannerAndRecommend(cityId)]);
 
     await next();
 };
@@ -95,9 +97,10 @@ async function setHouseIndexBannerAndRecommend(cityId) {
 
 // 渲染列表页 meta相关数据
 function renderMetaData(seoData, ctx) {
+    const cityText = AbbrevMapCity[ctx.state.cityName].text;
     const keywordsArr = [];
 
-    seoData.position && (keywordsArr.push('北京'+seoData.position.join('')+'租房'));
+    seoData.position && (keywordsArr.push(cityText+seoData.position.join('')+'租房'));
     seoData.rent && (keywordsArr.push('租金'+seoData.rent+'元'+'租房'));
 
     if (seoData.houseType) {
