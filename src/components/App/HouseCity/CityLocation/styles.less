@@ -1,0 +1,42 @@
+@import (reference) '~styles/lib.less';
+
+.m-citylocation {
+    margin-bottom: 90px;
+
+    &-title {
+        display: block;
+        margin-bottom: 40px;
+        color: #666;
+        font-family: PingFangSC-Medium;
+        .font-size(28);
+    }
+
+    &-city {
+        margin-right: 40px;
+        color: #f38d39;
+        font-family: PingFangSC-Medium;
+        .font-size(36);
+    }
+
+    &-bg-location {
+        display: inline-block;
+        width: 26px;
+        height: 26px;
+        background-image: url('./images/location.png');
+        background-size: 100% 100%;
+
+        &.active {
+            animation: allwaysRotate 2s linear infinite;
+        }
+    }
+}
+
+@keyframes allwaysRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

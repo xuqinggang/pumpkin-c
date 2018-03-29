@@ -1,0 +1,29 @@
+@import (reference) '~styles/lib.less';
+
+.m-citylist {
+    &-title {
+        display: block;
+        margin-bottom: 40px;
+        font-family: PingFangSC-Medium;
+        color: #999;
+        .font-size(28);
+    }
+
+    &-list {
+        .list-item {
+            margin-bottom: 60px;
+            font-family: PingFangSC-Medium;
+            .font-size(36);
+
+            &.active {
+                color: #f38d39;
+            }
+        }
+    }
+
+    &-tips {
+        margin-top: 70px;
+        color: #999;
+        .font-size(36);
+    }
+}

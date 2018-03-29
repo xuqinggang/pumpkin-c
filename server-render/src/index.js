@@ -13,6 +13,7 @@ import Service from 'lib/Service';
 
 import routerConfig from 'application/App/routes/config';
 import allRouters from './router';
+import { prefixMapCityId } from 'config/config';
 
 import assets from '../dist/assets.json';
 
@@ -34,9 +35,7 @@ function serverRenderConf(app) {
         windowMiddle(),
         async (ctx, next) => {
             window.location.href = ctx.request.url;
-            Service.baseConfig = {
-                urlPrefix: '/bj/nangua',
-            };
+            ctx.state.cityId = prefixMapCityId[ctx.params.cityName];
             ctx.state.assets = assets;
             await next();
         },
