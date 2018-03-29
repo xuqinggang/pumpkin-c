@@ -7,8 +7,8 @@ import HouseLogin from 'application/App/HouseLogin/HouseLogin';
 import HouseMe from 'application/App/HouseMe/HouseMe';
 import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
 import HouseCity from 'application/App/HouseCity/HouseCity';
-import ApartmentList from 'application/App/ApartmentList/ApartmentList';
-import ApartmentDetail from 'application/App/ApartmentDetail/ApartmentDetail';
+import ShopList from 'application/App/ShopList/ShopList';
+import ShopDetail from 'application/App/ShopDetail/ShopDetail';
 
 import Service from 'lib/Service';
 import { AbbrevMapCity } from 'config/config';
@@ -39,9 +39,9 @@ class WrapRouter extends PureComponent {
     render() {
         return (
             <Switch>
-                <Route path={`${this.urlPrefix}/shop/detail/:shopId`} component={ApartmentDetail} />
-                <Route exact path={`${this.urlPrefix}/shop/list/:filterUrlFragment?`} component={ApartmentList} />
-                <Route exact path={`${this.urlPrefix}/shop/:filterUrlFragment?`} component={ApartmentList} />
+                <Route path={`${this.urlPrefix}/shop/detail/:shopId`} component={ShopDetail} />
+                <Route exact path={`${this.urlPrefix}/shop/list/:filterUrlFragment?`} component={ShopList} />
+                <Route exact path={`${this.urlPrefix}/shop/:filterUrlFragment?`} component={ShopList} />
                 <Route path={`${this.urlPrefix}/login`} component={HouseLogin} />
                 <Route path={`${this.urlPrefix}/me`} component={HouseMe} />
                 <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />

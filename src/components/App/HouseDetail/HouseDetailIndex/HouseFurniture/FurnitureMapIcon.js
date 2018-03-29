@@ -55,6 +55,10 @@ const equipMap = {
         text: '洗衣机',
         className: 'icon-washing-machine',
     },
+    DESK: {
+        text: '桌子',
+        className: 'icon-desk',
+    },
 };
 
 export default equipMap;
