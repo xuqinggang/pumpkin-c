@@ -42,4 +42,3 @@ export default class HouseCity extends PureComponent {
         );
     }
 }
-

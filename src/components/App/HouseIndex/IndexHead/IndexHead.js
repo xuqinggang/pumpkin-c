@@ -42,10 +42,12 @@ export default class IndexHead extends PureComponent {
 
         return (
             <div className={classnames('g-grid-row f-flex-justify-between f-flex-align-center', classPrefix, className)}>
-                <div className={`f-display-flex f-flex-align-center ${classPrefix}-location`}>
+                <div
+                    className={`f-display-flex f-flex-align-center ${classPrefix}-location`}
+                    onTouchTap={this.handleNavigateCity}
+                >
                     <span
                         className="f-vertical-middle location-text"
-                        onTouchTap={this.handleNavigateCity}
                     >
                         {AbbrevMapCity[cityName].text}
                     </span>
