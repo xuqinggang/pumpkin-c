@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 
-import './styles';
-
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import { Stars, ImageUploadInput } from 'components/App/Comment';
+
+import './styles';
 
 const classPrefix = 'g-commentinput';
 

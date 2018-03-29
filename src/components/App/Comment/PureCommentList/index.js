@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import CommentItem from '../CommentItem';
+import './styles.less';
 
 const classPrefix = 'm-purecommentlist';
 

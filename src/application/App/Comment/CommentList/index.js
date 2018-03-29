@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 
 import { PureCommentList } from 'components/App/Comment';
+import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import { getDocHeight, getScrollTop } from 'lib/util';
 import { ajaxGetCommentList } from '../ajaxInitComment';
 
-import { getDocHeight, getScrollTop } from 'lib/util';
+import './styles.less';
 
 const classPrefix = 'g-commentlist';
 
@@ -80,9 +82,16 @@ export default class CommentList extends PureComponent {
     }
 
     render() {
+        const { history } = this.props;
         const { comments } = this.state;
         return (
             <div className={`${classPrefix}`}>
+                <HouseHead
+                    history={history}
+                    renderRight={() => (
+                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓评价</span>
+                    )}
+                />
                 <PureCommentList comments={comments} />
             </div>
         );

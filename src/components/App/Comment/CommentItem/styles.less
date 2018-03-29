@@ -1,18 +1,59 @@
+@import (reference) '~styles/lib.less';
+
 .m-commentitem {
-    & img {
-        width: 45px;
+    border-top: 1px solid #EEE;
+    padding: 20px 0;
+
+    & .usr-info {
+        & .right-wrap {
+            flex: 1;
+        }
+
+        & .nickname {
+            .font-size(34);
+        }
+
+        & .time {
+            .font-size(24);
+            color: #999;
+        }
+    }
+
+    & .avatar {
+        width: 90px;
+        margin-right: 10px;
     }
 
     & .circle-avatar {
         display: inline-block;
         background-color: #D8D8D8;
-        width: 45px;
-        height: 45px;
-        border-radius: 45px;
+        width: 90px;
+        height: 90px;
+        border-radius: 90px;
+        margin-right: 20px;
     }
 
     & .comment-img {
-        width: 90px;
+        width: 180px;
+        height: 180px;
     }
 
+    & .content {
+        margin-left: 110px;
+        color: #666;
+    }
+
+    & .rent-unit {
+        background-color: #fafafa;
+        height: 60px;
+        line-height: 60px;
+        border-radius: 100px;
+        border: 1px solid #d8d8d8;
+        padding-left: 40px;
+        color: #000;
+
+        & img {
+            margin-right: 10px;
+        }
+    }
 }
