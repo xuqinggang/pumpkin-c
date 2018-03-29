@@ -13,7 +13,7 @@ import Service from 'lib/Service';
 
 import routerConfig from 'application/App/routes/config';
 import allRouters from './router';
-import { prefixMapCityId } from 'config/config';
+import { AbbrevMapCity } from 'config/config';
 
 import assets from '../dist/assets.json';
 
@@ -35,7 +35,7 @@ function serverRenderConf(app) {
         windowMiddle(),
         async (ctx, next) => {
             window.location.href = ctx.request.url;
-            ctx.state.cityId = prefixMapCityId[ctx.params.cityName];
+            ctx.state.cityId = AbbrevMapCity[ctx.params.cityName].id;
             ctx.state.assets = assets;
             await next();
         },
