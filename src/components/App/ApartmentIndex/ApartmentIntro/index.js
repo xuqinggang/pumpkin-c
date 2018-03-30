@@ -12,7 +12,7 @@ export default class ApartmentIntro extends PureComponent {
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
                 <img src={image} alt={name} />
                 <div className="intro-wrap">
-                    <div>
+                    <div className="f-singletext-ellipsis">
                         <span className="name">{name}</span>
                         <span className="price">¥{minPrice}元/月<span>起</span></span>
                     </div>
@@ -22,7 +22,7 @@ export default class ApartmentIntro extends PureComponent {
                 </div>
                 <div className="score-wrap">
                     <div className="score">{score}</div>
-                    <div className="go-comments" onTouchTap={goCommentList}>查看评价<i className="icon-pull-down" /></div>
+                    <div className="go-comments f-display-flex f-flex-align-center" onTouchTap={goCommentList}>查看评价<i className="icon-pull-down" /></div>
                 </div>
             </div>
         );

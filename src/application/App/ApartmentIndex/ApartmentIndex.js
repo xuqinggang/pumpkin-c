@@ -18,6 +18,7 @@ import { ajaxGetApartmentIndex } from './ajaxInitApartmentIndex';
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
+const createShopListPath = () => '/shop/list';
 
 export default class ApartmentIndex extends PureComponent {
     constructor(props) {
@@ -28,10 +29,12 @@ export default class ApartmentIndex extends PureComponent {
     }
 
     withHistory = withHistory(this.props.history)
-    goCommentList = () => this.withHistory(createCommentListPath)('90909090')
+    goCommentList = () => this.withHistory(createCommentListPath)(this.props.match.params.apartmentId)
+    goShopList = this.withHistory(createShopListPath)
 
     componentDidMount() {
-        ajaxGetApartmentIndex('sssss').then((brandApartments) => {
+        const { match: { params: { apartmentId } } } = this.props;
+        ajaxGetApartmentIndex(apartmentId).then((brandApartments) => {
             this.setState({
                 brandApartments,
             });
@@ -39,7 +42,7 @@ export default class ApartmentIndex extends PureComponent {
     }
 
     render() {
-        const { history } = this.props;
+        const { history, match } = this.props;
         const {
             brandApartments: {
                 images,
@@ -68,8 +71,8 @@ export default class ApartmentIndex extends PureComponent {
                 <ApartmentRecommend recommends={recommends} />
                 <ApartmentShop shops={boutiqueShops} />
                 <div className="content-padding">
-                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goCommentList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goCommentList} />
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goShopList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goShopList} />
                 </div>
             </div>
         );

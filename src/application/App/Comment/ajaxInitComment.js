@@ -1,23 +1,24 @@
 import Service from 'lib/Service';
 
-import { data } from './mock';
-
 // 获取评论列表
-export function ajaxGetCommentList(apartmentId, pager) {
+export function ajaxGetCommentList(apartmentId, pager = {}) {
 
-    // const { curPage } = pager;
-    // const perPage = 20;
+    const { curPage } = pager;
+    const perPage = 20;
 
-    return Promise.resolve(data);
+    // cityId
+    return Service.get(`/api/v1/brandApartments/comments/${apartmentId}`, {
+        cityId: 1,
+        offset: (curPage * perPage) || 0,
+        limit: perPage,
+    })
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data;
+            }
 
-    // return Service.get(`/api/v1/brandApartments/comments/${apartmentId}`)
-    //     .then((res) => {
-    //         if (res.code === 200) {
-    //             return res.data;
-    //         }
-
-    //         throw new Error(res);
-    //     });
+            throw new Error(res);
+        });
 }
 
 // 评论房源
@@ -47,23 +48,17 @@ export function ajaxPostComment(apartmentId, { // isRequired
 
 // 上传图片
 export function ajaxPostImage(file) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('https://pic.kuaizhan.com/g3/17/d8/f361-a365-4e70-a2f7-a08a26f26f4058')
-        }, 100);
-    });
+    return Service.post('/api/v1/common/pics', {
+        file,
+    }, {
+        contentType: 'form-data',
+    })
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data.url;
+            }
 
-    // return Service.post('/api/v1/common/pics', {
-    //     file,
-    // }, {
-    //     contentType: 'form',
-    // })
-    //     .then((res) => {
-    //         if (res.code === 200) {
-    //             return res.data;
-    //         }
-
-    //         throw new Error(res);
-    //     });
+            throw new Error(res);
+        });
 }
 

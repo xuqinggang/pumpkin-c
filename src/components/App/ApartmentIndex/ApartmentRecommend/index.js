@@ -14,6 +14,8 @@ export default class ApartmentRecommend extends PureComponent {
             recommends,
         } = this.props;
 
+        if (recommends.length <= 0) return null;
+
         return (
             <div className={classnames(classPrefix)}>
                 <div>

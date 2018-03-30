@@ -46,9 +46,10 @@ export default class CommentList extends PureComponent {
     }
 
     fetchData = (renew = false) => {
+        const { apartmentId } = this.props;
         const { pager: { curPage }, comments } = this.state;
 
-        ajaxGetCommentList().then((data) => {
+        ajaxGetCommentList(apartmentId).then((data) => {
             let newComments;
             let newPager;
 
@@ -82,7 +83,7 @@ export default class CommentList extends PureComponent {
     }
 
     render() {
-        const { history } = this.props;
+        const { history, apartmentId } = this.props;
         const { comments } = this.state;
         return (
             <div className={`${classPrefix}`}>

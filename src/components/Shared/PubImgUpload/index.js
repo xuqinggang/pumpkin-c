@@ -1,6 +1,4 @@
-import React, {
-    Component,
-} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './styles.less';
@@ -20,19 +18,11 @@ class PubImgUpload extends Component {
         this.$imgInput = null;
     }
 
-    componentDidMount() {
-        const { images } = this.props;
-        this.setState({
-            images,
-        });
-    }
-
     handleAddImage = () => {
         const { limit } = this.props;
         const { images } = this.state;
 
         let added = false;
-
         if (images.length < limit) {
             added = true;
             this.$imgInput.click();
@@ -44,23 +34,27 @@ class PubImgUpload extends Component {
     handleDelete = (index) => {
         const { images } = this.state;
 
-        let newImages = [...images];
+        const newImages = [...images];
         newImages.splice(index, 1);
-        
+
         this.setState({
-            images: newImages
+            images: newImages,
         });
-        
-        this.props.ondelete(newImages, index);
+
+        this.props.onDelete(newImages, index);
     }
 
     uploadHandler = (e) => {
-        const files = e.target.files;
+        const { files } = e.target;
+
+        // 异步触发 image change
+        // setTimeout(() => this.props.onImageChange(e));
+
         if (files.length < 0) return;
 
         const { limit, fetch: uploadImageFetch } = this.props;
         const { images } = this.state;
-        let currentImageCount = images.length;
+        const currentImageCount = images.length;
 
         // 只上传 limit 以内的图片
         let fileArray = Array.from(files);
@@ -69,15 +63,16 @@ class PubImgUpload extends Component {
         this.setState({
             loading: true,
         });
-        
+
+        // 上传图片
         const uploadTasks = fileArray.map(file => uploadImageFetch(file));
-        Promise.all(uploadTasks).then(data => {
+        Promise.all(uploadTasks).then((data) => {
             this.setState({
-                images: [...images, ...data]
-            })
-        }).catch(error => {
-            console.log(error, 'upload error');
-            // TODO
+                images: [...images, ...data],
+            });
+            this.props.onImageUploaded(true, images);
+        }).catch((error) => {
+            this.props.onImageUploaded(false, error);
         }).finally(() => {
             this.setState({
                 loading: false,
@@ -85,9 +80,16 @@ class PubImgUpload extends Component {
         });
     }
 
+    componentWillMount() {
+        const { images } = this.props;
+        this.setState({
+            images,
+        });
+    }
+
     render() {
         const { limit } = this.props;
-        const { images } = this.state;
+        const { images, loading } = this.state;
 
         return (
             <div className={`${classPrefix}`}>
@@ -96,15 +98,21 @@ class PubImgUpload extends Component {
                         <div key={index} className="item">
                             <div className="img-wrap">
                                 <img src={image} alt={index} />
-                                <div className="delete" role="presentation" onClick={() => this.handleDelete(index)}>x</div>
+                                <div className="delete" role="presentation" onClick={() => this.handleDelete(index)} />
                             </div>
                         </div>
                     ))
                 }
                 {
                     images.length < limit &&
-                    <div className="item add-image" role="presentation" onClick={this.handleAddImage}>
-                        add Image
+                    <div className="item" role="presentation" onClick={this.handleAddImage}>
+                        <img className="add-image" src={require('./images/add-image.png')} alt="" />
+                    </div>
+                }
+                {
+                    loading &&
+                    <div className="loading-wrap">
+                        <div className="loading" />
                     </div>
                 }
                 <input
@@ -118,11 +126,10 @@ class PubImgUpload extends Component {
                 />
             </div>
         );
-	}
+    }
 }
 
 PubImgUpload.propTypes = {
-    // url: PropTypes.string,
     images: PropTypes.arrayOf(PropTypes.any),
     fetch: PropTypes.func,
     onDelete: PropTypes.func,
@@ -130,11 +137,9 @@ PubImgUpload.propTypes = {
     onImageChange: PropTypes.func,
     onImageUploaded: PropTypes.func,
     limit: PropTypes.number,
-    // colCount: propTypes.number,
 };
 
 PubImgUpload.defaultProps = {
-    // url: '',
     images: [],
     fetch: () => null,
     onDelete: () => null,
@@ -142,7 +147,6 @@ PubImgUpload.defaultProps = {
     onImageChange: () => null,
     onImageUploaded: () => null,
     limit: SIZE_LIMIT,
-    // colCount: 4,
 };
 
 export default PubImgUpload;

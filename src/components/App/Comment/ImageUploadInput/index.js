@@ -26,7 +26,7 @@ export default class ImageUploadInput extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className="textarea">
                     <textarea
-                        placeholder={'房源信息是否真实、管家服务态度 、居住体验等…'}
+                        placeholder="房源信息是否真实、管家服务态度 、居住体验等…"
                         value={this.state.comment} onChange={this.handleChange} />
                     <PubImgUpload fetch={ajaxPostImage} />
                 </div>

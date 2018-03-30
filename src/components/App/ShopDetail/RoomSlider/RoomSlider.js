@@ -36,6 +36,8 @@ export default class RoomSlider extends PureComponent {
         const { images, totalOnsaleCount } = this.props;
         const { curIndex } = this.state;
 
+        if ((images && images.length <= 0) || !images) return null;
+
         return (
             <div className={`${classPrefix}`}>
                 <ReactSwipe
@@ -56,9 +58,9 @@ export default class RoomSlider extends PureComponent {
                     }
                 </ReactSwipe>
                 {
-                    totalOnsaleCount > 0 ?
-                    <span className="tip">剩余{totalOnsaleCount}套可租</span> :
-                    null
+                    totalOnsaleCount > 0
+                        ? <span className="tip">剩余{totalOnsaleCount}套可租</span> 
+                        : null
                 }
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {

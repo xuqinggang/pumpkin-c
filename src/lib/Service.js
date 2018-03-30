@@ -77,10 +77,19 @@ Service.reqServer = (url, paramters, type = 'GET', extraConf = {}) => {
             if (contentType === 'form') {
                 xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 xmlHttp.send(reqData);
+            } else if (contentType === 'form-data') {
+                // do set by yourself
+                // xmlHttp.setRequestHeader('Content-type', 'multipart/form-data');
+                const form = new FormData();
+                for (const key in paramters) {
+                    form.append(key, paramters[key]);
+                }
+                xmlHttp.send(form);
             } else {
                 xmlHttp.setRequestHeader('Content-type', 'application/json');
                 xmlHttp.send(JSON.stringify(paramters));
             }
+
         }
         console.info(`请求server: type=${type} url=${url}`);
     });

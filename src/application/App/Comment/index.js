@@ -7,13 +7,35 @@ import CommentList from './CommentList';
 
 export default class Comment extends PureComponent {
     render() {
-        const { url } = this.props.match;
+        const { url, params } = this.props.match;
+        const { id } = params;
 
         return (
             <Switch>
-                <Route exact path={`${url}/input`} component={CommentInput} />
-                <Route exact path={`${url}/list`} component={CommentList} />
-                <Route exact path={`${url}`} component={CommentList} />
+                <Route
+                    exact
+                    path={`${url}/input`}
+                    render={
+                        props => (
+                            <CommentInput {...props} rentUnitId={id} />
+                        )}
+                />
+                <Route
+                    exact
+                    path={`${url}/list`}
+                    render={
+                        props => (
+                            <CommentList {...props} apartmentId={id} />
+                        )}
+                />
+                <Route
+                    exact
+                    path={`${url}`}
+                    render={
+                        props => (
+                            <CommentList {...props} apartmentId={id} />
+                        )}
+                />
             </Switch>
         );
     }

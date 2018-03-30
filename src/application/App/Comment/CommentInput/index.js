@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import { Stars, ImageUploadInput } from 'components/App/Comment';
 
-import './styles';
+import './styles.less';
 
 const classPrefix = 'g-commentinput';
 
@@ -42,13 +42,14 @@ export default class CommentInput extends PureComponent {
                     )}
                 />
                 <div className="main">
-                    <div className={`f-display-flex f-flex-align-center`}>
+                    <div className="f-display-flex f-flex-align-center">
                         <span className="rating-title">综合评分</span>
-                        <Stars   
+                        <Stars
+                            className="stars"
                             count={5}
+                            half={false}
                             onChange={this.handleStars}
-                            size={48}
-                            color2={'#F38D39'} 
+                            color2="#F38D39"
                         />
                     </div>
                     <ImageUploadInput />

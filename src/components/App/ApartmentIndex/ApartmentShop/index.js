@@ -25,6 +25,8 @@ export default class ApartmentShop extends PureComponent {
             shops,
         } = this.props;
 
+        if (shops.length <= 0) return null;
+
         return (
             <div className={classnames(classPrefix)}>
                 <TitleWithMore title="精品门店" goMore={() => console.log('more')} />
