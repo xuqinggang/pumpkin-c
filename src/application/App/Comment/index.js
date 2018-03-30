@@ -8,16 +8,16 @@ import CommentList from './CommentList';
 export default class Comment extends PureComponent {
     render() {
         const { url, params } = this.props.match;
-        const { id } = params;
+        const { apartmentId } = params;
 
         return (
             <Switch>
                 <Route
                     exact
-                    path={`${url}/input`}
+                    path={`${url}/input/:rentUnitId`}
                     render={
                         props => (
-                            <CommentInput {...props} rentUnitId={id} />
+                            <CommentInput {...props} apartmentId={apartmentId} />
                         )}
                 />
                 <Route
@@ -25,7 +25,7 @@ export default class Comment extends PureComponent {
                     path={`${url}/list`}
                     render={
                         props => (
-                            <CommentList {...props} apartmentId={id} />
+                            <CommentList {...props} apartmentId={apartmentId} />
                         )}
                 />
                 <Route

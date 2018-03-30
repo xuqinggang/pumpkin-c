@@ -27,7 +27,7 @@ export function ajaxPostComment(apartmentId, { // isRequired
     content,
     score,
     images,
-    cityId, // isRequired
+    cityId = 1, // isRequired
     rentUnitId, // isRequired
 }) {
     return Service.post(`/api/v1/brandApartments/comments/${apartmentId}`, {

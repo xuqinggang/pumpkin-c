@@ -5,6 +5,7 @@ import './styles.less';
 
 const classPrefix = 'm-pubimgupload';
 const SIZE_LIMIT = 8;
+const imgCutModifier = '?crop=1&cpos=middle&w=200&h=200';
 
 class PubImgUpload extends Component {
     constructor(props) {
@@ -67,10 +68,11 @@ class PubImgUpload extends Component {
         // 上传图片
         const uploadTasks = fileArray.map(file => uploadImageFetch(file));
         Promise.all(uploadTasks).then((data) => {
+            const newImages = [...images, ...data];
             this.setState({
-                images: [...images, ...data],
+                images: newImages,
             });
-            this.props.onImageUploaded(true, images);
+            this.props.onImageUploaded(true, newImages);
         }).catch((error) => {
             this.props.onImageUploaded(false, error);
         }).finally(() => {
@@ -97,7 +99,7 @@ class PubImgUpload extends Component {
                     images.map((image, index) => (
                         <div key={index} className="item">
                             <div className="img-wrap">
-                                <img src={image} alt={index} />
+                                <img src={`${image}${imgCutModifier}`} alt={index} />
                                 <div className="delete" role="presentation" onClick={() => this.handleDelete(index)} />
                             </div>
                         </div>
