@@ -34,7 +34,7 @@ export default class CitiLocation extends PureComponent {
             urlQuery,
         } = urlStore;
 
-        window.location.href = urlJoin(`/${cityName}/nangua/list`, filterUrlFragment) + `?${urlQuery}`;
+        window.location.href = `/${cityName}/nangua/list/`;
     }
 
     locationCity() {
