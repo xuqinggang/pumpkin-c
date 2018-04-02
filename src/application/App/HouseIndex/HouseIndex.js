@@ -20,14 +20,13 @@ export default class HouseIndex extends PureComponent {
     }
 
     componentWillMount() {
-        const cityId = 1;
-        ajaxInitHouseIndexBanner(cityId)
+        ajaxInitHouseIndexBanner()
             .then((indexBannerData) => {
                 this.setState({
                     indexBannerData,
                 });
             });
-        ajaxInitHouseIndexRecommend(cityId)
+        ajaxInitHouseIndexRecommend()
             .then((indexRecommendData) => {
                 this.setState({
                     indexRecommendData,

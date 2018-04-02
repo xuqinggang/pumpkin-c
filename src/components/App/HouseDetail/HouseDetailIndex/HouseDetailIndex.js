@@ -22,6 +22,7 @@ import { dynamicDocTitle } from 'lib/util';
 import { isApp, isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
+import { AbbrevMapCity } from 'config/config';
 
 import './styles.less';
 
@@ -87,19 +88,23 @@ export default class HouseDetailIndex extends PureComponent {
 
     // 每次进来一定要再次调用微信分享
     callWxShareAgain(houseDetailData) {
+        const urlStore = window.getStore('url');
+        const cityName = urlStore.cityName;
+        const cityText = AbbrevMapCity[cityName].text;
+
         const { sliderImgArr, houseProfileData } = houseDetailData;
         const title = houseProfileData.title;
         const imgInfo = sliderImgArr && sliderImgArr[0] && sliderImgArr[0].imgInfo && sliderImgArr[0].imgInfo[0];
 
         // 分享
         execWxShare({
-            title: title + '-南瓜租房北京租房',
+            title: title + `-南瓜租房${cityText}租房`,
             link: window.location && window.location.href.split('#')[0],
             imgUrl: imgInfo && imgInfo.img,
             desc: '南瓜租房，只租真房源！',
         });
         // 动态更改标题
-        dynamicDocTitle(title + '-南瓜租房北京租房');
+        dynamicDocTitle(title + `-南瓜租房${cityText}租房`);
     }
 
     componentWillUnmount() {

@@ -34,9 +34,7 @@ function serverRenderConf(app) {
         windowMiddle(),
         async (ctx, next) => {
             window.location.href = ctx.request.url;
-            Service.baseConfig = {
-                urlPrefix: '/bj/nangua',
-            };
+            ctx.state.cityName = ctx.params.cityName;
             ctx.state.assets = assets;
             await next();
         },

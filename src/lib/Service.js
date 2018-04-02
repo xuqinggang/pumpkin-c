@@ -1,14 +1,19 @@
 const Service = {};
 
-Service.reqServer = (url, paramters, type = 'GET', extraConf = {}) => {
+Service.reqServer = (url, paramters = {}, type = 'GET', extraConf = {}) => {
     const {
         urlPrefix,
-    } = Service.baseConfig;
+        commonParamters,
+    } = Service.baseConfig || {};
 
     const {
         contentType = 'json',
         timeout = 10000,
     } = extraConf;
+
+    if (commonParamters) {
+        Object.assign(paramters, commonParamters);
+    }
 
     if (url.indexOf('http') === -1 && urlPrefix) {
         url = urlPrefix + url;
