@@ -33,7 +33,7 @@ export default class Comment extends PureComponent {
                     path={`${url}`}
                     render={
                         props => (
-                            <CommentList {...props} apartmentId={id} />
+                            <CommentList {...props} apartmentId={apartmentId} />
                         )}
                 />
             </Switch>
@@ -48,6 +48,6 @@ Comment.propTypes = {
 };
 
 // useAge: withHistory(history)(createCommentInputPath)
-export const createCommentInputPath = rentUnitId => `comment/${rentUnitId}/input`;
+export const createCommentInputPath = (apartmentId, rentUnitId) => `comment/${apartmentId}/input/${rentUnitId}`;
 
 export const createCommentListPath = apartmentId => `comment/${apartmentId}/list`;

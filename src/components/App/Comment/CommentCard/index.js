@@ -15,7 +15,7 @@ class CommentCard extends PureComponent {
     }
 
     handleTouchTap = () => {
-        this.goCommentInput('9090909090');
+        this.goCommentInput('1', '140826183515361280');
     }
 
     goCommentInput = withHistory(this.props.history)(createCommentInputPath)
@@ -29,7 +29,11 @@ class CommentCard extends PureComponent {
                         <div className="tip">你有一个房源待评价</div>
                         <div className="rent">你有一个房源待评价</div>
                     </div>
-                    <Button className={`${classPrefix}-button`}>去评论</Button>
+                    <Button
+                        className={`${classPrefix}-button`}
+                        onTouchTap={this.handleTouchTap}
+                    >去评论
+                    </Button>
                 </div>
             </div>
         );

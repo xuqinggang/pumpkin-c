@@ -16,7 +16,7 @@ export default class CommentInput extends PureComponent {
             content: '',
             images: [],
             score: 5,
-            commentDone: true,
+            commentDone: false,
             title: 'xxx评论',
         };
     }
@@ -34,7 +34,7 @@ export default class CommentInput extends PureComponent {
         }).then(() => {
             this.setState({
                 commentDone: true,
-                title: '评价成功',
+                title: '评价完成',
             });
         }).catch((error) => {
             PopToolTip({ text: '提交失败' });

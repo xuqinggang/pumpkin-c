@@ -26,6 +26,8 @@ export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
+        console.log('cons list');
+
         const {
             urlParamsObj,
             urlQuery,

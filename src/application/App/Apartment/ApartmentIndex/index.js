@@ -12,8 +12,9 @@ import {
 } from 'components/App/ApartmentIndex';
 import { withHistory } from 'application/App/routes';
 import { createCommentListPath } from 'application/App/Comment';
+import { Route, Switch } from 'react-router';
 
-import { ajaxGetApartmentIndex } from './ajaxInitApartmentIndex';
+import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 
 import './styles.less';
 
@@ -32,16 +33,7 @@ export default class ApartmentIndex extends PureComponent {
     goCommentList = () => this.withHistory(createCommentListPath)(this.props.match.params.apartmentId)
     goShopList = this.withHistory(createShopListPath)
 
-    componentDidMount() {
-        const { match: { params: { apartmentId } } } = this.props;
-        ajaxGetApartmentIndex(apartmentId).then((brandApartments) => {
-            this.setState({
-                brandApartments,
-            });
-        });
-    }
-
-    render() {
+    renderIndex() {
         const { history, match } = this.props;
         const {
             brandApartments: {
@@ -76,5 +68,18 @@ export default class ApartmentIndex extends PureComponent {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        const { match: { params: { apartmentId } } } = this.props;
+        ajaxGetApartmentIndex(apartmentId).then((brandApartments) => {
+            this.setState({
+                brandApartments,
+            });
+        });
+    }
+
+    render() {
+        return this.renderIndex();
     }
 }
