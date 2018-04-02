@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
-import { Stars, ImageUploadInput } from 'components/App/Comment';
+import { Stars, ImageUploadInput, SuccessComment } from 'components/App/Comment';
 import { ajaxPostComment } from '../ajaxInitComment';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
@@ -16,6 +16,8 @@ export default class CommentInput extends PureComponent {
             content: '',
             images: [],
             score: 5,
+            commentDone: true,
+            title: 'xxx评论',
         };
     }
 
@@ -29,8 +31,11 @@ export default class CommentInput extends PureComponent {
             images,
             score,
             rentUnitId,
-        }).then((data) => {
-            PopToolTip({ text: '提交成功' });
+        }).then(() => {
+            this.setState({
+                commentDone: true,
+                title: '评价成功',
+            });
         }).catch((error) => {
             PopToolTip({ text: '提交失败' });
         });
@@ -54,9 +59,43 @@ export default class CommentInput extends PureComponent {
         });
     }
 
+    renderSuccess = () => {
+        return (
+            <SuccessComment />
+        );
+    }
+
+    renderMain = () => {
+        const { score, commentDone } = this.state;
+
+        if (commentDone) {
+            return this.renderSuccess();
+        }
+
+        return (
+            <div className="main">
+                <div className="stars-wrap f-display-flex f-flex-align-center">
+                    <span className="rating-title">综合评分</span>
+                    <Stars
+                        className="stars"
+                        count={5}
+                        value={score}
+                        half={false}
+                        onChange={this.handleStars}
+                        color2="#F38D39"
+                    />
+                </div>
+                <ImageUploadInput
+                    onImageChange={this.handleImageChange}
+                    onContentChange={this.handleContentChange}
+                />
+            </div>
+        )
+    }
+
     render() {
         const { history } = this.props;
-        const { score } = this.state;
+        const { title, commentDone } = this.state;
 
         return (
             <div className={`${classPrefix}`}>
@@ -64,28 +103,15 @@ export default class CommentInput extends PureComponent {
                     history={history}
                     renderRight={() => (
                         <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
-                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'xxx评论'}</span>
-                            <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                            {
+                                !commentDone &&
+                                <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                            }
                         </div>
                     )}
                 />
-                <div className="main">
-                    <div className="stars-wrap f-display-flex f-flex-align-center">
-                        <span className="rating-title">综合评分</span>
-                        <Stars
-                            className="stars"
-                            count={5}
-                            value={score}
-                            half={false}
-                            onChange={this.handleStars}
-                            color2="#F38D39"
-                        />
-                    </div>
-                    <ImageUploadInput
-                        onImageChange={this.handleImageChange}
-                        onContentChange={this.handleContentChange}
-                    />
-                </div>
+                { this.renderMain() }
             </div>
         );
     }

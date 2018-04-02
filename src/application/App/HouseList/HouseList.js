@@ -192,7 +192,9 @@ export default class HouseList extends PureComponent {
                     onFilterReSume={this.onFilterReSume}
                     onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
                 />
-                <CommentCard />
+                <div className={`${classPrefix}-comment`}>
+                    <CommentCard />
+                </div>
                 <HouseLists
                     filterParams={filterParamsObj}
                 />
