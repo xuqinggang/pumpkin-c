@@ -1,11 +1,15 @@
 import React from 'react';
+import { withRouter } from 'react-router';
+
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import './styles.less';
 
 const classPrefix = 'g-apartmentdetail';
 
-export default function ApartmentDetail({
+function ApartmentDetail({
     history,
+    authentications,
+    intro,
 }) {
     return (
         <React.Fragment>
@@ -16,9 +20,11 @@ export default function ApartmentDetail({
                 )}
             />
             <div>
-                <div>xxx</div>
-                <div>ssssss</div>
+                <div>{authentications.name}</div>
+                <div>{intro}</div>
             </div>
         </React.Fragment>
-    )
+    );
 }
+
+export default withRouter(ApartmentDetail)

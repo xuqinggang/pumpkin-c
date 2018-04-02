@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import {
-    RoomSlider,
-} from 'components/App/ShopDetail';
+import { RoomSlider } from 'components/App/ShopDetail';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import {
     ApartmentIntro,
@@ -10,16 +8,18 @@ import {
     ApartmentShop,
     RentUnitList,
 } from 'components/App/ApartmentIndex';
+import ApartmentDetail from '../ApartmentDetail';
+
 import { withHistory } from 'application/App/routes';
 import { createCommentListPath } from 'application/App/Comment';
 import { Route, Switch } from 'react-router';
-
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
 const createShopListPath = () => '/shop/list';
+const createApartmentDeatilPath = apartmentId => `/apartment/${apartmentId}/detail`;
 
 export default class ApartmentIndex extends PureComponent {
     constructor(props) {
@@ -29,9 +29,11 @@ export default class ApartmentIndex extends PureComponent {
         };
     }
 
+    apartmentId = this.props.match.params.apartmentId
     withHistory = withHistory(this.props.history)
-    goCommentList = () => this.withHistory(createCommentListPath)(this.props.match.params.apartmentId)
+    goCommentList = () => this.withHistory(createCommentListPath)(this.apartmentId)
     goShopList = this.withHistory(createShopListPath)
+    goApartmentDetail = () => this.withHistory(createApartmentDeatilPath)(this.apartmentId)
 
     renderIndex() {
         const { history, match } = this.props;
@@ -55,9 +57,10 @@ export default class ApartmentIndex extends PureComponent {
                 />
                 <RoomSlider images={images} />
                 <div className="content-padding">
-                    <ApartmentIntro 
+                    <ApartmentIntro
                         {...apartment}
                         goCommentList={this.goCommentList}
+                        goDetail={this.goApartmentDetail}
                     />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
@@ -67,6 +70,18 @@ export default class ApartmentIndex extends PureComponent {
                     <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goShopList} />
                 </div>
             </div>
+        );
+    }
+
+    renderDetail() {
+        const {
+            brandApartments: {
+                apartment,
+            },
+        } = this.state;
+        const { intro, authentications } = apartment;
+        return (
+            <ApartmentDetail intro={intro} authentications={authentications} />
         );
     }
 
@@ -80,6 +95,21 @@ export default class ApartmentIndex extends PureComponent {
     }
 
     render() {
-        return this.renderIndex();
+        const { url } = this.props.match;
+
+        return (
+            <Switch>
+                <Route
+                    exact
+                    path={url}
+                    render={() => this.renderIndex()}
+                />
+                <Route
+                    exact
+                    path={`${url}/detail`}
+                    render={() => this.renderDetail()}
+                />
+            </Switch>
+        )
     }
 }
