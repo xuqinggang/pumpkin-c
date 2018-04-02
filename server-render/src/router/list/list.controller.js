@@ -1,5 +1,6 @@
 'use strict';
 
+import { AbbrevMapCity } from 'config/config';
 import { parseUrlToState } from 'application/App/HouseList/filterStateToUrl';
 import { filterStateToParams } from 'application/App/HouseList/filterStateToParams';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
@@ -7,6 +8,7 @@ import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 import { ajaxInitHouseIndexBanner, ajaxInitHouseIndexRecommend } from 'application/App/HouseIndex/ajaxInitHouseIndex';
 
 export default async (ctx, next) => {
+    const cityId = AbbrevMapCity[ctx.params.cityName].id;
     const filterUrlFragment = ctx.params.filterUrlFragment;
 
     // 设置位置相关数据
@@ -20,7 +22,8 @@ export default async (ctx, next) => {
     });
 
     // 设置列表页数据 和 首页的banner和recommend 
-    await Promise.all([setHouseListData(newFilterParamsObj), setHouseIndexBannerAndRecommend()])
+    await Promise.all([setHouseListData(newFilterParamsObj, cityId),
+        setHouseIndexBannerAndRecommend(cityId)]);
 
     await next();
 };
@@ -57,8 +60,9 @@ function setFilterData(filterUrlFragment, ctx) {
     return newFilterParamsObj;
 }
 
-async function setHouseListData(filterParamsObj) {
-    const houseListRes = await fetchRentUnitList({ filter: filterParamsObj, pager: { curPage: 1, totalPage: 1 } });
+async function setHouseListData(filterParamsObj, cityId) {
+    const houseListRes = await fetchRentUnitList({ filter: Object.assign(filterParamsObj, {cityId}),
+        pager: { curPage: 1, totalPage: 1 } });
     let houseListStore = {
         isFetching: false,
         isFetchCrash: houseListRes.fetch.type === 'CRASH',
@@ -75,14 +79,13 @@ async function setHouseListData(filterParamsObj) {
     window.setStore('houseList', houseListStore);
 }
 
-async function setHouseIndexBannerAndRecommend() {
+async function setHouseIndexBannerAndRecommend(cityId) {
     // window变量是全局的，首页banner和recommend数据缓存到window上了,所以此处可利用缓存的数据
     // const houseIndexData = window.getStore('houseIndex');
     // if (houseIndexData && houseIndexData.indexBannerData && houseIndexData.indexRecommendArr) {
     //     return;
     // }
 
-    const cityId = 1;
     await Promise.all([ajaxInitHouseIndexRecommend(cityId), ajaxInitHouseIndexBanner(cityId)])
         .then(dataArr =>  {
             window.setStore('houseIndex', {
@@ -94,9 +97,10 @@ async function setHouseIndexBannerAndRecommend() {
 
 // 渲染列表页 meta相关数据
 function renderMetaData(seoData, ctx) {
+    const cityText = AbbrevMapCity[ctx.state.cityName].text;
     const keywordsArr = [];
 
-    seoData.position && (keywordsArr.push('北京'+seoData.position.join('')+'租房'));
+    seoData.position && (keywordsArr.push(cityText+seoData.position.join('')+'租房'));
     seoData.rent && (keywordsArr.push('租金'+seoData.rent+'元'+'租房'));
 
     if (seoData.houseType) {

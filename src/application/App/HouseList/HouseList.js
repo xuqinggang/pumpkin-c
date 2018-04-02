@@ -167,6 +167,7 @@ export default class HouseList extends PureComponent {
     }
 
     render() {
+        console.log('HouseList, render');
         const {
             filterState,
             filterLabel,

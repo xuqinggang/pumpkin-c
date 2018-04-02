@@ -6,12 +6,23 @@ import serverConfig from 'server/config/env';
 export default function nodeRequest(url, paramters, type, contentType) {
     const uriPrefix = process.env.SERVER_ENV === 'test' ? '/bj/nangua' : '';
 
+    const typeUp = type.toUpperCase();
     const options = {
         uri: `${serverConfig.server[process.env.SERVER_ENV].target}${uriPrefix}${url}`,
-        method: type.toUpperCase(),
-        body: paramters,
+        method: typeUp,
         json: true, // Automatically parses the JSON string in the response
     };
+
+    if (typeUp === 'POST') {
+        Object.assign(options, {
+            body: paramters,
+        });
+    } else if (typeUp === 'GET') {
+        Object.assign(options, {
+            qs: paramters,
+        });
+    }
+
 
     const start = Date.now();
     return requestPromise(options)

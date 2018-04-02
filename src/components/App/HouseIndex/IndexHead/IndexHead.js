@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
+import { AbbrevMapCity } from 'config/config';
 import { isHasCookie, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
 
@@ -22,6 +23,11 @@ export default class IndexHead extends PureComponent {
         }
     }
 
+    handleNavigateCity = () => {
+        const urlPrefix = window.getStore('url').urlPrefix;
+        this.props.history.push(urlJoin(urlPrefix, 'city'));
+    }
+
     handleLogTap = () => {
         window.scrollTo(0, 0);
     }
@@ -31,10 +37,20 @@ export default class IndexHead extends PureComponent {
             className,
         } = this.props;
 
+        const urlStore = window.getStore('url');
+        const cityName = urlStore.cityName;
+
         return (
             <div className={classnames('g-grid-row f-flex-justify-between f-flex-align-center', classPrefix, className)}>
-                <div className={`f-display-flex f-flex-align-center ${classPrefix}-location`}>
-                    <span className="f-vertical-middle location-text">北京</span>
+                <div
+                    className={`f-display-flex f-flex-align-center ${classPrefix}-location`}
+                    onTouchTap={this.handleNavigateCity}
+                >
+                    <span
+                        className="f-vertical-middle location-text"
+                    >
+                        {AbbrevMapCity[cityName].text}
+                    </span>
                     <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
                 </div>
                 {

@@ -3,22 +3,30 @@ npm install pumpkin-font-c --registry=http://10.10.126.140:4873
 npm install
 
 # 开发环境(客户端渲染)
-npm run dev
+`npm run dev`
 
 # 本地server(服务器端渲染)
+
+```sh
 npm run build_test
 npm run build_render_test
 npm run server_dev
+npm run build_test && npm run build_render_test && npm run server_dev
+```
 
 # 线上test环境(服务器端渲染) nginx代理接口
+```sh
 npm run build_test
 npm run build_render_test
 npm run server
+```
 
 # docker 线上production环境 nginx代理接口
+```sh
 npm run build_production
 npm run build_render_production
 npm run server
+```
 
 # 生产环境sentry日志
 http://sentryjs.kuaizhan.sohuno.com/sentry/nanguapumpkin-c-online/
