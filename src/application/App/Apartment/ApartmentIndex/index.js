@@ -8,13 +8,11 @@ import {
     ApartmentShop,
     RentUnitList,
 } from 'components/App/ApartmentIndex';
-import { goCommentList } from 'application/App/Comment';
-import { goShopList } from 'application/App/ShopList';
+import { goCommentList, goShopList, goApartmentDetail } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
 import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
-import { goApartmentDetail } from '../index';
 
 import './styles.less';
 

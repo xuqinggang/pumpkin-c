@@ -3,21 +3,19 @@ import { withRouter } from 'react-router';
 
 import { dateFormat } from 'lib/util';
 import ExpandText from 'Shared/ExpandText/ExpandText';
-import withHistory from 'application/App/routes/utils';
+import { goRentUnitDetail } from 'application/App/routes/routes';
 import Stars from '../Stars';
 
 import './styles.less';
 
 const classPrefix = 'm-commentitem';
 
-const createRentUnitDeatilPath = rentUnitId => `/detail/${rentUnitId}`;
-
 class CommentItem extends PureComponent {
     handleTouchTap = (rentUnitId) => {
         this.goRentUnitDetail(rentUnitId);
     }
 
-    goRentUnitDetail = withHistory(this.props.history)(createRentUnitDeatilPath)
+    goRentUnitDetail = goRentUnitDetail(this.props.history)
 
     render() {
         const { comment } = this.props;

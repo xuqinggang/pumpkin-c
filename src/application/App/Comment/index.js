@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router';
 
-import withHistory from 'application/App/routes/utils';
-import { loginRequired } from 'application/App/routes/enhance';
 import { isHasCookie } from 'lib/util';
 
 import CommentInput from './CommentInput';
@@ -58,12 +56,3 @@ Comment.propTypes = {
 };
 
 export default Comment;
-
-export const createCommentInputPath = (apartmentId, rentUnitId) => `comment/${apartmentId}/input/${rentUnitId}`;
-export const createCommentListPath = apartmentId => `comment/${apartmentId}/list`;
-
-export const goCommentInput = withHistory(createCommentInputPath, {
-    beforeRouteChange: loginRequired,
-});
-
-export const goCommentList = withHistory(createCommentListPath);

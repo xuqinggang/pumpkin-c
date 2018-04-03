@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
 import './styles.less';
-import { goCommentInput } from 'application/App/Comment';
+import { goCommentInput } from 'application/App/routes/routes';
 
 import Button from '../Button';
 

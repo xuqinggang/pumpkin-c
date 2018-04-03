@@ -1,5 +1,5 @@
 import { isHasCookie } from 'lib/util';
-import { goLogin } from 'application/App/HouseLogin/route';
+import { goLogin } from './routes';
 
 // enhance 其实不是必要的 可以用以下方式替代
 /**

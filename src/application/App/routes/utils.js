@@ -1,18 +1,21 @@
 import { urlJoin } from 'lib/util';
 
-const defaultBeforeRoute = () => null;
-const defaultAfterRoute = () => null;
+const defaultBeforeRoutes = [];
+const defaultAfterRoutes = [
+    function pv() {
+        window.send_stat_pv && window.send_stat_pv(); // pv
+    },
+];
 const routeChange = (history, to) => {
     history.push(to);
-    window.send_stat_pv && window.send_stat_pv(); // pv
 };
 
 const withHistory = (createPath, enhance) => history => (...arg) => {
     if (!history.push) throw new Error('need react router history');
 
     const {
-        beforeRouteChange = defaultBeforeRoute,
-        afterRouteChange = defaultAfterRoute,
+        beforeRouteChange = [],
+        afterRouteChange = [],
     } = enhance || {};
 
     // define when call withHistory
@@ -27,9 +30,11 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
         ? afterRouteChange
         : [afterRouteChange];
     const tasks = [
+        ...defaultBeforeRoutes,
         ...beforeTasks,
         routeChange,
         ...afterTasks,
+        ...defaultAfterRoutes,
     ];
 
     let goOnFlag = true;
