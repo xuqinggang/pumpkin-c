@@ -75,10 +75,12 @@ export default class CommentList extends PureComponent {
     }
 
     componentDidMount() {
+        document.body.style['overflow-x'] = 'hidden';
         window.addEventListener('scroll', this.handleLoadMore);
         this.fetchData(true);
     }
     componentWillUnmount() {
+        document.body.style['overflow-x'] = 'auto';
         window.removeEventListener('scroll', this.handleLoadMore);
     }
 

@@ -8,18 +8,17 @@ import {
     ApartmentShop,
     RentUnitList,
 } from 'components/App/ApartmentIndex';
-import ApartmentDetail from '../ApartmentDetail';
-
-import { withHistory } from 'application/App/routes';
-import { createCommentListPath } from 'application/App/Comment';
+import { goCommentList } from 'application/App/Comment';
+import { goShopList } from 'application/App/ShopList';
 import { Route, Switch } from 'react-router';
+
+import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
+import { goApartmentDetail } from '../index';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
-const createShopListPath = () => '/shop/list';
-const createApartmentDeatilPath = apartmentId => `/apartment/${apartmentId}/detail`;
 
 export default class ApartmentIndex extends PureComponent {
     constructor(props) {
@@ -30,10 +29,9 @@ export default class ApartmentIndex extends PureComponent {
     }
 
     apartmentId = this.props.match.params.apartmentId
-    withHistory = withHistory(this.props.history)
-    goCommentList = () => this.withHistory(createCommentListPath)(this.apartmentId)
-    goShopList = this.withHistory(createShopListPath)
-    goApartmentDetail = () => this.withHistory(createApartmentDeatilPath)(this.apartmentId)
+    goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
+    goShopList = goShopList(this.props.history)
+    goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
 
     renderIndex() {
         const { history, match } = this.props;
@@ -79,7 +77,7 @@ export default class ApartmentIndex extends PureComponent {
                 apartment,
             },
         } = this.state;
-        const { intro, authentications } = apartment;
+        const { intro, authentications } = apartment || {};
         return (
             <ApartmentDetail intro={intro} authentications={authentications} />
         );
@@ -110,6 +108,6 @@ export default class ApartmentIndex extends PureComponent {
                     render={() => this.renderDetail()}
                 />
             </Switch>
-        )
+        );
     }
 }

@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
 import './styles.less';
-import { withHistory } from 'application/App/routes';
-import { createCommentInputPath } from 'application/App/Comment';
+import { goCommentInput } from 'application/App/Comment';
+
 import Button from '../Button';
 
 const classPrefix = 'm-commentcard';
@@ -18,7 +18,7 @@ class CommentCard extends PureComponent {
         this.goCommentInput('1', '140826183515361280');
     }
 
-    goCommentInput = withHistory(this.props.history)(createCommentInputPath)
+    goCommentInput = goCommentInput(this.props.history)
 
     render() {
         return (

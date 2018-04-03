@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import { dateFormat } from 'lib/util';
 import ExpandText from 'Shared/ExpandText/ExpandText';
-import { withHistory } from 'application/App/routes';
+import withHistory from 'application/App/routes/utils';
 import Stars from '../Stars';
 
 import './styles.less';

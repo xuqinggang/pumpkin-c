@@ -1,24 +1,34 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router';
+
+import withHistory from 'application/App/routes/utils';
+import { loginRequired } from 'application/App/routes/enhance';
+import { isHasCookie } from 'lib/util';
 
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
 
-export default class Comment extends PureComponent {
+class Comment extends PureComponent {
     render() {
-        const { url, params } = this.props.match;
+        const { match } = this.props;
+        const { url, params } = match;
         const { apartmentId } = params;
+
+        const { urlPrefix } = window.customStore.url;
 
         return (
             <Switch>
                 <Route
                     exact
                     path={`${url}/input/:rentUnitId`}
-                    render={
-                        props => (
+                    render={props => (
+                        isHasCookie('sid') ? (
                             <CommentInput {...props} apartmentId={apartmentId} />
-                        )}
+                        ) : (
+                            <Redirect to={`${urlPrefix}/login`} />
+                        )
+                    )}
                 />
                 <Route
                     exact
@@ -47,7 +57,13 @@ Comment.propTypes = {
     }).isRequired,
 };
 
-// useAge: withHistory(history)(createCommentInputPath)
-export const createCommentInputPath = (apartmentId, rentUnitId) => `comment/${apartmentId}/input/${rentUnitId}`;
+export default Comment;
 
+export const createCommentInputPath = (apartmentId, rentUnitId) => `comment/${apartmentId}/input/${rentUnitId}`;
 export const createCommentListPath = apartmentId => `comment/${apartmentId}/list`;
+
+export const goCommentInput = withHistory(createCommentInputPath, {
+    beforeRouteChange: loginRequired,
+});
+
+export const goCommentList = withHistory(createCommentListPath);
