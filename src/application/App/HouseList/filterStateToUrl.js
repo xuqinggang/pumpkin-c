@@ -15,20 +15,16 @@ let TypeAndPrefixMap = {
 
 TypeAndPrefixMap = Object.assign(TypeAndPrefixMap, reverseObjKeyValue(TypeAndPrefixMap));
 
+// 位置筛选对应的字母数组
+const TypeMapAlphaArr = {
+    districts: [TypeAndPrefixMap.districtId, TypeAndPrefixMap.circleId],
+    subways: [TypeAndPrefixMap.subwayId, TypeAndPrefixMap.stationId],
+};
+
 // 每个筛选条件内部的分隔符
 const FILTER_ITEM_SEPARATOR = 'l';
 // 各个筛选条件连接的分隔符
 const FILTER_SEPARATOR = '-';
-
-// 反转对象的属性和值
-function reverseObjKeyValue(obj) {
-    const reverseObj = {};
-    for(let key in obj) {
-        reverseObj[obj[key]] = key;
-    }
-
-    return reverseObj;
-}
 
 
 // 将state对象转换成筛选url参数
@@ -119,13 +115,13 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
     // positionFilterDataObj: {districts: { 2345: {text: '2号线'}, sub: {} }}
     const positionFilterDataObj = window.getStore('positionFilterDataObj').data;
 
-    const IndexMapType = {
+    const firstIndexMapType = {
         '0': 'districts',
         '1': 'subways',
     };
 
     // 获取第一级索引对应的类型对象
-    const type = IndexMapType[firstItemSelectedIndex];
+    const type = firstIndexMapType[firstItemSelectedIndex];
     const typePositionObj = positionFilterDataObj[type];
 
     // 获取第二级第三级索引对应的id
@@ -136,11 +132,6 @@ export function stringifyPositionStateToUrl(positinFilterStateObj) {
 
     const secondIdArr = Object.keys(typePositionObj[firstId].sub);
     secondId = secondIdArr[thirdItemSelectedIndex];
-
-    const TypeMapAlphaArr = {
-        districts: ['a', 'b'],
-        subways: ['c', 'd'],
-    };
 
     const urlArr = [];
     const alphaArr = TypeMapAlphaArr[type];

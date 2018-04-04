@@ -1,19 +1,24 @@
 /* @flow */
 
-import React, { Component, PureComponent, createElement } from 'react';
+import React, { PureComponent, createElement } from 'react';
 import classnames from 'classnames';
 
-import { Tabs, Tab } from 'Shared/Tabs'
-import { findArrayItemByPathIndex } from 'lib/util';
+import { Tabs, Tab } from 'Shared/Tabs';
+
+import './styles.less';
 
 const TypeMapText = {
     districts: '区域',
     subways: '地铁',
 };
 
-import './styles.less';
-
 const ptClass = 'm-ptfilter';
+
+type StateType = {
+    firstItemSelectedIndex: number,
+    secondItemSelectedIndex: number,
+    thirdItemSelectedIndex: number,
+};
 
 type PropType = {
     onFilterConfirm: Function,
@@ -28,12 +33,7 @@ type PropType = {
             },
         },
     },
-};
-
-type StateType = {
-    firstItemSelectedIndex: number,
-    secondItemSelectedIndex: number,
-    thirdItemSelectedIndex: number,
+    filterState: StateType,
 };
 
 export default class PositionFilter extends PureComponent<PropType, StateType> {
@@ -91,7 +91,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
 
     // 每点击第一级item，要将之前点击的第二，三级item取消掉
     onFirstItemTap = (event: SyntheticEvent<>, index: number) => {
-        if (this.state.firstItemSelectedIndex == index) return;
+        if (this.state.firstItemSelectedIndex === index) return;
 
         this.setState({
             firstItemSelectedIndex: index,
@@ -111,14 +111,14 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
     }
 
     renderSecondList(secondDataObj: {}) {
-        const children = secondDataObj && Object.keys(secondDataObj).map((secondId, index) => {
-            return createElement(Tab, {
+        const children = secondDataObj && Object.keys(secondDataObj).map(
+            (secondId, index) => createElement(Tab, {
                 label: secondDataObj[secondId].text,
                 key: index,
                 navItemClass: `${ptClass}-nav-item`,
                 contentItemClass: `${ptClass}-content-item`,
-            }, this.renderThirdList(secondDataObj[secondId].sub));
-        });
+            }, this.renderThirdList(secondDataObj[secondId].sub)),
+        );
 
         return createElement(Tabs, {
             className: ptClass,
@@ -135,14 +135,14 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
             positionFilterDataObj,
         } = this.props;
 
-        const children = Object.keys(positionFilterDataObj).map((type, index) => {
-            return createElement(Tab, {
+        const children = Object.keys(positionFilterDataObj).map(
+            (type, index) => createElement(Tab, {
                 label: TypeMapText[type],
                 key: index,
                 navItemClass: `${ptClass}-nav-item`,
                 contentItemClass: `${ptClass}-content-item`,
-            }, this.renderSecondList(positionFilterDataObj[type]));
-        });
+            }, this.renderSecondList(positionFilterDataObj[type])),
+        );
 
         return createElement(Tabs, {
             className: ptClass,
@@ -154,23 +154,12 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
         }, children);
     }
 
-    // componentWillMount() {
-    //     const {
-    //         filterState,
-    //     } = this.props;
-
-    //     if (filterState) {
-    //         this.setState(filterState);
-    //     }
-    // }
-
-    // componentWillReceiveProps(nextProps: {}) {
-    //     const filterState = nextProps.filterState;
-
-    //     if (filterState) {
-    //         this.setState(filterState);
-    //     }
-    // }
+    componentWillReceiveProps(nextProps: PropType) {
+        const {
+            filterState,
+        } = nextProps;
+        this.setState(filterState);
+    }
 
     render() {
         return (
@@ -263,7 +252,7 @@ type PropTypeThirdItem = {
 };
 
 class ThirdItem extends PureComponent<PropTypeThirdItem> {
-    handleTouchTap = (e: SyntheticEvent<>) => {
+    handleTouchTap = () => {
         const {
             onThirdItemTap,
             index,
@@ -274,7 +263,6 @@ class ThirdItem extends PureComponent<PropTypeThirdItem> {
 
     render() {
         const {
-            onThirdItemTap,
             isSelected,
             text,
         } = this.props;

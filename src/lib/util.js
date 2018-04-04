@@ -1,3 +1,14 @@
+
+// 反转对象的属性和值
+export function reverseObjKeyValue(obj) {
+    const reverseObj = {};
+    for(let key in obj) {
+        reverseObj[obj[key]] = key;
+    }
+
+    return reverseObj;
+}
+
 // 时间格式化
 export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
     const date = new Date(timestamp);

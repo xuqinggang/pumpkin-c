@@ -5,12 +5,10 @@ import React, { PureComponent, Component } from 'react';
 import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
 
-// 转换state->params和label
-import { positionFilterStateToParams } from 'application/App/HouseList/filterStateToParams';
-
 type PropType = {
     onFilterConfirm: Function,
 };
+
 type StateType = {
     positionFilterDataObj: ?{
         [type: string]: {
@@ -24,8 +22,9 @@ type StateType = {
         },
     },
 };
+
 // 位置筛选，请求初始化筛选数据
-export default class PositionFilterWrap extends PureComponent<PropType, StateType> {
+export default class PositionFilterWrap extends Component<PropType, StateType> {
     constructor(props: PropType) {
         super(props);
         this.state = {

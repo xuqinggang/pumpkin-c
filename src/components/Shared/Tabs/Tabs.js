@@ -191,7 +191,7 @@ class Tabs extends PureComponent<PropType, StateType> {
                     }
                 </ul>
                 {
-                    (activeIndex !== prevIndex && tabContent[activeIndex]) ?
+                    tabContent[activeIndex] ?
                         (
                             <div className={classnames(`${classPrefix}-content`, contentClassName)}>
                                 {

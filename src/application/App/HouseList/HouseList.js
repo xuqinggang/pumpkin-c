@@ -4,15 +4,22 @@ import React, { PureComponent } from 'react';
 import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
 import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
 import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
-import HeadTitle from 'components/App/HouseList/HeadTitle/HeadTitle';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
-import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
-import { filterStateToParams } from './filterStateToParams';
-import Service from 'lib/Service';
-import { shallowEqual, urlJoin, parseUrlParams } from 'lib/util';
+import { InitStateFilterLabel, InitStateFilterState } from 'application/App/HouseList/initState';
+import {
+    FILTER_SEPARATOR,
+    parseUrl,
+    stringifyPostionState,
+    stringifyMoreState,
+    stringifyRentState,
+    stringifyHouseTypeState,
+} from './transState';
+// import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
+// import { filterStateToParams } from './filterStateToParams';
+import { urlJoin, parseUrlParams } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 import { kzPv } from 'lib/pv';
@@ -32,31 +39,26 @@ export default class HouseList extends PureComponent {
         this.urlQuery = urlQuery;
         this.urlParamsObj = urlParamsObj;
 
+        // 各个筛选器url片段
+        this.urlFrgObj = {
+            position: '',
+            rent: '',
+            houseType: '',
+            more: '',
+        };
+
+        // 筛选的请求参数
+        this.filterParamsObj = {
+            apartmentId: this.urlParamsObj.apartment || null,
+        };
+
+        this.filterState = InitStateFilterState;
+        this.filterLabel = InitStateFilterLabel;
+
         window.setStore('url', {
             urlParamsObj,
             urlQuery,
         });
-
-        this.state = {
-            // 4个筛选面板的state
-            filterLabel: {
-                position: '位置',
-                rent: '租金',
-                houseType: '房型',
-                more: '更多',
-            },
-            // 筛选初始状态
-            filterState: {
-                position: {},
-                rent: [0, 20000],
-                houseType: {},
-                more: {},
-            },
-            // 筛选的请求参数
-            filterParamsObj: {
-                apartmentId: this.urlParamsObj.apartment || null,
-            },
-        };
 
         // 动态更改标题
         // dynamicDocTitle('南瓜租房');
@@ -72,56 +74,79 @@ export default class HouseList extends PureComponent {
     }
 
     // 筛选确认回调
-    onFilterConfirm = (filterStateObj) => {
-        // const oldFilterState = this.state.filterState;
-        // const newFilterState = Object.assign({}, oldFilterState, filterStateObj);
+    // typeUrlObj, eg: { type: 'rent', url: 'e123l2141' }
+    // paramsObj, eg: { districtId: 1234 }
+    // typeFilterStateObj, eg: { type: rent, state: [123, 424] }
+    onFilterConfirm = (typeFilterStateObj) => {
+        const {
+            type,
+            state,
+        } = typeFilterStateObj;
 
-        // this.setState({
-        //     filterState: newFilterState,
-        // });
+        const TypeMapStringifyState = {
+            rent: stringifyRentState,
+            houseType: stringifyHouseTypeState,
+            more: stringifyMoreState,
+            position: stringifyPostionState,
+        };
 
-        // console.log('newFilterState', newFilterState);
-        const filterUrlFragment = stringifyStateObjToUrl(newFilterState);
-        this._setStoreFilterUrlFragment(filterUrlFragment);
+        const typeStringifStateFun = TypeMapStringifyState[type];
+        const {
+            url,
+            paramsObj,
+            label,
+        } = typeStringifStateFun(state);
+
+        // filterState
+        this.filterState = Object.assign({}, this.filterState, { [type]: state });
+        // label
+        this.filterLabel = Object.assign({}, this.filterLabel, { [type]: label });
+        // 生成筛选参数
+        this.filterParamsObj = Object.assign({}, this.filterParamsObj, paramsObj);
+        // urlFrgObj
+        this.urlFrgObj[type] = url;
+
+        // setStore
+        this._setStoreFilterInfo();
+
+        // 拼接生成url
+        const urlArr = [];
+
+        Object.keys(this.urlFrgObj).forEach((typeTmp) => {
+            const urlFrg = this.urlFrgObj[typeTmp];
+            urlFrg && urlArr.push(urlFrg);
+        });
+        const urlFrgRt = urlArr.join(FILTER_SEPARATOR);
+
+
+        // this._setStoreFilterUrlFrg(urlFrgRt);
 
         let link = '';
         // 筛选url片段
-        link = urlJoin(this.urlPrefix, 'list', filterUrlFragment) + `?${this.urlQuery}`;
+        link = urlJoin(this.urlPrefix, 'list', urlFrgRt) + `?${this.urlQuery}`;
 
         this.props.history.push(link);
 
-        // 未知原因，需要设置延时来确保微信分享正常
-        const timer = setTimeout(() => {
-            clearTimeout(timer);
-            this.wxShare();
-        }, 500);
+        // // 未知原因，需要设置延时来确保微信分享正常
+        // const timer = setTimeout(() => {
+        //     clearTimeout(timer);
+        //     this.wxShare();
+        // }, 500);
     }
 
-    _setStoreFilterUrlFragment(filterUrlFragment) {
-        window.setStore('url', {
-            filterUrlFragment,
+    _setStoreFilterInfo() {
+        window.setStore('filter', {
+            state: this.filterState,
+            label: this.filterLabel,
+            paramsObj: this.filterParamsObj,
+            urlFrg: this.urlFrgObj,
         });
     }
 
-    // 根据url片段生成state和params
-    _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
-        const filterState = parseUrlToState(filterUrlFragment);
-        // filterState中 position包含 state和params信息
-        // const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
-        // const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
-        // const filterParamsAndLabel = filterStateToParams(newFilterState);
-
-        // this.setState({
-        //     filterState: Object.assign({}, this.state.filterState, newFilterState),
-        //     filterParamsObj: Object.assign({},
-        //         this.state.filterParamsObj,
-        //         filterParamsAndLabel.filterParams,
-        //         positionStateAndParams && positionStateAndParams.params,
-        //     ),
-        //     filterLabel: Object.assign({}, this.state.filterLabel, filterParamsAndLabel.label),
-        // }, () => {
-        //     window.setStore('filter', this.state);
-        // });
+    _setStoreFilterUrlFrg(filterUrlFrg) {
+        window.setStore('url', {
+            filterUrlFrg,
+        });
     }
 
     wxShare() {
@@ -136,13 +161,24 @@ export default class HouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        this._setStoreFilterUrlFragment(filterUrlFragment);
+        this._setStoreFilterUrlFrg(filterUrlFragment);
 
-        const filterStore = window.getStore('filter');
+        let filterStore = window.getStore('filter');
+        if (!filterStore && filterUrlFragment) {
+            filterStore = parseUrl(filterUrlFragment);
+        }
+
         if (filterStore) {
-            this.setState(filterStore);
-        } else {
-            this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
+            const {
+                urlFrg,
+                state,
+                label,
+                paramsObj,
+            } = filterStore;
+            this.filterParamsObj = Object.assign({}, this.filterParamsObj, paramsObj);
+            this.filterLabel = Object.assign({}, this.filterLabel, label);
+            this.filterState = Object.assign({}, this.filterState, state);
+            this.urlFrgObj = Object.assign(this.urlFrgObj, urlFrg);
         }
     }
 
@@ -158,22 +194,12 @@ export default class HouseList extends PureComponent {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
         if (curFilterUrlFragment !== nextFilterUrlFragment) {
-
-            this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
-
             // 每生成一个新的url发送一次pv请求
             window.send_stat_pv && window.send_stat_pv();
         }
     }
 
     render() {
-        console.log('HouseList, render');
-        const {
-            filterState,
-            filterLabel,
-            filterParamsObj,
-        } = this.state;
-
         const {
             match,
             history,
@@ -188,21 +214,19 @@ export default class HouseList extends PureComponent {
                 <IndexRecommend />
                 <Filter
                     className="filter"
-                    filterState={filterState}
-                    filterLabel={filterLabel}
                     onFilterConfirm={this.onFilterConfirm}
-                    onFilterClear={this.onFilterClear}
-                    onFilterReSume={this.onFilterReSume}
                     onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
+                    filterState={this.filterState}
+                    filterLabel={this.filterLabel}
                 />
                 <HouseLists
-                    filterParams={filterParamsObj}
+                    filterParams={this.filterParamsObj}
                 />
                 {
                     isApp() ?
                         null :
                         <BottomOpenNative
-                            schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(filterParamsObj)}`}
+                            schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(this.filterParamsObj)}`}
                         />
                 }
             </div>
