@@ -24,6 +24,7 @@ export default class CommentList extends PureComponent {
 
 
     onLoadMore = () => {
+        console.log('loadmore');
         this.fetchData();
     }
 
@@ -72,12 +73,12 @@ export default class CommentList extends PureComponent {
     }
 
     componentDidMount() {
-        document.body.style['overflow-x'] = 'hidden';
+        const commentListDom = document.getElementsByClassName('g-commentlist');
+        commentListDom[0].style['overflow-x'] = 'hidden';
         window.addEventListener('scroll', this.handleLoadMore);
         this.fetchData(true);
     }
     componentWillUnmount() {
-        document.body.style['overflow-x'] = 'auto';
         window.removeEventListener('scroll', this.handleLoadMore);
     }
 

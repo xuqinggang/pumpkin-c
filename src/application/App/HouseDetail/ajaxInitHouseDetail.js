@@ -108,6 +108,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 // 集中式公寓
                 aptType,
                 onsaleCount,
+                apartment,
             } = houseDetailData;
 
 
@@ -141,6 +142,11 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             // 服务器端渲染seo相关数据
             const seoData = genSeoData(houseDetailData);
 
+            // 拨打电话需要存储的数据
+            // const contactButlerData = {
+                
+            // }
+
             return {
                 headData: { isCollected, },
                 sliderImgArr,
@@ -160,6 +166,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                     rentalType,
                     aptType,
                     onsaleCount,
+                    apartmentId: apartment.id,
                 },
                 seoData,
             };

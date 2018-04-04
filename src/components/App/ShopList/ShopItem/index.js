@@ -2,19 +2,17 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
 import { urlJoin } from 'lib/util';
-import { withHistory } from 'application/App/routes';
+import { goShopDetail } from 'application/App/routes/routes';
 
 import './styles.less';
 
 const classPrefix = 'm-shopitem';
 const imgCutModifier = '?crop=1&cpos=middle&w=720&h=370';
 
-const createShopDetailPath = shopId => `shop/detail/${shopId}`;
-
 class ShopItem extends PureComponent {
 
-    goShopDetail = (shopId) => withHistory(this.props.history)(createShopDetailPath)(shopId);
-    
+    goShopDetail = shopId => goShopDetail(this.props.history)(shopId);
+
     handleTouchTap = () => {
         this.goShopDetail(this.props.shop.id);
     }

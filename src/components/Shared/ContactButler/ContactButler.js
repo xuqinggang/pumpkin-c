@@ -6,6 +6,7 @@ import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/im
 import { isAndroid } from 'lib/const';
 
 import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
+import { commentStorage } from 'application/App/storage';
 
 import './styles.less';
 
@@ -38,7 +39,14 @@ export default class ContactButler extends PureComponent {
                 this.setState({
                     show: true,
                     dynamicTel: tel,
-                })
+                });
+            }).finally(() => {
+                // storage it to localStorage for comment
+                commentStorage.set({
+                    rentUnitId: '140826183515361280',
+                    apartmentId: '1',
+                    name: 'kong',
+                });
             })
     }
 

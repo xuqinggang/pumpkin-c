@@ -14,7 +14,10 @@ export function ajaxGetCommentList(apartmentId, pager = {}) {
     })
         .then((res) => {
             if (res.code === 200) {
-                return res.data;
+                return {
+                    ...res.data,
+                    totalPage: Math.ceil(res.data.total / perPage),
+                };
             }
 
             throw new Error(res);

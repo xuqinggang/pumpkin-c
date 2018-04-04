@@ -18,7 +18,7 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 import OpenNative from 'Shared/OpenNative/OpenNative';
 
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { dynamicDocTitle } from 'lib/util';
+import { dynamicDocTitle, getWithDefault } from 'lib/util';
 import { isApp, isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
@@ -159,7 +159,14 @@ export default class HouseDetailIndex extends PureComponent {
             rentalType,
             aptType,
             onsaleCount,
+            apartmentId,
         } = extraData || {};
+
+        const houseDataByContact = {
+            // name: `${blockName}-${bedroomCount}居室-${getWithDefault(DirectTypeMapText, direct, '多个朝向')}`,
+            rentUnitId: this.rentUnitId,
+            apartmentId,
+        };
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
@@ -215,7 +222,7 @@ export default class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
                     communityIntroData={communityIntroData || {}}
                 />
-                <ContactButler contactButlerData={contactButlerData || {}} />
+                <ContactButler houseData={houseDataByContact} contactButlerData={contactButlerData || {}} />
             </div>
         );
     }

@@ -17,7 +17,7 @@ export default class RentUnitList extends PureComponent {
                 <TitleWithMore title={title} goMore={goMore} />
                 {
                     this.props.list.map((rentalUnit, index) => (
-                        <RentUnitItem key={index} {...rentalUnit} />
+                        <RentUnitItem key={index} {...rentalUnit} imgUrl={rentalUnit.image} />
                     ))
                 }
             </div>

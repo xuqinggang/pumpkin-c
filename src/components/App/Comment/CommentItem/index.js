@@ -10,6 +10,8 @@ import './styles.less';
 
 const classPrefix = 'm-commentitem';
 
+const imgCutModifier = '?crop=1&cpos=middle&w=200&h=200';
+
 class CommentItem extends PureComponent {
     handleTouchTap = (rentUnitId) => {
         this.goRentUnitDetail(rentUnitId);
@@ -38,9 +40,10 @@ class CommentItem extends PureComponent {
                             : <div className="circle-avatar" />
                     }
                     <div className="f-display-flex f-flex-justify-between right-wrap">
-                        <div>
+                        <div className="stars-wrap">
                             <div className="nickname">{nickname}</div>
                             <Stars
+                                className="stars"
                                 count={5}
                                 value={parseInt(score, 10)}
                                 edit={false}
@@ -56,7 +59,7 @@ class CommentItem extends PureComponent {
                     <ExpandText intro={content} />
                     {
                         images.map((image, index) => (
-                            <img className="comment-img" src={image} alt="" key={index} />
+                            <img className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>

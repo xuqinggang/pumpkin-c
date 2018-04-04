@@ -21,7 +21,9 @@ export const goApartmentDetail = withHistory(createApartmentDeatilPath);
 
 // shop
 const createShopListPath = () => '/shop/list';
+const createShopDetailPath = shopId => `shop/detail/${shopId}`;
 export const goShopList = withHistory(createShopListPath);
+export const goShopDetail = withHistory(createShopDetailPath);
 
 // rentUnit
 const createRentUnitDeatilPath = rentUnitId => `/detail/${rentUnitId}`;

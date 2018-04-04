@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 
-import './styles.less';
 import { goCommentInput } from 'application/App/routes/routes';
+import './styles.less';
+import CommentCardWrap from '../CommentCardWrap';
 
 import Button from '../Button';
 
@@ -15,19 +16,21 @@ class CommentCard extends PureComponent {
     }
 
     handleTouchTap = () => {
-        this.goCommentInput('1', '140826183515361280');
+        const { apartmentId, rentUnitId } = this.props;
+        this.goCommentInput(apartmentId, rentUnitId);
     }
 
     goCommentInput = goCommentInput(this.props.history)
 
     render() {
+        const { name } = this.props;
         return (
             <div className={`${classPrefix}`}>
-                <p className="close">x</p>
+                <p className="close"><i className="icon-small-close" /></p>
                 <div className="content g-grid-row">
                     <div>
                         <div className="tip">你有一个房源待评价</div>
-                        <div className="rent">你有一个房源待评价</div>
+                        <div className="rent">{name}</div>
                     </div>
                     <Button
                         className={`${classPrefix}-button`}
@@ -40,4 +43,4 @@ class CommentCard extends PureComponent {
     }
 }
 
-export default withRouter(CommentCard);
+export default withRouter(CommentCardWrap(CommentCard));

@@ -22,7 +22,7 @@ const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ShopList extends PureComponent {
 
-    static wxShare() {
+    wxShare() {
         // 分享
         execWxShare({
             title: '北京 - 品质生活独栋公寓', // TODO city
@@ -32,7 +32,7 @@ export default class ShopList extends PureComponent {
         });
     }
 
-    static _setStoreFilterUrlFragment = (filterUrlFragment) => {
+    _setStoreFilterUrlFragment = (filterUrlFragment) => {
         window.setStore('url', {
             filterUrlFragment,
         });
