@@ -1,4 +1,5 @@
-import validateEngine from 'lib/validate';
+import PropTypes from 'prop-types';
+
 /**
  * Return cache Api by use store key
  *
@@ -23,10 +24,8 @@ const generateCacheApi = (
 ) => ({
     set: (data, expire = defaultExpire) => {
         // validate essential data
-        // 不严格限制, 不符合的数据是以 console.warn()抛出
-        if (!validateEngine(validate, data)) {
-            throw new Error('validate not pass');
-        }
+        // 严格限制, 且不符合的数据是以 console.warn()抛出
+        PropTypes.checkPropTypes({ data: validate }, { data }, 'prop', `set storage ${key}`);
 
         const newData = {
             data,
@@ -72,12 +71,12 @@ const Keys = {
 export const commentStorage = generateCacheApi({
     engine: window.localStorage,
     key: Keys.COMMENT_CARD,
-    validate: [{
-        title: 'string',
-        apartmentId: 'string|number',
-        rentUnitId: 'string|number',
-        timestamp: 'number',
-    }],
+    validate: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string,
+        apartmentId: PropTypes.number,
+        rentUnitId: PropTypes.string,
+        timestamp: PropTypes.number,
+    })),
     defaultExpire: null,
 });
 
