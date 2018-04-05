@@ -143,6 +143,8 @@ export default class HouseDetailIndex extends PureComponent {
             contactButlerData,
             // 周边及交通,经纬度
             houseTrafficData,
+            // 打电话后需要本地存储的信息
+            dataByContact,
             // 额外信息
             extraData,
         } = this.state.houseDetailData;
@@ -159,14 +161,7 @@ export default class HouseDetailIndex extends PureComponent {
             rentalType,
             aptType,
             onsaleCount,
-            apartmentId,
         } = extraData || {};
-
-        const houseDataByContact = {
-            // name: `${blockName}-${bedroomCount}居室-${getWithDefault(DirectTypeMapText, direct, '多个朝向')}`,
-            rentUnitId: this.rentUnitId,
-            apartmentId,
-        };
 
         return (
             <div className={`${classPrefix}`} ref={ (dom) => { this.wrapDom = dom; } }>
@@ -222,7 +217,7 @@ export default class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
                     communityIntroData={communityIntroData || {}}
                 />
-                <ContactButler houseData={houseDataByContact} contactButlerData={contactButlerData || {}} />
+                <ContactButler houseData={dataByContact} contactButlerData={contactButlerData || {}} />
             </div>
         );
     }

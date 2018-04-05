@@ -143,9 +143,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             const seoData = genSeoData(houseDetailData);
 
             // 拨打电话需要存储的数据
-            // const contactButlerData = {
-                
-            // }
+            const dataByContact = getDataByConcat(houseDetailData);
 
             return {
                 headData: { isCollected, },
@@ -162,6 +160,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 communityIntroData,
                 contactButlerData,
                 houseTrafficData,
+                dataByContact,
                 extraData: {
                     rentalType,
                     aptType,
@@ -175,6 +174,21 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             console.log('err', err);
             return {};
         })
+}
+
+function getDataByConcat(houseDetailData) {
+    const {
+        apartment,
+        rentUnitId,
+        blockName,
+        bedroomCount,
+        direct,
+    } = houseDetailData;
+    return {
+        apartmentId: apartment.id,
+        rentUnitId,
+        title: `${blockName}-${bedroomCount}居室-${getWithDefault(DirectTypeMapText, direct, '多个朝向')}`,
+    };
 }
 
 function genSeoData(houseDetailData) {

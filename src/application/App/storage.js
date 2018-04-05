@@ -1,4 +1,4 @@
-const isEmpty = o => o === null || o === undefined;
+import validateEngine from 'lib/validate';
 /**
  * Return cache Api by use store key
  *
@@ -14,14 +14,18 @@ const isEmpty = o => o === null || o === undefined;
  * @return {object}
  */
 const generateCacheApi = (
-    engine, key, essentialData = [], defaultExpire = 7 * 24 * 3600 * 1000,
+    {
+        engine,
+        key,
+        validate = null,
+        defaultExpire = 7 * 24 * 3600 * 1000,
+    },
 ) => ({
     set: (data, expire = defaultExpire) => {
         // validate essential data
-        if (data instanceof Object) {
-            essentialData.forEach((e) => {
-                if (isEmpty(data[e])) throw new Error(`need ${e} in generateCacheApi`);
-            });
+        // 不严格限制, 不符合的数据是以 console.warn()抛出
+        if (!validateEngine(validate, data)) {
+            throw new Error('validate not pass');
         }
 
         const newData = {
@@ -49,16 +53,32 @@ const generateCacheApi = (
         }
         return data;
     },
+    push(data, expire = defaultExpire) {
+        const oldData = this.get();
+        let newData;
+        if (Array.isArray(oldData)) {
+            newData = [...oldData, data];
+        } else {
+            newData = [data];
+        }
+        this.set(newData, expire);
+    },
 });
 
 const Keys = {
     COMMENT_CARD: 'COMMENT_CARD',
 };
 
-export const commentStorage = generateCacheApi(window.localStorage, Keys.COMMENT_CARD, [
-    'rentUnitId', // we may add type check like 'rentUnitId:string'
-    'apartmentId',
-    'name',
-], null);
+export const commentStorage = generateCacheApi({
+    engine: window.localStorage,
+    key: Keys.COMMENT_CARD,
+    validate: [{
+        title: 'string',
+        apartmentId: 'string|number',
+        rentUnitId: 'string|number',
+        timestamp: 'number',
+    }],
+    defaultExpire: null,
+});
 
 export default generateCacheApi;

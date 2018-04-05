@@ -13,6 +13,7 @@ class CommentCard extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
+        console.log('con card');
     }
 
     handleTouchTap = () => {
@@ -23,14 +24,14 @@ class CommentCard extends PureComponent {
     goCommentInput = goCommentInput(this.props.history)
 
     render() {
-        const { name } = this.props;
+        const { title } = this.props;
         return (
             <div className={`${classPrefix}`}>
                 <p className="close"><i className="icon-small-close" /></p>
                 <div className="content g-grid-row">
                     <div>
                         <div className="tip">你有一个房源待评价</div>
-                        <div className="rent">{name}</div>
+                        <div className="rent">{title}</div>
                     </div>
                     <Button
                         className={`${classPrefix}-button`}

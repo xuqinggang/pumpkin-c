@@ -42,12 +42,19 @@ export default class ContactButler extends PureComponent {
                 });
             }).finally(() => {
                 // storage it to localStorage for comment
-                commentStorage.set({
-                    rentUnitId: '140826183515361280',
-                    apartmentId: '1',
-                    name: 'kong',
+                const { houseData } = this.props || {};
+                const {
+                    rentUnitId,
+                    apartmentId,
+                    title,
+                } = houseData;
+                commentStorage.push({
+                    rentUnitId,
+                    apartmentId,
+                    title,
+                    timestamp: new Date().getTime()
                 });
-            })
+            });
     }
 
     handleNoContactTap = (e) => {
