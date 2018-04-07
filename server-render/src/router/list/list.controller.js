@@ -1,8 +1,7 @@
 'use strict';
 
 import { AbbrevMapCity } from 'config/config';
-import { parseUrlToState } from 'application/App/HouseList/filterStateToUrl';
-import { filterStateToParams } from 'application/App/HouseList/filterStateToParams';
+import { parseUrl } from 'application/App/HouseList/transState';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 // import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxInitHouseIndexBanner, ajaxInitHouseIndexRecommend } from 'application/App/HouseIndex/ajaxInitHouseIndex';
@@ -35,23 +34,18 @@ export default async (ctx, next) => {
 
 function setFilterData(filterUrlFragment, ctx) {
     // gen state
-    const filterState = parseUrlToState(filterUrlFragment);
-    // filterState中 position包含state和params信息
-    const { position: positionStateAndParams, ...extraTypeFilterState } = filterState;
-    const newFilterState = { ...extraTypeFilterState, position: positionStateAndParams && positionStateAndParams.state };
-    // gen paramsAndlabel
-    const filterParamsAndLabel = filterStateToParams(newFilterState);
-
-    const newFilterParamsObj = Object.assign({},
-        filterParamsAndLabel.filterParams,
-        positionStateAndParams && positionStateAndParams.params,
-    );
-
+    const {
+        urlFrg,
+        state,
+        label,
+        paramsObj,
+    } = parseUrl(filterUrlFragment);
     // 设置筛选的store
     window.setStore('filter', {
-        filterState: newFilterState,
-        filterParamsObj: newFilterParamsObj,
-        filterLabel: filterParamsAndLabel.label,
+        urlFrg,
+        state,
+        label,
+        paramsObj,
     });
 
     // 渲染列表页 meta相关数据

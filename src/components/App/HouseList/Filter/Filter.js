@@ -8,27 +8,12 @@ import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
 import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
 import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
-import { InitStateFilterLabel, InitStateFilterState } from 'application/App/HouseList/initState';
 import { getScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
-
-import {
-    stringifyHouseTypeState,
-    stringifyRentState,
-    stringifyPostionState,
-    stringifyMoreState,
-} from 'application/App/HouseList/transState';
 
 import './styles.less';
 
 const filterClass = 'm-filter';
-
-// // 位置类型对应接口参数key
-// const PtTypeMapParamsKey = {
-//     districts: ['districtId', 'circleId'],
-//     subways: ['subwayId', 'stationId'],
-//     around: ['nearByInfo'],
-// };
 
 export default class Filter extends PureComponent {
     constructor(props) {
@@ -36,8 +21,6 @@ export default class Filter extends PureComponent {
         this.state = {
             // 滚动时filterDom是否fixed
             isFixed: false,
-            // ex: { more: '更多', houseType: '房型' }
-            // filterLabel: props.filterLabel,
             // ex: { more: { direction: {1:true} }, houseType: {} }
             filterShow: {
                 position: false,
@@ -47,13 +30,6 @@ export default class Filter extends PureComponent {
             },
         };
     }
-
-    // _setLabelAndFilterstate = (newLabelObj, newStateObj) => {
-    //     this.setState({
-    //         label: Object.assign({}, this.state.label, newLabelObj),
-    //         filterState: Object.assign({}, this.state.filterState, newStateObj),
-    //     });
-    // }
 
     // 回调函数-弹层是否展现
     handleFilterShowTap = (type, isResetScrollTop) => {
@@ -148,14 +124,6 @@ export default class Filter extends PureComponent {
 
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionState) => {
-        // const {
-        //     label,
-        //     paramsObj,
-        //     url,
-        // } = stringifyPostionState(positionState);
-        // this._setLabelAndFilterstate({ position: label }, { position: positionState });
-        // this.props.onFilterConfirm({ type: 'position', url }, paramsObj);
-
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
 
@@ -172,15 +140,6 @@ export default class Filter extends PureComponent {
 
     // filterState, ex: { shared: {1:true, 2:false} }
     onFilterHouseTypeConfirm = (houseTypeState) => {
-        // console.log('houseTypeFilterState', houseTypeState);
-        // const {
-        //     label,
-        //     paramsObj,
-        //     url,
-        // } = stringifyHouseTypeState(houseTypeState);
-        // this._setLabelAndFilterstate({ houseType: label }, { houseType: houseTypeState });
-        // this.props.onFilterConfirm({ type: 'houseType', url }, paramsObj);
-
         // 隐藏弹层
         this.handleFilterShowTap('houseType', true);
 
@@ -189,14 +148,6 @@ export default class Filter extends PureComponent {
 
     // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
     onFilterMoreConfirm = (moreState) => {
-        // const {
-        //     label,
-        //     paramsObj,
-        //     url,
-        // } = stringifyMoreState(moreState);
-        // this._setLabelAndFilterstate({ more: label }, { more: moreState });
-        // this.props.onFilterConfirm({ type: 'more', url }, paramsObj);
-
         // 隐藏弹层
         this.handleFilterShowTap('more', true);
 
@@ -254,7 +205,7 @@ export default class Filter extends PureComponent {
                             type="position"
                             filterState={filterState.position}
                             onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetLabel}
+                            onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
                         />
                     </DropDownScreen>
                 </li>

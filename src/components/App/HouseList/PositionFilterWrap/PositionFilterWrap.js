@@ -4,6 +4,7 @@ import React, { PureComponent, Component } from 'react';
 
 import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
+import { parsePositionUrlToStateAndLabel } from 'application/App/HouseList/transState';
 
 type PropType = {
     onFilterConfirm: Function,
@@ -55,14 +56,15 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
             .then((positionFilterDataObj) => {
                 // if (positionFilterDataArr) {
                 //     const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
-                    window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
-
-                    this.setState({
-                        positionFilterDataObj,
-                    });
+                window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
+                this.setState({
+                    positionFilterDataObj,
+                });
+                const rt = parsePositionUrlToStateAndLabel('c66678-d117872');
+                console.log('pt', rt);
 
                 //     const { label } = positionFilterStateToParams(this.props.filterState);
-                //     this.props.onDynamicSetLabel(label);
+                    this.props.onDynamicPtStateAndLabel(rt);
                 // }
             });
 

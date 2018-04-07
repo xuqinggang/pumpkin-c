@@ -17,8 +17,6 @@ import {
     stringifyRentState,
     stringifyHouseTypeState,
 } from './transState';
-// import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
-// import { filterStateToParams } from './filterStateToParams';
 import { urlJoin, parseUrlParams } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
@@ -60,22 +58,23 @@ export default class HouseList extends PureComponent {
             urlQuery,
         });
 
-        // 动态更改标题
-        // dynamicDocTitle('南瓜租房');
-
         this.urlPrefix = window.getStore('url').urlPrefix;
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
-    _dynamicSetPositionFilterLabel = (label) => {
-        this.setState({
-            filterLabel: Object.assign({}, this.state.filterLabel, { position: label }),
-        });
+    _dynamicSetPtStateAndLabel = (stateAndLabelObj) => {
+        const {
+            state,
+            label,
+        } = stateAndLabelObj;
+
+        this.filterLabel = Object.assign({}, this.filterLabel, { position: label });
+        this.filterState = Object.assign({}, this.filterState, { position: state });
+
+        this.forceUpdate();
     }
 
     // 筛选确认回调
-    // typeUrlObj, eg: { type: 'rent', url: 'e123l2141' }
-    // paramsObj, eg: { districtId: 1234 }
     // typeFilterStateObj, eg: { type: rent, state: [123, 424] }
     onFilterConfirm = (typeFilterStateObj) => {
         const {
@@ -127,11 +126,11 @@ export default class HouseList extends PureComponent {
 
         this.props.history.push(link);
 
-        // // 未知原因，需要设置延时来确保微信分享正常
-        // const timer = setTimeout(() => {
-        //     clearTimeout(timer);
-        //     this.wxShare();
-        // }, 500);
+        // 未知原因，需要设置延时来确保微信分享正常
+        const timer = setTimeout(() => {
+            clearTimeout(timer);
+            this.wxShare();
+        }, 500);
     }
 
     _setStoreFilterInfo() {
@@ -161,7 +160,7 @@ export default class HouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        this._setStoreFilterUrlFrg(filterUrlFragment);
+        // this._setStoreFilterUrlFrg(filterUrlFragment);
 
         let filterStore = window.getStore('filter');
         if (!filterStore && filterUrlFragment) {
@@ -215,7 +214,7 @@ export default class HouseList extends PureComponent {
                 <Filter
                     className="filter"
                     onFilterConfirm={this.onFilterConfirm}
-                    onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
+                    onDynamicPtStateAndLabel={this._dynamicSetPtStateAndLabel}
                     filterState={this.filterState}
                     filterLabel={this.filterLabel}
                 />
