@@ -16,25 +16,12 @@ export default class PureShopListWrap extends PureComponent {
             pager: {
                 curPage: 1,
                 totalPage: 1,
-            }
+            },
         };
     }
-    componentDidMount() {
-        // 南瓜租房 iOS APP 传来 cityId 等参数
-        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
-        this.cityId = cityId;
-
-        this.fetchData(true);
-    }
-    componentWillReceiveProps(nextProps, nextState) {
-        this.filterParams = nextProps.filterParams;
-        if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
-            this.fetchData(true);
-        }
-    }
-    fetchData = (renew=false) => {
+    fetchData = (renew = false) => {
         const { pager, apartmentList } = this.state;
-        let curPage = pager.curPage;
+        let { curPage } = pager;
 
         // fetching
         this.setState({
@@ -51,8 +38,8 @@ export default class PureShopListWrap extends PureComponent {
                 cityId,
             },
             pager,
-        }).then(data => {
-            let newApartmentLists= [];
+        }).then((data) => {
+            let newApartmentLists = [];
             if (!renew) {
                 curPage += 1;
                 newApartmentLists = apartmentList.concat(data.list);
@@ -71,10 +58,23 @@ export default class PureShopListWrap extends PureComponent {
                     window.scrollTo(0, 0);
                 }
             });
-        })
+        });
     }
     handleLoadMore = () => {
         this.fetchData();
+    }
+    componentDidMount() {
+        // 南瓜租房 iOS APP 传来 cityId 等参数
+        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
+        this.cityId = cityId;
+
+        this.fetchData(true);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.filterParams = nextProps.filterParams;
+        if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
+            this.fetchData(true);
+        }
     }
     render() {
         const {

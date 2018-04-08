@@ -6,12 +6,17 @@ import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/im
 import { isAndroid } from 'lib/const';
 
 import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { commentStorage } from 'application/App/storage';
+import { commentListStorage, commentQueueStorage } from 'application/App/storage';
 
 import './styles.less';
 
 const btnPrefix = 'm-contactbutler-btn';
-const dialogPrefix = 'm-contactbutler-dialog'
+const dialogPrefix = 'm-contactbutler-dialog';
+
+const saveCommentToStorage = (data) => {
+    commentListStorage.push(data);
+    commentQueueStorage.update(data);
+};
 
 export default class ContactButler extends PureComponent {
     constructor(props) {
@@ -48,11 +53,11 @@ export default class ContactButler extends PureComponent {
                     apartmentId,
                     title,
                 } = houseData;
-                commentStorage.push({
+                saveCommentToStorage({
                     rentUnitId,
                     apartmentId,
                     title,
-                    timestamp: new Date().getTime()
+                    timestamp: new Date().getTime(),
                 });
             });
     }

@@ -204,7 +204,7 @@ export default class ShopList extends PureComponent {
                 <div className={`${classPrefix}-fixed-top`}>
                     {
                         !isRmHead()
-                            ? <HouseHead 
+                            ? <HouseHead
                                 history={history}
                                 renderRight={() => (
                                     <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
