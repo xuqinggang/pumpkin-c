@@ -34,38 +34,51 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
     }
 
     onFilterConfirm = (positionFilterStateObj: {}) => {
-        console.log('positionFilterStateObj', positionFilterStateObj);
         this.props.onFilterConfirm(positionFilterStateObj);
     }
 
-    // componentWillMount() {
-    //     const positionFilterDataArrStore = window.getStore('positionFilterDataArr');
+    componentWillMount() {
+        const positionFilterDataObjStore = window.getStore('positionFilterDataObj');
 
-    //     // 如果存在数据，则不请求
-    //     if (positionFilterDataArrStore && positionFilterDataArrStore.data) {
-    //         this.setState({
-    //             positionFilterDataArr: positionFilterDataArrStore.data,
-    //         });
+        if (positionFilterDataObjStore && positionFilterDataObjStore.data) {
+            this.setState({
+                positionFilterDataObj: positionFilterDataObjStore.data,
+            });
 
-    //         return;
-    //     }
-    // }
+            return;
+        }
+    }
 
     componentDidMount() {
+        // 如果存在数据，则不请求
+        const positionFilterDataObjStore = window.getStore('positionFilterDataObj');
+        if (positionFilterDataObjStore && positionFilterDataObjStore.data) return;
+
         ajaxInitPositionData()
             .then((positionFilterDataObj) => {
-                // if (positionFilterDataArr) {
-                //     const newPositionFilterDataArr = [...positionFilterDataArr, ...this.state.positionFilterDataArr];
                 window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
                 this.setState({
                     positionFilterDataObj,
                 });
-                const rt = parsePositionUrlToStateAndLabel('c66678-d117872');
-                console.log('pt', rt);
-
-                //     const { label } = positionFilterStateToParams(this.props.filterState);
+                const filterStore = window.getStore('filter');
+                const positionUrlFrg = filterStore && filterStore.urlFrg.position;
+                if (positionUrlFrg) {
+                    const rt = parsePositionUrlToStateAndLabel(positionUrlFrg);
                     this.props.onDynamicPtStateAndLabel(rt);
-                // }
+
+                    const {
+                        label,
+                        state,
+                    } = rt;
+                    const {
+                        label: oldLabel,
+                        state: oldState,
+                    } = filterStore || {};
+                    window.setStore('filter', {
+                        label: Object.assign({}, oldLabel, { position: label }),
+                        state: Object.assign({}, oldState, { position: state }),
+                    });
+                }
             });
 
         // 手动添加附近相关数据

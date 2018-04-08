@@ -14,14 +14,14 @@ export default async (ctx, next) => {
     // await setPositionData();
 
     // 设置筛选数据
-    const newFilterParamsObj = setFilterData(filterUrlFragment, ctx);
+    const filterParamsObj = setFilterData(filterUrlFragment, ctx);
     const apartmentId = ctx.query.apartment;
-    apartmentId !== undefined && Object.assign(newFilterParamsObj, {
+    apartmentId !== undefined && Object.assign(filterParamsObj, {
         apartmentId: apartmentId,
     });
 
     // 设置列表页数据 和 首页的banner和recommend 
-    await Promise.all([setHouseListData(newFilterParamsObj, cityId),
+    await Promise.all([setHouseListData(filterParamsObj, cityId),
         setHouseIndexBannerAndRecommend(cityId)]);
 
     await next();
@@ -39,7 +39,9 @@ function setFilterData(filterUrlFragment, ctx) {
         state,
         label,
         paramsObj,
+        seoData,
     } = parseUrl(filterUrlFragment);
+
     // 设置筛选的store
     window.setStore('filter', {
         urlFrg,
@@ -49,14 +51,16 @@ function setFilterData(filterUrlFragment, ctx) {
     });
 
     // 渲染列表页 meta相关数据
-    renderMetaData(filterParamsAndLabel.seoData, ctx);
+    renderMetaData(seoData, ctx);
 
-    return newFilterParamsObj;
+    return paramsObj;
 }
 
 async function setHouseListData(filterParamsObj, cityId) {
-    const houseListRes = await fetchRentUnitList({ filter: Object.assign(filterParamsObj, {cityId}),
-        pager: { curPage: 1, totalPage: 1 } });
+    const houseListRes = await fetchRentUnitList({
+        filter: Object.assign(filterParamsObj, { cityId }),
+        pager: { curPage: 1, totalPage: 1 },
+    });
     let houseListStore = {
         isFetching: false,
         isFetchCrash: houseListRes.fetch.type === 'CRASH',

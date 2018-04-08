@@ -105,7 +105,7 @@ export default class HouseList extends PureComponent {
         // urlFrgObj
         this.urlFrgObj[type] = url;
 
-        // setStore
+        // setStore filter
         this._setStoreFilterInfo();
 
         // 拼接生成url
@@ -117,8 +117,8 @@ export default class HouseList extends PureComponent {
         });
         const urlFrgRt = urlArr.join(FILTER_SEPARATOR);
 
-
-        // this._setStoreFilterUrlFrg(urlFrgRt);
+        // setStore url.filterUrlFragment
+        this._setStoreFilterUrlFrg(urlFrgRt);
 
         let link = '';
         // 筛选url片段
@@ -142,9 +142,9 @@ export default class HouseList extends PureComponent {
         });
     }
 
-    _setStoreFilterUrlFrg(filterUrlFrg) {
+    _setStoreFilterUrlFrg(filterUrlFragment) {
         window.setStore('url', {
-            filterUrlFrg,
+            filterUrlFragment,
         });
     }
 
@@ -160,7 +160,7 @@ export default class HouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        // this._setStoreFilterUrlFrg(filterUrlFragment);
+        this._setStoreFilterUrlFrg(filterUrlFragment);
 
         let filterStore = window.getStore('filter');
         if (!filterStore && filterUrlFragment) {
@@ -178,6 +178,7 @@ export default class HouseList extends PureComponent {
             this.filterLabel = Object.assign({}, this.filterLabel, label);
             this.filterState = Object.assign({}, this.filterState, state);
             this.urlFrgObj = Object.assign(this.urlFrgObj, urlFrg);
+            this._setStoreFilterInfo();
         }
     }
 
