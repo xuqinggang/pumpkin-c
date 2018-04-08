@@ -28,28 +28,27 @@ const findIndexByField = (arr, obj, field) => {
 };
 
 /**
- * Return cache Api by use store key
+ * Return store Api by use store key
  *
  * Examples:
  *
- *    const userInfoCache =
- *                  generateCacheApi(localStorage, Keys.USER_INFO, 30 * MILLISECONDS_EACH_DAY)
- *    userInfoCache.set({name: 'konglingxing'})
- *    const userInfo = userInfoCache.get()
+ *    const userInfoStore =
+ *                  generateStoreApi(localStorage, Keys.USER_INFO, 30 * MILLISECONDS_EACH_DAY)
+ *    userInfoStore.set({name: 'konglingxing'})
+ *    const userInfo = userInfoStore.get()
  * @param {Storage} engine
  * @param {String} key
  * @param {Array} essentialData
- * @param {Number} defaultExpire if defaultExpire is null, the cache will never expire
+ * @param {Number} defaultExpire
  * @param {string} uniqueField 当数据是包含对象的数组时, 用来标识一个数据的身份
  * @return {object}
  */
-const generateCacheApi = (
+const generateStoreApi = (
     {
         engine,
         key,
         validate = null,
-        defaultExpire = 7 * 24 * 3600 * 1000,
-        uniqueField = null,
+        defaultExpire = null,
     },
 ) => ({
     set: (data, expire = defaultExpire) => {
@@ -85,42 +84,48 @@ const generateCacheApi = (
     remove: () => {
         engine.removeItem(key);
     },
-    // TODO 以下为非基本操作, 数组操作 为其专门加一个高阶函数 或者 mixin
-    // 添加
-    push(data, expire = defaultExpire) {
-        const oldData = this.get() || [];
-        let newData;
-        if (Array.isArray(oldData)) {
-            newData = [...oldData, data];
-        } else {
-            newData = [data];
-        }
-        this.set(newData, expire);
-    },
-    // 添加 or 去重更新
-    update(data, expire = defaultExpire) {
-        // 更新操作时需要将旧记录删除并将新记录放在最前面
-        const oldData = this.get() || [];
-        let newData;
-        if (Array.isArray(oldData)) {
-            // delete the same item
-            const index = findIndexByField(oldData, data, uniqueField);
-            if (index >= 0) {
-                oldData.splice(index, 1);
-            }
-
-            // add a new one
-            newData = [...oldData, data];
-        } else {
-            newData = [data];
-        }
-        this.set(newData, expire);
-    },
 });
 
-// const withArrayApi = (baseStorage, ...arg) => {
-//     baseStorage(...arg);
-// }
+const withArrayApi = (baseStorage, opts) => {
+    const {
+        defaultExpire = null,
+        uniqueField = null,
+    } = opts;
+    return {
+        ...baseStorage(opts),
+        // 添加
+        push(data, expire = defaultExpire) {
+            const oldData = this.get() || [];
+            let newData;
+            if (Array.isArray(oldData)) {
+                newData = [...oldData, data];
+            } else {
+                newData = [data];
+            }
+            this.set(newData, expire);
+        },
+        // 添加 or 去重更新
+        update(data, expire = defaultExpire) {
+            // 更新操作时需要将旧记录删除并将新记录放在最前面
+            const oldData = this.get() || [];
+            let newData;
+            if (Array.isArray(oldData)) {
+                // delete the same item
+                const index = findIndexByField(oldData, data, uniqueField);
+                if (index >= 0) {
+                    oldData.splice(index, 1);
+                }
+                // add a new one
+                newData = [...oldData, data];
+            } else {
+                newData = [data];
+            }
+            this.set(newData, expire);
+        },
+    };
+};
+
+const generateArrayStoreApi = opts => withArrayApi(generateStoreApi, opts);
 
 const Keys = {
     // 可评价房源列表 (如果你对这个名词有疑问，可以去翻prd)
@@ -131,7 +136,7 @@ const Keys = {
     LAST_LOGIN_USER_ID: 'ng_LAST_LOGIN_USER_ID',
 };
 
-export const commentListStorage = generateCacheApi({
+export const commentListStorage = generateArrayStoreApi({
     engine: window.localStorage,
     key: Keys.CAN_COMMENT_RENT_LIST,
     validate: PropTypes.arrayOf(PropTypes.shape({
@@ -140,11 +145,10 @@ export const commentListStorage = generateCacheApi({
         rentUnitId: PropTypes.string.isRequired,
         timestamp: PropTypes.number.isRequired,
     })).isRequired,
-    defaultExpire: null,
     uniqueField: 'rentUnitId',
 });
 
-export const commentQueueStorage = generateCacheApi({
+export const commentQueueStorage = generateArrayStoreApi({
     engine: window.localStorage,
     key: Keys.REMIND_COMMENT_RENT_QUEUE,
     validate: PropTypes.arrayOf(PropTypes.shape({
@@ -153,18 +157,16 @@ export const commentQueueStorage = generateCacheApi({
         rentUnitId: PropTypes.string.isRequired,
         timestamp: PropTypes.number.isRequired,
     })).isRequired,
-    defaultExpire: null,
     uniqueField: 'rentUnitId',
 });
 
-export const lastUserIdStorage = generateCacheApi({
+export const lastUserIdStorage = generateStoreApi({
     engine: window.localStorage,
     key: Keys.LAST_LOGIN_USER_ID,
     validate: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
     ]),
-    defaultExpire: null,
 });
 
-export default generateCacheApi;
+export default generateStoreApi;

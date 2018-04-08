@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 
 import BottomDialog from 'Shared/BottomDialog';
 import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/images/male.png';
 import { isAndroid } from 'lib/const';
 
 import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { commentListStorage, commentQueueStorage } from 'application/App/storage';
+import { commentListStorage, commentQueueStorage, lastUserIdStorage } from 'application/App/storage';
 
 import './styles.less';
 
