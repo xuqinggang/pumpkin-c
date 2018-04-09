@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
 import { AbbrevMapCity } from 'config/config';
-import { isHasCookie, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
+import { goMe, goCity } from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -13,19 +13,11 @@ const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
     handleNavigateMe = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
-
-        // 跳转前判断是否登录，利用cookie中是否含有sid判断
-        if (isHasCookie('sid')) {
-            this.props.history.push(urlJoin(urlPrefix, 'me'));
-        } else {
-            this.props.history.push(urlJoin(urlPrefix, 'login'));
-        }
+        goMe(this.props.history)();
     }
 
     handleNavigateCity = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, 'city'));
+        goCity(this.props.history)();
     }
 
     handleLogTap = () => {
@@ -51,12 +43,11 @@ export default class IndexHead extends PureComponent {
                     >
                         {AbbrevMapCity[cityName].text}
                     </span>
-                    <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
+                    <span className={`f-vertical-middle icon-pull-down location-downicon`} />
                 </div>
                 {
-                    isApp() ?
-                        null : 
-                        <img
+                    isApp() ? null
+                        : <img
                             className={`f-display-flex ${classPrefix}-logo`}
                             src={logoImg}
                             onTouchTap={this.handleLogTap}

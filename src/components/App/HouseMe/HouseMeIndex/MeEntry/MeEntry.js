@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
+import { goHouseList } from 'application/App/routes/routes';
 import { clearCookie, urlJoin } from 'lib/util';
 
 import './styles.less';
@@ -12,8 +13,7 @@ export default class MeEntry extends PureComponent {
     // 事件处理程序-退出当前账号点击
     handleLogoutTap = () => {
         clearCookie('sid');
-
-        this.props.history.replace(urlJoin(this.rootUrlPrefix));
+        goHouseList(this.props.history)();
     }
 
     render() {

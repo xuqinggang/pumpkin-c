@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+import { goLogin, goHouseReport } from 'application/App/routes/routes';
 import { ajaxCollectHouse, ajaxCancelCollectHouse } from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { isHasCookie, getPageFrom, urlJoin } from 'lib/util';
 import { isWeiXin } from 'lib/const';
@@ -40,7 +41,7 @@ class HouseHead extends PureComponent {
 
         // 筛选url片段
         this.filterUrlFragment = urlStore && urlStore.filterUrlFragment || '';
-        this.urlQuery = urlStore && urlStore.urlQuery || '';
+        this.filterSearch = urlStore && urlStore.filterSearch || '';
     }
 
     // 是否收藏
@@ -65,7 +66,7 @@ class HouseHead extends PureComponent {
 
     handleCollectTap = () => {
         if (!isHasCookie('sid')) {
-            this.props.history.push(urlJoin(this.rootUrlPrefix, 'login')+`?pagefrom=detail`);
+            goLogin(this.props.history)('?pagefrom=detail');
             return;
         }
         
@@ -103,12 +104,11 @@ class HouseHead extends PureComponent {
     }
 
     handleReportTap = () => {
-        if (!isHasCookie('sid')) {
-            this.props.history.push(urlJoin(this.rootUrlPrefix, 'login')+`?pagefrom=detail`);
-            return;
-        }
-
-        this.props.history.push(urlJoin(this.curUrl, 'report'));
+        const {
+            rentUnitId,
+            history,
+        } = this.props;
+        goHouseReport(history)(rentUnitId);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -141,12 +141,12 @@ class HouseHead extends PureComponent {
         return (
             <div className={containerClass}>
                 {
-                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin() || this.isFrom ? 
+                    this.isShareFrom || this.pageFrom === 'login' || isWeiXin() || this.isFrom ?
                     (
                         <Link
                             className={`f-display-flex f-flex-align-center ${classPrefix}-btn-back`}
-                            to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + `?${this.urlQuery}`}>
-                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`}></span> 
+                            to={urlJoin(this.rootUrlPrefix, 'list', this.filterUrlFragment) + this.filterSearch}>
+                            <span className={`f-vertical-align ${classPrefix}-icon icon-logo`} /> 
                             <span className={`f-vertical-align ${classPrefix}-icon-text`}>首页</span>
                         </Link>
                     )
@@ -154,24 +154,24 @@ class HouseHead extends PureComponent {
                         <a
                             href="javascript:history.back();"
                             className={`f-display-flex f-flex-align-center icon-back ${classPrefix}-btn-back-browser`}
-                        >
-                        </a>
+                        />
                     )
                 }
                 {
                     type === 'default' ?
-                        <div className={`f-display-flex f-flex-align-center`}>
-                            <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
-                            <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
+                        <div className="f-display-flex f-flex-align-center" >
+                            <span className={collectBtnClass} onTouchTap={this.handleCollectTap} />
+                            <span
+                                className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
                                 onTouchTap={this.handleReportTap}
-                            ></span>
-                        </div> :
-                    null
+                            />
+                        </div>
+                        : null
                 }
                 {
                     type === 'apartment' ?
-                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span> :
-                    null
+                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                        : null
                 }
             </div>
         );

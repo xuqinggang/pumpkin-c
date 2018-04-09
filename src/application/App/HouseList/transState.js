@@ -60,6 +60,7 @@ export function stringifyPostionState(positionState) {
     const firstIndexMapType = {
         '0': 'districts',
         '1': 'subways',
+        '2': 'around',
     };
 
     // 获取第一级索引对应的类型对象
@@ -80,13 +81,15 @@ export function stringifyPostionState(positionState) {
     const alphaArr = TypeMapAlphaArr[type];
 
     if (parseInt(firstId, 10) !== 0) {
-        paramsObj.districtId = parseInt(firstId, 10);
+        const firstParamKey = TypeAndPrefixMap[alphaArr[0]];
+        paramsObj[firstParamKey] = parseInt(firstId, 10);
         label = typePositionObj[firstId].text;
         urlArr.push(`${alphaArr[0]}${firstId}`);
         seoData.push(label);
 
         if (parseInt(secondId, 10) !== 0) {
-            paramsObj.circleId = parseInt(secondId, 10);
+            const secondParamKey = TypeAndPrefixMap[alphaArr[1]];
+            paramsObj[secondParamKey] = parseInt(secondId, 10);
             label = secondObj[secondId];
             urlArr.push(`${alphaArr[1]}${secondId}`);
             seoData.push(label);

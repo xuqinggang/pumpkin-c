@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import ReportBack from './ReportBack/ReportBack';
 import ReportType from './ReportType/ReportType';
 import ReportTextArea from './ReportTextArea/ReportTextArea';
+import LoginRequiredConnect from 'Shared/LoginRequiredConnect/LoginRequiredConnect';
 
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { ajaxHouseReport } from 'application/App/HouseDetail/ajaxInitHouseDetail';
@@ -10,7 +11,7 @@ import './styles.less';
 
 const classPrefix = 'm-housereport';
 
-export default class HouseReport extends PureComponent {
+class HouseReport extends PureComponent {
     constructor(props) {
         super(props);
         // 举报的类型
@@ -64,3 +65,5 @@ export default class HouseReport extends PureComponent {
         );
     }
 }
+
+export default LoginRequiredConnect({ pagefrom: 'detail' })(HouseReport);

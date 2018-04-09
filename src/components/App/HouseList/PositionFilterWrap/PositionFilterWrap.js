@@ -29,7 +29,11 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
     constructor(props: PropType) {
         super(props);
         this.state = {
-            positionFilterDataObj: null,
+            positionFilterDataObj: {
+                districts: null,
+                subways: null,
+                around: null,
+            },
         };
     }
 
@@ -44,8 +48,6 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
             this.setState({
                 positionFilterDataObj: positionFilterDataObjStore.data,
             });
-
-            return;
         }
     }
 
@@ -56,9 +58,10 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
 
         ajaxInitPositionData()
             .then((positionFilterDataObj) => {
-                window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
+                const newPositionFilterDataObj = Object.assign({}, this.state.positionFilterDataObj, positionFilterDataObj);
+                window.setStore('positionFilterDataObj', { data: newPositionFilterDataObj });
                 this.setState({
-                    positionFilterDataObj,
+                    positionFilterDataObj: newPositionFilterDataObj,
                 });
                 const filterStore = window.getStore('filter');
                 const positionUrlFrg = filterStore && filterStore.urlFrg.position;
@@ -85,32 +88,33 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
         // 如果地理位置权限允许，则添加附近数据
         // stuffAroundDataToPosition()
         //     .then((positionArroundObj) => {
-        //         if (positionArroundObj) {
-        //             const newPositionFilterDataArr = [...this.state.positionFilterDataArr, positionArroundObj];
+        //         const newPositionFilterDataObj = Object.assign({}, this.state.positionFilterDataObj, positionArroundObj);
+        //         window.setStore('positionFilterDataObj', { data: newPositionFilterDataObj });
+
+        //         // if (positionArroundObj) {
         //             this.setState({
-        //                 positionFilterDataArr: newPositionFilterDataArr,
+        //                 positionFilterDataObj: newPositionFilterDataObj,
         //             });
 
-        //             window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
+        //         //     window.setStore('positionFilterDataArr', { data: newPositionFilterDataArr });
 
-        //             const { label } = positionFilterStateToParams(this.props.filterState);
-        //             this.props.onDynamicSetLabel(label);
-        //         }
+        //         //     const { label } = positionFilterStateToParams(this.props.filterState);
+        //         //     this.props.onDynamicSetLabel(label);
+        //         // }
         //     })
-            // .catch((err) => {
-            //     // 如果地理位置没有获取权限
-            //     const { firstItemSelectedIndex, secondItemSelectedIndex, thirdItemSelectedIndex } = this.props.filterState;
-            //     if (firstItemSelectedIndex === 2 && secondItemSelectedIndex) {
-            //         this.props.onDynamicSetLabel(`${secondItemSelectedIndex}km`);
-            //     }
-            // })
+        //     .catch((err) => {
+        //         // 如果地理位置没有获取权限
+        //         // const { firstItemSelectedIndex, secondItemSelectedIndex, thirdItemSelectedIndex } = this.props.filterState;
+        //         // if (firstItemSelectedIndex === 2 && secondItemSelectedIndex) {
+        //         //     this.props.onDynamicSetLabel(`${secondItemSelectedIndex}km`);
+        //         // }
+        //     })
     }
 
     render() {
         const {
             positionFilterDataObj,
         } = this.state;
-
         const {
             filterState,
         } = this.props;

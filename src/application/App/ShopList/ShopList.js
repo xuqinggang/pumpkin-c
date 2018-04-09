@@ -10,7 +10,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 import { stateToParams } from './stateToParams';
 import { stringifyStateObjToUrl, parseUrlToState } from './stateToUrl';
 import { execWxShare } from 'lib/wxShare';
-import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
+import { dynamicDocTitle, urlJoin, parseUrlQueryFields } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
@@ -38,13 +38,6 @@ export default class ShopList extends PureComponent {
             filterParamsObj: {}
         };
 
-        // TODO REMOVE SOME 样板代码
-        const {
-            urlParamsObj,
-            urlQuery,
-        } = parseUrlParams();
-        this.urlQuery = urlQuery;
-        this.urlParamsObj = urlParamsObj;
         this.urlPrefix = window.getStore('url').urlPrefix;
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
@@ -129,51 +122,47 @@ export default class ShopList extends PureComponent {
 
         // filter state to url
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState, newParams);
-        const link = urlJoin(this.urlPrefix, 'shop/list', filterUrlFragment) + `?${this.urlQuery}`;
+        const link = urlJoin(this.urlPrefix, 'shop/list', filterUrlFragment);
         this.props.history.push(link);
     }
 
-    
-
     // 根据 url 片段生成state和params
     _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
-
         const filterState = parseUrlToState(filterUrlFragment);
         // filterState中 position包含 state和params信息
         const { position: positionStateAndParams, brand: brandParams } = filterState;
         const newFilterState = {
-            position: positionStateAndParams && positionStateAndParams.state 
+            position: positionStateAndParams && positionStateAndParams.state,
         };
         const newParams = { 
-            position: positionStateAndParams && positionStateAndParams.params, 
+            position: positionStateAndParams && positionStateAndParams.params,
             apartmentIds: brandParams && brandParams.params,
-        }
+        };
 
-        this.setFilterStateAndStore(newFilterState, newParams)
+        this.setFilterStateAndStore(newFilterState, newParams);
     }
 
-    setFilterStateAndStore = (newFilterState={}, newParams={}, newLabel={}) => {
+    setFilterStateAndStore = (newFilterState = {}, newParams = {}, newLabel = {}) => {
         const { filterState, filterLabel, filterParamsObj } = this.state;
         const filter = {
             ...this.state,
             filterState: {
                 ...filterState,
-                ...newFilterState
+                ...newFilterState,
             },
             filterParamsObj: {
                 ...filterParamsObj,
-                ...newParams
+                ...newParams,
             },
             filterLabel: {
                 ...filterLabel,
-                ...newLabel
+                ...newLabel,
             },
         };
 
         window.setStore('apartmentFilter', filter);
         this.setState(filter);
     }
-    
 
     wxShare() {
         const urlStore = window.getStore('url');
@@ -202,16 +191,16 @@ export default class ShopList extends PureComponent {
             `${classPrefix}-padding-top`,
             {
                 [`${classPrefix}-no-head`]: isRmHead(),
-            }
-        )
+            },
+        );
 
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
                     {
                         !isRmHead() ?
-                        <HouseHead type="apartment" title="集中式公寓" history={history} /> : 
-                        null
+                        <HouseHead type="apartment" title="集中式公寓" history={history} />
+                        : null
                     }
                     <ShopFilter
                         className="apartmentfilter"

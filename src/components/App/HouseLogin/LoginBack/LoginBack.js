@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
+import { goAbout } from 'application/App/routes/routes';
 import HeadJumpConnect from 'Shared/HeadJumpConnect/HeadJumpConnect';
-import { urlJoin } from 'lib/util';
 
 import './styles.less';
 
@@ -9,8 +9,7 @@ const classPrefix = 'm-loginback';
 
 class LoginBack extends Component {
     handleNavigateAboutTap = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, 'about'));
+        goAbout(this.props.history)();
     }
 
     shouldComponentUpdate() {

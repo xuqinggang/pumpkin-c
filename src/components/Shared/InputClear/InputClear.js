@@ -59,6 +59,7 @@ export default class InputClear extends PureComponent {
         return (
             <div className={classnames(`${classPrefix}`, className)}>
                 <input
+                    ref="inputDom"
                     type={type}
                     placeholder={placeholder}
                     className={`${classPrefix}-input`}

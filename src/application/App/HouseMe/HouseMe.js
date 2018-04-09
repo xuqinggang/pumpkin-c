@@ -6,44 +6,26 @@ import HouseMeWish from 'components/App/HouseMe/HouseMeWish/HouseMeWish';
 import HouseMeFeedBack from 'components/App/HouseMe/HouseMeFeedBack/HouseMeFeedBack';
 import HouseMeInfo from 'components/App/HouseMe/HouseMeInfo/HouseMeInfo';
 import HouseMeCoupon from 'components/App/HouseMe/HouseMeCoupon/HouseMeCoupon';
+import LoginRequiredConnect from 'Shared/LoginRequiredConnect/LoginRequiredConnect';
 
+import { goLogin } from 'application/App/routes/routes';
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-import { isHasCookie, setCookie, urlJoin } from 'lib/util';
 import { isApp, isRmHead } from 'lib/const';
 
 import './styles.less';
 
 const classPrefix = 'm-houseme';
 
-export default class HouseMe extends PureComponent {
+class HouseMe extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             meInfoObj: {},
         };
-
-        this.urlPrefix = window.getStore('url').urlPrefix;
     }
 
     componentWillMount() {
-        // 向app中注入cookie
-        if (isApp() && isRmHead()) {
-            let sidVal = null;
-            if (window.iOS && iOS.getSessionId) {
-                sidVal = iOS.getSessionId();
-            }
-            if (window.android && android.getSessionId) {
-                sidVal = android.getSessionId();
-            }
-            sidVal && setCookie('sid', sidVal);
-        }
-
-        // 进入组件之前判断是否登录
-        if (!isHasCookie('sid')) {
-            this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
-        }
-
         const meInfoStore = window.getStore('meInfo');
         if (meInfoStore) {
             this.setState({
@@ -62,7 +44,7 @@ export default class HouseMe extends PureComponent {
                 });
             })
             .catch((err) => {
-                this.props.history.replace(urlJoin(this.urlPrefix, 'login'));
+                goLogin(this.props.history)();
             })
     }
 
@@ -109,3 +91,5 @@ export default class HouseMe extends PureComponent {
         );
     }
 }
+
+export default LoginRequiredConnect()(HouseMe);

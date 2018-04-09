@@ -17,7 +17,8 @@ import {
     stringifyRentState,
     stringifyHouseTypeState,
 } from './transState';
-import { urlJoin, parseUrlParams } from 'lib/util';
+import { goHouseList } from 'application/App/routes/routes';
+import { parseUrlQueryFields } from 'lib/util';
 import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 import { kzPv } from 'lib/pv';
@@ -31,11 +32,10 @@ export default class HouseList extends PureComponent {
         super(props);
 
         const {
-            urlParamsObj,
-            urlQuery,
-        } = parseUrlParams();
-        this.urlQuery = urlQuery;
-        this.urlParamsObj = urlParamsObj;
+            queryFieldsObj,
+            search,
+        } = parseUrlQueryFields();
+        this.queryFieldsObj = queryFieldsObj;
 
         // 各个筛选器url片段
         this.urlFrgObj = {
@@ -47,15 +47,15 @@ export default class HouseList extends PureComponent {
 
         // 筛选的请求参数
         this.filterParamsObj = {
-            apartmentId: this.urlParamsObj.apartment || null,
+            apartmentId: this.queryFieldsObj.apartment || null,
         };
 
         this.filterState = InitStateFilterState;
         this.filterLabel = InitStateFilterLabel;
 
         window.setStore('url', {
-            urlParamsObj,
-            urlQuery,
+            filterQueryFieldsObj: queryFieldsObj,
+            filterSearch: search,
         });
 
         this.urlPrefix = window.getStore('url').urlPrefix;
@@ -120,11 +120,7 @@ export default class HouseList extends PureComponent {
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
 
-        let link = '';
-        // 筛选url片段
-        link = urlJoin(this.urlPrefix, 'list', urlFrgRt) + `?${this.urlQuery}`;
-
-        this.props.history.push(link);
+        goHouseList(this.props.history)(urlFrgRt);
 
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
@@ -185,17 +181,8 @@ export default class HouseList extends PureComponent {
     componentDidMount() {
         this.wxShare();
 
-        if (this.urlParamsObj.daili) {
-            kzPv(this.urlParamsObj.daili, 'nangua_daili_list');
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
-        const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
-        if (curFilterUrlFragment !== nextFilterUrlFragment) {
-            // 每生成一个新的url发送一次pv请求
-            window.send_stat_pv && window.send_stat_pv();
+        if (this.queryFieldsObj.daili) {
+            kzPv(this.queryFieldsObj.daili, 'nangua_daili_list');
         }
     }
 

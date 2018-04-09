@@ -18,8 +18,6 @@ const TypeMapName = {
     },
 };
 
-const positionDataObj = {};
-
 // 以id为索引的对象存储
 // const Test = {
 //     subways: {
@@ -49,7 +47,7 @@ function stuffDataToPosition(itemArr, type) {
         },
     };
 
-    itemArr && itemArr.map((item, index) => {
+    itemArr && itemArr.forEach((item) => {
         const {
             typeName,
             subTypeName,
@@ -76,59 +74,40 @@ function stuffDataToPosition(itemArr, type) {
         firstObj[item[typeId]].sub = secondObj;
     });
 
-    positionDataObj[type] = firstObj;
-
-    console.log(window.test = positionDataObj);
+    return {
+        [type]: firstObj,
+    };
 }
 
 export function stuffAroundDataToPosition() {
     // 获取地理位置
-    // return Promise.resolve([116, 39])
-    return getCurrentPosition()
+    return Promise.resolve([116, 39])
+    // return getCurrentPosition()
         .then((lonlatArr) => {
             if (lonlatArr) {
                 window.isGeoLocation = true;
                 window.lonlatArr = lonlatArr;
                 const [lon, lat] = lonlatArr;
+                const lonlatStr = `${lon},${lat}`;
                 const positionArroundObj = {
-                    id: {
-                        type: 'around',
-                    },
-                    text: '附近',
-                    itemArr: [
-                        {
+                    around: {
+                        '0': {
                             text: '不限',
-                            id: -1,
-                            isCanCancel: true,
+                            sub: null,
                         },
-                        {
+                        [`${lonlatStr},1`]: {
                             text: '1km',
-                            id: {
-                                lon,
-                                lat,
-                                distance: 1,
-                            },
-                            isCanCancel: true,
+                            sub: null,
                         },
-                        {
+                        [`${lonlatStr},2`]: {
                             text: '2km',
-                            id: {
-                                lon,
-                                lat,
-                                distance: 2,
-                            },
-                            isCanCancel: true,
+                            sub: null,
                         },
-                        {
+                        [`${lonlatStr},3`]: {
                             text: '3km',
-                            id: {
-                                lon,
-                                lat,
-                                distance: 3,
-                            },
-                            isCanCancel: true,
+                            sub: null,
                         },
-                    ],
+                    },
                 };
                 return positionArroundObj;
             } else {
@@ -143,15 +122,14 @@ export function stuffAroundDataToPosition() {
 
 export function ajaxInitPositionData() {
     // 位置筛选的数据
-    let positionDataArr = [];
-
+    const positionDataObj = {};
     return Promise.all([
         _ajaxDistricts(),
         _ajaxSubways(),
     ])
         .then((datas) => {
             datas.forEach((data) => {
-                stuffDataToPosition(data.arr, data.type);
+                Object.assign(positionDataObj, stuffDataToPosition(data.arr, data.type));
             });
 
             return positionDataObj;

@@ -82,6 +82,11 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
             secondItemSelectedIndex: index,
             thirdItemSelectedIndex: -1,
         }, () => {
+            // // 如果点击的都是附近所属的二级列表
+            // if (this.state.firstItemSelectedIndex === 2) {
+            //     this.onPositionFilterChange(this.state);
+            //     return;
+            // }
             // 如果索引为0,点击不限，直接响应
             if (index === 0) {
                 this.onPositionFilterChange(this.state);
