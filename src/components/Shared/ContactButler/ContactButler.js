@@ -3,19 +3,67 @@ import React, { PureComponent } from 'react';
 
 import BottomDialog from 'Shared/BottomDialog';
 import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/images/male.png';
-import { isAndroid } from 'lib/const';
+import { isHasCookie } from 'lib/util';
 
 import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { commentListStorage, commentQueueStorage, lastUserIdStorage } from 'application/App/storage';
+import { ajaxSavePhoneRecord } from 'application/App/Comment/ajaxInitComment';
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
+import {
+    commentListStorage,
+    commentQueueStorage,
+    lastUserIdStorage,
+} from 'application/App/storage';
 
 import './styles.less';
 
 const btnPrefix = 'm-contactbutler-btn';
 const dialogPrefix = 'm-contactbutler-dialog';
 
-const saveCommentToStorage = (data) => {
+const savePhoneRecord = () => {
+    const isLogin = isHasCookie('sid');
+    if (!isLogin) {
+        return;
+    }
+
+    const saveRecordRemote = () => {
+        const phoneRecord = commentListStorage.get();
+        // 无记录不用发送
+        if (!phoneRecord || (phoneRecord && phoneRecord.length === 0)) return;
+        ajaxSavePhoneRecord(phoneRecord).then(() => {
+            commentListStorage.remove();
+        });
+    }
+
+    const lastUserId = lastUserIdStorage.get();
+
+    if (!lastUserId) {
+        saveRecordRemote();
+        return;
+    }
+
+    // 先从缓存中尝试获取 meInfo
+    const meInfo = window.getStore('meInfo');
+    if (meInfo && lastUserId === meInfo.uid) {
+        saveRecordRemote();
+        return;
+    }
+
+    // meInfo
+    if (meInfo === null) {
+        ajaxGetMeInfo()
+            .then((meInfoObj) => {
+                if (meInfo && lastUserId === meInfo.uid) {
+                    window.setStore('meInfo', meInfoObj);
+                    saveRecordRemote();
+                }
+            });
+    }
+};
+
+const saveComment = (data) => {
     commentListStorage.push(data);
     commentQueueStorage.update(data);
+    savePhoneRecord();
 };
 
 export default class ContactButler extends PureComponent {
@@ -53,7 +101,7 @@ export default class ContactButler extends PureComponent {
                     apartmentId,
                     title,
                 } = houseData;
-                saveCommentToStorage({
+                saveComment({
                     rentUnitId,
                     apartmentId,
                     title,

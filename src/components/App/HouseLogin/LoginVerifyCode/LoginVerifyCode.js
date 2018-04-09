@@ -52,7 +52,7 @@ export default class LoginVerifyCode extends PureComponent {
 
         // 验证码输入6个数字后，自动登录验证
         if (verifyCodeVal.length === 6) {
-            this.ajaxUserLogin(this.telVal, verifyCodeVal)
+            this.ajaxUserLogin(this.telVal, verifyCodeVal);
             e.target.blur();
         }
     }

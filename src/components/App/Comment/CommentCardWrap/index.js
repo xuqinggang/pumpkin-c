@@ -1,15 +1,43 @@
-import React from 'react';
-import { commentListStorage } from 'application/App/storage';
+import React, { Component } from 'react';
+import { commentQueueStorage } from 'application/App/storage';
 
 export default function CommentCardWrap(WrappedComponent) {
-    return (props) => {
-        const data = commentListStorage.get();
-        if (data && Array.isArray(data) && data.length > 0) {
-            return (
-                <WrappedComponent {...props} {...data[data.length - 1]} />
-            );
+    return class CommentCard extends Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                remindComments: [],
+            };
         }
+        handleClose = () => {
+            const { remindComments } = this.state;
 
-        return null;
+            remindComments.pop();
+            commentQueueStorage.pop();
+
+            this.setState({
+                remindComments,
+            });
+        }
+        componentWillMount() {
+            const remindComments = commentQueueStorage.get();
+            this.setState({
+                remindComments,
+            });
+        }
+        render() {
+            const { props } = this;
+            const { remindComments } = this.state;
+            if (remindComments && Array.isArray(remindComments) && remindComments.length > 0) {
+                return (
+                    <WrappedComponent
+                        {...props}
+                        {...remindComments[remindComments.length - 1]}
+                        handleClose={this.handleClose}
+                    />
+                );
+            }
+            return null;
+        }
     };
 }

@@ -65,3 +65,15 @@ export function ajaxPostImage(file) {
         });
 }
 
+// 保存用户电话记录
+export function ajaxSavePhoneRecord(record = []) {
+    return Service.post('/api/v1/brandApartments/phoneRecord', record)
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data;
+            }
+
+            throw new Error(res);
+        });
+}
+
