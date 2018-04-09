@@ -44,7 +44,16 @@ export default class LoginTel extends PureComponent {
                 const {
                     url,
                 } = data;
-                dynamicScript(url, () => {
+                // 如果url为空的话，则不需要滑动验证
+                if (!url) {
+                    this.getVerifyCode({
+                        mobile: phone,
+                        ticket: '',
+                    });
+                    return;
+                }
+
+                url && dynamicScript(url, () => {
                     capInit(divDom, {
                         type: 'popup',
                         pos: 'fixed',
@@ -63,6 +72,8 @@ export default class LoginTel extends PureComponent {
                             }
                         },
                     });
+
+                    const iframe = document.getElementsByTagName('iframe');
                 });
             })
     }
