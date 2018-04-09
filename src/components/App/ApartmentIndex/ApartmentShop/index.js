@@ -17,19 +17,20 @@ export default class ApartmentShop extends PureComponent {
             <li className="f-display-inlineblock list-item" key={index}>
                 <ShopItem shop={shop} />
             </li>
-        )
+        );
     }
 
     render() {
         const {
             shops,
+            goMore,
         } = this.props;
 
         if (shops.length <= 0) return null;
 
         return (
             <div className={classnames(classPrefix)}>
-                <TitleWithMore title="精品门店" goMore={() => console.log('more')} />
+                <TitleWithMore title="精品门店" goMore={goMore} />
                 <SimpleScroll key={shops.length} className={`${classPrefix}-wrapper`}>
                     <ul className={`${classPrefix}-list`}>
                         {
@@ -46,8 +47,10 @@ export default class ApartmentShop extends PureComponent {
 
 ApartmentShop.propTypes = {
     shops: PropTypes.arrayOf(PropTypes.any),
+    goMore: PropTypes.func,
 };
 
 ApartmentShop.defaultProps = {
     shops: [],
+    goMore: () => null,
 };

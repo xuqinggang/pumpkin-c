@@ -11,12 +11,13 @@ const clsPrefix = 'm-purerentUnit-list';
 
 export default class RentUnitList extends PureComponent {
     render() {
-        const { title, goMore } = this.props;
+        const { title, goMore, list } = this.props;
+        if (list.length <= 0) return null;
         return (
             <div className={clsPrefix}>
                 <TitleWithMore title={title} goMore={goMore} />
                 {
-                    this.props.list.map((rentalUnit, index) => (
+                    list.map((rentalUnit, index) => (
                         <RentUnitItem key={index} {...rentalUnit} imgUrl={rentalUnit.image} />
                     ))
                 }

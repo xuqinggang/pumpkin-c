@@ -8,7 +8,12 @@ import {
     ApartmentShop,
     RentUnitList,
 } from 'components/App/ApartmentIndex';
-import { goCommentList, goShopList, goApartmentDetail } from 'application/App/routes/routes';
+import {
+    goCommentList,
+    goShopList,
+    goApartmentDetail,
+    goRentUnitList,
+} from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
 import ApartmentDetail from '../ApartmentDetail';
@@ -28,8 +33,11 @@ export default class ApartmentIndex extends PureComponent {
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
-    goShopList = goShopList(this.props.history)
+    goShopList = () => {
+        goShopList(this.props.history)(`b${this.apartmentId}`);
+    }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
+    goRentUnitList = goRentUnitList(this.props.history);
 
     renderIndex() {
         const { history, match } = this.props;
@@ -60,10 +68,10 @@ export default class ApartmentIndex extends PureComponent {
                     />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
-                <ApartmentShop shops={boutiqueShops} />
+                <ApartmentShop shops={boutiqueShops} goMore={this.goShopList} />
                 <div className="content-padding">
-                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goShopList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goShopList} />
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goRentUnitList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goRentUnitList} />
                 </div>
             </div>
         );
