@@ -183,6 +183,7 @@ function genSeoData(houseDetailData) {
         description,
     };
 }
+
 function genContactButler(houseDetailData) {
     const {
         superName,
@@ -196,7 +197,7 @@ function genContactButler(houseDetailData) {
         name: superName,
         img: superHeadImg,
         tel: superTel,
-        id: supervisorId
+        id: supervisorId,
         rentUnitId,
     };
 }
