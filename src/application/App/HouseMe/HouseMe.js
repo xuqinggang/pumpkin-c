@@ -16,7 +16,8 @@ import './styles.less';
 
 const classPrefix = 'm-houseme';
 
-class HouseMe extends PureComponent {
+@LoginRequiredConnect()
+export default class HouseMe extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -91,5 +92,3 @@ class HouseMe extends PureComponent {
         );
     }
 }
-
-export default LoginRequiredConnect()(HouseMe);

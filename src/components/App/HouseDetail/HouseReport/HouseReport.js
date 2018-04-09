@@ -11,7 +11,8 @@ import './styles.less';
 
 const classPrefix = 'm-housereport';
 
-class HouseReport extends PureComponent {
+@LoginRequiredConnect({ pagefrom: 'detail' })
+export default class HouseReport extends PureComponent {
     constructor(props) {
         super(props);
         // 举报的类型
@@ -65,5 +66,3 @@ class HouseReport extends PureComponent {
         );
     }
 }
-
-export default LoginRequiredConnect({ pagefrom: 'detail' })(HouseReport);
