@@ -4,9 +4,10 @@ import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } f
 import { AbbrevMapCity } from 'config/config';
 
 // 通过管家id动态请求虚拟手机号
-export function ajaxDynamicTel(supervisorId) {
+export function ajaxDynamicTel({ supervisorId, rentUnitId }) {
     return Service.get('/api/v1/common/getDynamicPhone', {
         supervisorId,
+        rentUnitId,
     }, {
         timeout: 1000,
     })
@@ -188,6 +189,7 @@ function genContactButler(houseDetailData) {
         superTel,
         superHeadImg,
         supervisorId,
+        rentUnitId,
     } = houseDetailData;
 
     return {
@@ -195,6 +197,7 @@ function genContactButler(houseDetailData) {
         img: superHeadImg,
         tel: superTel,
         id: supervisorId
+        rentUnitId,
     };
 }
 

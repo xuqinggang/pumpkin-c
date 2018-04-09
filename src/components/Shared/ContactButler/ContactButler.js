@@ -25,9 +25,10 @@ export default class ContactButler extends PureComponent {
         const {
             id,
             tel,
+            rentUnitId,
         } = this.props.contactButlerData;
 
-        ajaxDynamicTel(id)
+        ajaxDynamicTel({ rentUnitId, supervisorId: id })
             .then((data) => {
                 this.setState({
                     show: true,
