@@ -32,10 +32,12 @@ export default class PositionFilterWrap extends PureComponent {
 
             return;
         }
-        
     }
 
     componentDidMount() {
+        const positionFilterDataArrStore = window.getStore('positionFilterDataArr');
+        if (positionFilterDataArrStore && positionFilterDataArrStore.data) return;
+        
         ajaxInitPositionData()
             .then((positionFilterDataArr) => {
                 if (positionFilterDataArr) {
