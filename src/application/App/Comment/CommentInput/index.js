@@ -4,6 +4,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 import { Stars, ImageUploadInput, SuccessComment } from 'components/App/Comment';
 import { ajaxPostComment } from '../ajaxInitComment';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+import { commentQueueStorage } from 'application/App/storage';
 
 import './styles.less';
 
@@ -36,7 +37,9 @@ export default class CommentInput extends PureComponent {
                 commentDone: true,
                 title: '评价完成',
             });
-        }).catch((error) => {
+            // 待评价队列出队
+            commentQueueStorage.pop();
+        }).catch(() => {
             PopToolTip({ text: '提交失败' });
         });
     }
@@ -60,8 +63,9 @@ export default class CommentInput extends PureComponent {
     }
 
     renderSuccess = () => {
+        const { apartmentId } = this.props;
         return (
-            <SuccessComment />
+            <SuccessComment apartmentId={apartmentId} />
         );
     }
 

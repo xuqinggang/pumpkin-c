@@ -23,6 +23,7 @@ import { isApp, isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
 import { AbbrevMapCity } from 'config/config';
+import { goApartment } from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -105,6 +106,12 @@ export default class HouseDetailIndex extends PureComponent {
         });
         // 动态更改标题
         dynamicDocTitle(title + `-南瓜租房${cityText}租房`);
+    }
+    
+    goApartment = goApartment(this.props.history)
+    handleTouchApartmet = () => {
+        const { dataByContact: { apartmentId } } = this.state.houseDetailData;
+        this.goApartment(apartmentId);
     }
 
     componentWillUnmount() {
@@ -190,6 +197,7 @@ export default class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
                     houseProfileData={houseProfileData || {}}
                     houseTrafficData={houseTrafficData || {}}
+                    onTouchApartment={this.handleTouchApartmet}
                 />
                 <HouseTags
                     className={`g-housedetail-module-padding ${classPrefix}-housetags`}

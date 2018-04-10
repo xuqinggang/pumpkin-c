@@ -94,20 +94,6 @@ export default class ContactButler extends PureComponent {
                     show: true,
                     dynamicTel: tel,
                 });
-            }).finally(() => {
-                // storage it to localStorage for comment
-                const { houseData } = this.props || {};
-                const {
-                    rentUnitId,
-                    apartmentId,
-                    title,
-                } = houseData;
-                saveComment({
-                    rentUnitId,
-                    apartmentId,
-                    title,
-                    timestamp: new Date().getTime(),
-                });
             });
     }
 
@@ -118,6 +104,23 @@ export default class ContactButler extends PureComponent {
     onCloseDialogTap = () => {
         this.setState({
             show: false,
+        });
+    }
+
+    handleTel = () => {
+        console.log('tel');
+        // storage it to localStorage for comment
+        const { houseData } = this.props || {};
+        const {
+            rentUnitId,
+            apartmentId,
+            title,
+        } = houseData;
+        saveComment({
+            rentUnitId,
+            apartmentId,
+            title,
+            timestamp: new Date().getTime(),
         });
     }
 
@@ -195,7 +198,7 @@ export default class ContactButler extends PureComponent {
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
                         <div className="f-display-inlineblock line" />
                         <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
-                        <a href={`tel:${dynamicTel}`} className="f-display-inlineblock text">立即联系</a>
+                        <a href={`tel:${dynamicTel}`} onTouchTap={this.handleTel} className="f-display-inlineblock text">立即联系</a>
                     </BottomDialog.Footer>
                 </BottomDialog>
             ]

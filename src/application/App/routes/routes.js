@@ -14,6 +14,8 @@ export const goRentUnitList = withHistory(createListPath, {
         }, 800);
     },
 });
+const createIndexPath = () => '/';
+export const goIndex = withHistory(createIndexPath);
 
 // login
 const createLoginPath = () => '/login';

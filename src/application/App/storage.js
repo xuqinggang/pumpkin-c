@@ -158,7 +158,6 @@ export const commentListStorage = generateArrayStoreApi({
         apartmentId: PropTypes.number.isRequired,
         rentUnitId: PropTypes.string.isRequired,
         timestamp: PropTypes.number.isRequired,
-        cityId: PropTypes.string,
     })).isRequired,
     uniqueField: 'rentUnitId',
 });
