@@ -100,7 +100,12 @@ class PubImgUpload extends Component {
                         <div key={index} className="item">
                             <div className="img-wrap">
                                 <img src={`${image}${imgCutModifier}`} alt={index} />
-                                <div className="delete" role="presentation" onClick={() => this.handleDelete(index)} />
+                                <img
+                                    className="delete"
+                                    alt=""
+                                    src={require('./images/delete.jpg')}
+                                    onClick={() => this.handleDelete(index)} 
+                                />
                             </div>
                         </div>
                     ))
@@ -112,7 +117,7 @@ class PubImgUpload extends Component {
                     </div>
                 }
                 {
-                    true &&
+                    loading &&
                     <div className="loading-wrap">
                         <img className="loading" src={require('./images/loading.png')} alt="" />
                     </div>

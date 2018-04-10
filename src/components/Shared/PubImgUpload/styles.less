@@ -5,22 +5,27 @@
     & .item {
         width: 24%;
         margin-right: 5px;
+        position: relative;
 
         & .img-wrap {
-            width: 90%;    
+            width: 130px;
             position: relative;
             margin: 0 auto;
             position: relative;
             & img {
-                width: 130px;
-                height: 130px;
+                width: 100%;
+                height: 100%;
                 margin: 0 auto;
             }
-        }
 
-        .delete {
-            position: absolute;
-            display: inline-block;
+            & img.delete {
+                position: absolute;
+                display: inline-block;
+                width: 28px;
+                height: 30px;
+                top: -10px;
+                right: -10px;
+            }
         }
     }
 
@@ -44,43 +49,6 @@
             height: 80px;
             position: absolute;
             animation: loader-rotate 1s linear infinite;
-        }
-    }
-
-    & .delete {
-        color: #fff;
-        position: absolute;
-        margin-top: 0;
-        margin-left: 0;
-        width: 28px; /*px*/
-        height: 28px; /*px*/
-        background-color: #999999;
-        border-radius: 50%;
-        top: -10px;
-        right: -10px;
-
-        &:before {
-            content: '';
-            position: absolute;
-            top: 13px; /*px*/
-            left: 6px; /*px*/
-            width: 16px; /*px*/
-            height: 1px; /*no*/
-            background-color: #ffffff;
-            -webkit-transform: rotate(-45deg);
-            transform: rotate(-45deg);
-        }
-
-        &:after {
-            content: '';
-            position: absolute;
-            top: 13px; /*px*/
-            left: 6px; /*px*/
-            width: 16px; /*px*/
-            height: 1px; /*no*/
-            background-color: #ffffff;
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
         }
     }
 }
