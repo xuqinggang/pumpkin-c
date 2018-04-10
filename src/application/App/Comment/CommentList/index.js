@@ -19,12 +19,12 @@ export default class CommentList extends PureComponent {
                 curPage: 1,
                 totalPage: 1,
             },
+            loading: false,
         };
     }
 
 
     onLoadMore = () => {
-        console.log('loadmore');
         this.fetchData();
     }
 
@@ -45,9 +45,13 @@ export default class CommentList extends PureComponent {
 
     fetchData = (renew = false) => {
         const { apartmentId } = this.props;
-        const { pager: { curPage }, comments } = this.state;
+        const { pager, comments } = this.state;
+        const { curPage } = pager;
 
-        ajaxGetCommentList(apartmentId).then((data) => {
+        this.setState({
+            loading: true,
+        });
+        ajaxGetCommentList(apartmentId, pager).then((data) => {
             let newComments;
             let newPager;
 
@@ -69,6 +73,10 @@ export default class CommentList extends PureComponent {
                 comments: newComments,
                 pager: newPager,
             });
+        }).finally(() => {
+            this.setState({
+                loading: false,
+            });
         });
     }
 
@@ -84,7 +92,7 @@ export default class CommentList extends PureComponent {
 
     render() {
         const { history, apartmentId } = this.props;
-        const { comments } = this.state;
+        const { comments, loading } = this.state;
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead
@@ -94,6 +102,7 @@ export default class CommentList extends PureComponent {
                     )}
                 />
                 <PureCommentList comments={comments} />
+                <p className="loading">加载中...</p>
             </div>
         );
     }
