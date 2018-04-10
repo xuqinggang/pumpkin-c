@@ -29,9 +29,13 @@
 
         .intro {
             .font-size(28);
+            // max-height: 85px;
             color: #999999;
-            max-height: 85px;
             overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
         }
 
     }

@@ -102,7 +102,9 @@ export default class CommentList extends PureComponent {
                     )}
                 />
                 <PureCommentList comments={comments} />
-                <p className="loading">加载中...</p>
+                {
+                    loading && <p className="loading">加载中...</p>
+                }
             </div>
         );
     }

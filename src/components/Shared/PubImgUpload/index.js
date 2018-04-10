@@ -112,9 +112,9 @@ class PubImgUpload extends Component {
                     </div>
                 }
                 {
-                    loading &&
+                    true &&
                     <div className="loading-wrap">
-                        <div className="loading" />
+                        <img className="loading" src={require('./images/loading.png')} alt="" />
                     </div>
                 }
                 <input
