@@ -6,7 +6,7 @@ import headImg from 'components/App/HouseDetail/HouseDetailIndex/RoommateInfo/im
 import { isHasCookie } from 'lib/util';
 
 import { ajaxDynamicTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { ajaxSavePhoneRecord } from 'application/App/Comment/ajaxInitComment';
+import { ajaxSaveTel } from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 import {
     commentListStorage,
@@ -29,7 +29,7 @@ const savePhoneRecord = () => {
         const phoneRecord = commentListStorage.get();
         // 无记录不用发送
         if (!phoneRecord || (phoneRecord && phoneRecord.length === 0)) return;
-        ajaxSavePhoneRecord(phoneRecord).then(() => {
+        ajaxSaveTel(phoneRecord).then(() => {
             commentListStorage.remove();
         });
     }
@@ -79,9 +79,10 @@ export default class ContactButler extends PureComponent {
         const {
             id,
             tel,
+            rentUnitId,
         } = this.props.contactButlerData;
 
-        ajaxDynamicTel(id)
+        ajaxDynamicTel({ rentUnitId, supervisorId: id })
             .then((data) => {
                 this.setState({
                     show: true,

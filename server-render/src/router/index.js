@@ -41,6 +41,11 @@ router.get('/about/:xx*', (ctx, next) => {
     ctx.body = indexHtml;
 });
 
+router.get('/city', (ctx, next) => {
+    ctx.type = 'html';
+    ctx.body = indexHtml;
+});
+
 router.get('/shop/:xx*', (ctx, next) => {
     ctx.type = 'html';
     ctx.body = indexHtml;

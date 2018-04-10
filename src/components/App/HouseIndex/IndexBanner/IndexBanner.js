@@ -27,8 +27,7 @@ export default class IndexBanner extends PureComponent {
             return;
         }
 
-        const cityId = 1;
-        ajaxInitHouseIndexBanner(cityId)
+        ajaxInitHouseIndexBanner()
             .then((indexBannerData) => {
                 this.setState({
                     indexBannerData,

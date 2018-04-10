@@ -4,9 +4,9 @@ import classnames from 'classnames';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
-import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
+import { ajaxVerifyCode, ajaxSlideCaptcha } from 'application/App/HouseLogin/ajaxLogin';
 import { regTel } from 'lib/regExp';
-import { urlJoin } from 'lib/util';
+import { urlJoin, dynamicScript } from 'lib/util';
 
 import './styles.less';
 
@@ -35,12 +35,51 @@ export default class LoginTel extends PureComponent {
         }
     }
 
+    genSlideCaptcha(phone) {
+        const divDom = document.createElement('div');
+        document.body.appendChild(divDom);
 
-    // 点击事件-获取验证码
-    handleGetVerifyTap = () => {
-        const telVal = this.state.telVal;
+        ajaxSlideCaptcha(phone)
+            .then(data => {
+                const {
+                    url,
+                } = data;
+                // 如果url为空的话，则不需要滑动验证
+                if (!url) {
+                    this.getVerifyCode({
+                        mobile: phone,
+                        ticket: '',
+                    });
+                    return;
+                }
 
-        ajaxVerifyCode(telVal)
+                url && dynamicScript(url, () => {
+                    capInit(divDom, {
+                        type: 'popup',
+                        pos: 'fixed',
+                        themeColor: 'f38d39',
+                        callback: (retJson) => {
+                            if (retJson && retJson.ret === 0) {
+                                const ticket = retJson.ticket;
+                                this.getVerifyCode({
+                                    mobile: phone,
+                                    ticket: ticket,
+                                });
+                            } else {
+                                this.setState({
+                                    isTelValid: true,
+                                });
+                            }
+                        },
+                    });
+
+                    const iframe = document.getElementsByTagName('iframe');
+                });
+            })
+    }
+
+    getVerifyCode({ mobile, ticket }) {
+        ajaxVerifyCode({ mobile, ticket })
             .then((bool) => {
                 // 验证成功
                 if (bool) {
@@ -51,13 +90,26 @@ export default class LoginTel extends PureComponent {
                     const {
                         search,
                     } = this.props.location;
-                    this.props.history.push(urlJoin(url, telVal)+`${search}`);
+                    this.props.history.push(urlJoin(url, mobile)+`${search}`);
                 }
             })
             .catch((err) => {
+                this.setState({
+                    isTelValid: true,
+                });
                 // 验证失败
                 PopToolTip({text: err.code ? err.msg : err.toString()});
             })
+    }
+
+    // 点击事件-获取验证码
+    handleGetVerifyTap = () => {
+        const telVal = this.state.telVal;
+        // 验证码先disable
+        this.setState({
+            isTelValid: false,
+        });
+        this.genSlideCaptcha(telVal);
     }
     
     render() {

@@ -27,8 +27,7 @@ export default class IndexRecommend extends PureComponent {
             return;
         }
         
-        const cityId = 1;
-        ajaxInitHouseIndexRecommend(cityId)
+        ajaxInitHouseIndexRecommend()
             .then((indexRecommendArr) => {
                 this.setState({
                     indexRecommendArr,

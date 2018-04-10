@@ -6,9 +6,7 @@ export function ajaxGetCommentList(apartmentId, pager = {}) {
     const { curPage } = pager;
     const perPage = 20;
 
-    // cityId
     return Service.get(`/api/v1/brandApartments/comments/${apartmentId}`, {
-        cityId: 1,
         offset: (curPage * perPage) || 0,
         limit: perPage,
     })
@@ -25,19 +23,16 @@ export function ajaxGetCommentList(apartmentId, pager = {}) {
 }
 
 // 评论房源
-// TODO cityId
 export function ajaxPostComment(apartmentId, { // isRequired
     content,
     score,
     images,
-    cityId = 1, // isRequired
     rentUnitId, // isRequired
 }) {
     return Service.post(`/api/v1/brandApartments/comments/${apartmentId}`, {
         content,
         score,
         images,
-        cityId,
         rentUnitId,
     })
         .then((res) => {
@@ -64,16 +59,3 @@ export function ajaxPostImage(file) {
             throw new Error(res);
         });
 }
-
-// 保存用户电话记录
-export function ajaxSavePhoneRecord(record = []) {
-    return Service.post('/api/v1/brandApartments/phoneRecord', record)
-        .then((res) => {
-            if (res.code === 200) {
-                return res.data;
-            }
-
-            throw new Error(res);
-        });
-}
-

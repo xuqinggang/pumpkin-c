@@ -1,6 +1,7 @@
 import Service from 'lib/Service';
 import { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
+import { AbbrevMapCity } from 'config/config';
 
 /**
  * API: 保存用户电话记录
@@ -12,11 +13,12 @@ import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } f
  *  apartmentId: string,
  *  rentUnitId: string,
  *  cityId: string,
+ *  title: string,
  *  timestamp: int, // 拨打电话的大概时间
  * }
  */
 export function ajaxSaveTel(telList) {
-    return Service.get('/api/v1/brandApartments/phoneRecord', telList)
+    return Service.post('/api/v1/brandApartments/phoneRecord', telList)
         .then((data) => {
             if (data.code === 200) {
                 return data.data;
@@ -27,9 +29,10 @@ export function ajaxSaveTel(telList) {
 }
 
 // 通过管家id动态请求虚拟手机号
-export function ajaxDynamicTel(supervisorId) {
+export function ajaxDynamicTel({ supervisorId, rentUnitId }) {
     return Service.get('/api/v1/common/getDynamicPhone', {
         supervisorId,
+        rentUnitId,
     }, {
         timeout: 1000,
     })
@@ -192,6 +195,10 @@ function getDataByConcat(houseDetailData) {
 }
 
 function genSeoData(houseDetailData) {
+    const urlStore = window.getStore('url');
+    const cityName = urlStore.cityName;
+    const cityText = AbbrevMapCity[cityName].text;
+
     const {
         // 合租(SHARED)整租(WHOLE)
         rentalType = 'SHARED',
@@ -212,9 +219,9 @@ function genSeoData(houseDetailData) {
 
     const houseDetailTitle = `${RentalTypeMapText[rentalType]}·${blockName}${bedroomCount}室${livingRoomCount}厅`;
 
-    title = `${houseDetailTitle}-南瓜租房北京租房`;
-    keywords = `北京${districtName}${blockName}租房,${subwayLine}${subwayStation}租房,品质租房${houseDetailTitle}`;
-    description = `北京南瓜租房提供${houseDetailTitle},距${subwayLine}${subwayStation}${subwayDistance}米`;
+    title = `${houseDetailTitle}-南瓜租房${cityText}租房`;
+    keywords = `${cityText}${districtName}${blockName}租房,${subwayLine}${subwayStation}租房,品质租房${houseDetailTitle}`;
+    description = `${cityText}南瓜租房提供${houseDetailTitle},距${subwayLine}${subwayStation}${subwayDistance}米`;
 
     return {
         title,
@@ -222,19 +229,22 @@ function genSeoData(houseDetailData) {
         description,
     };
 }
+
 function genContactButler(houseDetailData) {
     const {
         superName,
         superTel,
         superHeadImg,
         supervisorId,
+        rentUnitId,
     } = houseDetailData;
 
     return {
         name: superName,
         img: superHeadImg,
         tel: superTel,
-        id: supervisorId
+        id: supervisorId,
+        rentUnitId,
     };
 }
 

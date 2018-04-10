@@ -6,6 +6,7 @@ export default class SimpleScroll extends PureComponent {
         super(props);
         this.activeIndex = props.activeIndex;
     }
+
     componentDidMount() {
         this.scrollIns = new PRoll(this.wrapperDom, {
             isScrollY: false,
@@ -23,6 +24,7 @@ export default class SimpleScroll extends PureComponent {
             this.scrollIns.options.preventDefault = false;
         });
     }
+
     render() {
         const { 
             children,
