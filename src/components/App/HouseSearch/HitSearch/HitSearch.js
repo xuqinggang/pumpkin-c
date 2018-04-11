@@ -21,7 +21,7 @@ function setFilterStore({type, urlFrg, state, label, paramsObj}) {
         label: oldLabel,
         paramsObj: oldParamsObj,
         urlFrg: oldUrlFrg,
-    } = filterStore || {};
+    } = filterStore;
 
     window.setStore('filter', {
         state: Object.assign({}, oldState, { [type]: state }),
