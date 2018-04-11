@@ -63,7 +63,7 @@ export default class LoginVerifyCode extends PureComponent {
             verifyCodeVal: '',
         });
 
-        ajaxVerifyCode(this.telVal)
+        ajaxVerifyCode({ mobile: this.telVal })
             .catch((err) => {
                 // 验证失败
                 PopToolTip({text: err.code ? err.msg : err.toString()});
