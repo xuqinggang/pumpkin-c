@@ -80,11 +80,14 @@ export default class CommentList extends PureComponent {
         });
     }
 
+    componentWillMount() {
+        this.fetchData(true);
+    }
+
     componentDidMount() {
         const commentListDom = document.getElementsByClassName('g-commentlist');
         commentListDom[0].style['overflow-x'] = 'hidden';
         window.addEventListener('scroll', this.handleLoadMore);
-        this.fetchData(true);
     }
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleLoadMore);
@@ -93,6 +96,7 @@ export default class CommentList extends PureComponent {
     render() {
         const { history, apartmentId } = this.props;
         const { comments, loading } = this.state;
+
         return (
             <div className={`${classPrefix}`}>
                 <HouseHead
@@ -101,6 +105,12 @@ export default class CommentList extends PureComponent {
                         <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓评价</span>
                     )}
                 />
+                { comments.length === 0 && !loading &&                 
+                    <div className={`${classPrefix}-empty g-grid-col f-flex-align-center`}>
+                        <img src={require('./images/comment-empty.png')} alt="" />
+                        <p className="no-comment">暂无评价</p>
+                    </div>
+                }  
                 <PureCommentList comments={comments} />
                 {
                     loading && <p className="loading">加载中...</p>
