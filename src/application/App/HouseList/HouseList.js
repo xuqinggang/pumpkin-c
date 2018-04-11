@@ -62,6 +62,8 @@ export default class HouseList extends PureComponent {
         // dynamicDocTitle('南瓜租房');
 
         this.urlPrefix = window.getStore('url').urlPrefix;
+
+        console.log('con HouseList', this.urlParamsObj.apartment);
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -165,7 +167,7 @@ export default class HouseList extends PureComponent {
     }
 
     render() {
-        console.log('HouseList, render');
+        console.log('HouseList, render', this.state.filterParamsObj);
         const {
             filterState,
             filterLabel,

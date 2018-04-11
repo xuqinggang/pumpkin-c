@@ -6,7 +6,7 @@ export function ajaxGetCommentList(apartmentId, pager = {}) {
     const { curPage } = pager;
     const perPage = 20;
 
-    return Service.get(`/api/v1/brandApartments/comments/${apartmentId}`, {
+    return Service.get(`/api/v1/brandApartments/comments/apartment/${apartmentId}`, {
         offset: (curPage * perPage) || 0,
         limit: perPage,
     })

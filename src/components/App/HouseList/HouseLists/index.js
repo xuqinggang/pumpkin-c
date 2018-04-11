@@ -106,7 +106,10 @@ export default class HouseLists extends PureComponent {
 
     componentWillMount() {
         const storeHouseListState = window.getStore('houseList');
-        if (storeHouseListState) {
+        const filterStore = window.getStore('filter') || {};
+        const { filterParamsObj } = filterStore || {};
+
+        if (storeHouseListState && shallowEqual(this.props.filterParams, filterParamsObj)) {
             this.setState(storeHouseListState, () => {
                 const storeScrollTop = window.getStore('scrollTop');
                 const scrollTop = storeScrollTop && storeScrollTop.pt || 0;
@@ -160,7 +163,7 @@ export default class HouseLists extends PureComponent {
                     onLoadMore={this.handleLoadMore}
                 />
                 {
-                    this.fetchType === 'INIT' && isFetchCrash ? 
+                    this.fetchType === 'INIT' && isFetchCrash ?
                         <SingnalLessNote />
                         : null
                 }
