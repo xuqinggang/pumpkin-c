@@ -41,13 +41,7 @@ export default class ApartmentIndex extends PureComponent {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
 
-        window.setStore('filter', {
-            ...filterStore,
-            filterParamsObj: {
-                ...filterStore.filterParamsObj,
-                apartmentId,
-            },
-        });
+        window.setStore('filter', null);
         goRentUnitList(this.props.history)({
             queryParam: {
                 apartment: apartmentId,
