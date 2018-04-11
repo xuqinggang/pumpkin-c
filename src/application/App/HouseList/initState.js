@@ -1,3 +1,10 @@
+export const InitStateFilterUrlFrg = {
+    position: '',
+    rent: '',
+    houseType: '',
+    more: '',
+};
+
 export const InitStateFilterLabel = {
     position: '位置',
     rent: '租金',

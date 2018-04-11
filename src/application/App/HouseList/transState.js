@@ -8,7 +8,7 @@ import { InitStateFilterLabel, InitStateFilterState } from './initState';
 
 // const
 // 筛选参数键，与url字母缩写Map
-let TypeAndPrefixMap = {
+export let TypeAndPrefixMap = {
     districtId: 'a',
     circleId: 'b',
     subwayId: 'c',
@@ -375,6 +375,10 @@ export function parsePositionUrlToStateAndLabel(ptUrl) {
     }
 
     const ptUrlObj = _transFilterUrlFrg(ptUrl);
+    const {
+        paramsObj,
+    } = parsePositionUrlToParams(ptUrlObj);
+
     const PrefixMapPtType = {
         a: 'districts',
         c: 'subways',
@@ -413,6 +417,7 @@ export function parsePositionUrlToStateAndLabel(ptUrl) {
         label,
         seoData,
         state: ptStateObj,
+        paramsObj,
     };
 }
 

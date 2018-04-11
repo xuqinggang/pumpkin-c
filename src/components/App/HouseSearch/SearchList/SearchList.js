@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import SearchItem from '../SearchItem/SearchItem';
+import SearchBlock from '../SearchBlock/SearchBlock';
 
 import './styles.less';
 
@@ -25,6 +25,16 @@ const TypeMapTitle = {
 }
 
 export default class SearchList extends PureComponent<PropType> {
+    onOtherSearchItemTap = () => {
+
+    }
+    onPositionSearchItemTap = () => {
+
+    }
+    onSeachItemTap = () => {
+
+    }
+
     renderChildren() {
         const {
             searchData = {},
@@ -34,7 +44,7 @@ export default class SearchList extends PureComponent<PropType> {
         Object.keys(searchData).forEach((type, index) => {
             const searchDataArr = searchData[type];
             searchDataArr && searchDataArr.length && childrenArr.push(
-                <SearchItem
+                <SearchBlock
                     key={index}
                     searchDataArr={searchData[type]}
                     title={TypeMapTitle[type]}

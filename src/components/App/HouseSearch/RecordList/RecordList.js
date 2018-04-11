@@ -14,10 +14,6 @@ type PropType = {
 }
 
 export default class RecordList extends PureComponent<PropType> {
-    handleSeachTap = () => {
-
-    }
-
     render() {
         const {
             list = [],
@@ -28,7 +24,12 @@ export default class RecordList extends PureComponent<PropType> {
                 {
                     list && list.map((item, index) => {
                         return (
-                            <RecordItem item={item} className={`${classPrefix}-item`} key={index}/>
+                            <RecordItem
+                                className={`${classPrefix}-item`}
+                                item={item}
+                                key={index}
+                                onChangeTap={this.props.onSearchTap}
+                            />
                         );
                     })
                 }
@@ -56,18 +57,15 @@ class RecordItem extends PureComponent<ItemPropType> {
             onChangeTap,
         } = this.props;
 
-        const {
-            text,
-            field,
-            fieldValue,
-        } = item;
-
-        onChangeTap({
-            text: item.text,
-            params: {
-                [field]: fieldValue,
-            },
-        });
+        // let {
+        //     text,
+        //     type,
+        //     superField,
+        //     superFieldValue,
+        //     field,
+        //     fieldValue,
+        // } = item;
+        onChangeTap(item);
     }
 
     render() {

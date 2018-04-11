@@ -8,7 +8,6 @@ import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
-import { InitStateFilterLabel, InitStateFilterState } from 'application/App/HouseList/initState';
 import {
     FILTER_SEPARATOR,
     parseUrl,
@@ -37,21 +36,25 @@ export default class HouseList extends PureComponent {
         } = parseUrlQueryFields();
         this.queryFieldsObj = queryFieldsObj;
 
+        const filterStore = window.getStore('filter');
+        const {
+            label,
+            state,
+            paramsObj,
+            urlFrg,
+        } = filterStore;
+
         // 各个筛选器url片段
-        this.urlFrgObj = {
-            position: '',
-            rent: '',
-            houseType: '',
-            more: '',
-        };
+        this.urlFrgObj = urlFrg;
 
         // 筛选的请求参数
         this.filterParamsObj = {
             apartmentId: this.queryFieldsObj.apartment || null,
+            ...paramsObj,
         };
 
-        this.filterState = InitStateFilterState;
-        this.filterLabel = InitStateFilterLabel;
+        this.filterState = state;
+        this.filterLabel = label;
 
         window.setStore('url', {
             filterQueryFieldsObj: queryFieldsObj,
@@ -63,6 +66,7 @@ export default class HouseList extends PureComponent {
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
     _dynamicSetPtStateAndLabel = (stateAndLabelObj) => {
+        console.log('_dynamicSetPtStateAndLabel', stateAndLabelObj);
         const {
             state,
             label,
@@ -158,10 +162,7 @@ export default class HouseList extends PureComponent {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
         this._setStoreFilterUrlFrg(filterUrlFragment);
 
-        let filterStore = window.getStore('filter');
-        if (!filterStore && filterUrlFragment) {
-            filterStore = parseUrl(filterUrlFragment);
-        }
+        const filterStore = parseUrl(filterUrlFragment);
 
         if (filterStore) {
             const {

@@ -6,6 +6,7 @@ import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
 import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 
+import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
 
 import './styles.less';
@@ -25,6 +26,14 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         };
     }
 
+    componentWillMount() {
+        // 请求position筛选数据
+        ajaxInitPositionData()
+            .then((positionFilterDataObj) => {
+                window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
+            });
+    }
+
     onInputChange = (keyword: string) => {
         ajaxSearchHits({
             keyword,
@@ -32,7 +41,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         })
             .then((searchData) => {
                 this.setState({
-                    searchData,
+                    searchData: { ...searchData },
                 });
             });
     }
@@ -42,13 +51,17 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             searchData,
         } = this.state;
 
+        const {
+            history,
+        } = this.props;
+
         return (
             <div className={classPrefix}>
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
                     <InputSearch onInputChange={this.onInputChange} />
                     <span className="head-btn-cancel">取消</span>
                 </div>
-                <HitSearch />
+                <HitSearch history={history} />
                 <SearchList searchData={searchData} />
             </div>
         );

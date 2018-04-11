@@ -10,15 +10,21 @@ const TypeMapSubName = {
     },
     stations: {
         iconClass: 'icon-subway2',
-        subName: 'subwayName',
+        subName: ['subwayName'],
+        superId: 'subwayId',
     },
     circles: {
-        subName: ['districtName'],
         iconClass: 'icon-trade-area',
+        subName: ['districtName'],
+        superId: 'districtId',
     },
     blocks: {
         subName: ['districtName', 'circleName'],
         iconClass: 'icon-village',
+    },
+    addresses: {
+        iconClass: 'icon-address',
+        subName: ['districtName', 'circleName'],
     },
 };
 
@@ -28,7 +34,6 @@ export function ajaxSearchHits(params = {}) {
         .then((data) => {
             if (data.code === 200) {
                 const searchData = data.data;
-
                 // 对数据进行处理
                 const newSeachData = {};
                 searchData && Object.keys(searchData).forEach((type) => {
@@ -36,7 +41,7 @@ export function ajaxSearchHits(params = {}) {
                     let newTypeSearchDataArr = null;
 
                     newTypeSearchDataArr = !(typeSearchDataArr && typeSearchDataArr.length) ?
-                        [] : 
+                        [] :
                         typeSearchDataArr.map((typeSearchDataItem) => {
                             const {
                                 id,
@@ -58,8 +63,14 @@ export function ajaxSearchHits(params = {}) {
                                 newTypeSearchDataItem.iconClass = TypeMapSubName[type].iconClass;
                             }
 
+                            const subInfo = TypeMapSubName[type];
+                            // superId
+                            // 对应类型的superId: (subwayId or districtId)
+                            const typeSuperIdKey = subInfo.superId;
+                            const typeSuperIdVal = typeSearchDataItem[typeSuperIdKey];
+
                             // 拼接subName
-                            const typeSubNameArr = TypeMapSubName[type] && TypeMapSubName[type].subName;
+                            const typeSubNameArr = subInfo && subInfo.subName;
                             let subName = '';
                             typeSubNameArr && typeSubNameArr.forEach((item) => {
                                 const tmpSubName = typeSearchDataItem[item];
@@ -67,7 +78,9 @@ export function ajaxSearchHits(params = {}) {
                                     subName += `${tmpSubName} `;
                                 }
                             });
+
                             newTypeSearchDataItem.subName = subName;
+                            newTypeSearchDataItem.superId = typeSuperIdVal;
 
                             return newTypeSearchDataItem;
                         });
@@ -76,7 +89,7 @@ export function ajaxSearchHits(params = {}) {
                 });
 
                 // 将subways和stations合并，然后删除stations
-                newSeachData.subways.concat(newSeachData.stations);
+                newSeachData.subways = newSeachData.subways.concat(newSeachData.stations);
                 delete newSeachData.stations;
                 console.log(newSeachData, 'newSeachData');
                 return newSeachData;
