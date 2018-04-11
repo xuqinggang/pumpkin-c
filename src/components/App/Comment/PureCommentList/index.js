@@ -15,15 +15,6 @@ export default class PureCommentList extends PureComponent {
     render() {
         const { comments } = this.props;
 
-        if (comments.length === 0) {
-            return (
-                <div className={`${classPrefix}-empty g-grid-col f-flex-align-center`}>
-                    <img src={require('./images/comment-empty.png')} alt="" />
-                    <p className="no-comment">暂无评价</p>
-                </div>
-            );
-        }
-
         return (
             <div className={`${classPrefix}`}>
                 {
