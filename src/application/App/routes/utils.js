@@ -21,7 +21,7 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
     // define when call withHistory
     const { urlPrefix } = window.getStore('url');
     const locationSearch = window.location.search;
-    const url = urlJoin(urlPrefix, createPath(...arg), `/${locationSearch}`);
+    const url = `${urlPrefix}${createPath(...arg)}${locationSearch}`;
 
     const beforeTasks = Array.isArray(beforeRouteChange)
         ? beforeRouteChange

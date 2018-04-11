@@ -37,7 +37,23 @@ export default class ApartmentIndex extends PureComponent {
         goShopList(this.props.history)(`b${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
-    goRentUnitList = goRentUnitList(this.props.history);
+    goRentUnitList = () => {
+        const filterStore = window.getStore('filter') || { filterParamsObj: {} };
+        const { apartmentId } = this;
+
+        window.setStore('filter', {
+            ...filterStore,
+            filterParamsObj: {
+                ...filterStore.filterParamsObj,
+                apartmentId,
+            },
+        });
+        goRentUnitList(this.props.history)({
+            queryParam: {
+                apartment: apartmentId,
+            },
+        });
+    }
 
     renderIndex() {
         const { history, match } = this.props;

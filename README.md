@@ -11,6 +11,8 @@ npm install
 npm run build_test
 npm run build_render_test
 npm run server_dev
+
+# 或者使用
 npm run build_test && npm run build_render_test && npm run server_dev
 ```
 
