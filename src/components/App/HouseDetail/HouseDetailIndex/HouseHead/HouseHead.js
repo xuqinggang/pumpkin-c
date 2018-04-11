@@ -121,7 +121,7 @@ class HouseHead extends PureComponent {
     }
 
     render() {
-        const { type, title } = this.props;
+        const { title } = this.props;
 
         const {
             isCollected,
@@ -134,9 +134,14 @@ class HouseHead extends PureComponent {
         });
 
         const containerClass = classnames(`${classPrefix}`, {
-            'g-grid-row f-flex-justify-between': type === 'default',
-            'f-display-flex f-flex-align-center': type === 'apartment',
+            'f-display-flex f-flex-align-center': true,
         });
+
+        const headRightClass = classnames(`head-right f-display-flex f-flex-align-center`,
+            {
+                'f-flex-justify-end': !this.props.renderRight
+            }
+        )
 
         return (
             <div className={containerClass}>
@@ -158,43 +163,37 @@ class HouseHead extends PureComponent {
                         </a>
                     )
                 }
+                <div className={headRightClass}>
                 {
-                    type === 'default' ?
-                        <div className={`f-display-flex f-flex-align-center`}>
-                            <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
-                            <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
-                                onTouchTap={this.handleReportTap}
-                            ></span>
-                        </div> :
-                    null
+                    this.props.renderRight ?
+                        this.props.renderRight() :
+                    <div className="collection-wrap f-display-flex f-flex-align-center">
+                        <span className={collectBtnClass} onTouchTap={this.handleCollectTap}></span> 
+                        <span className={`icon-report ${classPrefix}-icon ${classPrefix}-btn-report`}
+                            onTouchTap={this.handleReportTap}
+                        ></span>
+                    </div>
                 }
-                {
-                    type === 'apartment' ?
-                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span> :
-                    null
-                }
+                </div>
             </div>
         );
     }
 }
 
 HouseHead.propTypes = {
-    type: PropTypes.oneOf([
-        'default',
-        'apartment',
-    ]),
     title: PropTypes.string,
     headData: PropTypes.any,
     match: PropTypes.any,
     history: PropTypes.any,
+    renderRight: PropTypes.func,
 };
 
 HouseHead.defaultProps = {
-    type: 'default',
     title: '',
     headData: {},
     match: {},
     history: {},
+    renderRight: null,
 };
 
 

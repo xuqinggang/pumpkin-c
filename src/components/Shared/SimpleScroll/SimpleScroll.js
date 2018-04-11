@@ -12,7 +12,6 @@ export default class SimpleScroll extends PureComponent {
             isScrollY: false,
             isScrollX: true,
         });
-
         this.scrollIns.on('scrollStart', () => {
             this.scrollIns.options.preventDefault = false;
         });

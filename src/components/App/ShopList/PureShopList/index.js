@@ -38,8 +38,8 @@ export default class PureShopList extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 {
-                    list.map((apartment, index) => (
-                        <ShopItem apartment={apartment} key={index} />
+                    list.map((shop, index) => (
+                        <ShopItem shop={shop} key={index} />
                     ))
                 }
             </div>

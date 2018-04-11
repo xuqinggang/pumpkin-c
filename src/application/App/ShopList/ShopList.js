@@ -22,6 +22,7 @@ const classPrefix = 'g-shoplist';
 const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ShopList extends PureComponent {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -57,9 +58,10 @@ export default class ShopList extends PureComponent {
 
     }
 
-    componentDidMount() {
-        this.wxShare();
-        dynamicDocTitle('南瓜租房');
+    _setStoreFilterUrlFragment = (filterUrlFragment) => {
+        window.setStore('url', {
+            filterUrlFragment,
+        });
     }
 
     componentWillMount() {
@@ -75,6 +77,11 @@ export default class ShopList extends PureComponent {
         }
     }
 
+    componentDidMount() {
+        this.wxShare();
+        dynamicDocTitle('南瓜租房');
+    }
+
     componentWillReceiveProps(nextProps) {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
@@ -82,12 +89,6 @@ export default class ShopList extends PureComponent {
             // 每生成一个新的url发送一次pv请求
             window.send_stat_pv && window.send_stat_pv();
         }
-    }
-
-    _setStoreFilterUrlFragment = (filterUrlFragment) => {
-        window.setStore('url', {
-            filterUrlFragment,
-        });
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -108,9 +109,9 @@ export default class ShopList extends PureComponent {
         this.setState({
             filterState: {
                 ...this.state.filterState,
-                brand: state
-            }
-        })
+                brand: state,
+            },
+        });
     }
 
     onFilterConfirm = (newState) => {
@@ -132,8 +133,6 @@ export default class ShopList extends PureComponent {
         const link = urlJoin(this.urlPrefix, 'shop/list', filterUrlFragment) + `?${this.urlQuery}`;
         this.props.history.push(link);
     }
-
-    
 
     // 根据 url 片段生成state和params
     _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
@@ -209,12 +208,17 @@ export default class ShopList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
                     {
-                        !isRmHead() ?
-                        <HouseHead type="apartment" title="集中式公寓" history={history} /> : 
-                        null
+                        !isRmHead()
+                            ? <HouseHead
+                                history={history}
+                                renderRight={() => (
+                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
+                                )}
+                            />
+                            : null
                     }
                     <ShopFilter
-                        className="apartmentfilter"
+                        className="shopfilter"
                         filterState={filterState}
                         filterLabel={filterLabel}
                         onFilterConfirm={this.onFilterConfirm}

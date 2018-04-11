@@ -139,7 +139,12 @@ export default class ApartmentDetail extends PureComponent {
             <div className={`${classPrefix}`}>
                 {
                     !isRmHead() ?
-                    <HouseHead type="apartment" title={name} history={history} /> :
+                    <HouseHead
+                        history={history}
+                        renderRight={() => (
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{name}</span>
+                        )}
+                    /> :
                     null
                 }
                 <RoomSlider images={images} totalOnsaleCount={totalOnsaleCount} />

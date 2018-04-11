@@ -8,6 +8,7 @@ import HeadTitle from 'components/App/HouseList/HeadTitle/HeadTitle';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
+import CommentCard from 'components/App/Comment/CommentCard';
 
 import { stringifyStateObjToUrl, parseUrlToState } from './filterStateToUrl';
 import { filterStateToParams } from './filterStateToParams';
@@ -192,6 +193,9 @@ export default class HouseList extends PureComponent {
                     onFilterReSume={this.onFilterReSume}
                     onDynamicSetLabel={this._dynamicSetPositionFilterLabel}
                 />
+                <div className={`${classPrefix}-comment`}>
+                    <CommentCard />
+                </div>
                 <HouseLists
                     filterParams={filterParamsObj}
                 />

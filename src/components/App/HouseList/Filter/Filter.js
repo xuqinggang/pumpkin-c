@@ -15,7 +15,7 @@ import {
     rentFilterStateToParams,
     positionFilterStateToParams,
 } from 'application/App/HouseList/filterStateToParams';
-import { scrollTo, getScrollTop } from 'lib/util';
+import { scrollTo, getScrollTop, getFilterFixScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
 import './styles.less';
@@ -178,9 +178,7 @@ export default class Filter extends PureComponent {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度
         this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
-        this.bannerDomHeight = Math.round(document.querySelector('.m-indexbanner').offsetHeight);
-        this.recommendDomHeight = Math.round(document.querySelector('.m-indexrecommend').offsetHeight);
-        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
+        this.filterFixScrollTop = getFilterFixScrollTop();
 
         window.addEventListener('scroll', this._fixFilterDom);
     }

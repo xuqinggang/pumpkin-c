@@ -1,0 +1,62 @@
+@import (reference) '~styles/lib.less';
+
+.m-apartmentintro {
+    height: 160px;
+    & img {
+        width: 100px;
+        height: 100px;
+    }
+
+    & .intro-wrap {
+        flex: 0.7;
+        padding: 0 15px;
+
+        & .name {
+            color: #000;
+            margin-right: 10px;
+            .font-size(34);
+        }
+
+        & .price {
+            color: #F38D39;
+            .font-size(28);
+
+            & span {
+                color: #3F3F3F;
+                .font-size(22);
+            }
+        }
+
+        .intro {
+            .font-size(28);
+            // max-height: 85px;
+            color: #999999;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+    }
+
+    & .score-wrap {
+        text-align: center;
+        border-left: 1px solid #EAEAEA;
+
+        & .score {
+            color: #F38D39;
+            .font-size(40);
+        }
+
+        & .go-comments {
+            color: #666666;
+            .font-size(20);
+
+            & i {
+                display: inline-block;
+                transform: rotateZ(-90deg);
+            }
+        }
+    }
+}
