@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
+import HouseSearchConnect from 'application/App/HouseSearch/HouseSearchConnect';
+
 import './styles.less';
 
 const classPrefix = 'm-searchblock';
@@ -35,15 +37,22 @@ export default class SearchBlock extends PureComponent<PropType> {
             <div className={classnames(classPrefix, className)}>
                 <h2 className={`${classPrefix}-title`}>{title}</h2>
                 {
-                    searchDataArr.map((item, index) => <SearchItem item={item} key={index} type={type} />)
+                    searchDataArr.map((item, index) =>
+                        <SearchItem
+                            key={index}
+                            item={item}
+                            type={type}
+                        />
+                    )
                 }
             </div>
         );
     }
 }
 
+@HouseSearchConnect()
 class SearchItem extends PureComponent {
-    handleOthersItemTap = () => {
+    handleOtherSearchItemTap = () => {
         const {
             type,
             item,
@@ -53,12 +62,15 @@ class SearchItem extends PureComponent {
             id,
         } = item;
         const paramsObj = {
-            id: id,
+            id,
             text: name, 
             type,
         };
+
+        this.props.onOtherSearchItemTap(paramsObj);
     }
-    handlePositionItemTap = () => {
+
+    handlePositionSearchItemTap = () => {
         const {
             type,
             item,
@@ -100,7 +112,10 @@ class SearchItem extends PureComponent {
                 field: 'districtId',
             });
         }
+
+        this.props.onPositionSearchItemTap(paramsObj);
     }
+
     handleItemTap = () => {
         const {
             type,
@@ -111,10 +126,10 @@ class SearchItem extends PureComponent {
             case 'subways':
             case 'circles':
             case 'districts':
-                this.handlePositionItemTap();
+                this.handlePositionSearchItemTap();
                 break;
             default:
-                this.handleOthersItemTap();
+                this.handleOtherSearchItemTap();
         }
     }
     

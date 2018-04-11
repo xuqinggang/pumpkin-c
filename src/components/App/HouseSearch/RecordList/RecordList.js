@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
+import HouseSearchConnect from 'application/App/HouseSearch/HouseSearchConnect';
+
 import './styles.less';
 
 const classPrefix = 'm-recordlist';
@@ -28,7 +30,6 @@ export default class RecordList extends PureComponent<PropType> {
                                 className={`${classPrefix}-item`}
                                 item={item}
                                 key={index}
-                                onChangeTap={this.props.onSearchTap}
                             />
                         );
                     })
@@ -40,21 +41,18 @@ export default class RecordList extends PureComponent<PropType> {
 
 type ItemPropType = {
     className: string,
-    onChangeTap: Function,
+    onPositionSearchItemTap: Function,
     item: {
         text: string,
     },
 };
 
+@HouseSearchConnect()
 class RecordItem extends PureComponent<ItemPropType> {
-    static defaultProps = {
-        onChangeTap: () => {},
-    };
-
     handleSearchTap = () => {
         const {
-            item = {},
-            onChangeTap,
+            item,
+            onPositionSearchItemTap,
         } = this.props;
 
         // let {
@@ -65,7 +63,7 @@ class RecordItem extends PureComponent<ItemPropType> {
         //     field,
         //     fieldValue,
         // } = item;
-        onChangeTap(item);
+        onPositionSearchItemTap(item);
     }
 
     render() {

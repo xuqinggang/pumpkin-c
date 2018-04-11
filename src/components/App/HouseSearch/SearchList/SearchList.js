@@ -5,6 +5,12 @@ import classnames from 'classnames';
 
 import SearchBlock from '../SearchBlock/SearchBlock';
 
+import {
+    parsePositionSearchToFilterInfo,
+    jumpHouseList,
+    setFilterStore,
+} from 'application/App/HouseSearch/transId';
+
 import './styles.less';
 
 const classPrefix = 'm-searchlist';
@@ -28,8 +34,8 @@ export default class SearchList extends PureComponent<PropType> {
     onOtherSearchItemTap = () => {
 
     }
-    onPositionSearchItemTap = () => {
-
+    onPositionSearchItemTap = (data) => {
+        console.log('data', data);
     }
     onSeachItemTap = () => {
 
@@ -49,6 +55,8 @@ export default class SearchList extends PureComponent<PropType> {
                     searchDataArr={searchData[type]}
                     title={TypeMapTitle[type]}
                     type={type}
+                    onPositionSearchItemTap={this.onPositionSearchItemTap}
+                    onOtherSearchItemTap={this.onOtherSearchItemTap}
                 />
             );
         });

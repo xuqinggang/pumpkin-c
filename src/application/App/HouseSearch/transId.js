@@ -3,6 +3,7 @@ import {
     TypeAndPrefixMap,
     parsePositionUrlToStateAndLabel,
 } from 'application/App/HouseList/transState';
+import { goHouseList } from 'application/App/routes/routes';
 
 
 // const superFieldMapType = {
@@ -38,4 +39,40 @@ export function parsePositionSearchToFilterInfo({
         state,
         paramsObj,
     };
+}
+
+export function setFilterStore({type, urlFrg, state, label, paramsObj}) {
+    const filterStore = window.getStore('filter');
+    const {
+        state: oldState,
+        label: oldLabel,
+        paramsObj: oldParamsObj,
+        urlFrg: oldUrlFrg,
+    } = filterStore;
+
+    window.setStore('filter', {
+        state: state ? Object.assign({}, oldState, { [type]: state }) : oldState,
+        label: label ? Object.assign({}, oldLabel, { [type]: label }) : oldLabel,
+        paramsObj: paramsObj ? Object.assign({}, oldParamsObj, paramsObj) : oldParamsObj,
+        urlFrg: urlFrg ? Object.assign({}, oldUrlFrg, { [type]: urlFrg }) : oldUrlFrg,
+    });
+}
+
+export function jumpHouseList(history) {
+    const filterStore = window.getStore('filter');
+    const {
+        urlFrg = {},
+    } = filterStore || {};
+
+    const urlArr = [];
+    Object.keys(urlFrg).forEach((type) => {
+        const urlFrgVal = urlFrg[type];
+        urlFrgVal && urlArr.push(urlFrgVal);
+    });
+    const url = urlArr.join(FILTER_SEPARATOR);
+    window.setStore('url', {
+        filterUrlFragment: url,
+    });
+
+    goHouseList(history)();
 }
