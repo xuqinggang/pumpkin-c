@@ -20,7 +20,7 @@ import OpenNative from 'Shared/OpenNative/OpenNative';
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
 import { dynamicDocTitle, getWithDefault } from 'lib/util';
 import { isApp, isRmHead, isNanguaApp } from 'lib/const';
-import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
+import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
 import { AbbrevMapCity } from 'config/config';
 import { goApartment } from 'application/App/routes/routes';
@@ -47,7 +47,7 @@ export default class HouseDetailIndex extends PureComponent {
         });
 
         if (isSimulateNative()) {
-            postRouteChangToIOS({
+            postRouteChangeToIOS({
                 canGoBack: true,
                 url: window.location.href,
             });

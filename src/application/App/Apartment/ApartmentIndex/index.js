@@ -18,6 +18,8 @@ import { Route, Switch } from 'react-router';
 
 import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
+import { dynamicDocTitle } from 'lib/util';
+import { isRmHead, isNanguaApp } from 'lib/const';
 
 import './styles.less';
 
@@ -63,12 +65,15 @@ export default class ApartmentIndex extends PureComponent {
         } = this.state;
         return (
             <div className={`${classPrefix}`}>
-                <HouseHead
-                    history={history}
-                    renderRight={() => (
-                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>
-                    )}
-                />
+                {
+                    !isRmHead() &&
+                    <HouseHead
+                        history={history}
+                        renderRight={() => (
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>
+                        )}
+                    />
+                }
                 <RoomSlider images={images} />
                 <div className="content-padding">
                     <ApartmentIntro
@@ -106,6 +111,8 @@ export default class ApartmentIndex extends PureComponent {
                 brandApartments,
             });
         });
+        // TODO can move to routes
+        dynamicDocTitle('品牌公寓');
     }
 
     render() {

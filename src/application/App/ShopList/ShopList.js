@@ -12,7 +12,7 @@ import { stringifyStateObjToUrl, parseUrlToState } from './stateToUrl';
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
-import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
+import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
 
 import './styles.less';
@@ -50,9 +50,9 @@ export default class ShopList extends PureComponent {
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
         if (isSimulateNative()) {
-            postRouteChangToIOS({
+            postRouteChangeToIOS({
                 canGoBack: false,
-                url: window.location.href
+                url: window.location.href,
             });
         }
 

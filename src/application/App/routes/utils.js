@@ -1,9 +1,13 @@
 import { urlJoin } from 'lib/util';
+import { postRouteChangeToIOS, postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
 
 const defaultBeforeRoutes = [];
 const defaultAfterRoutes = [
     function pv() {
         window.send_stat_pv && window.send_stat_pv(); // pv
+    },
+    function routeChangeToIOS(history, to, next) {
+        postRouteChangeToIOSV2({ to });
     },
 ];
 const routeChange = (history, to) => {

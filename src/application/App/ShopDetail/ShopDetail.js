@@ -13,7 +13,8 @@ import { ajaxGetApartmentDetail } from './ajaxInitShopDetail';
 import { dynamicDocTitle } from 'lib/util';
 import { stuffTotalFloorTOCentralHouses, getLocation } from './dataAdapter';
 import { isRmHead, isNanguaApp } from 'lib/const';
-import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
+import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
+import { goApartment } from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -21,7 +22,7 @@ const classPrefix = 'g-shopdetail';
 
 const isSimulateNative = () => isRmHead() && isNanguaApp();
 
-export default class ApartmentDetail extends PureComponent {
+export default class ShopDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,12 +36,17 @@ export default class ApartmentDetail extends PureComponent {
         });
 
         if (isSimulateNative()) {
-            postRouteChangToIOS({
+            postRouteChangeToIOS({
                 canGoBack: true,
-                url: window.location.href
+                url: window.location.href,
             });
         }
+    }
 
+    goApartment = () => {
+        const { history } = this.props;
+        const { apartmentDetailData } = this.state;
+        goApartment(history)(apartmentDetailData.apartmentId);
     }
 
     handleJumpMapTap = () => {
@@ -87,7 +93,7 @@ export default class ApartmentDetail extends PureComponent {
     }
 
     componentDidMount() {
-        dynamicDocTitle('南瓜租房');
+        dynamicDocTitle('精品公寓');
     }
 
     wxShare() {
@@ -149,7 +155,12 @@ export default class ApartmentDetail extends PureComponent {
                 }
                 <RoomSlider images={images} totalOnsaleCount={totalOnsaleCount} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
-                    <Location apartmentName={apartmentName} address={location} onTouchTap={this.handleJumpMapTap}/>
+                    <Location
+                        apartmentName={apartmentName} 
+                        address={location} 
+                        onTouchTap={this.handleJumpMapTap}
+                        goApartment={this.goApartment}
+                    />
                 </div>
                 <div className={`${classPrefix}-module ${classPrefix}-intro`}>
                     <ApartmentIntro
