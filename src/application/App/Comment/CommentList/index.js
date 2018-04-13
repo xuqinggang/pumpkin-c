@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 
 import { PureCommentList } from 'components/App/Comment';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
-import { getDocHeight, getScrollTop } from 'lib/util';
+import { getDocHeight, getScrollTop, dynamicDocTitle } from 'lib/util';
 import { ajaxGetCommentList } from '../ajaxInitComment';
+import { isRmHead } from 'lib/const';
 
 import './styles.less';
 
@@ -82,6 +83,7 @@ export default class CommentList extends PureComponent {
 
     componentWillMount() {
         this.fetchData(true);
+        dynamicDocTitle('公寓评价');
     }
 
     componentDidMount() {
@@ -99,12 +101,15 @@ export default class CommentList extends PureComponent {
 
         return (
             <div className={`${classPrefix}`}>
-                <HouseHead
-                    history={history}
-                    renderRight={() => (
-                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓评价</span>
-                    )}
-                />
+                {
+                    !isRmHead() &&
+                    <HouseHead
+                        history={history}
+                        renderRight={() => (
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓评价</span>
+                        )}
+                    />
+                }
                 { comments.length === 0 && !loading &&                 
                     <div className={`${classPrefix}-empty g-grid-col f-flex-align-center`}>
                         <img src={require('./images/comment-empty.png')} alt="" />

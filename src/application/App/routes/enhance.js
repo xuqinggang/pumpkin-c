@@ -1,5 +1,6 @@
 import { isHasCookie } from 'lib/util';
 import { goLogin } from './routes';
+import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
 
 // enhance 其实不是必要的 可以用以下方式替代
 /**
@@ -27,5 +28,8 @@ export default {
             goLogin(history)();
             next(false);
         }
+    },
+    routeChangeToIOS: (history, to, next, title) => {
+        postRouteChangeToIOSV2({ to, title });
     },
 };

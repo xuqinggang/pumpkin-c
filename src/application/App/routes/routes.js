@@ -1,5 +1,5 @@
 import withHistory from './utils';
-import { loginRequired } from 'application/App/routes/enhance';
+import { loginRequired, routeChangeToIOS } from 'application/App/routes/enhance';
 import { getFilterFixScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
@@ -32,20 +32,32 @@ const createCommentListPath = apartmentId => `/comment/${apartmentId}/list`;
 export const goCommentInput = withHistory(createCommentInputPath, {
     beforeRouteChange: loginRequired,
 });
-export const goCommentList = withHistory(createCommentListPath);
+export const goCommentList = withHistory(createCommentListPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+});
 
 // apartment
 const createApartmentPath = apartmentId => `/apartment/${apartmentId}`;
 const createApartmentDeatilPath = apartmentId => `/apartment/${apartmentId}/detail`;
-export const goApartment = withHistory(createApartmentPath);
-export const goApartmentDetail = withHistory(createApartmentDeatilPath);
+export const goApartment = withHistory(createApartmentPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '品牌公寓'),
+});
+export const goApartmentDetail = withHistory(createApartmentDeatilPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓详情'),
+});
 
 // shop
 const createShopListPath = (filterParams = '') => `/shop/list/${filterParams}`;
 const createShopDetailPath = shopId => `/shop/detail/${shopId}`;
-export const goShopList = withHistory(createShopListPath);
-export const goShopDetail = withHistory(createShopDetailPath);
+export const goShopList = withHistory(createShopListPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+});
+export const goShopDetail = withHistory(createShopDetailPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
+});
 
 // rentUnit
 const createRentUnitDeatilPath = rentUnitId => `/detail/${rentUnitId}`;
-export const goRentUnitDetail = withHistory(createRentUnitDeatilPath);
+export const goRentUnitDetail = withHistory(createRentUnitDeatilPath, {
+    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '房源详情'),
+});

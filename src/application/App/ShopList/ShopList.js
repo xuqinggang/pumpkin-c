@@ -7,13 +7,16 @@ import {
 } from 'components/App/ShopList';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
-import { stateToParams } from './stateToParams';
+import { stateToParams, getTextFromBrands } from './stateToParams';
 import { stringifyStateObjToUrl, parseUrlToState } from './stateToUrl';
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle, urlJoin, parseUrlParams } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
+import {
+    goShopList,
+} from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -55,7 +58,6 @@ export default class ShopList extends PureComponent {
                 url: window.location.href,
             });
         }
-
     }
 
     _setStoreFilterUrlFragment = (filterUrlFragment) => {
@@ -86,8 +88,7 @@ export default class ShopList extends PureComponent {
         const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
         const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
         if (curFilterUrlFragment !== nextFilterUrlFragment) {
-            // 每生成一个新的url发送一次pv请求
-            window.send_stat_pv && window.send_stat_pv();
+            this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
         }
     }
 
@@ -104,9 +105,7 @@ export default class ShopList extends PureComponent {
             filterLabel: {
                 ...this.state.filterLabel,
                 brand: label,
-            }
-        });
-        this.setState({
+            },
             filterState: {
                 ...this.state.filterState,
                 brand: state,
@@ -114,65 +113,65 @@ export default class ShopList extends PureComponent {
         });
     }
 
+    goShopList = (filterUrlFragment) => {
+        goShopList(this.props.history)(filterUrlFragment);
+    }
+
     onFilterConfirm = (newState) => {
         const { filterState, filterLabel, filterParamsObj } = this.state;
-
         const querys = stateToParams(newState, filterParamsObj, filterLabel);
-
-        // new filter state
+        const newParams = querys.params;
+        // const newLabel = querys.label;
         const newFilterState = {
             ...filterState,
             ...newState,
         };
-        const newParams = querys.params;
-        const newLabel = querys.label;
-        this.setFilterStateAndStore(newFilterState, newParams, newLabel);
-
-        // filter state to url
         const filterUrlFragment = stringifyStateObjToUrl(newFilterState, newParams);
-        const link = urlJoin(this.urlPrefix, 'shop/list', filterUrlFragment) + `?${this.urlQuery}`;
-        this.props.history.push(link);
+        this.goShopList(filterUrlFragment);
     }
 
     // 根据 url 片段生成state和params
     _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {
-
         const filterState = parseUrlToState(filterUrlFragment);
         // filterState中 position包含 state和params信息
         const { position: positionStateAndParams, brand: brandParams } = filterState;
         const newFilterState = {
-            position: positionStateAndParams && positionStateAndParams.state 
+            position: positionStateAndParams && positionStateAndParams.state,
         };
         const newParams = { 
             position: positionStateAndParams && positionStateAndParams.params, 
-            apartmentIds: brandParams && brandParams.params,
-        }
-
-        this.setFilterStateAndStore(newFilterState, newParams)
+            apartmentIds: (brandParams && brandParams.params) || [],
+        };
+        const querys = stateToParams({
+            position: positionStateAndParams && positionStateAndParams.state,
+            brand: newParams.apartmentIds,
+        } || {}, newParams, this.state.filterLabel);
+        this.setFilterStateAndStore(newFilterState, newParams, querys.label);
     }
 
-    setFilterStateAndStore = (newFilterState={}, newParams={}, newLabel={}) => {
+    setFilterStateAndStore = (newFilterState = {}, newParams = {}, newLabel = {}, callback) => {
         const { filterState, filterLabel, filterParamsObj } = this.state;
         const filter = {
             ...this.state,
             filterState: {
                 ...filterState,
-                ...newFilterState
+                ...newFilterState,
             },
             filterParamsObj: {
                 ...filterParamsObj,
-                ...newParams
+                ...newParams,
             },
             filterLabel: {
                 ...filterLabel,
-                ...newLabel
+                ...newLabel,
             },
         };
 
         window.setStore('apartmentFilter', filter);
-        this.setState(filter);
+        this.setState(filter, () => {
+            callback && callback();
+        });
     }
-    
 
     wxShare() {
         const urlStore = window.getStore('url');
@@ -196,7 +195,6 @@ export default class ShopList extends PureComponent {
             filterLabel,
             filterParamsObj,
         } = this.state;
-
         const listClass = classnames(
             `${classPrefix}-padding-top`,
             {
