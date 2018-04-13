@@ -1,5 +1,26 @@
 import { positionFilterStateToParams } from 'application/App/HouseList/filterStateToParams';
 
+const getTextFromBrands = (apartmentIds) => {
+    const apartmentBrandLabels = (window.getStore('apartmentBrandLabels') || { list: [] }).list;
+    let text;
+    if (apartmentIds.length === 0) {
+        text = '品牌';
+    }
+    if (apartmentIds.length === 1) {
+        apartmentBrandLabels.forEach((brand) => {
+            if (brand.value.toString() === apartmentIds[0].toString()) {
+                text = brand.text;
+            }
+        });
+    }
+
+    if (apartmentIds.length > 1) {
+        text = '多选';
+    }
+
+    return text;
+};
+
 // newBrands: Array<number>
 const setBrandLabel = (newBrands, label) => {
     if (newBrands.length === 0) {
@@ -44,6 +65,7 @@ export const brandParamsToStateLabels = (apartmentIds) => {
     };
 };
 
+// doc this file, type param
 export const stateToParams = (newState, filterParamsObj, filterLabel) => {
     const apartmentBrandLabels = (window.getStore('apartmentBrandLabels') || { list: [] }).list;
     // init
@@ -56,20 +78,25 @@ export const stateToParams = (newState, filterParamsObj, filterLabel) => {
     if (brand) {
         let newBrands = [];
         let label = '品牌';
-        Object.keys(brand).forEach((index, i) => {
-            if (brand[index]) {
-                const apartment = apartmentBrandLabels[index];
-                newBrands = newBrands.concat(apartment && apartment.value);
-                label = setBrandLabel(newBrands, apartment && apartment.text);
-            }
-        });
-        newfilterParams = {
-            ...filterParamsObj,
-            apartmentIds: newBrands,
-        };
+        if (Array.isArray(brand)) {
+            label = getTextFromBrands(brand);
+            newBrands = brand;
+        } else {
+            Object.keys(brand).forEach((index, i) => {
+                if (brand[index]) {
+                    const apartment = apartmentBrandLabels[index];
+                    newBrands = newBrands.concat(apartment && apartment.value);
+                    label = setBrandLabel(newBrands, apartment && apartment.text);
+                }
+            });
+        }
         newfilterLabel = {
-            ...filterLabel,
+            ...newfilterLabel,
             brand: label,
+        };
+        newfilterParams = {
+            ...newfilterParams,
+            apartmentIds: newBrands,
         };
     }
 
@@ -80,7 +107,7 @@ export const stateToParams = (newState, filterParamsObj, filterLabel) => {
             position: filterParams,
         };
         newfilterLabel = {
-            ...filterLabel,
+            ...newfilterLabel,
             position: label,
         };
     }

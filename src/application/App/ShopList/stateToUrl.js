@@ -18,7 +18,7 @@ export function stringifyBrandWithIdStateToUrl(apartmentIds) {
 
 // TODO add flow
 export function parseUrlToState(filterUrlFragment) {
-         // 初始化的state
+    // 初始化的state
     const filterStateObj = {
         position: {
             state: {},
