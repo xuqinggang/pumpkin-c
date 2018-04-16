@@ -55,7 +55,7 @@ export default class ApartmentIndex extends PureComponent {
         const { history, match } = this.props;
         const {
             brandApartments: {
-                images,
+                banners: links,
                 apartment,
                 recommends,
                 boutiqueShops,
@@ -74,7 +74,7 @@ export default class ApartmentIndex extends PureComponent {
                         )}
                     />
                 }
-                <RoomSlider images={images} />
+                <RoomSlider links={links} />
                 <div className="content-padding">
                     <ApartmentIntro
                         {...apartment}
