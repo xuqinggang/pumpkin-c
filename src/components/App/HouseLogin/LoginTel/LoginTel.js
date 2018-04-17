@@ -54,7 +54,7 @@ export default class LoginTel extends PureComponent {
                 }
 
                 url && dynamicScript(url, () => {
-                    capInit(divDom, {
+                    window.capInit(divDom, {
                         type: 'popup',
                         pos: 'fixed',
                         themeColor: 'f38d39',
@@ -65,15 +65,15 @@ export default class LoginTel extends PureComponent {
                                     mobile: phone,
                                     ticket: ticket,
                                 });
+                                window.capDestroy();
                             } else {
                                 this.setState({
                                     isTelValid: true,
                                 });
+                                window.capDestroy();
                             }
                         },
                     });
-
-                    const iframe = document.getElementsByTagName('iframe');
                 });
             })
     }

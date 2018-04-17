@@ -26,6 +26,11 @@ global.window = {
     screen: {},
 
     scrollTo: () => {},
+
+    localStorage: {
+        setItem: () => {},
+        getItem: () => {},
+    },
 };
 
 global.document = window.document;
