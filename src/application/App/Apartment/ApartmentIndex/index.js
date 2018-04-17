@@ -21,6 +21,8 @@ import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 
+const isLikeNativeView = () => isRmHead() && isNanguaApp();
+
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
@@ -42,6 +44,12 @@ export default class ApartmentIndex extends PureComponent {
     goRentUnitList = () => {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
+
+        if (isLikeNativeView()) {
+            window.location.href =
+                `nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`;
+            return;
+        }
 
         window.setStore('filter', null);
         goRentUnitList(this.props.history)({
