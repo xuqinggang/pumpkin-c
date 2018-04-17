@@ -69,8 +69,9 @@ export default class LoginTel extends PureComponent {
         });
         genSlideCaptcha(telVal)
             .then((ticket) => {
+                console.log('asdf');
                 this.getVerifyCode({
-                    mobile: phone,
+                    mobile: telVal,
                     ticket: ticket,
                 });
             })
