@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
-import { ajaxLogin } from 'application/App/HouseLogin/ajaxLogin';
-import { ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
+import { ajaxLogin, ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
+import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
 import { getPageFrom, urlJoin } from 'lib/util';
 
 const classPrefix = 'm-houselogin';
@@ -63,10 +63,13 @@ export default class LoginVerifyCode extends PureComponent {
             verifyCodeVal: '',
         });
 
-        ajaxVerifyCode({ mobile: this.telVal })
-            .catch((err) => {
-                // 验证失败
-                PopToolTip({text: err.code ? err.msg : err.toString()});
+        genSlideCaptcha(this.telVal)
+            .then((ticket) => {
+                ajaxVerifyCode({ mobile: this.telVal, ticket })
+                    .catch(err => {
+                        // 验证失败
+                        PopToolTip({text: err.code ? err.msg : err.toString()});
+                    })
             })
     }
 
