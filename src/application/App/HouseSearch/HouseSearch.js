@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
 import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
+import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecord';
 
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
@@ -62,6 +63,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                     <span className="head-btn-cancel">取消</span>
                 </div>
                 <HitSearch history={history} />
+                <HistoryRecord />
                 <SearchList searchData={searchData} />
             </div>
         );

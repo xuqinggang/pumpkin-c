@@ -104,7 +104,21 @@ export function ajaxTopSearches(params) {
     return Service.get('/api/v1/rentUnits/topSearches', params)
         .then((data) => {
             if (data.code === 200) {
-                return data.data;
+                const oldTopSearches = data.data.topSearches;
+                const newTopSearches = oldTopSearches.map((item) => {
+                    const {
+                        type,
+                    } = item;
+
+                    return {
+                        ...item,
+                        type: `${type.toLowerCase()}s`,
+                    };
+                });
+
+                return {
+                    topSearches: newTopSearches,
+                };
             }
 
             throw new Error(data);

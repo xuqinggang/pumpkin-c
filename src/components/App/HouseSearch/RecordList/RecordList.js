@@ -24,15 +24,13 @@ export default class RecordList extends PureComponent<PropType> {
         return (
             <ul className={`${classPrefix}`}>
                 {
-                    list && list.map((item, index) => {
-                        return (
-                            <RecordItem
-                                className={`${classPrefix}-item`}
-                                item={item}
-                                key={index}
-                            />
-                        );
-                    })
+                    list && list.map((item, index) => (
+                        <RecordItem
+                            className={`${classPrefix}-item`}
+                            item={item}
+                            key={index}
+                        />
+                    ))
                 }
             </ul>
         );
@@ -53,17 +51,31 @@ class RecordItem extends PureComponent<ItemPropType> {
         const {
             item,
             onPositionSearchItemTap,
+            onOtherSearchItemTap,
         } = this.props;
 
         // let {
         //     text,
-        //     type,
+        //     type, // `apartments,districts,subways,stations,circles,blocks,keywords(关键词搜索)`
         //     superField,
         //     superFieldValue,
         //     field,
         //     fieldValue,
         // } = item;
-        onPositionSearchItemTap(item);
+        let {
+            type,
+        } = item;
+
+        switch (type) {
+            case 'districts':
+            case 'subways':
+            case 'stations':
+            case 'circles':
+                onPositionSearchItemTap(item);
+                break;
+            default:
+                onOtherSearchItemTap(item);
+        }
     }
 
     render() {

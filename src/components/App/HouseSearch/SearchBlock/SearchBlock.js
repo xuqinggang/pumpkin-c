@@ -62,9 +62,9 @@ class SearchItem extends PureComponent {
             id,
         } = item;
         const paramsObj = {
-            id,
+            fieldValue: id,
             text: name, 
-            type,
+           type,
         };
 
         this.props.onOtherSearchItemTap(paramsObj);
@@ -82,6 +82,7 @@ class SearchItem extends PureComponent {
         } = item;
 
         const paramsObj = {
+            type,
             text: name,
         };
 

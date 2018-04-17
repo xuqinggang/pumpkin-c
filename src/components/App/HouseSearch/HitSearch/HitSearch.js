@@ -43,9 +43,6 @@ export default class HitSearch extends PureComponent<{}, StateType> {
             hitSearchDatatArr,
         } = this.state;
 
-        const {
-        } = this.props;
-
         return (
             <div className={classPrefix}>
                 <h2 className={`f-display-inlineblock ${classPrefix}-title`}>热门搜索</h2>
