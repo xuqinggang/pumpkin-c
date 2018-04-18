@@ -21,14 +21,16 @@ function ApartmentDetail({
             />
             <div className="item">
                 <h2 className="title">公寓认证</h2>
-                {
-                    authentications.map((auth, index) => (
-                        <div className="auth" key={index}>
-                            <img className="image" src={auth.image} alt="" />
-                            <span className="name">{auth.name}</span>
-                        </div>
-                    ))
-                }
+                <div className="f-display-flex">
+                    {
+                        authentications.map((auth, index) => (
+                            <div className="auth" key={index}>
+                                <img className="image" src={auth.image} alt="" />
+                                <span className="name">{auth.name}</span>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
             <div className="item">
                 <h2 className="title">公寓介绍</h2>
