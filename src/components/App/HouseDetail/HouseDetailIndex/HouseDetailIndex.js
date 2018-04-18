@@ -217,6 +217,7 @@ export default class HouseDetailIndex extends PureComponent {
                 <ApartmentIntro
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
+                    goApartment={this.handleTouchApartmet}
                 />
                 {
                     rentalType === 'SHARED' ? (
