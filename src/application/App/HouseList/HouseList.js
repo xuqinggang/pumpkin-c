@@ -9,13 +9,18 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
 import {
-    FILTER_SEPARATOR,
     parseUrl,
     stringifyPostionState,
     stringifyMoreState,
     stringifyRentState,
     stringifyHouseTypeState,
 } from './transState';
+import { transUrlFrgObjToStr } from './utils';
+import {
+    clearOtherFilter,
+    clearPositionFilter,
+    clearSearchStore,
+} from 'application/App/HouseSearch/transId';
 import { goHouseList } from 'application/App/routes/routes';
 import { parseUrlQueryFields } from 'lib/util';
 import { isApp } from 'lib/const';
@@ -36,25 +41,8 @@ export default class HouseList extends PureComponent {
         } = parseUrlQueryFields();
         this.queryFieldsObj = queryFieldsObj;
 
-        const filterStore = window.getStore('filter');
-        const {
-            label,
-            state,
-            paramsObj,
-            urlFrg,
-        } = filterStore;
-
-        // 各个筛选器url片段
-        this.urlFrgObj = urlFrg;
-
-        // 筛选的请求参数
-        this.filterParamsObj = {
-            apartmentId: this.queryFieldsObj.apartment || null,
-            ...paramsObj,
-        };
-
-        this.filterState = state;
-        this.filterLabel = label;
+        // 从filter store中取出初始化到this相应变量上
+        this._getStoreFilterInfo();
 
         window.setStore('url', {
             filterQueryFieldsObj: queryFieldsObj,
@@ -66,7 +54,6 @@ export default class HouseList extends PureComponent {
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
     _dynamicSetPtStateAndLabel = (stateAndLabelObj) => {
-        console.log('_dynamicSetPtStateAndLabel', stateAndLabelObj);
         const {
             state,
             label,
@@ -111,15 +98,8 @@ export default class HouseList extends PureComponent {
 
         // setStore filter
         this._setStoreFilterInfo();
-
-        // 拼接生成url
-        const urlArr = [];
-
-        Object.keys(this.urlFrgObj).forEach((typeTmp) => {
-            const urlFrg = this.urlFrgObj[typeTmp];
-            urlFrg && urlArr.push(urlFrg);
-        });
-        const urlFrgRt = urlArr.join(FILTER_SEPARATOR);
+        const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
+console.log('this.urlFrgObj', this.urlFrgObj, urlFrgRt);
 
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
@@ -142,12 +122,50 @@ export default class HouseList extends PureComponent {
         });
     }
 
+    _getStoreFilterInfo() {
+        const filterStore = window.getStore('filter');
+        const {
+            label,
+            state,
+            paramsObj,
+            urlFrg,
+        } = filterStore;
+        this.filterLabel = label;
+        this.filterState = state;
+
+        // 各个筛选器url片段
+        this.urlFrgObj = urlFrg;
+
+        // 筛选的请求参数
+        this.filterParamsObj = {
+            apartmentId: this.queryFieldsObj.apartment || null,
+            ...paramsObj,
+        };
+    }
+
     _setStoreFilterUrlFrg(filterUrlFragment) {
         window.setStore('url', {
             filterUrlFragment,
         });
     }
 
+
+    onClearSearch = () => {
+        clearPositionFilter();
+        clearOtherFilter();
+        clearSearchStore();
+        this._getStoreFilterInfo();
+
+        const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
+
+        // setStore url.filterUrlFragment
+        this._setStoreFilterUrlFrg(urlFrgRt);
+
+        goHouseList(this.props.history)(urlFrgRt);
+        
+        this.forceUpdate(); 
+    }
+    
     wxShare() {
         // 分享
         execWxShare({
@@ -193,10 +211,20 @@ export default class HouseList extends PureComponent {
             history,
         } = this.props;
 
+        console.log('this.filterParamsObj', this.filterParamsObj);
+
+        const searchStore = window.getStore('search');
+        const searchRt = searchStore && searchStore.searchRt;
+
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
-                    <IndexHead match={match} history={history} />
+                    <IndexHead
+                        match={match}
+                        history={history}
+                        searchRt={searchRt}
+                        onClearSearch={this.onClearSearch}
+                    />
                 </div>
                 <IndexBanner />
                 <IndexRecommend />

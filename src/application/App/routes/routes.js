@@ -78,3 +78,7 @@ export const goEditTelVerify = withHistory(createEditTelVerifyPath);
 // city
 const createCityPath = () => '/city/';
 export const goCity = withHistory(createCityPath);
+
+// search
+const createSearchPath = () => '/search/';
+export const goSearch = withHistory(createSearchPath);

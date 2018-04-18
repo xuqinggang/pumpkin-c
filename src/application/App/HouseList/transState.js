@@ -365,7 +365,8 @@ export function parsePositionUrlToStateAndLabel(ptUrl) {
     const ptStateObj = { ...InitStateFilterState.position };
     const seoData = [];
 
-    const positionFilterDataObj = window.getStore('positionFilterDataObj').data;
+    const positionStore = window.getStore('positionFilterDataObj')
+    const positionFilterDataObj = positionStore && positionStore.data;
     if (!ptUrl || !positionFilterDataObj) {
         return {
             label,

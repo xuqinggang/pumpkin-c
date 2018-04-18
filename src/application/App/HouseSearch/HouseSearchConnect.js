@@ -1,12 +1,14 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router';
 
 import {
     parsePositionSearchToFilterInfo,
     jumpHouseList,
     setFilterStore,
+    clearOtherFilter,
+    setSearchStore,
 } from 'application/App/HouseSearch/transId';
 import { historyRecordStorage } from 'application/App/storage';
 
@@ -18,14 +20,13 @@ const TypeMapParamId = {
 };
 
 function setStorage(data) {
-    console.log('data', data)
     const {
         text,
     } = data;
 
     const reg = /<\/?em>/g;
     const newText = text.replace(reg, '');
-    historyRecordStorage.update({...data, text: newText});
+    historyRecordStorage.update({ ...data, text: newText });
 }
 
 export default function HouseSearchConnectFunWrap() {
@@ -39,16 +40,28 @@ export default function HouseSearchConnectFunWrap() {
                     fieldValue,
                 } = data;
 
+                // 先清理
+                clearOtherFilter();
+
                 setFilterStore({
                     paramsObj: {
                         [TypeMapParamId[type]]: fieldValue,
                     },
                 });
 
+                // history record storage
                 setStorage(data);
+
+                // search store
+                setSearchStore(text);
+
+                // 清空 houseList store
+                window.setStore('houseList', null);
+
                 jumpHouseList(this.props.history);
             }
 
+            // districts circles subways stations
             onPositionSearchItemTap = (data) => {
                 const {
                     type,
@@ -60,17 +73,26 @@ export default function HouseSearchConnectFunWrap() {
                 } = data;
 
 
-                // storage
+                // history record storage
                 setStorage(data);
 
                 // filterInfo = {urlFrg, label, state, paramsObj}
                 const filterInfo = parsePositionSearchToFilterInfo({superField, superFieldValue, field, fieldValue});
+
+                // 先清理
+                clearOtherFilter();
+
+                // search store
+                setSearchStore(text)
 
                 setFilterStore({
                     type: 'position',
                     ...filterInfo,
                 });
 
+                // 清空 houseList store
+                window.setStore('houseList', null);
+                
                 jumpHouseList(this.props.history);
             }
 

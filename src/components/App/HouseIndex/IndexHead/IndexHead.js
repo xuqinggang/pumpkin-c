@@ -1,17 +1,22 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
+import SearchPresent from 'components/App/HouseSearch/SearchPresent/SearchPresent';
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
 import { AbbrevMapCity } from 'config/config';
 import { isApp } from 'lib/const';
-import { goMe, goCity } from 'application/App/routes/routes';
+import { goMe, goCity, goSearch } from 'application/App/routes/routes';
 
 import './styles.less';
 
 const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
+    handleNavigateSearch = () => {
+        goSearch(this.props.history)();
+    }
+
     handleNavigateMe = () => {
         goMe(this.props.history)();
     }
@@ -27,6 +32,8 @@ export default class IndexHead extends PureComponent {
     render() {
         const {
             className,
+            searchRt,
+            onClearSearch,
         } = this.props;
 
         const urlStore = window.getStore('url');
@@ -46,12 +53,18 @@ export default class IndexHead extends PureComponent {
                     <span className={`f-vertical-middle icon-pull-down location-downicon`} />
                 </div>
                 {
-                    isApp() ? null
-                        : <img
-                            className={`f-display-flex ${classPrefix}-logo`}
-                            src={logoImg}
-                            onTouchTap={this.handleLogTap}
-                        />
+                    <SearchPresent
+                        className={`grid-col ${classPrefix}-search`}
+                        searchRt={searchRt}
+                        onNavigateTap={this.handleNavigateSearch}
+                        onClearSearch={onClearSearch}
+                    />
+                        // isApp() ? null
+                        //     : <img
+                        //         className={`f-display-flex ${classPrefix}-logo`}
+                        //         src={logoImg}
+                        //         onTouchTap={this.handleLogTap}
+                        //     />
                 }
                 <a 
                     href="javascript:void(0)"

@@ -27,12 +27,9 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         };
     }
 
-    componentWillMount() {
-        // 请求position筛选数据
-        ajaxInitPositionData()
-            .then((positionFilterDataObj) => {
-                window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
-            });
+    handleStopPropagation = (e) => {
+        e.preventDefault();
+        console.log('eee', e);
     }
 
     onInputChange = (keyword: string) => {
@@ -47,6 +44,14 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             });
     }
 
+    componentWillMount() {
+        // 请求position筛选数据
+        ajaxInitPositionData()
+            .then((positionFilterDataObj) => {
+                window.setStore('positionFilterDataObj', { data: positionFilterDataObj });
+            });
+    }
+
     render() {
         const {
             searchData,
@@ -57,7 +62,10 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         } = this.props;
 
         return (
-            <div className={classPrefix}>
+            <div
+                className={classPrefix}
+                onTouchTap={this.handleStopPropagation}
+            >
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
                     <InputSearch onInputChange={this.onInputChange} />
                     <span className="head-btn-cancel">取消</span>

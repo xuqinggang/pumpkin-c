@@ -41,6 +41,54 @@ export function parsePositionSearchToFilterInfo({
     };
 }
 
+// 清理apartment block keyword filterStore信息
+export function clearOtherFilter() {
+    const filterStore = window.getStore('filter');
+    const {
+        paramsObj: oldParamsObj,
+    } = filterStore;
+
+    window.setStore('filter', {
+        paramsObj: Object.assign({}, oldParamsObj, {
+            keyword: null,
+            apartmentId: null,
+            blockId: null,
+        }),
+    });
+}
+
+export function clearPositionFilter() {
+    const filterStore = window.getStore('filter');
+    const {
+        state: oldState,
+        label: oldLabel,
+        paramsObj: oldParamsObj,
+        urlFrg: oldUrlFrg,
+    } = filterStore;
+
+    window.setStore('filter', {
+        state: Object.assign({}, oldState, {
+            position: {
+                firstItemSelectedIndex: 0,
+                secondItemSelectedIndex: -1,
+                thirdItemSelectedIndex: -1,
+            },
+        }),
+        label: Object.assign({}, oldLabel, {
+            position: '租金',
+        }),
+        urlFrg: Object.assign({}, oldUrlFrg, {
+            position: '',
+        }),
+        paramsObj: Object.assign({}, oldParamsObj, {
+            districtId: null,
+            circleId: null,
+            subwayId: null,
+            stationId: null,
+        }),
+    });
+}
+
 export function setFilterStore({type, urlFrg, state, label, paramsObj}) {
     const filterStore = window.getStore('filter');
     const {
@@ -55,6 +103,21 @@ export function setFilterStore({type, urlFrg, state, label, paramsObj}) {
         label: label ? Object.assign({}, oldLabel, { [type]: label }) : oldLabel,
         paramsObj: paramsObj ? Object.assign({}, oldParamsObj, paramsObj) : oldParamsObj,
         urlFrg: urlFrg ? Object.assign({}, oldUrlFrg, { [type]: urlFrg }) : oldUrlFrg,
+    });
+}
+
+export function setSearchStore(searchRt) {
+    const reg = /<\/?em>/g;
+    const newSearchRt = searchRt.replace(reg, '');
+    
+    window.setStore('search', {
+        searchRt: newSearchRt,
+    });
+}
+
+export function clearSearchStore() {
+    window.setStore('search', {
+        searchRt: '',
     });
 }
 
