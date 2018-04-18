@@ -4,7 +4,7 @@ import React, { PureComponent, Component } from 'react';
 
 import PositionFilter from 'components/App/HouseList/PositionFilter/PositionFilter';
 import { ajaxInitPositionData, stuffAroundDataToPosition } from 'application/App/HouseList/ajaxInitPositionData';
-import { parsePositionUrlToStateAndLabel } from 'application/App/HouseList/transState';
+import { parsePositionUrlToStateAndLabel } from 'application/App/HouseList/parseUrl';
 
 type PropType = {
     onFilterConfirm: Function,

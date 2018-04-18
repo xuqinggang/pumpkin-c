@@ -1,4 +1,4 @@
-import { FILTER_SEPARATOR, } from './transState';
+import { FILTER_SEPARATOR, } from './const';
 
 export function transUrlFrgObjToStr(urlFrgObj) {
     // 拼接生成url
