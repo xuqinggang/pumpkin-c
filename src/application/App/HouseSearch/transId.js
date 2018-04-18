@@ -1,8 +1,8 @@
 import {
     FILTER_SEPARATOR,
     TypeAndPrefixMap,
-    parsePositionUrlToStateAndLabel,
-} from 'application/App/HouseList/transState';
+} from 'application/App/HouseList/const';
+import { parsePositionUrlToStateAndLabel } from 'application/App/HouseList/parseUrl';
 import { goHouseList } from 'application/App/routes/routes';
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 import { AbbrevMapCity } from 'config/config';
-import { parseUrl } from 'application/App/HouseList/transState';
+import { parseUrl } from 'application/App/HouseList/parseUrl';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 // import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxInitHouseIndexBanner, ajaxInitHouseIndexRecommend } from 'application/App/HouseIndex/ajaxInitHouseIndex';
