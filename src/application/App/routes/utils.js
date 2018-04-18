@@ -1,18 +1,14 @@
 import { urlJoin } from 'lib/util';
 
 const defaultBeforeRoutes = [];
-const defaultAfterRoutes = [
-    function pv() {
-        window.send_stat_pv && window.send_stat_pv(); // pv
-    },
-];
+const defaultAfterRoutes = [];
+
 const routeChange = (history, to) => {
     history.push(to);
 };
 
 const withHistory = (createPath, enhance) => history => (...arg) => {
     if (!history.push) throw new Error('need react router history');
-
     const {
         beforeRouteChange = [],
         afterRouteChange = [],
@@ -20,8 +16,7 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
 
     // define when call withHistory
     const { urlPrefix } = window.getStore('url');
-    const locationSearch = window.location.search;
-    const url = `${urlPrefix}${createPath(...arg)}${locationSearch}`;
+    const url = `${urlPrefix}${createPath(...arg)}`;
 
     const beforeTasks = Array.isArray(beforeRouteChange)
         ? beforeRouteChange
@@ -37,20 +32,14 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
         ...defaultAfterRoutes,
     ];
 
-    let goOnFlag = true;
-    const next = (goOn) => {
-        if (goOn === false) {
-            goOnFlag = goOn;
-        } else {
-            goOnFlag = true;
+    // tasks按中间件方式执行
+    let index = 0;
+    function next() {
+        if (index < tasks.length) {
+            tasks[index++](history, url, next);
         }
-    };
-    tasks.reduce((acc, cur) => {
-        if (acc) {
-            cur(history, url, next);
-        }
-        return goOnFlag;
-    }, goOnFlag);
+    }
+    next();
 };
 
 export default withHistory;

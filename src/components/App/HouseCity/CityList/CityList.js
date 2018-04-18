@@ -45,12 +45,6 @@ class CityItem extends PureComponent {
             cityName,
         } = this.props;
 
-        const urlStore = window.getStore('url');
-        const {
-            filterUrlFragment,
-            urlQuery,
-        } = urlStore;
-
         window.location.href = `/${cityName}/nangua/list/`;
     }
 

@@ -1,0 +1,39 @@
+@import (reference) '~styles/lib.less';
+
+.m-inputsearch {
+    position: relative;
+
+    &-btn-search {
+        position: absolute;
+        top: 50%;
+        left: 26px;
+        transform: translate(0, -50%);
+        color: #b2b2b2;
+        z-index: 1;
+        .font-size(28);
+    }
+
+    &-input-wrapper {
+        width: 602px;
+
+        .m-inputclear-input {
+            box-sizing: border-box;
+            padding: 10px 22px 10px 62px;
+            border-radius: 100px;
+            background: #f8f8f8;
+            .font-size(28);
+        }
+
+        .m-inputclear-btn-clear {
+            right: 22px;
+            padding: 0px;
+            color: #d8d8d8;
+            .font-size(30);
+
+            &:before {
+                content: "\E92D";
+            }
+        }
+    }
+
+}

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import InputClear from 'Shared/InputClear/InputClear';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
+import { goEditTelVerify } from 'application/App/routes/routes';
 import { ajaxUpdatemobileCaptchas } from 'application/App/HouseMe/ajaxHouseMe';
 import { regTel } from 'lib/regExp';
 import { urlJoin } from 'lib/util';
@@ -37,10 +38,7 @@ export default class EditTelRouter extends PureComponent {
             .then((bool) => {
                 // 验证成功
                 if (bool) {
-                    const {
-                        url,
-                    } = this.props.match;
-                    this.props.history.push(urlJoin(url, telVal));
+                    goEditTelVerify(this.props.history)(telVal);
                 }
             })
             .catch((err) => {

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
-import { shallowEqual } from 'lib/util';
 import MoreFilterTagData from './MoreFilterTagData';
 
 import './styles.less';
@@ -13,14 +12,14 @@ class MoreFilter extends PureComponent {
     constructor(props) {
         super(props);
         this.initialState = {
-            direction: {},
-            area: {},
-            feature: {},
-            floor: {},
+            directs: {},
+            areaInfo: {},
+            tags: {},
+            floorInfo: {},
         };
 
         // state, ex: { direction: { 0: false, 1: true }, area: { 3: true } }
-        this.state = this.initialState;
+        this.state = props.filterState || this.initialState;
     }
 
     onTagsChange = (type, tagsStateObj) => {
@@ -33,70 +32,65 @@ class MoreFilter extends PureComponent {
     _clearState = () => {
         this.setState(this.initialState);
     }
+
     // 确认state
     _confirmState = () => {
         this.props.onFilterConfirm(this.state);
-    }
-    
-    componentWillMount() {
-        if (this.props.filterState) {
-            this.setState(this.props.filterState);
-        }
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState(Object.assign({}, this.initialState, nextProps.filterState));
     }
-    
+
     render() {
         const {
-            direction,
-            area,
-            feature,
-            floor,
+            directs,
+            tags,
+            areaInfo,
+            floorInfo,
         } = this.state;
 
         return (
             <div className={`${moreClass}`}>
                 <TagsGroup
-                    type="direction"
+                    type="directs"
                     classPrefix={moreClass}
                     className={`${moreClass}-direction`}
                     tagItemClass="direction-item"
-                    tagsArr={MoreFilterTagData.directionTagsArr}
+                    tagsArr={MoreFilterTagData.directs}
                     label="朝向"
                     onTagsChange={this.onTagsChange}
-                    activeIndexObj={direction || {}}
+                    activeIndexObj={directs || {}}
                 />
                 <TagsGroup
-                    type="feature"
+                    type="tags"
                     classPrefix={moreClass}
                     className={`${moreClass}-feature`}
                     tagItemClass="feature-item"
-                    tagsArr={MoreFilterTagData.featureTagsArr}
+                    tagsArr={MoreFilterTagData.tags}
                     label="标签"
                     onTagsChange={this.onTagsChange}
-                    activeIndexObj={feature || {}}
+                    activeIndexObj={tags || {}}
                 />
                 <TagsGroup
-                    type="area"
+                    type="areaInfo"
                     classPrefix={moreClass}
                     className={`${moreClass}-area`}
                     tagItemClass="area-item"
-                    tagsArr={MoreFilterTagData.areaTagsArr}
+                    tagsArr={MoreFilterTagData.areaInfo}
                     label="面积"
                     onTagsChange={this.onTagsChange}
-                    activeIndexObj={area || {}}
+                    activeIndexObj={areaInfo || {}}
                 />
                 <TagsGroup
-                    type="floor"
+                    type="floorInfo"
                     classPrefix={moreClass}
                     className={`${moreClass}-floor`}
                     tagItemClass="floor-item"
-                    tagsArr={MoreFilterTagData.floorTagsArr}
+                    tagsArr={MoreFilterTagData.floorInfo}
                     label="楼层"
                     onTagsChange={this.onTagsChange}
-                    activeIndexObj={floor || {}}
+                    activeIndexObj={floorInfo || {}}
                 />
             </div>
         );

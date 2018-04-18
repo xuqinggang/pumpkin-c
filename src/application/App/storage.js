@@ -10,11 +10,9 @@ const fieldEqual = (a, b, field) => {
     if (!a || !b) {
         return false;
     }
-
     if (!a[field] || !a[field]) {
         return false;
     }
-
     return a[field] === b[field];
 }
 
@@ -55,7 +53,6 @@ const generateStoreApi = (
         // validate essential data
         // 非严格限制
         PropTypes.checkPropTypes({ data: validate }, { data }, 'prop', `set storage ${key}`);
-
         const newData = {
             data,
             expire,
@@ -69,12 +66,10 @@ const generateStoreApi = (
             return null;
         }
         const { data, time, expire } = JSON.parse(res);
-
         // 存储永久不过期
         if (expire === null) {
             return data;
         }
-
         const now = new Date().getTime();
         if (now - time > expire) {
             return null;
@@ -85,7 +80,6 @@ const generateStoreApi = (
         engine.removeItem(key);
     },
 });
-
 const withArrayApi = (baseStorage, opts) => {
     const {
         defaultExpire = null,
@@ -116,23 +110,21 @@ const withArrayApi = (baseStorage, opts) => {
                     oldData.splice(index, 1);
                 }
                 // add a new one
-                newData = [...oldData, data];
+                newData = [data, ...oldData];
             } else {
                 newData = [data];
             }
+
             this.set(newData, expire);
         },
         pop() {
             const oldData = this.get() || [];
-
             if (!Array.isArray(oldData) || oldData.length === 0) {
                 this.remove();
                 return;
             }
-
             const returnItem = oldData.pop();
             const newData = oldData;
-
             this.set(newData);
             return returnItem;
         },
@@ -148,6 +140,8 @@ const Keys = {
     REMIND_COMMENT_RENT_QUEUE: 'ng_REMIND_COMMENT_RENT_QUEUE',
     // 上次登录的 用户id (退出登录时设置)
     LAST_LOGIN_USER_ID: 'ng_LAST_LOGIN_USER_ID',
+    // 搜索 历史记录
+    HISTORY_RECORD: 'ng_history_record',
 };
 
 export const commentListStorage = generateArrayStoreApi({
@@ -181,6 +175,20 @@ export const lastUserIdStorage = generateStoreApi({
         PropTypes.string,
         PropTypes.number,
     ]),
+});
+
+export const historyRecordStorage = generateArrayStoreApi({
+    engine: window.localStorage,
+    key: Keys.HISTORY_RECORD,
+    validate: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        field: PropTypes.string,
+        fieldValue: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number.isRequired]),
+        superField: PropTypes.string,
+        superFieldValue: PropTypes.string,
+    })),
+    uniqueField: 'text',
 });
 
 export default generateStoreApi;

@@ -1,5 +1,3 @@
-import { isHasCookie } from 'lib/util';
-import { goLogin } from './routes';
 import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
 
 // enhance 其实不是必要的 可以用以下方式替代
@@ -20,16 +18,13 @@ import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
  */
 
 export default {
-    loginRequired: (history, to, next = () => null) => {
-        // 跳转前判断是否登录，利用cookie中是否含有sid判断
-        if (isHasCookie('sid')) {
-            next();
-        } else {
-            goLogin(history)();
-            next(false);
-        }
-    },
     routeChangeToIOS: (history, to, next, title) => {
         postRouteChangeToIOSV2({ to, title });
+        next();
+    },
+    pv: (history, url, next) => {
+        // 焦点pv请求
+        window.send_stat_pv && window.send_stat_pv();
+        next();
     },
 };

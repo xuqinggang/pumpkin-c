@@ -1,7 +1,7 @@
 import { 
     parsePositionUrlToState,
     stringifyPositionStateToUrl,
- } from 'application/App/HouseList/filterStateToUrl';
+ } from 'application/App/HouseList/HouseList'; // TODO
 
 export function parseBrandUrlToParams(filterUrlItem) {
     // b18$24$29 start with b, split by $

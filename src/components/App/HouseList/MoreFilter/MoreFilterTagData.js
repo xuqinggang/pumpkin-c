@@ -62,19 +62,19 @@ const featureTagsArr = [
 const areaTagsArr = [
     {
         text: '20m²以下',
-        value: { 'floor': null, 'ceil': 20 },
+        value: { floor: null, ceil: 20 },
     },
     {
         text: '20-40m²',
-        value: { 'floor': 20, 'ceil': 40 },
+        value: { floor: 20, ceil: 40 },
     },
     {
         text: '40-60m²',
-        value: { 'floor': 40, 'ceil': 60 },
+        value: { floor: 40, ceil: 60 },
     },
     {
         text: '60m²以上',
-        value: { 'floor': 60, 'ceil': null },
+        value: { floor: 60, ceil: null },
     },
 ];
 
@@ -82,21 +82,21 @@ const areaTagsArr = [
 const floorTagsArr = [
     {
         text: '6层以下',
-        value: { 'ceil': 6 },
+        value: { ceil: 6 },
     },
     {
         text: '6-12层',
-        value: { 'floor': 6, 'ceil': 12 },
+        value: { floor: 6, ceil: 12 },
     },
     {
         text: '12层以上',
-        value: { 'floor': 12 },
-    }
+        value: { floor: 12 },
+    },
 ];
 
 export default {
-    directionTagsArr,
-    featureTagsArr,
-    areaTagsArr,
-    floorTagsArr,
+    directs: directionTagsArr,
+    tags: featureTagsArr,
+    areaInfo: areaTagsArr,
+    floorInfo: floorTagsArr,
 };

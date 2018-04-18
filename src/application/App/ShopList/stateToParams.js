@@ -1,4 +1,5 @@
-import { positionFilterStateToParams } from 'application/App/HouseList/filterStateToParams';
+// import { positionFilterStateToParams } from 'application/App/HouseList/filterStateToParams';
+import { positionFilterStateToParams } from 'application/App/HouseList/HouseList'; // TODO
 
 const getTextFromBrands = (apartmentIds) => {
     const apartmentBrandLabels = (window.getStore('apartmentBrandLabels') || { list: [] }).list;
