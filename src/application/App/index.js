@@ -7,7 +7,6 @@ import 'styles/index.less';
 import 'pumpkin-font-c';
 
 import './store';
-import './initStore';
 import routes from './routes';
 
 const history = createHistory();
