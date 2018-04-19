@@ -6,6 +6,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxVerifyCode, ajaxSlideCaptcha } from 'application/App/HouseLogin/ajaxLogin';
 import { goLoginTel } from 'application/App/routes/routes';
+import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
 import { regTel } from 'lib/regExp';
 import { urlJoin, dynamicScript } from 'lib/util';
 
@@ -36,49 +37,6 @@ export default class LoginTel extends PureComponent {
         }
     }
 
-    genSlideCaptcha(phone) {
-        const divDom = document.createElement('div');
-        document.body.appendChild(divDom);
-
-        ajaxSlideCaptcha(phone)
-            .then(data => {
-                const {
-                    url,
-                } = data;
-                // 如果url为空的话，则不需要滑动验证
-                if (!url) {
-                    this.getVerifyCode({
-                        mobile: phone,
-                        ticket: '',
-                    });
-                    return;
-                }
-
-                url && dynamicScript(url, () => {
-                    window.capInit(divDom, {
-                        type: 'popup',
-                        pos: 'fixed',
-                        themeColor: 'f38d39',
-                        callback: (retJson) => {
-                            if (retJson && retJson.ret === 0) {
-                                const ticket = retJson.ticket;
-                                this.getVerifyCode({
-                                    mobile: phone,
-                                    ticket: ticket,
-                                });
-                                window.capDestroy();
-                            } else {
-                                this.setState({
-                                    isTelValid: true,
-                                });
-                                window.capDestroy();
-                            }
-                        },
-                    });
-                });
-            })
-    }
-
     getVerifyCode({ mobile, ticket }) {
         ajaxVerifyCode({ mobile, ticket })
             .then((bool) => {
@@ -103,7 +61,19 @@ export default class LoginTel extends PureComponent {
         this.setState({
             isTelValid: false,
         });
-        this.genSlideCaptcha(telVal);
+        genSlideCaptcha(telVal)
+            .then((ticket) => {
+                console.log('asdf');
+                this.getVerifyCode({
+                    mobile: telVal,
+                    ticket: ticket,
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    isTelValid: true,
+                });
+            })
     }
     
     render() {
