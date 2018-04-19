@@ -28,11 +28,6 @@ export default class CitiLocation extends PureComponent {
 
     handleNavigateTap = () => {
         const cityName = CityeTextMapAbbrev[this.state.cityText];
-        const urlStore = window.getStore('url');
-        const {
-            filterUrlFragment,
-            urlQuery,
-        } = urlStore;
 
         window.location.href = `/${cityName}/nangua/list/`;
     }

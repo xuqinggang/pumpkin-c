@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Router, Switch, Route } from 'react-router';
+import { Switch, Route } from 'react-router';
 
 import HouseDetail from 'application/App/HouseDetail/HouseDetail';
 import HouseList from 'application/App/HouseList/HouseList';
@@ -11,6 +11,7 @@ import ShopList from 'application/App/ShopList/ShopList';
 import ShopDetail from 'application/App/ShopDetail/ShopDetail';
 import Comment from 'application/App/Comment';
 import { ApartmentIndex } from 'application/App/Apartment';
+import HouseSearch from 'application/App/HouseSearch/HouseSearch';
 
 import Service from 'lib/Service';
 import { AbbrevMapCity } from 'config/config';
@@ -52,14 +53,15 @@ class WrapRouter extends PureComponent {
                 <Route exact path={`${this.urlPrefix}/city`} component={HouseCity} />
                 <Route path={`${this.urlPrefix}/detail`} component={HouseDetail} />
                 <Route exact path={`${this.urlPrefix}/list/:filterUrlFragment?`} component={HouseList} />
+                <Route exact path={`${this.urlPrefix}/search`} component={HouseSearch} />
                 <Route exact path={`${this.urlPrefix}/:filterUrlFragment?`} component={HouseList} />
             </Switch>
         );
     }
 }
 
-export default function() {
+export default function Config() {
     return (
-        <Route path="/:cityName/nangua" component={WrapRouter}/>
+        <Route path="/:cityName/nangua" component={WrapRouter} />
     );
 }

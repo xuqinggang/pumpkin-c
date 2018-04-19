@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
+import { goHouseList } from 'application/App/routes/routes';
 import { clearCookie, urlJoin } from 'lib/util';
 import { lastUserIdStorage } from 'application/App/storage';
 
@@ -13,14 +14,7 @@ export default class MeEntry extends PureComponent {
     // 事件处理程序-退出当前账号点击
     handleLogoutTap = () => {
         clearCookie('sid');
-
-        // 退出登录时，需要将 uid 存到 localStorage
-        const meInfo = window.getStore('meInfo');
-        if (meInfo) {
-            lastUserIdStorage.set(meInfo.uid);
-        }
-
-        this.props.history.replace(urlJoin(this.rootUrlPrefix));
+        goHouseList(this.props.history)();
     }
 
     render() {

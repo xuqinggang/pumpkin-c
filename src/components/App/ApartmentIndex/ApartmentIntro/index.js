@@ -10,7 +10,7 @@ export default class ApartmentIntro extends PureComponent {
         const { name, image, intro, minPrice, score, goCommentList, goDetail } = this.props;
         return (
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
-                <img src={image} alt={name} />
+                <img src={image} alt={name} onTouchTap={goDetail} />
                 <div className="intro-wrap" onTouchTap={goDetail}>
                     <div className="f-singletext-ellipsis">
                         <span className="name">{name}</span>

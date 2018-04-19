@@ -1,31 +1,28 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
+import SearchPresent from 'components/App/HouseSearch/SearchPresent/SearchPresent';
 import logoImg from 'images/App/logo.png';
 import meImg from 'images/App/me.png';
 import { AbbrevMapCity } from 'config/config';
-import { isHasCookie, urlJoin } from 'lib/util';
 import { isApp } from 'lib/const';
+import { goMe, goCity, goSearch } from 'application/App/routes/routes';
 
 import './styles.less';
 
 const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
-    handleNavigateMe = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
+    handleNavigateSearch = () => {
+        goSearch(this.props.history)();
+    }
 
-        // 跳转前判断是否登录，利用cookie中是否含有sid判断
-        if (isHasCookie('sid')) {
-            this.props.history.push(urlJoin(urlPrefix, 'me'));
-        } else {
-            this.props.history.push(urlJoin(urlPrefix, 'login'));
-        }
+    handleNavigateMe = () => {
+        goMe(this.props.history)();
     }
 
     handleNavigateCity = () => {
-        const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, 'city'));
+        goCity(this.props.history)();
     }
 
     handleLogTap = () => {
@@ -35,6 +32,8 @@ export default class IndexHead extends PureComponent {
     render() {
         const {
             className,
+            searchRt,
+            onClearSearch,
         } = this.props;
 
         const urlStore = window.getStore('url');
@@ -51,16 +50,21 @@ export default class IndexHead extends PureComponent {
                     >
                         {AbbrevMapCity[cityName].text}
                     </span>
-                    <span className={`f-vertical-middle icon-pull-down location-downicon`}></span>
+                    <span className={`f-vertical-middle icon-pull-down location-downicon`} />
                 </div>
                 {
-                    isApp() ?
-                        null : 
-                        <img
-                            className={`f-display-flex ${classPrefix}-logo`}
-                            src={logoImg}
-                            onTouchTap={this.handleLogTap}
-                        />
+                    <SearchPresent
+                        className={`grid-col ${classPrefix}-search`}
+                        searchRt={searchRt}
+                        onNavigateTap={this.handleNavigateSearch}
+                        onClearSearch={onClearSearch}
+                    />
+                        // isApp() ? null
+                        //     : <img
+                        //         className={`f-display-flex ${classPrefix}-logo`}
+                        //         src={logoImg}
+                        //         onTouchTap={this.handleLogTap}
+                        //     />
                 }
                 <a 
                     href="javascript:void(0)"

@@ -5,6 +5,7 @@ import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxVerifyCode, ajaxSlideCaptcha } from 'application/App/HouseLogin/ajaxLogin';
+import { goLoginTel } from 'application/App/routes/routes';
 import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
 import { regTel } from 'lib/regExp';
 import { urlJoin, dynamicScript } from 'lib/util';
@@ -41,14 +42,7 @@ export default class LoginTel extends PureComponent {
             .then((bool) => {
                 // 验证成功
                 if (bool) {
-                    const {
-                        url,
-                    } = this.props.match;
-
-                    const {
-                        search,
-                    } = this.props.location;
-                    this.props.history.push(urlJoin(url, mobile)+`${search}`);
+                    goLoginTel(this.props.history)(telVal);
                 }
             })
             .catch((err) => {

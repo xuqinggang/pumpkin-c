@@ -12,11 +12,12 @@ export default class MeCoupon extends PureComponent {
         return (
             <div className={classPrefix} style={{minHeight: (window.innerHeight / window.lib.flexible.rem - 1.1733) + 'rem'}}>
                 <Tabs
-                    isBar={true}
                     className={`${classPrefix}-tabs`}
                     navClassName={`${classPrefix}-nav`}
                     barClassName={`${classPrefix}-bar`}
                     contentClassName={`${classPrefix}-content`}
+                    activeIndex={0}
+                    isBar={true}
                 >
                     <Tab label='待使用' navItemClass={`${classPrefix}-navitem`}>
                         <MeCouponList type="use" />
