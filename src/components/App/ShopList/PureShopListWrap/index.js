@@ -29,12 +29,11 @@ export default class PureShopListWrap extends PureComponent {
         });
 
         const cityId = this.cityId;
-        const apartmentFilter = window.getStore('apartmentFilter');
-        const filter = (apartmentFilter && apartmentFilter.filterParamsObj) || {};
+        const filterParamsObj = this.filterParams || {};
 
         ajaxGetShopList({
             filter: {
-                ...filter,
+                ...filterParamsObj,
                 cityId,
             },
             pager,
@@ -63,15 +62,17 @@ export default class PureShopListWrap extends PureComponent {
     handleLoadMore = () => {
         this.fetchData();
     }
-    componentDidMount() {
+    componentWillMount() {
         // 南瓜租房 iOS APP 传来 cityId 等参数
         const cityId = (window.iOS && window.iOS.getCityId()) || 1;
         this.cityId = cityId;
+        this.filterParams = this.props.filterParams;
 
         this.fetchData(true);
     }
     componentWillReceiveProps(nextProps) {
         this.filterParams = nextProps.filterParams;
+        console.log('filterParams', this.filterParams);
         if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
             this.fetchData(true);
         }

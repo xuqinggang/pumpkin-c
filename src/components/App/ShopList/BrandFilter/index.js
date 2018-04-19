@@ -7,6 +7,8 @@ import { ajaxGetBrandList } from 'application/App/ShopList/ajaxInitShopList';
 import { brandParamsToStateLabels } from 'application/App/ShopList/stateToParams';
 import { shallowEqual } from 'lib/util';
 
+import { brandFilterBus } from 'application/App/ShopList/Filters';
+
 import './styles.less';
 
 const brandClass = 'm-brandfilter';
@@ -71,15 +73,15 @@ class BrandFilter extends PureComponent {
 
         const apartmentFilter = window.getStore('apartmentFilter');
 
-        // TODO 这段语法重构
-        if (apartmentFilter
-             && apartmentFilter.filterParamsObj &&
-             apartmentFilter.filterParamsObj.apartmentIds) {
+        // // TODO 这段语法重构
+        // if (apartmentFilter
+        //      && apartmentFilter.filterParamsObj &&
+        //      apartmentFilter.filterParamsObj.apartmentIds) {
 
-            const apartmentIds = apartmentFilter.filterParamsObj.apartmentIds;
-            const { state, label } = brandParamsToStateLabels(apartmentIds);
-            this.props.onDynamicSetLabel(state, label);
-        }
+        //     const apartmentIds = apartmentFilter.filterParamsObj.apartmentIds;
+        //     const { state, label } = brandFilterBus.setLbel(apartmentIds);
+        //     this.props.onDynamicSetLabel(state, label);
+        // }
     }
 
     // 清空state

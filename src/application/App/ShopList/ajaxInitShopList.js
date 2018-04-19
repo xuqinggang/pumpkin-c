@@ -6,7 +6,9 @@ export function ajaxGetBrandList() {
     return Service.get(`/api/v1/centralShops/brandList`)
         .then((res) => {
             if (res.code === 200) {
-                return res.data;
+                return res.data.concat(
+                    [{"name":"海草海草海草公ssss寓","apartmentId":90}]
+                );
             }
 
             throw new Error(res);
