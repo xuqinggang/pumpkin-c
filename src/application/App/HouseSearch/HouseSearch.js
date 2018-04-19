@@ -83,7 +83,6 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         return (
             <div
                 className={classPrefix}
-                onTouchTap={this.handleStopPropagation}
             >
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
                     <form onSubmit={this.handleSubmit}>
@@ -91,9 +90,13 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                     </form>
                     <span className="head-btn-cancel" onTouchTap={this.handleNavigateList}>取消</span>
                 </div>
-                <HitSearch history={history} />
-                <HistoryRecord />
-                <SearchList searchData={searchData} />
+                <div
+                    onTouchTap={this.handleStopPropagation}
+                >
+                    <HitSearch history={history} />
+                    <HistoryRecord />
+                    <SearchList searchData={searchData} />
+                </div>
             </div>
         );
     }
