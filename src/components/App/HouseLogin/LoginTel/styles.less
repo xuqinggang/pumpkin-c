@@ -1,0 +1,12 @@
+// 针对滑动验证码iframe，受flexible布局的scale缩放影响,在dpr不为1的手机上会缩小，所以需要transform scale变大
+html[data-dpr^="2"] {
+    iframe[src*="captcha"] {
+        transform: scale(2, 2);
+    }
+}
+
+html[data-dpr^="3"] {
+    iframe[src*="captcha"] {
+        transform: scale(3, 3);
+    }
+}

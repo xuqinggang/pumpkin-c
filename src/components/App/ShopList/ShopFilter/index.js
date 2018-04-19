@@ -118,7 +118,7 @@ export default class ShopFilter extends PureComponent {
                             type="position"
                             filterState={filterState.position}
                             onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetLabel}
+                            onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
                         />
                     </DropDownScreen>
                 </li>

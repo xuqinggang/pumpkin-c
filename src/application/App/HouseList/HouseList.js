@@ -99,7 +99,7 @@ export default class HouseList extends PureComponent {
         // setStore filter
         this._setStoreFilterInfo();
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
-console.log('this.urlFrgObj', this.urlFrgObj, urlFrgRt);
+        console.log('this.urlFrgObj', this.urlFrgObj, urlFrgRt);
 
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);

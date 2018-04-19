@@ -41,7 +41,6 @@ const findIndexByField = (arr, obj, field) => {
  * @param {string} uniqueField 当数据是包含对象的数组时, 用来标识一个数据的身份
  * @return {object}
  */
-
 const generateStoreApi = (
     {
         engine,

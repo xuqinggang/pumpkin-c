@@ -22,7 +22,7 @@ export default class Location extends PureComponent {
                     <span className={`icon-region`} />
                     <span>{address}</span>
                 </div>
-                <div className={`f-display-inlineblock head-apartname-wrap f-singletext-ellipsis `}>
+                <div onTouchTap={this.props.goApartment} className={`f-display-inlineblock head-apartname-wrap f-singletext-ellipsis `}>
                     <span className={`head-apartname`}>{apartmentName}</span>
                 </div>
             </div>
@@ -34,10 +34,12 @@ Location.propTypes = {
     apartmentName: PropTypes.string,
     address: PropTypes.string,
     onTouchTap: PropTypes.func,
+    goApartment: PropTypes.func,
 };
 
 Location.defaultProps = {
     apartmentName: '',
     address: '',
-    onTouchTap: () => null
+    onTouchTap: () => null,
+    goApartment: () => null,
 };

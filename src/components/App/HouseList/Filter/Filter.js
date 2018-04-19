@@ -8,7 +8,7 @@ import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
 import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
 import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
-import { getScrollTop } from 'lib/util';
+import { getScrollTop, getFilterFixScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
 import './styles.less';
@@ -158,9 +158,7 @@ export default class Filter extends PureComponent {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度
         this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
-        this.bannerDomHeight = Math.round(document.querySelector('.m-indexbanner').offsetHeight);
-        this.recommendDomHeight = Math.round(document.querySelector('.m-indexrecommend').offsetHeight);
-        this.filterFixScrollTop = Math.round(this.bannerDomHeight) + Math.round(this.recommendDomHeight);
+        this.filterFixScrollTop = getFilterFixScrollTop();
 
         window.addEventListener('scroll', this._fixFilterDom);
     }

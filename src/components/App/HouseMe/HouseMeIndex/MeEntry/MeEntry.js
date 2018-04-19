@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import { goHouseList } from 'application/App/routes/routes';
 import { clearCookie, urlJoin } from 'lib/util';
+import { lastUserIdStorage } from 'application/App/storage';
 
 import './styles.less';
 

@@ -331,3 +331,13 @@ export function getWithDefault(obj, key, defaultVal) {
         return defaultVal;
     }
 }
+
+const getDomOffsetHeight = (dom) => {
+    return (dom && dom.offsetHeight) || 0;
+};
+
+export const getFilterFixScrollTop = () => {
+    const bannerDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexbanner')));
+    const recommendDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexrecommend')));
+    return Math.round(bannerDomHeight) + Math.round(recommendDomHeight);
+}

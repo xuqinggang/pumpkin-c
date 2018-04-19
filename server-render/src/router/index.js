@@ -51,6 +51,16 @@ router.get('/shop/:xx*', (ctx, next) => {
     ctx.body = indexHtml;
 });
 
+router.get('/apartment/:xx*', (ctx, next) => {
+    ctx.type = 'html';
+    ctx.body = indexHtml;
+});
+
+router.get('/comment/:xx*', (ctx, next) => {
+    ctx.type = 'html';
+    ctx.body = indexHtml;
+});
+
 // 服务器端渲染
 // koa-router没有找到first match router相关配置，所以此处判断处理下
 // router.get('/:filterUrlFragment?', async(ctx, next) => {
