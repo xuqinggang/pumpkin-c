@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 import { ajaxGetBrandList } from 'application/App/ShopList/ajaxInitShopList';
-import { brandParamsToStateLabels } from 'application/App/ShopList/stateToParams';
 import { shallowEqual } from 'lib/util';
-
-import { brandFilterBus } from 'application/App/ShopList/Filters';
 
 import './styles.less';
 
@@ -36,6 +33,27 @@ class BrandFilter extends PureComponent {
         }
     }
 
+    setParentsStateAndLabel = () => {
+        this.props.onDynamicSetLabel();
+    }
+
+    // 清空state
+    _clearState = () => {
+        this.setState(this.initialState);
+    }
+    // 确认state
+    _confirmState = () => {
+        this.props.onFilterConfirm({
+            brand: this.state.brand,
+        });
+    }
+
+    onTagsChange = (type, tagsStateObj) => {
+        this.setState({
+            [type]: tagsStateObj,
+        });
+    }
+
     componentWillMount() {
         // TODO 将这个拆出去
         const apartmentBrandLabels = window.getStore('apartmentBrandLabels');
@@ -57,7 +75,7 @@ class BrandFilter extends PureComponent {
                 brandLabels: formattedBrands,
             });
 
-            this.setParentsStateAndLabel(brandLabels);
+            this.setParentsStateAndLabel();
         });
     }
 
@@ -67,38 +85,6 @@ class BrandFilter extends PureComponent {
                 brand: nextProps.filterState,
             })
         }
-    }
-
-    setParentsStateAndLabel = (brandLabels) => {
-
-        const apartmentFilter = window.getStore('apartmentFilter');
-
-        // // TODO 这段语法重构
-        // if (apartmentFilter
-        //      && apartmentFilter.filterParamsObj &&
-        //      apartmentFilter.filterParamsObj.apartmentIds) {
-
-        //     const apartmentIds = apartmentFilter.filterParamsObj.apartmentIds;
-        //     const { state, label } = brandFilterBus.setLbel(apartmentIds);
-        //     this.props.onDynamicSetLabel(state, label);
-        // }
-    }
-
-    // 清空state
-    _clearState = () => {
-        this.setState(this.initialState);
-    }
-    // 确认state
-    _confirmState = () => {
-        this.props.onFilterConfirm({
-            brand: this.state.brand,
-        });
-    }
-
-    onTagsChange = (type, tagsStateObj) => {
-        this.setState({
-            [type]: tagsStateObj,
-        });
     }
 
     render() {

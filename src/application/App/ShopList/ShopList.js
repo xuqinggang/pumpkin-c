@@ -1,23 +1,19 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import {
-    ShopFilter,
-    PureShopListWrap,
-} from 'components/App/ShopList';
+import { ShopFilter, PureShopListWrap } from 'components/App/ShopList';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 
-import { stateToParams, getTextFromBrands } from './stateToParams';
 import { execWxShare } from 'lib/wxShare';
-import { dynamicDocTitle, urlJoin, parseUrlQueryFields } from 'lib/util';
+import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
-import {
-    goShopList,
-} from 'application/App/routes/routes';
-
-import { brandFilterBus } from './Filters';
+import { goShopList } from 'application/App/routes/routes';
+import { brandFilterBus } from './filters/brandFilter';
+import { stringifyPostionState } from 'application/App/HouseList/stringifyState';
+import { parseUrl as parsePositionUrl } from 'application/App/HouseList/parseUrl';
+import { apartmentFilterStoreKey, urlModuleSplit } from './filters/utils';
 
 import './styles.less';
 
@@ -33,7 +29,7 @@ export default class ShopList extends PureComponent {
             // 位置筛选
             positionFilter: {
                 state: {},
-                label: {},
+                label: '位置',
                 param: {},
             },
             // 品牌筛选
@@ -54,106 +50,136 @@ export default class ShopList extends PureComponent {
     }
 
     get filterLabel() {
-        const { brandFilter } = this.state;
-        return {
-            position: '位置',
-            brand: brandFilter.label,
-        }
+        const { positionFilter, brandFilter } = this.state;
+        return { position: positionFilter.label, brand: brandFilter.label };
     }
     get filterState() {
-        const { brandFilter } = this.state;
-        return {
-            position: {},
-            brand: brandFilter.state,
-        };
+        const { brandFilter, positionFilter } = this.state;
+        return { position: positionFilter.state, brand: brandFilter.state };
     }
     get filterParamsObj() {
-        const { brandFilter } = this.state;
-        return {
-            position: {},
-            apartmentIds: brandFilter.param,
-        };
+        const { brandFilter, positionFilter } = this.state;
+        return { position: positionFilter.param, apartmentIds: brandFilter.param };
     }
 
-    _setStoreFilterUrlFragment = (filterUrlFragment) => {
-        window.setStore('url', {
-            filterUrlFragment,
-        });
-    }
-
-    componentWillMount() {
-        // store filterUrlFragment for easy get
-        const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        this.filterUrlFragment = filterUrlFragment;
-        brandFilterBus.parseUrlToState(filterUrlFragment, (brandFilter) => {
-            console.log('brandFilter', brandFilter);
-            this.setState({
-                brandFilter,
-            });
-        });
-
-        const filterStore = window.getStore('apartmentFilter');
-        if (filterStore) {
-            this.setState(filterStore);
-        } else {
-            this._genStateAndParamsByFilterUrlFragment(filterUrlFragment);
-        }
-    }
-
-    componentDidMount() {
-        this.wxShare();
-        dynamicDocTitle('南瓜租房');
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const curFilterUrlFragment = this.props.match.params.filterUrlFragment;
-        const nextFilterUrlFragment = nextProps.match.params.filterUrlFragment;
-        if (curFilterUrlFragment !== nextFilterUrlFragment) {
-            this._genStateAndParamsByFilterUrlFragment(nextFilterUrlFragment);
-        }
-    }
-
-    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
-    dynamicSetPositionFilterLabel = (label) => {
-        console.log(label, 'label', 'dynamicSetPositionFilterLabel');
-    }
-    // 由于品牌筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label 和 state
-    dynamicSetBrandFilterLabelAndState = (state, label) => {
-        console.log(state, label, 'dynamicSetBrandFilterLabelAndState');
-    }
-
-    goShopList = (filterUrlFragment) => {
-        goShopList(this.props.history)(filterUrlFragment);
-    }
-
-    onFilterConfirm = (newState) => {
-        const { filterUrlFragment } = this;
-        if (newState && newState.brand) {
-            brandFilterBus
-                .parseStateToOthers(newState.brand, filterUrlFragment, (brandFilter, filterUrlFragment) => {
-                    this.setState({
-                        brandFilter,
-                    });
-                    this.goShopList(filterUrlFragment);
-                });
-        }
-    }
-
-    // 根据 url 片段生成state和params
-    _genStateAndParamsByFilterUrlFragment(filterUrlFragment) {}
-
-    wxShare() {
+    wxShare = () => {
         const urlStore = window.getStore('url');
-        const cityName = urlStore.cityName;
+        const { cityName } = urlStore;
         const cityText = AbbrevMapCity[cityName].text;
 
-        // 分享
         execWxShare({
             title: `${cityText} - 品质生活独栋公寓`,
             link: window.location.href.split('#')[0],
             imgUrl: 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200',
             desc: '生活不止眼前的苟且，还有诗和远方，快来这里看看高品质的集中式公寓吧。',
         });
+    }
+
+    // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
+    dynamicSetPositionFilterLabel = (positionStateAndLabel) => {
+        const { label, state } = positionStateAndLabel;
+        this.setState({
+            positionFilter: {
+                ...this.state.positionFilter,
+                label,
+                state,
+            },
+        });
+    }
+    // 由于品牌筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label 和 state
+    dynamicSetBrandFilterLabelAndState = () => {
+        const brandFilter = brandFilterBus.parseUrlToState(this.filterUrlFragment) || {};
+        this.setState({
+            brandFilter: { ...this.state.brandFilter, ...brandFilter },
+        });
+    }
+
+    goShopList = (filterUrlFragment) => {
+        goShopList(this.props.history)(filterUrlFragment);
+    }
+
+    handleBrandSelect(brand) {
+        const { filterUrlFragment } = this;
+        const {
+            filterState: brandFilter,
+            url: nextFilterUrlFragment,
+        } = brandFilterBus.parseStateToOthers(brand, filterUrlFragment)
+        this.setState({
+            brandFilter,
+        });
+        this.goShopList(nextFilterUrlFragment);
+    }
+
+    handlePositionSelect(position) {
+        const {
+            url,
+            paramsObj,
+            label,
+        } = stringifyPostionState(position);
+        this.setState({
+            positionFilter: {
+                param: paramsObj,
+                label,
+                state: position,
+            },
+        });
+
+        // 为 position 做的兼容
+        const brandUrl = brandFilterBus.stringifyParam();
+        const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
+        console.log(brandUrl, 'brandUrl');
+
+        this.goShopList(composedUrl);
+    }
+
+    onFilterConfirm = (newState) => {
+        if (!newState) return;
+        const { brand, position } = newState;
+        if (brand) {
+            this.handleBrandSelect(newState.brand);
+        } else if (position) {
+            this.handlePositionSelect(newState.position);
+        }
+    }
+
+    // 为 position 做的兼容
+    _setStoreFilterInfo() {
+        const oldApartmentFilter = window.getStore(apartmentFilterStoreKey);
+        window.setStore(apartmentFilterStoreKey, {
+            ...oldApartmentFilter,
+            state: this.filterState,
+            label: this.filterLabel,
+            paramsObj: this.filterParamsObj,
+            urlFrg: this.urlFrgObj,
+        });
+    }
+
+    componentWillMount() {
+        // store filterUrlFragment for easy get
+        const { filterUrlFragment } = this.props.match.params;
+        this.filterUrlFragment = filterUrlFragment;
+        // get position param from url
+        const { paramsObj: positionParam, urlFrg } = parsePositionUrl(filterUrlFragment);
+        this.urlFrgObj = urlFrg;
+        // get brand param from url
+        const brandFilter = brandFilterBus.parseUrlToState(filterUrlFragment) || {};
+        this.setState({
+            brandFilter: {
+                ...this.state.brandFilter,
+                ...brandFilter,
+            },
+            positionFilter: {
+                ...this.state.positionFilter,
+                param: positionParam,
+            },
+        });
+
+        this._setStoreFilterInfo();
+    }
+
+    componentDidMount() {
+        this.wxShare();
+        dynamicDocTitle('集中式公寓');
     }
 
     render() {
@@ -192,7 +218,7 @@ export default class ShopList extends PureComponent {
                         onFilterConfirm={this.onFilterConfirm}
                         onFilterClear={this.onFilterClear}
                         onFilterReSume={this.onFilterReSume}
-                        onDynamicSetLabel={this.dynamicSetPositionFilterLabel}
+                        onDynamicSetPositionLabel={this.dynamicSetPositionFilterLabel}
                         onDynamicSetBrandLabel={this.dynamicSetBrandFilterLabelAndState}
                     />
                 </div>
