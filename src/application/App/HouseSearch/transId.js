@@ -90,6 +90,7 @@ export function clearPositionFilter() {
 }
 
 export function setFilterStore({type, urlFrg, state, label, paramsObj}) {
+    console.log('paramsObj', paramsObj)
     const filterStore = window.getStore('filter');
     const {
         state: oldState,

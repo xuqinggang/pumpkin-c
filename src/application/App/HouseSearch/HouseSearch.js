@@ -9,6 +9,8 @@ import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecor
 
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
+import { goHouseList } from 'application/App/routes/routes';
+import { setFilterStore, setSearchStore } from './transId';
 
 import './styles.less';
 
@@ -25,23 +27,40 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         this.state = {
             searchData: {},
         };
+        this.keyword = '';
+    }
+
+    handleNavigateList = () => {
+        goHouseList(this.props.history)();
     }
 
     handleStopPropagation = (e) => {
         e.preventDefault();
-        console.log('eee', e);
     }
 
     onInputChange = (keyword: string) => {
+        this.keyword = keyword;
+
         ajaxSearchHits({
             keyword,
-            cityId: 1,
         })
             .then((searchData) => {
                 this.setState({
                     searchData: { ...searchData },
                 });
             });
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        setFilterStore({
+            paramsObj: { keyword: this.keyword },
+        });
+
+        setSearchStore(this.keyword);
+        // 清空 houseList store
+        window.setStore('houseList', null);
+        goHouseList(this.props.history)();
     }
 
     componentWillMount() {
@@ -64,15 +83,20 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         return (
             <div
                 className={classPrefix}
-                onTouchTap={this.handleStopPropagation}
             >
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
-                    <InputSearch onInputChange={this.onInputChange} />
-                    <span className="head-btn-cancel">取消</span>
+                    <form onSubmit={this.handleSubmit}>
+                        <InputSearch onInputChange={this.onInputChange} />
+                    </form>
+                    <span className="head-btn-cancel" onTouchTap={this.handleNavigateList}>取消</span>
                 </div>
-                <HitSearch history={history} />
-                <HistoryRecord />
-                <SearchList searchData={searchData} />
+                <div
+                    onTouchTap={this.handleStopPropagation}
+                >
+                    <HitSearch history={history} />
+                    <HistoryRecord />
+                    <SearchList searchData={searchData} />
+                </div>
             </div>
         );
     }

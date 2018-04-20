@@ -28,9 +28,7 @@ export default class HitSearch extends PureComponent<{}, StateType> {
     }
 
     componentDidMount() {
-        ajaxTopSearches({
-            cityId: 1,
-        })
+        ajaxTopSearches()
             .then((data) => {
                 this.setState({
                     hitSearchDatatArr: data.topSearches,
