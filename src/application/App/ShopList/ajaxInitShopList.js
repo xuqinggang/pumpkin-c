@@ -7,6 +7,7 @@ export function ajaxGetBrandList() {
         .then((res) => {
             if (res.code === 200) {
                 return res.data;
+            }
 
             throw new Error(res);
         });
