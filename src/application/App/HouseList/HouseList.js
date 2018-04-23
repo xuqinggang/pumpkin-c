@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 
 // 业务组件
 import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
@@ -30,7 +31,7 @@ import { kzPv } from 'lib/pv';
 import './styles.less';
 
 const classPrefix = 'g-houselist';
-
+@connect()
 export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
@@ -205,7 +206,13 @@ export default class HouseList extends PureComponent {
         }
     }
 
+    handleTouchTap = () => {
+        console.log('asdf', this.props.dispatch);
+        this.props.dispatch({type: 'init_houselist_asyn', payload: {}})
+    }
+
     render() {
+        console.log('saga houselist');
         const {
             match,
             history,
@@ -226,6 +233,7 @@ export default class HouseList extends PureComponent {
                         onClearSearch={this.onClearSearch}
                     />
                 </div>
+                <button onTouchTap={this.handleTouchTap}>test</button>
                 <IndexBanner />
                 <IndexRecommend />
                 <Filter

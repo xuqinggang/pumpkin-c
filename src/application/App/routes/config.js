@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react';
 import { Switch, Route } from 'react-router';
 
 import HouseDetail from 'application/App/HouseDetail/HouseDetail';
-import HouseList from 'application/App/HouseList/HouseList';
+// TODO:  <22-04-18, Me> //
+// import HouseList from 'application/App/HouseList/HouseList';
+import HouseList from 'application/App/pages/HouseList/HouseList';
+
 import HouseLogin from 'application/App/HouseLogin/HouseLogin';
 import HouseMe from 'application/App/HouseMe/HouseMe';
 import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
