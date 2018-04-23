@@ -23,12 +23,13 @@ export default class ExpandText extends PureComponent {
         const {
             className,
             intro,
+            color = '#999',
         } = this.props;
         const {
             isExpand,
         } = this.state;
 
-        let showIntroStr = intro; 
+        let showIntroStr = intro;
 
         const isExpandBtnShow = showIntroStr && showIntroStr.length > 150;
         if (isExpandBtnShow && !isExpand) {
@@ -37,9 +38,9 @@ export default class ExpandText extends PureComponent {
 
         return (
             <div className={classnames(classPrefix, className)}>
-                <p className={`${classPrefix}-text`}>{showIntroStr}</p>
+                <p className={`${classPrefix}-text`} style={{ color }}>{showIntroStr}</p>
                 {
-                    isExpandBtnShow ? 
+                    isExpandBtnShow ?
                         <span
                             onTouchTap={this.handleExpandTap}
                             className={`${classPrefix}-expandbtn f-display-inlineblock`}
