@@ -6,6 +6,8 @@ import ExpandText from 'Shared/ExpandText/ExpandText';
 import { goHouseDetail } from 'application/App/routes/routes';
 import Stars from '../Stars';
 
+import { DirectTypeMapText } from 'baseData/MapData';
+
 import './styles.less';
 
 const classPrefix = 'm-commentitem';
@@ -32,7 +34,7 @@ class CommentItem extends PureComponent {
         } = comment;
 
         const { nickname, avatar } = userInfo || {};
-        const { blockName, rentUnitId } = rentUnit || {};
+        const { blockName, rentUnitId, bedroomCount, direct } = rentUnit || {};
 
         return (
             <div className={`${classPrefix}`}>
@@ -59,7 +61,7 @@ class CommentItem extends PureComponent {
                     </div>
                 </div>
                 <div className="content">
-                    <ExpandText intro={content || '此用户未填写评价内容'} />
+                    <ExpandText color="#666" intro={content || '此用户未填写评价内容'} />
                     {
                         images && images.map((image, index) => (
                             <img className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
@@ -67,7 +69,7 @@ class CommentItem extends PureComponent {
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
                         <img src={require('./images/little-house.png')} alt="" />
-                        {blockName}
+                        {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
                     </div>
                 </div>
             </div>

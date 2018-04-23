@@ -42,7 +42,7 @@ export default class LoginTel extends PureComponent {
             .then((bool) => {
                 // 验证成功
                 if (bool) {
-                    goLoginTel(this.props.history)(telVal);
+                    goLoginTel(this.props.history)(mobile);
                 }
             })
             .catch((err) => {
@@ -63,7 +63,6 @@ export default class LoginTel extends PureComponent {
         });
         genSlideCaptcha(telVal)
             .then((ticket) => {
-                console.log('asdf');
                 this.getVerifyCode({
                     mobile: telVal,
                     ticket: ticket,

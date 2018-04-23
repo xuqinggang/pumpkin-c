@@ -47,7 +47,7 @@ export default class CommentInput extends PureComponent {
             // 待评价队列出队
             commentQueueStorage.unshift();
         }).catch(() => {
-            PopToolTip({ text: '提交失败' });
+            PopToolTip({ text: '评论提交失败' });
         });
     }
 
