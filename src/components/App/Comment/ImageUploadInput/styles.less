@@ -2,7 +2,7 @@
 
 .m-imageuploadinput {
         
-    & .textarea {
+    & .textarea-wrap {
         border: 1px solid #EAEAEA;
         border-radius: 10px;
         padding: 20px;
@@ -29,6 +29,17 @@
                 .font-size(30);
             }
         }
+    }
 
+    & .textarea {
+        position: relative;
+    }
+
+    &-remaining {
+        position: absolute;
+        right: 0.53333rem;
+        bottom: 0.26667rem;
+        color: #999;
+        .font-size(28);
     }
 }

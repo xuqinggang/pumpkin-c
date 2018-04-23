@@ -34,7 +34,6 @@ export default class RentUnitList extends Component {
         this.lastScrollTop = scrollTop;
     }
     render() {
-        console.log('this.props.list', this.props.list)
         return (
             <div className={clsPrefix}>
                 {

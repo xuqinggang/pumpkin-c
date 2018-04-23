@@ -117,13 +117,13 @@ const withArrayApi = (baseStorage, opts) => {
 
             this.set(newData, expire);
         },
-        pop() {
+        unshift() {
             const oldData = this.get() || [];
             if (!Array.isArray(oldData) || oldData.length === 0) {
                 this.remove();
                 return;
             }
-            const returnItem = oldData.pop();
+            const returnItem = oldData.unshift();
             const newData = oldData;
             this.set(newData);
             return returnItem;

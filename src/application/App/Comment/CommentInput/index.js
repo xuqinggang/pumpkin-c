@@ -32,13 +32,20 @@ export default class CommentInput extends PureComponent {
             images,
             score,
             rentUnitId,
-        }).then(() => {
+        }).then((data) => {
             this.setState({
                 commentDone: true,
                 title: '评价完成',
             });
+            // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
+            window.setStore('selfComment', {
+                content,
+                images,
+                score,
+                rentUnitId,
+            });
             // 待评价队列出队
-            commentQueueStorage.pop();
+            commentQueueStorage.unshift();
         }).catch(() => {
             PopToolTip({ text: '提交失败' });
         });

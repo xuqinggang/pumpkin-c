@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import { dateFormat } from 'lib/util';
 import ExpandText from 'Shared/ExpandText/ExpandText';
-import { goRentUnitDetail } from 'application/App/routes/routes';
+import { goHouseDetail } from 'application/App/routes/routes';
 import Stars from '../Stars';
 
 import './styles.less';
@@ -14,22 +14,25 @@ const imgCutModifier = '?crop=1&cpos=middle&w=200&h=200';
 
 class CommentItem extends PureComponent {
     handleTouchTap = (rentUnitId) => {
-        this.goRentUnitDetail(rentUnitId);
+        this.goHouseDetail(rentUnitId);
     }
 
-    goRentUnitDetail = goRentUnitDetail(this.props.history)
+    goHouseDetail = goHouseDetail(this.props.history)
 
     render() {
         const { comment } = this.props;
 
         const {
-            userInfo: { nickname, avatar },
+            userInfo,
             score,
             createTime,
             content,
             images,
-            rentUnit: { blockName, rentUnitId }
+            rentUnit,
         } = comment;
+
+        const { nickname, avatar } = userInfo || {};
+        const { blockName, rentUnitId } = rentUnit || {};
 
         return (
             <div className={`${classPrefix}`}>
@@ -56,9 +59,9 @@ class CommentItem extends PureComponent {
                     </div>
                 </div>
                 <div className="content">
-                    <ExpandText intro={content} />
+                    <ExpandText intro={content || '此用户未填写评价内容'} />
                     {
-                        images.map((image, index) => (
+                        images && images.map((image, index) => (
                             <img className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }

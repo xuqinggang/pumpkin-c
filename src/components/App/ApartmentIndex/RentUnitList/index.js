@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { rentUnitShape } from 'baseData/propTypes';
 import TitleWithMore from '../TitleWithMore';
+import { formatRentunit } from './utils';
 
 import './styles.less';
 
@@ -17,9 +18,12 @@ export default class RentUnitList extends PureComponent {
             <div className={clsPrefix}>
                 <TitleWithMore title={title} goMore={goMore} />
                 {
-                    list.map((rentalUnit, index) => (
-                        <RentUnitItem key={index} {...rentalUnit} imgUrl={rentalUnit.image} />
-                    ))
+                    list.map((rentalUnit, index) => {
+                        const formatedRentalUnit = formatRentunit(rentalUnit);
+                        return (
+                            <RentUnitItem key={index} {...formatedRentalUnit} imgUrl={rentalUnit.image} />
+                        );
+                    })
                 }
             </div>
         );

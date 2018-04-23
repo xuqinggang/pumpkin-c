@@ -10,6 +10,11 @@ import './styles.less';
 
 const classPrefix = 'g-commentlist';
 
+const getSelfComment = () => {
+    const comment = window.getStore('selfComment');
+    return comment;
+}
+
 export default class CommentList extends PureComponent {
 
     constructor(props) {
@@ -23,7 +28,6 @@ export default class CommentList extends PureComponent {
             loading: false,
         };
     }
-
 
     onLoadMore = () => {
         this.fetchData();
@@ -99,6 +103,9 @@ export default class CommentList extends PureComponent {
         const { history, apartmentId } = this.props;
         const { comments, loading } = this.state;
 
+        const selfComment = getSelfComment();
+        const composedComment = selfComment ? [selfComment, ...comments] : comments;
+
         return (
             <div className={`${classPrefix}`}>
                 {
@@ -116,7 +123,7 @@ export default class CommentList extends PureComponent {
                         <p className="no-comment">暂无评价</p>
                     </div>
                 }  
-                <PureCommentList comments={comments} />
+                <PureCommentList comments={composedComment} />
                 {
                     loading && <p className="loading">加载中...</p>
                 }

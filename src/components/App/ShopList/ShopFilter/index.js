@@ -8,6 +8,7 @@ import BrandFilterWrap from '../BrandFilter';
 
 import { scrollTo, getScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
+import { apartmentFilterStoreKey } from 'application/App/ShopList/filters/utils';
 
 import './styles.less';
 
@@ -70,18 +71,15 @@ export default class ShopFilter extends PureComponent {
         });
     }
 
-
     // brandFilterState, ex:  { brand: {1:true, 2:false} }
     onFilterBrandConfirm = (brandFilterState) => {
         this.props.onFilterConfirm(brandFilterState);
-
         // 隐藏弹层
         this.handleFilterShowTap('brand', true);
     }
 
     onFilterPositionConfirm = (positionFilterState) => {
         this.props.onFilterConfirm({ position: positionFilterState });
-
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
     }
@@ -116,9 +114,10 @@ export default class ShopFilter extends PureComponent {
                     >
                         <PositionFilterWrap
                             type="position"
+                            storeKey={apartmentFilterStoreKey}
                             filterState={filterState.position}
                             onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
+                            onDynamicPtStateAndLabel={this.props.onDynamicSetPositionLabel}
                         />
                     </DropDownScreen>
                 </li>
