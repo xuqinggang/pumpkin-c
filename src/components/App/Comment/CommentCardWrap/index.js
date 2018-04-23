@@ -12,8 +12,8 @@ export default function CommentCardWrap(WrappedComponent) {
         handleClose = () => {
             const { remindComments } = this.state;
 
-            remindComments.pop();
-            commentQueueStorage.pop();
+            remindComments.unshift();
+            commentQueueStorage.unshift();
 
             this.setState({
                 remindComments,
@@ -21,6 +21,7 @@ export default function CommentCardWrap(WrappedComponent) {
         }
         componentWillMount() {
             const remindComments = commentQueueStorage.get();
+            console.log(remindComments, 'remindComments xxxxxx');
             this.setState({
                 remindComments,
             });
