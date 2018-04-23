@@ -18,7 +18,7 @@ export default class CommentInput extends PureComponent {
             images: [],
             score: 5,
             commentDone: false,
-            title: 'xxx评论',
+            title: '',
         };
     }
 
@@ -104,9 +104,17 @@ export default class CommentInput extends PureComponent {
         )
     }
 
+    componentWillMount() {
+        const comments = commentQueueStorage.get();
+        const comment = comments[0] || { ttile: '评价' };
+        this.setState({
+            title: comment.title,
+        });
+    }
+
     render() {
         const { history } = this.props;
-        const { title, commentDone } = this.state;
+        const { commentDone, title } = this.state;
 
         return (
             <div className={`${classPrefix}`}>

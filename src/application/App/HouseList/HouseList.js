@@ -7,7 +7,6 @@ import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecomm
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
-import CommentCard from 'components/App/Comment/CommentCard';
 
 import {
     stringifyPostionState,
@@ -212,8 +211,6 @@ export default class HouseList extends PureComponent {
             history,
         } = this.props;
 
-        console.log('this.filterParamsObj', this.filterParamsObj);
-
         const searchStore = window.getStore('search');
         const searchRt = searchStore && searchStore.searchRt;
 
@@ -236,9 +233,6 @@ export default class HouseList extends PureComponent {
                     filterState={this.filterState}
                     filterLabel={this.filterLabel}
                 />
-                <div className={`${classPrefix}-comment`}>
-                    <CommentCard />
-                </div>
                 <HouseLists
                     filterParams={this.filterParamsObj}
                 />

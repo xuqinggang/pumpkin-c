@@ -10,11 +10,16 @@ export const formatRentunit = (rentUnit) => {
         return rentUnit;
     }
 
+    // compose address
     const address = `距离${subwayLine}${subwayStation}${subwayDistance}米`;
+
+    // remove apartmentName
+    const apartmentName = null;
 
     return {
         ...rentUnit,
         address,
+        apartmentName,
     };
 };
 

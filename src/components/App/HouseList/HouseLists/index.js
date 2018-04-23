@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import RentUnitList from '../RentUnitList';
 import RentUnitsSuggest from '../RentUnitsSuggest';
 import SingnalLessNote from '../SingnalLessNote';
+import CommentCard from 'components/App/Comment/CommentCard';
 import { rentUnitShape, pagerShape } from 'baseData/propTypes';
 import fetchRentUnitList from 'application/App/HouseList/fetchRentUnitList';
 import { isApp } from 'lib/const';
@@ -131,7 +132,7 @@ export default class HouseLists extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        console.log('HouseLists componentWillReceiveProps', this.props.filterParams, nextProps.filterParams);
+        // console.log('HouseLists componentWillReceiveProps', this.props.filterParams, nextProps.filterParams);
         this.filterParams = nextProps.filterParams;
         if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
             this.handleFetchList('INIT');
@@ -156,6 +157,12 @@ export default class HouseLists extends PureComponent {
             <div className={clsPrefix}
                 ref={ (listDom) => { this.listDom = listDom; } }
                 style={{'minHeight': `${minHeight}px`}}>
+                {
+                    rentUnitList.length > 0 &&
+                        <div className={`${clsPrefix}-comment`}>
+                            <CommentCard />
+                        </div>
+                }
                 <RentUnitList
                     list={rentUnitList}
                     pager={pager}
