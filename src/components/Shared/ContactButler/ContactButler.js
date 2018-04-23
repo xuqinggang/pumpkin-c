@@ -123,6 +123,10 @@ export default class ContactButler extends PureComponent {
                                 )
                                 : null
                         }
+                        <div className={`${dialogPrefix}-tip`}>
+                            <span className="icon">!</span>
+                            <span className="text">为保护您的隐私，此号码为虚拟号码</span>
+                        </div>
                     </BottomDialog.Body>
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
                         <div className="f-display-inlineblock line" />
