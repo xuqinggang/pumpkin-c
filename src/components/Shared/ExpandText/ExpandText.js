@@ -36,9 +36,11 @@ export default class ExpandText extends PureComponent {
             showIntroStr = showIntroStr.substr(0, 150) + '...';
         }
 
+        // showIntroStr = showIntroStr && showIntroStr.split('\n').join('<br />');
+
         return (
             <div className={classnames(classPrefix, className)}>
-                <p className={`${classPrefix}-text`} style={{ color }}>{showIntroStr}</p>
+                <pre className={`${classPrefix}-text`} style={{ color }}>{showIntroStr}</pre>
                 {
                     isExpandBtnShow ?
                         <span

@@ -91,7 +91,7 @@ export default class RoomSlider extends PureComponent {
                 }
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {
-                        items.map((_, index) => (
+                        items && items.length > 1 && items.map((_, index) => (
                             <div className={index === curIndex ? 'ring' : 'point'} key={index}></div>
                         ))
                     }
