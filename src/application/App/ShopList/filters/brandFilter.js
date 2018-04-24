@@ -66,7 +66,7 @@ export class BrandFilterState extends AbstractFilterState {
     stringifyParam() {
         const apartmentIds = this.param;
         let brandUrl = apartmentIds.join(this.urlInnerSplit);
-        brandUrl = brandUrl ? `b${brandUrl}` : '';
+        brandUrl = brandUrl ? `${this.urlStartsWith}${brandUrl}` : '';
         return brandUrl;
     }
 
