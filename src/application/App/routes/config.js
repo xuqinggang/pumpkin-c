@@ -15,6 +15,7 @@ import HouseSearch from 'application/App/HouseSearch/HouseSearch';
 
 import Service from 'lib/Service';
 import { AbbrevMapCity } from 'config/config';
+import initStore from 'application/App/initStore';
 
 class WrapRouter extends PureComponent {
     componentWillMount() {
@@ -29,6 +30,9 @@ class WrapRouter extends PureComponent {
             urlPrefix: this.urlPrefix,
             cityName,
         });
+
+        // 初始化一些store信息
+        initStore();
 
         // Server配置ajax url前缀, /bj/nangua
         Service.baseConfig = {
