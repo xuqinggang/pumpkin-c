@@ -125,7 +125,7 @@ export default class ContactButler extends PureComponent {
                         }
                         <div className={`${dialogPrefix}-tip`}>
                             <span className="icon">!</span>
-                            <span className="text">为保护您的隐私，此号码为虚拟号码</span>
+                            <span className="text">为保护隐私，不会展示您的真实手机号哦</span>
                         </div>
                     </BottomDialog.Body>
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
