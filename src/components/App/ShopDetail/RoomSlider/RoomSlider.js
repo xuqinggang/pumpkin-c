@@ -39,9 +39,13 @@ export default class RoomSlider extends PureComponent {
         const { avatar, url } = link;
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
-                <a href={url}>
-                    <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
-                </a>
+                {
+                    url ?
+                        <a href={url}>
+                            <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        </a>
+                        : <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                }
             </div>
         );
     }

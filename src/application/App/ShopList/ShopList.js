@@ -103,7 +103,7 @@ export default class ShopList extends PureComponent {
         const {
             filterState: brandFilter,
             url: nextFilterUrlFragment,
-        } = brandFilterBus.parseStateToOthers(brand, filterUrlFragment)
+        } = brandFilterBus.parseStateToOthers(brand, filterUrlFragment);
         this.setState({
             brandFilter,
         });
@@ -127,8 +127,6 @@ export default class ShopList extends PureComponent {
         // 为 position 做的兼容
         const brandUrl = brandFilterBus.stringifyParam();
         const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
-        console.log(brandUrl, 'brandUrl');
-
         this.goShopList(composedUrl);
     }
 
@@ -159,7 +157,7 @@ export default class ShopList extends PureComponent {
         const { filterUrlFragment } = this.props.match.params;
         this.filterUrlFragment = filterUrlFragment;
         // get position param from url
-        const { paramsObj: positionParam, urlFrg } = parsePositionUrl(filterUrlFragment);
+        const { paramsObj: positionParam, urlFrg } = parsePositionUrl(filterUrlFragment) || {};
         this.urlFrgObj = urlFrg;
         // get brand param from url
         const brandFilter = brandFilterBus.parseUrlToState(filterUrlFragment) || {};
