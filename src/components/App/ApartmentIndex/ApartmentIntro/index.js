@@ -7,7 +7,7 @@ const classPrefix = 'm-apartmentintro';
 
 export default class ApartmentIntro extends PureComponent {
     render() {
-        const { name, image, intro, minPrice, score, goCommentList, goDetail } = this.props;
+        const { name, image, slogan, minPrice, score, goCommentList, goDetail } = this.props;
         return (
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
                 <img src={image} alt={name} onTouchTap={goDetail} />
@@ -17,7 +17,7 @@ export default class ApartmentIntro extends PureComponent {
                         <span className="price">¥{minPrice}元/月<span>起</span></span>
                     </div>
                     <div className="intro">
-                        {intro}
+                        {slogan}
                     </div>
                 </div>
                 <div className="score-wrap">
