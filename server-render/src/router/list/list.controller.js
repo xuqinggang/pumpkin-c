@@ -33,17 +33,19 @@ export default async (ctx, next) => {
 // }
 
 function setFilterData(filterUrlFragment, ctx) {
+    const filterStore = parseUrl(filterUrlFragment);
+
     // gen state
     const {
         urlFrg,
         state,
         label,
-        paramsObj,
-        seoData,
-    } = parseUrl(filterUrlFragment);
+        paramsObj = {},
+        seoData = {},
+    } = filterStore || {};
 
     // 设置筛选的store
-    window.setStore('filter', {
+    filterStore && window.setStore('filter', {
         urlFrg,
         state,
         label,
@@ -73,6 +75,8 @@ async function setHouseListData(filterParamsObj, cityId) {
             pager: houseListRes.data.pager,
         });
     }
+
+    console.log('setHouseListData', houseListStore);
 
     window.setStore('houseList', houseListStore);
 }
