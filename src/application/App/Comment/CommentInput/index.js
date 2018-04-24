@@ -45,7 +45,7 @@ export default class CommentInput extends PureComponent {
                 rentUnitId,
             });
             // 待评价队列出队
-            commentQueueStorage.unshift();
+            commentQueueStorage.shift();
         }).catch(() => {
             PopToolTip({ text: '评论提交失败' });
         });

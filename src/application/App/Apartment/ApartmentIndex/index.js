@@ -12,7 +12,7 @@ import {
     goCommentList,
     goShopList,
     goApartmentDetail,
-    goRentUnitList,
+    goHouseList,
 } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
@@ -20,6 +20,7 @@ import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
+import initStore from 'application/App/initStore';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
 
@@ -41,7 +42,7 @@ export default class ApartmentIndex extends PureComponent {
         goShopList(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
-    goRentUnitList = () => {
+    goHouseList = () => {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
 
@@ -51,12 +52,13 @@ export default class ApartmentIndex extends PureComponent {
             return;
         }
 
-        window.setStore('filter', null);
-        goRentUnitList(this.props.history)({
-            queryParam: {
-                apartment: apartmentId,
-            },
+        initStore();
+        const urlStore = window.getStore('url');
+        window.setStore('url', {
+            ...urlStore,
+            filterSearch: `?apartment=${apartmentId}`,
         });
+        goHouseList(this.props.history)();
     }
 
     renderIndex() {
@@ -93,8 +95,8 @@ export default class ApartmentIndex extends PureComponent {
                 <ApartmentRecommend recommends={recommends} />
                 <ApartmentShop shops={boutiqueShops} goMore={this.goShopList} />
                 <div className="content-padding">
-                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goRentUnitList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goRentUnitList} />
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goHouseList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goHouseList} />
                 </div>
             </div>
         );
