@@ -38,7 +38,7 @@ export default class ApartmentIndex extends PureComponent {
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
     goShopList = () => {
-        goShopList(this.props.history)(`b${this.apartmentId}`);
+        goShopList(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
     goRentUnitList = () => {
