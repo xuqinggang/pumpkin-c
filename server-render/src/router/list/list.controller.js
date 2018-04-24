@@ -76,8 +76,6 @@ async function setHouseListData(filterParamsObj, cityId) {
         });
     }
 
-    console.log('setHouseListData', houseListStore);
-
     window.setStore('houseList', houseListStore);
 }
 

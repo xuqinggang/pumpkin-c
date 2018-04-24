@@ -7,6 +7,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 import { ajaxLogin, ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
 import { getPageFrom, urlJoin } from 'lib/util';
+import { lastUserIdStorage, commentQueueStorage, commentListStorage } from 'application/App/storage';
 
 const classPrefix = 'm-houselogin';
 
@@ -27,6 +28,15 @@ export default class LoginVerifyCode extends PureComponent {
         this.pageFrom = getPageFrom(search);
     }
 
+    removeLastUserPhoneRecord = (uid) => {
+        const lastUid = lastUserIdStorage.get();
+        // 如果和上一次不是同一个用户, 清空在未登录期间记录下来的电话
+        if (uid !== lastUid) {
+            commentQueueStorage.remove();
+            commentListStorage.remove();
+        }
+    }
+
     ajaxUserLogin(tel, verifyCode) {
         ajaxLogin(tel, verifyCode)
             .then((infoObj) => {
@@ -38,10 +48,11 @@ export default class LoginVerifyCode extends PureComponent {
                     return;
                 }
                 this.props.history.replace(urlJoin(this.urlPrefix, 'me'));
+                this.removeLastUserPhoneRecord(infoObj.uid);
             })
             .catch((err) => {
                 PopToolTip({text: err.code ? err.msg : err.toString()});
-            })
+            });
     }
     
     handleVerifyCodeChange = (e) => {
