@@ -130,7 +130,12 @@ export default class ContactButler extends PureComponent {
                     </BottomDialog.Body>
                     <BottomDialog.Footer className={`${dialogPrefix}-footer`}>
                         <div className="f-display-inlineblock line" />
-                        <a className="f-display-inlineblock text" onTouchTap={this.handleNoContactTap}>暂不联系</a>
+                        <a
+                            className="f-display-inlineblock text text-nocontact"
+                            onTouchTap={this.handleNoContactTap}
+                        >
+                            暂不联系
+                        </a>
                         <a href={`tel:${dynamicTel}`} className="f-display-inlineblock text">立即联系</a>
                     </BottomDialog.Footer>
                 </BottomDialog>
