@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { RoomSlider } from 'components/App/ShopDetail';
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import EasyHead from 'Shared/EasyHead';
 import {
     ApartmentIntro,
     ApartmentRecommend,
@@ -77,8 +77,7 @@ export default class ApartmentIndex extends PureComponent {
             <div className={`${classPrefix}`}>
                 {
                     !isRmHead() &&
-                    <HouseHead
-                        history={history}
+                    <EasyHead
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>
                         )}
