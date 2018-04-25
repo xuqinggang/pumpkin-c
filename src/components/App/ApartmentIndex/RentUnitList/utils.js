@@ -6,12 +6,12 @@ export const formatRentunit = (rentUnit) => {
         subwayLine,
         subwayStation,
     } = rentUnit;
-    if (!subwayDistance || !subwayLine || !subwayStation) {
-        return rentUnit;
-    }
 
     // compose address
-    const address = `距离${subwayLine}${subwayStation}${subwayDistance}米`;
+    let address = null;
+    if (subwayDistance && subwayLine && subwayStation) {
+        address = `距离${subwayLine}${subwayStation}${subwayDistance}米`;
+    }
 
     // remove apartmentName
     const apartmentName = null;

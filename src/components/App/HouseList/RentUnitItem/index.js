@@ -66,6 +66,8 @@ class RentUnitItem extends PureComponent {
             [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
 
+        console.log('apartmentName', apartmentName)
+
         return (
             <div
                 onTouchTap={this.handleTouchTap}

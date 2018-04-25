@@ -41,7 +41,6 @@ export default class CommentInput extends PureComponent {
             // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
             const userInfo = window.getStore('meInfo');
             const shiftComment = commentQueueStorage.shift();
-            console.log(shiftComment);
             window.setStore('selfComment', {
                 content,
                 images,
@@ -130,9 +129,11 @@ export default class CommentInput extends PureComponent {
 
         return (
             <div className={`${classPrefix}`}>
-                <HouseHead
-                    history={history}
-                    renderRight={() => (
+                <div className="head f-display-flex f-flex-align-center">
+                    <a
+                        href="javascript:history.back();"
+                        className={`f-display-flex f-flex-align-center icon-back ${classPrefix}-btn-back-browser`}/>
+                    <div className="head-right-wrap">
                         <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
                             {
@@ -140,8 +141,8 @@ export default class CommentInput extends PureComponent {
                                 <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
                             }
                         </div>
-                    )}
-                />
+                    </div>
+                </div>
                 { this.renderMain() }
             </div>
         );
