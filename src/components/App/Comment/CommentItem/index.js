@@ -28,9 +28,11 @@ class CommentItem extends PureComponent {
             userInfo,
             score,
             createTime,
+            updateTime,
             content,
             images,
             rentUnit,
+            title,
         } = comment;
 
         const { nickname, avatar } = userInfo || {};
@@ -57,7 +59,7 @@ class CommentItem extends PureComponent {
                                 color2="#F38D39"
                             />
                         </div>
-                        <div className="time">{dateFormat(createTime * 1000)}</div>
+                        <div className="time">{dateFormat(updateTime * 1000)}</div>
                     </div>
                 </div>
                 <div className="content">
@@ -69,7 +71,11 @@ class CommentItem extends PureComponent {
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
                         <img src={require('./images/little-house.png')} alt="" />
-                        {blockName}-{bedroomCount}居室-{DirectTypeMapText[direct]}
+                        {
+                            title
+                                ? title
+                                : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
+                        }
                     </div>
                 </div>
             </div>

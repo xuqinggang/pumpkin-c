@@ -5,8 +5,6 @@ import MeBack from './MeBack/MeBack';
 import MeInfo from './MeInfo/MeInfo';
 import MeEntry from './MeEntry/MeEntry';
 
-import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
-
 import './styles.less';
 
 const classPrefix = 'm-housemeindex';
