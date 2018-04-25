@@ -5,6 +5,7 @@ import { Stars, ImageUploadInput, SuccessComment } from 'components/App/Comment'
 import { ajaxPostComment } from '../ajaxInitComment';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 import { commentQueueStorage } from 'application/App/storage';
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
 
@@ -38,14 +39,19 @@ export default class CommentInput extends PureComponent {
                 title: '评价完成',
             });
             // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
+            const userInfo = window.getStore('meInfo');
+            const shiftComment = commentQueueStorage.shift();
+            console.log(shiftComment);
             window.setStore('selfComment', {
                 content,
                 images,
                 score,
                 rentUnitId,
+                updateTime: Date.now() / 1000,
+                userInfo,
+                title: shiftComment.title,
             });
             // 待评价队列出队
-            commentQueueStorage.shift();
         }).catch(() => {
             PopToolTip({ text: '评论提交失败' });
         });
@@ -106,10 +112,16 @@ export default class CommentInput extends PureComponent {
 
     componentWillMount() {
         const comments = commentQueueStorage.get();
-        const comment = comments[0] || { ttile: '评价' };
+        const comment = (comments && comments[0]) || { ttile: '评价' };
         this.setState({
             title: comment.title,
         });
+
+        // get user info TODO we need may need it in all page
+        ajaxGetMeInfo()
+            .then((meInfoObj) => {
+                window.setStore('meInfo', meInfoObj);
+            });
     }
 
     render() {
