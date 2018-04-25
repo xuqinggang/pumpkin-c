@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import { Stars, ImageUploadInput, SuccessComment } from 'components/App/Comment';
 import { ajaxPostComment } from '../ajaxInitComment';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+import EasyHead from 'Shared/EasyHead';
 import { commentQueueStorage } from 'application/App/storage';
 import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 
@@ -129,20 +129,16 @@ export default class CommentInput extends PureComponent {
 
         return (
             <div className={`${classPrefix}`}>
-                <div className="head f-display-flex f-flex-align-center">
-                    <a
-                        href="javascript:history.back();"
-                        className={`f-display-flex f-flex-align-center icon-back ${classPrefix}-btn-back-browser`}/>
-                    <div className="head-right-wrap">
-                        <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
-                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
-                            {
-                                !commentDone &&
-                                <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
-                            }
-                        </div>
+                <EasyHead renderRight={() => (
+                    <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
+                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                        {
+                            !commentDone &&
+                            <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                        }
                     </div>
-                </div>
+                )}
+                />
                 { this.renderMain() }
             </div>
         );
