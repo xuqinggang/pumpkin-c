@@ -3,8 +3,10 @@ import { withRouter } from 'react-router';
 
 import { dateFormat } from 'lib/util';
 import ExpandText from 'Shared/ExpandText/ExpandText';
-import { goRentUnitDetail } from 'application/App/routes/routes';
+import { goHouseDetail } from 'application/App/routes/routes';
 import Stars from '../Stars';
+
+import { DirectTypeMapText } from 'baseData/MapData';
 
 import './styles.less';
 
@@ -14,22 +16,27 @@ const imgCutModifier = '?crop=1&cpos=middle&w=200&h=200';
 
 class CommentItem extends PureComponent {
     handleTouchTap = (rentUnitId) => {
-        this.goRentUnitDetail(rentUnitId);
+        this.goHouseDetail(rentUnitId);
     }
 
-    goRentUnitDetail = goRentUnitDetail(this.props.history)
+    goHouseDetail = goHouseDetail(this.props.history)
 
     render() {
         const { comment } = this.props;
 
         const {
-            userInfo: { nickname, avatar },
+            userInfo,
             score,
             createTime,
+            updateTime,
             content,
             images,
-            rentUnit: { blockName, rentUnitId }
+            rentUnit,
+            title,
         } = comment;
+
+        const { nickname, avatar } = userInfo || {};
+        const { blockName, rentUnitId, bedroomCount, direct } = rentUnit || {};
 
         return (
             <div className={`${classPrefix}`}>
@@ -52,19 +59,23 @@ class CommentItem extends PureComponent {
                                 color2="#F38D39"
                             />
                         </div>
-                        <div className="time">{dateFormat(createTime * 1000)}</div>
+                        <div className="time">{dateFormat(updateTime * 1000)}</div>
                     </div>
                 </div>
                 <div className="content">
-                    <ExpandText intro={content} />
+                    <ExpandText color="#666" intro={content || '此用户未填写评价内容'} />
                     {
-                        images.map((image, index) => (
+                        images && images.map((image, index) => (
                             <img className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
                         <img src={require('./images/little-house.png')} alt="" />
-                        {blockName}
+                        {
+                            title
+                                ? title
+                                : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
+                        }
                     </div>
                 </div>
             </div>

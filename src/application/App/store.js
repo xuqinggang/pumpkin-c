@@ -22,7 +22,7 @@ window.setStore = function (key, dataObj) {
         if (!keyCorrespondValueObj) {
             if (window.isServerRender) return null;
             else {
-                throw new Error(`window变量上，没有相应的键值 => ${key}`);
+                // throw new Error(`window变量上，没有相应的键值 => ${key}`);
             }
         }
 

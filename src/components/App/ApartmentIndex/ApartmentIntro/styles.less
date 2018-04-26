@@ -8,10 +8,12 @@
     }
 
     & .intro-wrap {
-        flex: 0.7;
-        padding: 0 15px;
+        width: 350px;
+        padding: 0 25px;
 
         & .name {
+            display: inline-block;
+            max-width: 212px;
             color: #000;
             margin-right: 10px;
             .font-size(34);
@@ -35,7 +37,7 @@
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
         }
 
     }

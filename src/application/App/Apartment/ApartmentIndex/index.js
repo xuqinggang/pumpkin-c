@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { RoomSlider } from 'components/App/ShopDetail';
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import EasyHead from 'Shared/EasyHead';
 import {
     ApartmentIntro,
     ApartmentRecommend,
@@ -10,9 +10,9 @@ import {
 } from 'components/App/ApartmentIndex';
 import {
     goCommentList,
-    goShopList,
+    goExclusiveShop,
     goApartmentDetail,
-    goRentUnitList,
+    goHouseList,
 } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
@@ -20,6 +20,7 @@ import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
+import initStore from 'application/App/initStore';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
 
@@ -37,11 +38,11 @@ export default class ApartmentIndex extends PureComponent {
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
-    goShopList = () => {
-        goShopList(this.props.history)(`b${this.apartmentId}`);
+    goExclusiveShop = () => {
+        goExclusiveShop(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
-    goRentUnitList = () => {
+    goHouseList = () => {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
 
@@ -51,12 +52,13 @@ export default class ApartmentIndex extends PureComponent {
             return;
         }
 
-        window.setStore('filter', null);
-        goRentUnitList(this.props.history)({
-            queryParam: {
-                apartment: apartmentId,
-            },
+        initStore();
+        const urlStore = window.getStore('url');
+        window.setStore('url', {
+            ...urlStore,
+            filterSearch: `?apartment=${apartmentId}`,
         });
+        goHouseList(this.props.history)();
     }
 
     renderIndex() {
@@ -75,8 +77,7 @@ export default class ApartmentIndex extends PureComponent {
             <div className={`${classPrefix}`}>
                 {
                     !isRmHead() &&
-                    <HouseHead
-                        history={history}
+                    <EasyHead
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>
                         )}
@@ -91,10 +92,10 @@ export default class ApartmentIndex extends PureComponent {
                     />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
-                <ApartmentShop shops={boutiqueShops} goMore={this.goShopList} />
+                <ApartmentShop shops={boutiqueShops} goMore={this.goExclusiveShop} />
                 <div className="content-padding">
-                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goRentUnitList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goRentUnitList} />
+                    <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goHouseList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goHouseList} />
                 </div>
             </div>
         );

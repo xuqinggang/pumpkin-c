@@ -51,6 +51,7 @@ class WrapRouter extends PureComponent {
                 <Route path={`${this.urlPrefix}/shop/detail/:shopId`} component={ShopDetail} />
                 <Route exact path={`${this.urlPrefix}/shop/list/:filterUrlFragment?`} component={ShopList} />
                 <Route exact path={`${this.urlPrefix}/shop/:filterUrlFragment?`} component={ShopList} />
+                <Route exact path={`${this.urlPrefix}/shop/exclusive/:filterUrlFragment?`} component={ShopList} />
                 <Route path={`${this.urlPrefix}/login`} component={HouseLogin} />
                 <Route path={`${this.urlPrefix}/me`} component={HouseMe} />
                 <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />

@@ -4,7 +4,7 @@ import Service from 'lib/Service';
 export function ajaxGetCommentList(apartmentId, pager = {}) {
 
     const { curPage } = pager;
-    const perPage = 20;
+    const perPage = 10;
 
     return Service.get(`/api/v1/brandApartments/comments/apartment/${apartmentId}`, {
         offset: ((curPage - 1) * perPage) || 0,

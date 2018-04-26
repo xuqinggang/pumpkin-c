@@ -13,8 +13,15 @@ const classPrefix = 'm-meentry';
 export default class MeEntry extends PureComponent {
     // 事件处理程序-退出当前账号点击
     handleLogoutTap = () => {
+        this.storeLastLoginUser();
         clearCookie('sid');
         goHouseList(this.props.history)();
+    }
+
+    storeLastLoginUser = () => {
+        const meInfo = window.getStore('meInfo') || {};
+        const { uid } = meInfo;
+        lastUserIdStorage.set(uid);
     }
 
     render() {

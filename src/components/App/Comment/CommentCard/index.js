@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 
-import { goCommentInput, goRentUnitDetail } from 'application/App/routes/routes';
+import { goCommentInput, goHouseDetail } from 'application/App/routes/routes';
 import './styles.less';
 import CommentCardWrap from '../CommentCardWrap';
 import WaitImage from './images/wait-for-comment.jpg';
@@ -32,11 +32,11 @@ class CommentCard extends PureComponent {
 
     handleGoRentUnit = () => {
         const { rentUnitId } = this.props;
-        this.goRentUnitDetail(rentUnitId);
+        this.goHouseDetail(rentUnitId);
     }
 
     goCommentInput = goCommentInput(this.props.history)
-    goRentUnitDetail = goRentUnitDetail(this.props.history)
+    goHouseDetail = goHouseDetail(this.props.history)
 
     render() {
         const { title } = this.props;

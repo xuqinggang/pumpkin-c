@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import { Stars, ImageUploadInput, SuccessComment } from 'components/App/Comment';
 import { ajaxPostComment } from '../ajaxInitComment';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
+import EasyHead from 'Shared/EasyHead';
 import { commentQueueStorage } from 'application/App/storage';
+import { ajaxGetMeInfo } from 'application/App/HouseMe/ajaxHouseMe';
 
 import './styles.less';
 
@@ -18,7 +19,7 @@ export default class CommentInput extends PureComponent {
             images: [],
             score: 5,
             commentDone: false,
-            title: 'xxx评论',
+            title: '',
         };
     }
 
@@ -32,15 +33,26 @@ export default class CommentInput extends PureComponent {
             images,
             score,
             rentUnitId,
-        }).then(() => {
+        }).then((data) => {
             this.setState({
                 commentDone: true,
                 title: '评价完成',
             });
+            // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
+            const userInfo = window.getStore('meInfo');
+            const shiftComment = commentQueueStorage.shift();
+            window.setStore('selfComment', {
+                content,
+                images,
+                score,
+                rentUnitId,
+                updateTime: Date.now() / 1000,
+                userInfo,
+                title: shiftComment.title,
+            });
             // 待评价队列出队
-            commentQueueStorage.pop();
         }).catch(() => {
-            PopToolTip({ text: '提交失败' });
+            PopToolTip({ text: '评论提交失败' });
         });
     }
 
@@ -97,23 +109,35 @@ export default class CommentInput extends PureComponent {
         )
     }
 
+    componentWillMount() {
+        const comments = commentQueueStorage.get();
+        const comment = (comments && comments[0]) || { ttile: '评价' };
+        this.setState({
+            title: comment.title,
+        });
+
+        // get user info TODO we need may need it in all page
+        ajaxGetMeInfo()
+            .then((meInfoObj) => {
+                window.setStore('meInfo', meInfoObj);
+            });
+    }
+
     render() {
         const { history } = this.props;
-        const { title, commentDone } = this.state;
+        const { commentDone, title } = this.state;
 
         return (
             <div className={`${classPrefix}`}>
-                <HouseHead
-                    history={history}
-                    renderRight={() => (
-                        <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
-                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
-                            {
-                                !commentDone &&
-                                <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
-                            }
-                        </div>
-                    )}
+                <EasyHead renderRight={() => (
+                    <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
+                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                        {
+                            !commentDone &&
+                            <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                        }
+                    </div>
+                )}
                 />
                 { this.renderMain() }
             </div>

@@ -2,6 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipe from 'react-swipe';
 
+/**
+ * function stop() {
+    //delay = 0;
+    delay = options.auto > 0 ? options.auto : 0;
+    clearTimeout(interval);
+  }
+ */
+
 import './styles.less';
 
 const classPrefix = 'm-shoproomslider';
@@ -39,11 +47,19 @@ export default class RoomSlider extends PureComponent {
         const { avatar, url } = link;
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
-                <a href={url}>
-                    <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
-                </a>
+                {
+                    url ?
+                        <a href={url}>
+                            <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        </a>
+                        : <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                }
             </div>
         );
+    }
+
+    handleTransitionEnd = (e) => {
+        console.log(e, 'handleTransitionEnd');
     }
 
     renderImages = (img, index) => {
@@ -69,7 +85,9 @@ export default class RoomSlider extends PureComponent {
                         // continuous: true,
                         callback: this.handleSlideChange,
                         auto: 2000,
+                        transitionEnd: this.handleTransitionEnd,
                     }}
+                    ref={swiper => this.swiper = swiper}
                     key={items.length}
                 >
                     {
@@ -87,7 +105,7 @@ export default class RoomSlider extends PureComponent {
                 }
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {
-                        items.map((_, index) => (
+                        items && items.length > 1 && items.map((_, index) => (
                             <div className={index === curIndex ? 'ring' : 'point'} key={index}></div>
                         ))
                     }

@@ -66,6 +66,8 @@ class RentUnitItem extends PureComponent {
             [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
 
+        console.log('apartmentName', apartmentName)
+
         return (
             <div
                 onTouchTap={this.handleTouchTap}
@@ -86,7 +88,10 @@ class RentUnitItem extends PureComponent {
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
-                        <span className="title-apart f-vertical-middle">{apartmentName}</span>
+                        {
+                            apartmentName &&
+                            <span className="title-apart f-vertical-middle">{apartmentName}</span>
+                        }
                         {blockName}-{bedroomCount}居室-{getWithDefault(DirectTypeMapText, direct, '多个朝向')}
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">

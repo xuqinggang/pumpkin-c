@@ -214,8 +214,6 @@ export default class HouseList extends PureComponent {
             history,
         } = this.props;
 
-        console.log('this.filterParamsObj', this.filterParamsObj);
-
         const searchStore = window.getStore('search');
         const searchRt = searchStore && searchStore.searchRt;
 console.log('searchRt', searchRt);

@@ -56,6 +56,10 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
         const positionFilterDataObjStore = window.getStore('positionFilterDataObj');
         if (positionFilterDataObjStore && positionFilterDataObjStore.data) return;
 
+        const { storeKey = 'filter' } = this.props;
+
+        console.log(storeKey, 'storeKey');
+
         ajaxInitPositionData()
             .then((positionFilterDataObj) => {
                 const newPositionFilterDataObj = Object.assign({}, this.state.positionFilterDataObj, positionFilterDataObj);
@@ -63,7 +67,7 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
                 this.setState({
                     positionFilterDataObj: newPositionFilterDataObj,
                 });
-                const filterStore = window.getStore('filter');
+                const filterStore = window.getStore(storeKey);
                 const positionUrlFrg = filterStore && filterStore.urlFrg.position;
                 if (positionUrlFrg) {
                     const rt = parsePositionUrlToStateAndLabel(positionUrlFrg);
@@ -77,7 +81,7 @@ export default class PositionFilterWrap extends Component<PropType, StateType> {
                         label: oldLabel,
                         state: oldState,
                     } = filterStore || {};
-                    window.setStore('filter', {
+                    window.setStore(storeKey, {
                         label: Object.assign({}, oldLabel, { position: label }),
                         state: Object.assign({}, oldState, { position: state }),
                     });
