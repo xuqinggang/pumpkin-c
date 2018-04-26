@@ -26,8 +26,8 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
 
         this.state = {
             searchData: {},
+            keyword: '',
         };
-        this.keyword = '';
     }
 
     handleNavigateList = () => {
@@ -39,7 +39,9 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
     }
 
     onInputChange = (keyword: string) => {
-        this.keyword = keyword;
+        this.setState({
+            keyword,
+        });
 
         ajaxSearchHits({
             keyword,
@@ -54,10 +56,10 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
     handleSubmit = (e) => {
         e.preventDefault();
         setFilterStore({
-            paramsObj: { keyword: this.keyword },
+            paramsObj: { keyword: this.state.keyword },
         });
 
-        setSearchStore(this.keyword);
+        setSearchStore(this.state.keyword);
         // 清空 houseList store
         window.setStore('houseList', null);
         goHouseList(this.props.history)();
@@ -86,16 +88,27 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             >
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
                     <form onSubmit={this.handleSubmit}>
-                        <InputSearch onInputChange={this.onInputChange} />
+                        <InputSearch
+                            onInputChange={this.onInputChange}
+                            placeholder="区域、小区、商圈、地铁站、地址"
+                            maxLength={50}
+                        />
                     </form>
                     <span className="head-btn-cancel" onTouchTap={this.handleNavigateList}>取消</span>
                 </div>
                 <div
                     onTouchTap={this.handleStopPropagation}
                 >
-                    <HitSearch history={history} />
-                    <HistoryRecord />
-                    <SearchList searchData={searchData} />
+                    {
+                        this.state.keyword.length ?
+                            <SearchList searchData={searchData} />
+                            : (
+                                <div>
+                                    <HitSearch history={history} />
+                                    <HistoryRecord />
+                                </div>
+                            )
+                    }
                 </div>
             </div>
         );

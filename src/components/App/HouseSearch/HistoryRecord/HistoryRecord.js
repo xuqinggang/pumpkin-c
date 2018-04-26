@@ -31,16 +31,19 @@ export default class HistoryRecord extends PureComponent<{}> {
         } = this.state;
 
         return (
-            <div className={classPrefix}>
-                <div className={`g-grid-row f-flex-justify-between f-flex-align-center ${classPrefix}-head`}>
-                    <h2 className={`f-display-inlineblock ${classPrefix}-title`}>历史记录</h2>
-                    <span
-                        className={`icon-empty ${classPrefix}-icon`}
-                        onTouchTap={this.handleClearHistoryRecord}
-                    />
+            historyRecordArr.length ? (
+                <div className={classPrefix}>
+                    <div className={`g-grid-row f-flex-justify-between f-flex-align-center ${classPrefix}-head`}>
+                        <h2 className={`f-display-inlineblock ${classPrefix}-title`}>历史记录</h2>
+                        <span
+                            className={`icon-empty ${classPrefix}-icon`}
+                            onTouchTap={this.handleClearHistoryRecord}
+                        />
+                    </div>
+                    <RecordList list={historyRecordArr} />
                 </div>
-                <RecordList list={historyRecordArr} />
-            </div>
+            )
+            : null
         );
     }
 }

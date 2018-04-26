@@ -23,6 +23,8 @@ export default class InputSearch extends PureComponent<PropType> {
         const {
             className,
             onInputChange,
+            placeholder,
+            maxLength,
         } = this.props;
 
         return (
@@ -31,6 +33,8 @@ export default class InputSearch extends PureComponent<PropType> {
                 <InputClear
                     className={`${classPrefix}-input-wrapper`}
                     onChange={onInputChange}
+                    placeholder={placeholder}
+                    maxLength={maxLength}
                 />
             </div>
         );

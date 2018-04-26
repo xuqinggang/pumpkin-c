@@ -128,6 +128,10 @@ const withArrayApi = (baseStorage, opts) => {
             this.set(newData);
             return returnItem;
         },
+        len() {
+            const data = this.get() || [];
+            return data.length;
+        },
     };
 };
 

@@ -104,6 +104,9 @@ export default class HouseList extends PureComponent {
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
 
+        // 清空搜索
+        clearSearchStore();
+
         goHouseList(this.props.history)(urlFrgRt);
 
         // 未知原因，需要设置延时来确保微信分享正常
@@ -215,7 +218,7 @@ export default class HouseList extends PureComponent {
 
         const searchStore = window.getStore('search');
         const searchRt = searchStore && searchStore.searchRt;
-
+console.log('searchRt', searchRt);
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>

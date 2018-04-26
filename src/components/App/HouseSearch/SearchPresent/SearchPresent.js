@@ -38,12 +38,12 @@ export default class SearchPresent extends PureComponent<PropType> {
                             className={`f-display-inlineblock ${classPrefix}-rt`}
                             onTouchTap={this.handleClearSearch}
                         >
-                            <span className="rt-text">
+                            <span className="f-singletext-ellipsis rt-text">
                                 {searchRt}
                             </span>
                             <span className="rt-close icon-small-close" />
                         </div>
-                        : <span className={`${classPrefix}-text-default`}>想住哪呢</span>
+                        : <span className={`${classPrefix}-text-default`}>想住哪儿呢</span>
                 }
             </div>
         );

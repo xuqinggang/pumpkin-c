@@ -75,7 +75,7 @@ export function clearPositionFilter() {
             },
         }),
         label: Object.assign({}, oldLabel, {
-            position: '租金',
+            position: '位置',
         }),
         urlFrg: Object.assign({}, oldUrlFrg, {
             position: '',
