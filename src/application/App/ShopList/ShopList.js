@@ -9,7 +9,7 @@ import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
-import { goShopList } from 'application/App/routes/routes';
+import { goShopList, goExclusiveShop } from 'application/App/routes/routes';
 import { brandFilterBus } from './filters/brandFilter';
 import { stringifyPostionState } from 'application/App/HouseList/stringifyState';
 import { parseUrl as parsePositionUrl } from 'application/App/HouseList/parseUrl';
@@ -46,6 +46,11 @@ export default class ShopList extends PureComponent {
                 canGoBack: false,
                 url: window.location.href,
             });
+        }
+
+        const url = props.match.url;
+        if (url.indexOf('exclusive') > -1) {
+            this.isExclusive = true;
         }
     }
 
@@ -95,7 +100,11 @@ export default class ShopList extends PureComponent {
     }
 
     goShopList = (filterUrlFragment) => {
-        goShopList(this.props.history)(filterUrlFragment);
+        if (this.isExclusive) {
+            goExclusiveShop(this.props.history)(filterUrlFragment);
+        } else {
+            goShopList(this.props.history)(filterUrlFragment);
+        }
     }
 
     handleBrandSelect(brand) {
@@ -218,6 +227,7 @@ export default class ShopList extends PureComponent {
                         onFilterReSume={this.onFilterReSume}
                         onDynamicSetPositionLabel={this.dynamicSetPositionFilterLabel}
                         onDynamicSetBrandLabel={this.dynamicSetBrandFilterLabelAndState}
+                        isExclusive={this.isExclusive}
                     />
                 </div>
                 <div className={listClass}>

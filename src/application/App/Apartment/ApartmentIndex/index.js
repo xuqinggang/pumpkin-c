@@ -10,7 +10,7 @@ import {
 } from 'components/App/ApartmentIndex';
 import {
     goCommentList,
-    goShopList,
+    goExclusiveShop,
     goApartmentDetail,
     goHouseList,
 } from 'application/App/routes/routes';
@@ -38,8 +38,8 @@ export default class ApartmentIndex extends PureComponent {
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
-    goShopList = () => {
-        goShopList(this.props.history)(`z${this.apartmentId}`);
+    goExclusiveShop = () => {
+        goExclusiveShop(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
     goHouseList = () => {
@@ -92,7 +92,7 @@ export default class ApartmentIndex extends PureComponent {
                     />
                 </div>
                 <ApartmentRecommend recommends={recommends} />
-                <ApartmentShop shops={boutiqueShops} goMore={this.goShopList} />
+                <ApartmentShop shops={boutiqueShops} goMore={this.goExclusiveShop} />
                 <div className="content-padding">
                     <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goHouseList} />
                     <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goHouseList} />
