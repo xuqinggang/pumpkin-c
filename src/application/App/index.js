@@ -1,9 +1,9 @@
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import createHistory from 'history/createBrowserHistory';
 
 import configureStore from './reduxs/configureStore';
+import history from './history';
 
 // redux store
 const store = configureStore();
@@ -14,8 +14,6 @@ import 'pumpkin-font-c';
 
 import './store';
 import routes from './routes';
-
-const history = createHistory();
 
 // 注册onTouchTap
 injectTapEventPlugin();

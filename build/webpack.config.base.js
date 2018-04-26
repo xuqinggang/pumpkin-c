@@ -52,6 +52,7 @@ const webpackBaseConf = {
             Map: resolve('src/application/Map'),
             pages: resolve('src/application/App/pages'),
             reduxs: resolve('src/application/App/reduxs'),
+            const: resolve('src/application/App/const'),
             styles: resolve('src/styles'),
             config: resolve('src/config'),
             lib: resolve('src/lib'),

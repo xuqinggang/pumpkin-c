@@ -1,24 +1,71 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { dataAdapterPostion } from './dataAdapter';
+
 /* init state */
-const initstate_position = {
+const initStatePosition = {
     state: {
-        firstId: 0,
-        secondId: -1,
-        thirdId: -1,
+        firstIndex: 0,
+        secondIndex: -1,
+        thirdIndex: -1,
     },
     label: '位置',
-    Params: {},
+    params: {
+        districtId: null,
+        circleId: null,
+        subwayId: null,
+        stationId: null,
+    },
+    url: '',
+    originData: {
+        districts: null,
+        subways: null,
+    },
 };
 
 /* const actions */
-export const CHANGE_FILTER_POSITION = 'change_filter_position';
+// ajax
+export const positionFilterAjaxActions = {
+    POSITION_ORIGINDATA_FULFILLED: 'position_origindata_fulfilled',
+
+    fulfilled: createAction('position_origindata_fulfilled'),
+};
+
+// saga
+export const positionFilterSagaActions = {
+    POSITION_ORIGINDATA_INIT: 'position_origindata_init',
+
+    positionOriginDataInit: createAction('position_origindata_init'),
+};
+
+// put
+export const positionFilterPutActions = {
+    UPDATE_FILTER_POSITION: 'update_filter_position',
+
+    updateFilterPosition: createAction('update_filter_position'),
+};
 
 export default handleActions({
-    [CHANGE_FILTER_POSITION](state, action) {
+    [positionFilterAjaxActions.POSITION_ORIGINDATA_FULFILLED](state, action) {
+        const tmpOriginData = dataAdapterPostion(action.payload);
         return {
             ...state,
-            state: action.payload.state,
+            originData: { ...state.originData, ...tmpOriginData },
         };
     },
-}, initstate_position);
+    [positionFilterPutActions.UPDATE_FILTER_POSITION](state, action) {
+        const {
+            url,
+            params,
+            label,
+            state: newState,
+        } = action.payload;
+        return {
+            ...state,
+            url: url === undefined ? state.url : url,
+            label: label || state.label,
+            state: newState === undefined ? state.state : { ...state.state, ...newState },
+            params,
+        };
+    },
+}, initStatePosition);

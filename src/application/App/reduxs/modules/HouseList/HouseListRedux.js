@@ -3,7 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { rentUnitListAdapter } from './dataAdapter';
 
 /* init state */
-const initstate_houselist = {
+const initStateHouselist = {
     limit: 20,
     offset: 0,
     rentUnits: [],
@@ -16,48 +16,39 @@ const initstate_houselist = {
 
 /* actions const */
 // ajax
-export const AJAX_HOUSELIST_PENDING = 'ajax_houselist_pending';
-export const AJAX_HOUSELIST_FULFILLED = 'ajax_houselist_fulfilled';
-export const AJAX_HOUSELIST_FAILED = 'ajax_houselist_failed';
-// saga
-export const SAGA_HOUSELIST_INIT = 'saga_houselist_init';
-export const SAGA_HOUSELIST_ADD = 'saga_houselist_add';
-// export const SAGA_HOUSELIST_CLEAR = 'saga_houselist_clear';
-// syn
-export const HOUSELIST_CLEAR = 'houselist_clear';
+export const houseListAjaxActions = {
+    HOUSELIST_PENDING: 'houselist_pending',
+    HOUSELIST_FULFILLED: 'houselist_fulfilled',
+    HOUSELIST_FAILED: 'houselist_failed',
 
-/* action creator */
-// ajax
-const ajaxHouseListPending = createAction(AJAX_HOUSELIST_PENDING);
-const ajaxHouseListFulfilled = createAction(AJAX_HOUSELIST_FULFILLED);
-const ajaxHouseListFailed = createAction(AJAX_HOUSELIST_FAILED);
-export const ajaxHouseListActions = {
-    pending: ajaxHouseListPending,
-    fulfilled: ajaxHouseListFulfilled,
-    failed: ajaxHouseListFailed,
+    pending: createAction('houselist_pending'),
+    fulfilled: createAction('houselist_fulfilled'),
+    failed: createAction('houselist_failed'),
 };
 // saga
-const sagaHouseListInit = createAction(SAGA_HOUSELIST_INIT);
-const sagaHouseListAdd = createAction(SAGA_HOUSELIST_ADD);
-export const sagaHouseListActions = {
-    initHouseList: sagaHouseListInit,
-    addHouseList: sagaHouseListAdd,
+export const houseListSagaActions = {
+    HOUSELIST_INIT: 'houselist_init',
+    HOUSELIST_ADD: 'houselist_add',
+
+    houseListInit: createAction('houselist_init'),
+    houseListAdd: createAction('houselist_add'),
 };
-// syn
-export const houseListClearAction = createAction(HOUSELIST_CLEAR);
+// put
+export const houseListPutActions = {
+    HOUSELIST_CLEAR: 'houselist_clear',
+
+    houseListClear: createAction('houselist_clear'),
+};
 
 // reducer
 export default handleActions({
-    // [INIT_HOUSELIST](state, action) {
-    //     return action.payload;
-    // },
-    [AJAX_HOUSELIST_PENDING](state) {
+    [houseListAjaxActions.HOUSELIST_PENDING](state) {
         return {
             ...state,
             isPending: true,
         };
     },
-    [AJAX_HOUSELIST_FULFILLED](state, action) {
+    [houseListAjaxActions.HOUSELIST_FULFILLED](state, action) {
         const {
             suggestRentUnits,
             rentUnits,
@@ -73,16 +64,16 @@ export default handleActions({
             isPending: false,
         };
     },
-    [AJAX_HOUSELIST_FAILED](state, action) {
+    [houseListAjaxActions.HOUSELIST_FAILED](state, action) {
         return {
             ...state,
             isPending: false,
             isError: true,
         };
     },
-    [HOUSELIST_CLEAR]() {
+    [houseListPutActions.HOUSELIST_CLEAR]() {
         return {
-            ...initstate_houselist,
+            ...initStateHouselist,
         };
     },
-}, initstate_houselist);
+}, initStateHouselist);

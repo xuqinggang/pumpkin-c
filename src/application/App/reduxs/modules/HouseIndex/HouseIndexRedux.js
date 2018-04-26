@@ -11,32 +11,27 @@ const initstate_houseindex = {
 
 /* actions const */
 // ajax
-export const AJAX_HOUSEINDEX_BANNER = 'ajax_houseindex_banner';
-export const AJAX_HOUSEINDEX_RECOMMEND = 'ajax_houseindex_recommend';
-// saga
-export const SAGA_HOUSEINDEX_INIT = 'saga_houseindex_init';
+export const houseBannerAjaxActions = {
+    HOUSEINDEX_BANNER: 'houseindex_banner',
 
-/* action creator */
-// ajax
-const ajaxHouseIndexBanner = createAction(AJAX_HOUSEINDEX_BANNER);
-export const ajaxHouseIndexBannerActions = {
-    // pending: () => ({}),
-    fulfilled: ajaxHouseIndexBanner,
-    // failed: () => ({}),
+    fulfilled: createAction('houseindex_banner'),
 };
 
-const ajaxHouseIndexRecommend = createAction(AJAX_HOUSEINDEX_RECOMMEND);
-export const ajaxHouseIndexRecommendActions = {
-    // pending: () => ({}),
-    fulfilled: ajaxHouseIndexRecommend,
-    // failed: () => ({}),
-}
+export const houseRecommendAjaxActions = {
+    HOUSEINDEX_RECOMMEND: 'houseindex_recommend',
+    fulfilled: createAction('houseindex_recommend'),
+};
+
 // saga
-export const sagaHouseIndexInitAction = createAction(SAGA_HOUSEINDEX_INIT);
+export const houseIndexSagaActions = {
+    HOUSEINDEX_INIT: 'houseindex_init',
+
+    houseIndexInit: createAction('houseindex_init'),
+};
 
 /* reducer */
 export default handleActions({
-    [AJAX_HOUSEINDEX_BANNER](state, action) {
+    [houseBannerAjaxActions.HOUSEINDEX_BANNER](state, action) {
         const payload = action.payload || {};
 
         return {
@@ -47,7 +42,7 @@ export default handleActions({
             },
         };
     },
-    [AJAX_HOUSEINDEX_RECOMMEND](state, action) {
+    [houseRecommendAjaxActions.HOUSEINDEX_RECOMMEND](state, action) {
         const payload = action.payload || [];
         const recommends = payload.map(item => ({
             url: item.url,

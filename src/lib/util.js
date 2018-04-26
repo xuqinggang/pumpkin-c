@@ -1,3 +1,22 @@
+// 根据key数组截取对象
+export function sliceObjbyKeys(obj, keys) {
+    if (!(obj && keys && keys.length)) return null;
+
+    const distObj = {};
+    keys.forEach((key) => {
+        if (obj[key] !== undefined) {
+            distObj[key] = obj[key];
+        }
+    });
+
+    return Object.keys(distObj).length ? distObj : null;
+}
+
+// 获去对象对应索引的键
+export function getObjectKeyByIndex(obj, index) {
+    const keys = Object.keys(obj);
+    return keys[index];
+}
 
 // 反转对象的属性和值
 export function reverseObjKeyValue(obj) {

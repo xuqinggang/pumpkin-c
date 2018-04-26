@@ -6,16 +6,19 @@ import { connect } from 'react-redux';
 import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
 import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
 import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
+import Filter from 'components/App/HouseList/Filter/Filter';
 // import Filter from 'components/App/HouseList/Filter/Filter';
 // import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
-/* saga action creator */
-import { sagaHouseListActions } from 'reduxs/modules/HouseList/HouseListRedux';
-import { sagaHouseIndexInitAction } from 'reduxs/modules/HouseIndex/HouseIndexRedux';
+/* saga action */
+import { houseListSagaActions } from 'reduxs/modules/HouseList/HouseListRedux';
+import { houseIndexSagaActions } from 'reduxs/modules/HouseIndex/HouseIndexRedux';
+import { positionFilterSagaActions } from 'reduxs/modules/Filter/PositionFilterRedux';
 
 /* selector */
 import { houseListsSelector } from 'reduxs/modules/HouseList/HouseListSelector';
 import { houseIndexSelector } from 'reduxs/modules/HouseIndex/HouseIndexSelector';
+import { filterInfoSelector, filterUrlSelector } from 'reduxs/modules/Filter/FilterSelector';
 
 // import { goHouseList } from 'application/App/routes/routes';
 
@@ -27,20 +30,24 @@ import './styles.less';
 
 const classPrefix = 'g-houselist';
 
-@connect(state => ({
+@connect((state, props) => ({
     houseList: houseListsSelector(state),
     houseIndex: houseIndexSelector(state),
+    filterInfo: filterInfoSelector(state),
+    filterUrl: filterUrlSelector(props),
 }), {
-    sagaHouseListInit: sagaHouseListActions.initHouseList,
-    sagaHouseListAdd: sagaHouseListActions.addHouseList,
-    sagaHouseIndexInit: sagaHouseIndexInitAction,
+    sagaHouseListInit: houseListSagaActions.houseListInit,
+    sagaHouseListAdd: houseListSagaActions.houseListAdd,
+    sagaHouseIndexInit: houseIndexSagaActions.houseIndexInit,
+    sagaPositionOriginData: positionFilterSagaActions.positionOriginDataInit,
 })
 export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.props.sagaHouseListInit();
+        this.props.sagaHouseListInit({ filterUrl: props.filterUrl });
         this.props.sagaHouseIndexInit();
+        this.props.sagaPositionOriginData();
     }
 
     // 搜索
@@ -62,6 +69,7 @@ export default class HouseList extends PureComponent {
         const {
             houseList,
             houseIndex,
+            filterInfo,
         } = this.props;
         console.log('HouseList render', this.props)
         return (
@@ -69,6 +77,11 @@ export default class HouseList extends PureComponent {
                 <button onTouchTap={this.handleTestTap}>test</button>
                 <IndexBanner {...houseIndex.banner} />
                 <IndexRecommend recommends={houseIndex.recommends} />
+                <Filter
+                    className="filter"
+                    filterInfo={filterInfo}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
                 <HouseLists
                     {...houseList}
                     onLoadMore={this.onLoadMore}

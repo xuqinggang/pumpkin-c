@@ -2,23 +2,25 @@ import { fork, call, takeLatest, take, put, select } from 'redux-saga/effects';
 
 import { houseListsSelector } from './HouseListSelector';
 import { filterParamsSelector } from 'reduxs/modules/Filter/FilterSelector';
-
+import { filterSagaActions } from 'reduxs/modules/Filter/FilterRedux';
 import { ajaxHouseList } from 'reduxs/modules/ajax/ajaxSaga';
 
 import {
-    SAGA_HOUSELIST_INIT,
-    SAGA_HOUSELIST_ADD,
-    houseListClearAction,
+    houseListSagaActions,
+    houseListPutActions,
 } from './HouseListRedux';
 
 // 初始化房源列表(操作:默认,筛选,搜索)
-function* initHouseList() {
+function* initHouseList({ filterUrl, search } = {}) {
     const houseList = yield select(houseListsSelector);
 
     // 判断是否为初始化，避免再次请求
     if (houseList && houseList.isInit) {
         // 清空
-        yield put(houseListClearAction());
+        yield put(houseListPutActions.houseListClear());
+console.log('watchFilterUrl filterUrl', filterUrl);
+        // 根据filterUrl初始化filterInfo
+        yield put(filterSagaActions.filterUrlInit({ filterUrl, }))
 
         // 获得筛选参数
         const filterParams = yield select(filterParamsSelector);
@@ -43,10 +45,10 @@ function* initHouseList() {
 // }
 
 /* watcher */
-export function* watcherHouseList() {
+function* watcherHouseList() {
     while(true) {
-        yield take(SAGA_HOUSELIST_INIT);
-        yield call(initHouseList);
+        const { payload } = yield take(houseListSagaActions.HOUSELIST_INIT);
+        yield call(initHouseList, payload);
         // yield takeLatest(SAGA_HOUSELIST_ADD, addHouseList);
     }
 }

@@ -15,9 +15,9 @@ const TypeMapText = {
 const ptClass = 'm-ptfilter';
 
 type StateType = {
-    firstItemSelectedIndex: number,
-    secondItemSelectedIndex: number,
-    thirdItemSelectedIndex: number,
+    firstIndex: number,
+    secondIndex: number,
+    thirdIndex: number,
 };
 
 type PropType = {
@@ -46,13 +46,13 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
         super(props);
         this.state = {
             // 第一级item选中索引
-            firstItemSelectedIndex: 0,
+            firstIndex: 0,
 
             // 第二级item选中索引
-            secondItemSelectedIndex: -1,
+            secondIndex: -1,
 
             // 第三级item选中索引
-            thirdItemSelectedIndex: -1,
+            thirdIndex: -1,
         };
     }
 
@@ -70,7 +70,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
     // 回调函数-第三级item点击
     onThirdItemTap = (index: number) => {
         this.setState({
-            thirdItemSelectedIndex: index,
+            thirdIndex: index,
         }, () => {
             this.onPositionFilterChange(this.state);
         });
@@ -79,11 +79,11 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
     // 回调函数-第二级item点击
     onSecondItemTap = (event: SyntheticEvent<>, index: number) => {
         this.setState({
-            secondItemSelectedIndex: index,
-            thirdItemSelectedIndex: -1,
+            secondIndex: index,
+            thirdIndex: -1,
         }, () => {
             // // 如果点击的都是附近所属的二级列表
-            // if (this.state.firstItemSelectedIndex === 2) {
+            // if (this.state.firstIndex === 2) {
             //     this.onPositionFilterChange(this.state);
             //     return;
             // }
@@ -96,12 +96,12 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
 
     // 每点击第一级item，要将之前点击的第二，三级item取消掉
     onFirstItemTap = (event: SyntheticEvent<>, index: number) => {
-        if (this.state.firstItemSelectedIndex === index) return;
+        if (this.state.firstIndex === index) return;
 
         this.setState({
-            firstItemSelectedIndex: index,
-            secondItemSelectedIndex: -1,
-            thirdItemSelectedIndex: -1,
+            firstIndex: index,
+            secondIndex: -1,
+            thirdIndex: -1,
         });
     }
 
@@ -109,7 +109,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
         return (
             <ThirdItemList
                 thirdDataObj={thirdDataObj}
-                selectItemIndex={this.state.thirdItemSelectedIndex}
+                selectItemIndex={this.state.thirdIndex}
                 onChange={this.onThirdItemTap}
             />
         );
@@ -129,7 +129,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
             className: ptClass,
             navClassName: `${ptClass}-nav`,
             contentClassName: `${ptClass}-content`,
-            activeIndex: this.state.secondItemSelectedIndex,
+            activeIndex: this.state.secondIndex,
             onChange: this.onSecondItemTap,
             direction: 'vertical',
         }, children);
@@ -153,7 +153,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
             className: ptClass,
             navClassName: `${ptClass}-nav`,
             contentClassName: `${ptClass}-content`,
-            activeIndex: this.state.firstItemSelectedIndex,
+            activeIndex: this.state.firstIndex,
             onChange: this.onFirstItemTap,
             direction: 'vertical',
         }, children);

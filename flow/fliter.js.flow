@@ -1,0 +1,11 @@
+declare type positionOriginDataType = {
+    [type: string]: {
+        [id: string]: {
+            text: string,
+            sub: {
+                [id: string]: string,
+            },
+            isCanCancel?: boolean,
+        },
+    },
+};

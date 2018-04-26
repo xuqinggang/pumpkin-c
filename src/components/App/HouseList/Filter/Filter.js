@@ -155,10 +155,11 @@ export default class Filter extends PureComponent {
     }
 
     componentDidMount() {
-        this.listWrapDom = document.querySelector('.g-houselist');
-        // 头部高度
-        this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
-        this.filterFixScrollTop = getFilterFixScrollTop();
+        // TODO:  <25-04-18, Me> // 
+        // this.listWrapDom = document.querySelector('.g-houselist');
+        // // 头部高度
+        // this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
+        // this.filterFixScrollTop = getFilterFixScrollTop();
 
         window.addEventListener('scroll', this._fixFilterDom);
     }
@@ -170,14 +171,17 @@ export default class Filter extends PureComponent {
     render() {
         const {
             className,
-            filterLabel,
-            filterState,
+            filterInfo,
         } = this.props;
 
         const {
-            filterShow,
             isFixed,
+            filterShow,
         } = this.state;
+
+        const {
+            position,
+        } = filterInfo;
 
         const filterListClass = classnames('g-grid-row f-flex-justify-between', `${filterClass}`, className, {
             'f-filterdom-fixed': isFixed,
@@ -193,7 +197,7 @@ export default class Filter extends PureComponent {
                         className={`${filterClass}-dropscreen-position`}
                         show={filterShow.position}
                         type="position"
-                        label={filterLabel.position}
+                        label={position.label}
                         isMask={true}
                         screenHeight="10.66667rem"
                         isFullScreen={false}
@@ -201,59 +205,60 @@ export default class Filter extends PureComponent {
                     >
                         <PositionFilterWrap
                             type="position"
-                            filterState={filterState.position}
+                            filterState={position.state}
                             onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
-                    <DropDownScreen
-                        className={`${filterClass}-dropscreen-rent`}
-                        show={filterShow.rent}
-                        label={filterLabel.rent}
-                        type="rent"
-                        isFullScreen={true}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <RentFilterWrap
-                            type="rent"
-                            filterState={filterState.rent}
-                            onFilterConfirm={this.onFilterRentConfirm}
-                        />
-                    </DropDownScreen>
-                </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
-                    <DropDownScreen
-                        className={`${filterClass}-dropscreen-rent`}
-                        show={filterShow.houseType}
-                        type="houseType"
-                        label={filterLabel.houseType}
-                        isFullScreen={true}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <HouseTypeFilterWrap 
-                            type="houseType"
-                            filterState={filterState.houseType}
-                            onFilterConfirm={this.onFilterHouseTypeConfirm}
-                        />
-                    </DropDownScreen>
-                </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
-                    <DropDownScreen
-                        show={filterShow.more}
-                        type="more"
-                        label={filterLabel.more}
-                        isFullScreen={true}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <MoreFilterWrap
-                            type="more"
-                            filterState={filterState.more}
-                            onFilterConfirm={this.onFilterMoreConfirm}
-                        />
-                    </DropDownScreen>
-                </li>
+                {
+                    // <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                    //     <DropDownScreen
+                    //         className={`${filterClass}-dropscreen-rent`}
+                    //         show={filterShow.rent}
+                    //         label={filterLabel.rent}
+                    //         type="rent"
+                    //         isFullScreen={true}
+                    //         onTouchTap={this.handleFilterShowTap}
+                    //     >
+                    //     <RentFilterWrap
+                    //         type="rent"
+                    //         filterState={filterState.rent}
+                    //         onFilterConfirm={this.onFilterRentConfirm}
+                    //     />
+                    // </DropDownScreen>
+                // </li>
+                    //     <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                    //         <DropDownScreen
+                    //             className={`${filterClass}-dropscreen-rent`}
+                    //             show={filterShow.houseType}
+                    //             type="houseType"
+                    //             label={filterLabel.houseType}
+                    //             isFullScreen={true}
+                    //             onTouchTap={this.handleFilterShowTap}
+                    //         >
+                    //     <HouseTypeFilterWrap 
+                    //         type="houseType"
+                    //         filterState={filterState.houseType}
+                    //         onFilterConfirm={this.onFilterHouseTypeConfirm}
+                    //     />
+                    // </DropDownScreen>
+                // </li>
+                    //     <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                    //         <DropDownScreen
+                    //             show={filterShow.more}
+                    //             type="more"
+                    //             label={filterLabel.more}
+                    //             isFullScreen={true}
+                    //             onTouchTap={this.handleFilterShowTap}
+                    //         >
+                    //     <MoreFilterWrap
+                    //         type="more"
+                    //         filterState={filterState.more}
+                    //         onFilterConfirm={this.onFilterMoreConfirm}
+                    //     />
+                    // </DropDownScreen>
+                // </li>
+                }
             </ul>
         );
     }

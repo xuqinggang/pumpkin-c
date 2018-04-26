@@ -3,21 +3,17 @@ import { fork, call, take } from 'redux-saga/effects';
 import { ajaxHouseIndexRecommend, ajaxHouseIndexBanner } from 'reduxs/modules/ajax/ajaxSaga';
 
 import {
-    SAGA_HOUSEINDEX_INIT,
+    houseIndexSagaActions,
 } from './HouseIndexRedux';
 
-function* initHouseIndex() {
+/* watcher */
+function* watcherHouseIndexInit() {
+    yield take(houseIndexSagaActions.HOUSEINDEX_INIT);
     yield [call(ajaxHouseIndexBanner), call(ajaxHouseIndexRecommend)];
 }
 
-/* watcher */
-function* watcherHouseIndex() {
-    yield take(SAGA_HOUSEINDEX_INIT);
-    yield call(initHouseIndex);
-}
-
 const houseIndexSagas = [
-    fork(watcherHouseIndex),
+    fork(watcherHouseIndexInit),
 ];
 
 export default houseIndexSagas;
