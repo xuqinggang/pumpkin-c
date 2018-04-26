@@ -89,6 +89,7 @@ export default class ShopFilter extends PureComponent {
             className,
             filterState,
             filterLabel,
+            isExclusive,
         } = this.props;
         const {
             filterShow,
@@ -121,25 +122,28 @@ export default class ShopFilter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
-                    <DropDownScreen
-                        className={`${classPrefix}-dropscreen-brand`}
-                        show={filterShow.brand}
-                        type="brand"
-                        label={filterLabel.brand}
-                        isMask={true}
-                        screenHeight="10.66667rem"
-                        isFullScreen={false}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <BrandFilterWrap
+                {
+                    !isExclusive &&
+                    <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                        <DropDownScreen
+                            className={`${classPrefix}-dropscreen-brand`}
+                            show={filterShow.brand}
                             type="brand"
-                            filterState={filterState.brand}
-                            onFilterConfirm={this.onFilterBrandConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
-                        />
-                    </DropDownScreen>
-                </li>
+                            label={filterLabel.brand}
+                            isMask={true}
+                            screenHeight="10.66667rem"
+                            isFullScreen={false}
+                            onTouchTap={this.handleFilterShowTap}
+                        >
+                            <BrandFilterWrap
+                                type="brand"
+                                filterState={filterState.brand}
+                                onFilterConfirm={this.onFilterBrandConfirm}
+                                onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
+                            />
+                        </DropDownScreen>
+                    </li>
+                }
             </ul>
         );
     }

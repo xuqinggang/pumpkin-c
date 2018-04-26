@@ -2,6 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipe from 'react-swipe';
 
+/**
+ * function stop() {
+    //delay = 0;
+    delay = options.auto > 0 ? options.auto : 0;
+    clearTimeout(interval);
+  }
+ */
+
 import './styles.less';
 
 const classPrefix = 'm-shoproomslider';
@@ -50,6 +58,10 @@ export default class RoomSlider extends PureComponent {
         );
     }
 
+    handleTransitionEnd = (e) => {
+        console.log(e, 'handleTransitionEnd');
+    }
+
     renderImages = (img, index) => {
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
@@ -73,7 +85,9 @@ export default class RoomSlider extends PureComponent {
                         // continuous: true,
                         callback: this.handleSlideChange,
                         auto: 2000,
+                        transitionEnd: this.handleTransitionEnd,
                     }}
+                    ref={swiper => this.swiper = swiper}
                     key={items.length}
                 >
                     {
