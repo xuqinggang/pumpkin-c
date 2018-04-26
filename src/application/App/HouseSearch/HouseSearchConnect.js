@@ -8,6 +8,7 @@ import {
     jumpHouseList,
     setFilterStore,
     clearOtherFilter,
+    clearPositionFilter,
     setSearchStore,
 } from 'application/App/HouseSearch/transId';
 import { historyRecordStorage } from 'application/App/storage';
@@ -27,6 +28,10 @@ function setStorage(data) {
     const reg = /<\/?em>/g;
     const newText = text.replace(reg, '');
     historyRecordStorage.update({ ...data, text: newText });
+
+    if (historyRecordStorage.len() > 10) {
+        historyRecordStorage.pop();
+    }
 }
 
 export default function HouseSearchConnectFunWrap() {
@@ -42,6 +47,7 @@ export default function HouseSearchConnectFunWrap() {
 
                 // 先清理
                 clearOtherFilter();
+                clearPositionFilter();
 
                 setFilterStore({
                     paramsObj: {
@@ -81,6 +87,7 @@ export default function HouseSearchConnectFunWrap() {
 
                 // 先清理
                 clearOtherFilter();
+                clearPositionFilter();
 
                 // search store
                 setSearchStore(text)
