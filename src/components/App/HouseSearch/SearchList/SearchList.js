@@ -47,6 +47,7 @@ export default class SearchList extends PureComponent<PropType> {
         } = this.props;
 
         const childrenArr = [];
+        console.log('searchData', searchData);
         Object.keys(searchData).forEach((type, index) => {
             const searchDataArr = searchData[type];
             searchDataArr && searchDataArr.length && childrenArr.push(
