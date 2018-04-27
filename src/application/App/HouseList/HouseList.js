@@ -7,6 +7,7 @@ import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecomm
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
 import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
+import BackTop from 'Shared/BackTop/BackTop';
 
 import {
     stringifyPostionState,
@@ -99,7 +100,6 @@ export default class HouseList extends PureComponent {
         // setStore filter
         this._setStoreFilterInfo();
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
-        console.log('this.urlFrgObj', this.urlFrgObj, urlFrgRt);
 
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
@@ -144,6 +144,7 @@ export default class HouseList extends PureComponent {
             apartmentId: this.queryFieldsObj.apartment || null,
             ...paramsObj,
         };
+        this._setStoreFilterInfo();
     }
 
     _setStoreFilterUrlFrg(filterUrlFragment) {
@@ -216,7 +217,6 @@ export default class HouseList extends PureComponent {
 
         const searchStore = window.getStore('search');
         const searchRt = searchStore && searchStore.searchRt;
-console.log('searchRt', searchRt);
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
@@ -239,13 +239,17 @@ console.log('searchRt', searchRt);
                 <HouseLists
                     filterParams={this.filterParamsObj}
                 />
-                {
-                    isApp() ?
-                        null :
-                        <BottomOpenNative
+                <div className={`${classPrefix}-fixbottom`}>
+                    {
+                        isApp() ?
+                        null 
+                        : <BottomOpenNative
+                            className="fixbottom-opennative"
                             schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(this.filterParamsObj)}`}
                         />
-                }
+                    }
+                    <BackTop className="fixbottom-backtop" />
+                </div>
             </div>
         );
     }

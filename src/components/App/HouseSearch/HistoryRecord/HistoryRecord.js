@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 
 import RecordList from '../RecordList/RecordList';
 
@@ -27,12 +28,16 @@ export default class HistoryRecord extends PureComponent<{}> {
 
     render() {
         const {
+            className,
+        } = this.props;
+
+        const {
             historyRecordArr,
         } = this.state;
 
         return (
             historyRecordArr.length ? (
-                <div className={classPrefix}>
+                <div className={classnames(classPrefix, className)}>
                     <div className={`g-grid-row f-flex-justify-between f-flex-align-center ${classPrefix}-head`}>
                         <h2 className={`f-display-inlineblock ${classPrefix}-title`}>历史记录</h2>
                         <span

@@ -94,6 +94,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                 <div className={`f-display-flex f-flex-align-center ${classPrefix}-head`}>
                     <form onSubmit={this.handleSubmit}>
                         <InputSearch
+                            autofocus={true}
                             onInputChange={this.onInputChange}
                             placeholder="区域、小区、商圈、地铁站、地址"
                             maxLength={50}
@@ -110,7 +111,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                             : (
                                 <div>
                                     <HitSearch history={history} />
-                                    <HistoryRecord />
+                                    <HistoryRecord className={`${classPrefix}-historyrecord`} />
                                 </div>
                             )
                     }
