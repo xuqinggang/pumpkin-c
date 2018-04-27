@@ -16,7 +16,9 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
 
     // define when call withHistory
     const { urlPrefix } = window.getStore('url');
-    const url = `${urlPrefix}${createPath(...arg)}`;
+
+    // url can be change, like add a search
+    let url = `${urlPrefix}${createPath(...arg)}`;
 
     const beforeTasks = Array.isArray(beforeRouteChange)
         ? beforeRouteChange
@@ -34,12 +36,15 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
 
     // tasks按中间件方式执行
     let index = 0;
-    function next() {
+    function next(newUrl) {
+        if (newUrl) {
+            url = newUrl;
+        }
         if (index < tasks.length) {
             tasks[index++](history, url, next);
         }
     }
-    next();
+    next(url);
 };
 
 export default withHistory;

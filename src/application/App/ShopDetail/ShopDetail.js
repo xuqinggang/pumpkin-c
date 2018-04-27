@@ -12,15 +12,13 @@ import { execWxShare } from 'lib/wxShare';
 import { ajaxGetApartmentDetail } from './ajaxInitShopDetail';
 import { dynamicDocTitle } from 'lib/util';
 import { stuffTotalFloorTOCentralHouses, getLocation } from './dataAdapter';
-import { isRmHead, isNanguaApp } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { goApartment } from 'application/App/routes/routes';
 
 import './styles.less';
 
 const classPrefix = 'g-shopdetail';
-
-const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ShopDetail extends PureComponent {
     constructor(props) {
@@ -35,7 +33,7 @@ export default class ShopDetail extends PureComponent {
             shopId: this.shopId,
         });
 
-        if (isSimulateNative()) {
+        if (isLikeNativeView()) {
             postRouteChangeToIOS({
                 canGoBack: true,
                 url: window.location.href,
@@ -144,14 +142,14 @@ export default class ShopDetail extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 {
-                    !isRmHead() ?
-                    <HouseHead
-                        history={history}
-                        renderRight={() => (
-                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{name}</span>
-                        )}
-                    /> :
-                    null
+                    !isLikeNativeView() ?
+                        <HouseHead
+                            history={history}
+                            renderRight={() => (
+                                <span className={`${classPrefix}-title f-singletext-ellipsis`}>{name}</span>
+                            )}
+                        /> :
+                        null
                 }
                 <RoomSlider images={images} totalOnsaleCount={totalOnsaleCount} />
                 <div className={`${classPrefix}-module ${classPrefix}-location`}>
