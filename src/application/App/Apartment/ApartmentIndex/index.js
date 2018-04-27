@@ -20,6 +20,7 @@ import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
+import { execWxShare } from 'lib/wxShare';
 import initStore from 'application/App/initStore';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
@@ -29,12 +30,45 @@ import './styles.less';
 const classPrefix = 'g-apartmentindex';
 
 export default class ApartmentIndex extends PureComponent {
+
     constructor(props) {
         super(props);
         this.state = {
             brandApartments: {},
         };
     }
+
+    wxShare = () => this.setShareData((data) => {
+        execWxShare(data);
+    })
+
+    setShareData = (callback) => {
+        const {
+            brandApartments: {
+                apartment,
+                banners,
+            },
+        } = this.state;
+
+        const imgUrl = (banners && banners[0] && `{banners[0].avatar}/imageView/v1/thumbnail/200x200`) || 
+                'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200';
+
+
+        const data = {
+            title: `南瓜租房 - ${apartment.name}`,
+            link: window.location.href.split('#')[0],
+            imgUrl,
+            desc: '住品牌公寓，享品质生活!',
+        };
+        callback(data);
+    }
+
+    setShareForIOS = () => this.setShareData((data) => {
+        window.postMessage(JSON.stringify({
+            data,
+            event: 'CUSTOM_SHARE',
+        }), '*');
+    })
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
@@ -118,6 +152,10 @@ export default class ApartmentIndex extends PureComponent {
         ajaxGetApartmentIndex(apartmentId).then((brandApartments) => {
             this.setState({
                 brandApartments,
+            }, () => {
+                // 得到公寓信息再注册微信分享内容
+                this.wxShare();
+                this.setShareForIOS();
             });
         });
         // TODO can move to routes
