@@ -25,16 +25,19 @@ export default class InputSearch extends PureComponent<PropType> {
             onInputChange,
             placeholder,
             maxLength,
+            autofocus,
         } = this.props;
 
         return (
             <div className={classnames(classPrefix, className)}>
                 <span className={`icon-search ${classPrefix}-btn-search`} />
                 <InputClear
+                    type="search"
                     className={`${classPrefix}-input-wrapper`}
                     onChange={onInputChange}
                     placeholder={placeholder}
                     maxLength={maxLength}
+                    autofocus={autofocus}
                 />
             </div>
         );

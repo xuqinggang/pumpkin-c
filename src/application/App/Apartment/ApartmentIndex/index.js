@@ -16,14 +16,13 @@ import {
 } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
-import ApartmentDetail from '../ApartmentDetail';
-import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
-import { isRmHead, isNanguaApp } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 import initStore from 'application/App/initStore';
 
-const isLikeNativeView = () => isRmHead() && isNanguaApp();
+import ApartmentDetail from '../ApartmentDetail';
+import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 
 import './styles.less';
 
@@ -50,7 +49,7 @@ export default class ApartmentIndex extends PureComponent {
             },
         } = this.state;
 
-        const imgUrl = (banners && banners[0] && `{banners[0].avatar}/imageView/v1/thumbnail/200x200`) || 
+        const imgUrl = (banners && banners[0] && `${banners[0].avatar}/imageView/v1/thumbnail/200x200`) ||
                 'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200';
 
 
@@ -110,7 +109,7 @@ export default class ApartmentIndex extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 {
-                    !isRmHead() &&
+                    !isLikeNativeView() &&
                     <EasyHead
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>

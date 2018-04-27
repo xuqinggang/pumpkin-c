@@ -65,7 +65,6 @@ export default class HouseLists extends PureComponent {
 
         fetchRentUnitList({ filter: this.filterParams, pager: { curPage, totalPage } })
             .then((res) => {
-                console.log('this.props.res', res)
                 let rentUnitList = this.state.rentUnitList;
                 // 请求为初始化请求，需要设置rentUnitList为空
                 if (fetchType === 'INIT') {
@@ -108,9 +107,9 @@ export default class HouseLists extends PureComponent {
     componentWillMount() {
         const storeHouseListState = window.getStore('houseList');
         const filterStore = window.getStore('filter') || {};
-        const { filterParamsObj } = filterStore || {};
+        const { paramsObj } = filterStore || {};
 
-        if (storeHouseListState && shallowEqual(this.props.filterParams, filterParamsObj)) {
+        if (storeHouseListState && shallowEqual(this.props.filterParams, paramsObj)) {
             this.setState(storeHouseListState, () => {
                 const storeScrollTop = window.getStore('scrollTop');
                 const scrollTop = storeScrollTop && storeScrollTop.pt || 0;

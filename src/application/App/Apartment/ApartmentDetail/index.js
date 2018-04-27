@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import EasyHead from 'Shared/EasyHead';
 import './styles.less';
-import { isRmHead } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 
 const classPrefix = 'g-apartmentdetail';
 
@@ -15,7 +15,7 @@ function ApartmentDetail({
     return (
         <div className={`${classPrefix}`}>
             {
-                !isRmHead() &&
+                !isLikeNativeView() &&
                 <EasyHead
                     renderRight={() => (
                         <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓详情</span>
