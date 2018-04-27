@@ -72,7 +72,7 @@ const createHouseListPath = () => {
     return urlJoin('list', filterUrlFragment) + filterSearch;
 };
 const createApartmentHouseListPath = () => {
-    const urlStore = window.getStore('url') || {};
+    const urlStore = window.getStore('apartmentHouseUrl') || {};
     const {
         filterUrlFragment,
         filterSearch = '',
