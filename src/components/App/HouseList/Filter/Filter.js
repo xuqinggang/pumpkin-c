@@ -89,7 +89,7 @@ export default class Filter extends PureComponent {
             isFixed: true,
         }, () => {
             this._toggleForbideScrollThrough(newFilterShowState[type], isResetScrollTop);
-            this.listWrapDom.classList.add('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.add('f-list-addpadding');
         });
     }
 
@@ -106,7 +106,7 @@ export default class Filter extends PureComponent {
                 isFixed: true,
             });
 
-            this.listWrapDom.classList.add('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.add('f-list-addpadding');
 
             return;
         }
@@ -116,7 +116,7 @@ export default class Filter extends PureComponent {
                 isFixed: false,
             });
             // this.filterDom.classList.remove('f-filterdom-fixed');
-            this.listWrapDom.classList.remove('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.remove('f-list-addpadding');
 
             return;
         }
@@ -157,7 +157,8 @@ export default class Filter extends PureComponent {
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度
-        this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
+        const gHouseListHead = document.querySelector('.g-houselist-head');
+        this.headDomHeight = Math.round((gHouseListHead && gHouseListHead.offsetHeight) || 0);
         this.filterFixScrollTop = getFilterFixScrollTop();
 
         window.addEventListener('scroll', this._fixFilterDom);
@@ -172,6 +173,7 @@ export default class Filter extends PureComponent {
             className,
             filterLabel,
             filterState,
+            storeKey,
         } = this.props;
 
         const {
@@ -204,6 +206,7 @@ export default class Filter extends PureComponent {
                             filterState={filterState.position}
                             onFilterConfirm={this.onFilterPositionConfirm}
                             onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
+                            storeKey={storeKey}
                         />
                     </DropDownScreen>
                 </li>

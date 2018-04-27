@@ -14,6 +14,9 @@ import './styles.less';
 
 const clsPrefix = 'm-houselists';
 
+// TODO 临时做法
+const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
+
 export default class HouseLists extends PureComponent {
     constructor(props) {
         super(props);
@@ -157,7 +160,7 @@ export default class HouseLists extends PureComponent {
                 ref={ (listDom) => { this.listDom = listDom; } }
                 style={{'minHeight': `${minHeight}px`}}>
                 {
-                    rentUnitList.length > 0 &&
+                    rentUnitList.length > 0 && !isApartmentHouseList() &&
                         <div className={`${clsPrefix}-comment`}>
                             <CommentCard />
                         </div>

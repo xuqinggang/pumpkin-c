@@ -71,7 +71,16 @@ const createHouseListPath = () => {
     } = urlStore;
     return urlJoin('list', filterUrlFragment) + filterSearch;
 };
+const createApartmentHouseListPath = () => {
+    const urlStore = window.getStore('url') || {};
+    const {
+        filterUrlFragment,
+        filterSearch = '',
+    } = urlStore;
+    return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
+};
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
+export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });
 
 // houseDetail
 const createHouseDetailPath = rentUnitId => `/detail/${rentUnitId}/`;
