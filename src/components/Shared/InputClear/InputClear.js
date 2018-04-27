@@ -49,6 +49,15 @@ export default class InputClear extends PureComponent {
         });
     }
 
+    componentDidMount() {
+        const {
+            autofocus,
+        } = this.props;
+        if (autofocus) {
+            this.refs.inputDom.focus();
+        }
+    }
+
     render() {
         const {
             type,

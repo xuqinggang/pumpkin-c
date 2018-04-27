@@ -36,8 +36,11 @@ export default class BottomOpenNative extends PureComponent {
     }
 
     render() {
+        const {
+            className,
+        } = this.props;
         return (
-            <span className={`${classPrefix}`} onTouchTap={this.handleOpenTap}>
+            <span className={classnames(classPrefix, className)} onTouchTap={this.handleOpenTap}>
                 APP内打开
             </span>
         );

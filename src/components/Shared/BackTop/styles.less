@@ -1,0 +1,36 @@
+@import (reference) '~styles/lib.less';
+
+.m-backtop {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 84px;
+    height: 84px;
+    position: relative;
+    line-height: 84px;
+    border-radius: 50%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.46);
+
+    &-icon-wrap {
+        display: inline-block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &-line {
+        display: block;
+        width: 40px;
+        height: 3px;
+        background: #fff;
+    }
+
+    &-icon {
+        display: block;
+        width: 40px;
+        color: #fff;
+        transform: rotate(-90deg);
+        .font-size(35);
+    }
+}
