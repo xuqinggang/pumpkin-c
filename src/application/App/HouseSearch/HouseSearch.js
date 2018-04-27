@@ -11,6 +11,7 @@ import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPosition
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
 import { setFilterStore, setSearchStore } from './transId';
+import { debounce } from 'lib/util';
 
 import './styles.less';
 
@@ -28,6 +29,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             searchData: {},
             keyword: '',
         };
+        this.debounceAjaxSearchHits = debounce(this._ajaxSearchHits, 400, true);
     }
 
     handleNavigateList = () => {
@@ -41,16 +43,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
     onInputChange = (keyword: string) => {
         this.setState({
             keyword,
-        });
-
-        ajaxSearchHits({
-            keyword,
-        })
-            .then((searchData) => {
-                this.setState({
-                    searchData: { ...searchData },
-                });
-            });
+        }, this.debounceAjaxSearchHits);
     }
 
     handleSubmit = (e) => {
@@ -63,6 +56,18 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         // 清空 houseList store
         window.setStore('houseList', null);
         goHouseList(this.props.history)();
+    }
+
+    _ajaxSearchHits = () => {
+        ajaxSearchHits({
+            keyword: this.state.keyword,
+        })
+            .then((searchData) => {
+                console.log('ajaxSearchHits', searchData);
+                this.setState({
+                    searchData: { ...searchData },
+                });
+            });
     }
 
     componentWillMount() {
