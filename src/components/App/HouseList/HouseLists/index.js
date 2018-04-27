@@ -68,7 +68,7 @@ export default class HouseLists extends PureComponent {
 
         fetchRentUnitList({ filter: this.filterParams, pager: { curPage, totalPage } })
             .then((res) => {
-                let rentUnitList = this.state.rentUnitList;
+                let { rentUnitList } = this.state;
                 // 请求为初始化请求，需要设置rentUnitList为空
                 if (fetchType === 'INIT') {
                     rentUnitList = [];

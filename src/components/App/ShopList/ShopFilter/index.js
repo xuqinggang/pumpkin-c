@@ -95,7 +95,9 @@ export default class ShopFilter extends PureComponent {
             filterShow,
             isFixed,
         } = this.state;
-        const filterListClass = classnames('g-grid-row', `${classPrefix}`, className);
+        const filterListClass = classnames('g-grid-row', `${classPrefix}`, className, {
+            [`${classPrefix}-right`]: isExclusive,
+        });
         // 滚动穿透处理
         this._toggleForbideScrollThrough();
         return (

@@ -23,10 +23,13 @@ import initStore from 'application/App/initStore';
 
 import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
+import getCurrentPosition from 'lib/geolocation';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
+
+const urlStoreKey = 'apartmentHouseUrl';
 
 export default class ApartmentIndex extends PureComponent {
 
@@ -35,6 +38,19 @@ export default class ApartmentIndex extends PureComponent {
         this.state = {
             brandApartments: {},
         };
+
+        getCurrentPosition().then((data) => {
+            const [lon, lat] = data;
+            window.setStore('location', {
+                lon,
+                lat,
+            });
+        }).catch(() => {
+            window.setStore('location', {
+                lon: 23,
+                lat: 24,
+            });
+        });
     }
 
     wxShare = () => this.setShareData((data) => {
@@ -75,7 +91,7 @@ export default class ApartmentIndex extends PureComponent {
         goExclusiveShop(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
-    goHouseList = () => {
+    goHouseList = (isNearby = false) => {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
 
@@ -87,9 +103,13 @@ export default class ApartmentIndex extends PureComponent {
 
         initStore();
         const urlStore = window.getStore('url');
-        window.setStore('url', {
+        let filterSearch = `?apartment=${apartmentId}`;
+        if (!isNearby) {
+            filterSearch = `${filterSearch}&nearby=3`;
+        }
+        window.setStore(urlStoreKey, {
             ...urlStore,
-            filterSearch: `?apartment=${apartmentId}`,
+            filterSearch,
         });
         goApartmentHouseList(this.props.history)();
     }
@@ -128,7 +148,7 @@ export default class ApartmentIndex extends PureComponent {
                 <ApartmentShop shops={boutiqueShops} goMore={this.goExclusiveShop} />
                 <div className="content-padding">
                     <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goHouseList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goHouseList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={() => this.goHouseList(true)} />
                 </div>
             </div>
         );
