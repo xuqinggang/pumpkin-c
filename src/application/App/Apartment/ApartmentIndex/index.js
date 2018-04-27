@@ -104,7 +104,7 @@ export default class ApartmentIndex extends PureComponent {
         initStore();
         const urlStore = window.getStore('url');
         let filterSearch = `?apartment=${apartmentId}`;
-        if (!isNearby) {
+        if (isNearby) {
             filterSearch = `${filterSearch}&nearby=3`;
         }
         window.setStore(urlStoreKey, {
