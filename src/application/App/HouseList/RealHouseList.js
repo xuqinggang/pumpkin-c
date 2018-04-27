@@ -56,6 +56,9 @@ export default class RealHouseList extends PureComponent {
         });
 
         this.urlPrefix = window.getStore('url').urlPrefix;
+
+        // TO TOP
+        window.scrollTo({ x: 0, y: 0 }, 0);
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
