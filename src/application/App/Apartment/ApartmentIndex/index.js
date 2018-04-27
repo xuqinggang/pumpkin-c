@@ -12,7 +12,7 @@ import {
     goCommentList,
     goExclusiveShop,
     goApartmentDetail,
-    goHouseList,
+    goApartmentHouseList,
 } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
@@ -91,7 +91,7 @@ export default class ApartmentIndex extends PureComponent {
             ...urlStore,
             filterSearch: `?apartment=${apartmentId}`,
         });
-        goHouseList(this.props.history)();
+        goApartmentHouseList(this.props.history)();
     }
 
     renderIndex() {
