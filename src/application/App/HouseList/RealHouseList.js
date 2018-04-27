@@ -134,7 +134,6 @@ export default class RealHouseList extends PureComponent {
         // 生成筛选参数
         this.filterParamsObj = Object.assign({}, this.filterParamsObj, paramsObj);
 
-        console.log(this.filterParamsObj, 'this.filterParamsObj');
         this.setNearbyInfo(this.filterParamsObj.nearby);
 
         // urlFrgObj
@@ -199,6 +198,11 @@ export default class RealHouseList extends PureComponent {
                     lat,
                     distance: nearby,
                 },
+            };
+        } else {
+            this.filterParamsObj = {
+                ...this.filterParamsObj,
+                nearByInfo: null,
             };
         }
     }
