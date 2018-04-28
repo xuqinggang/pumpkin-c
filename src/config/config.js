@@ -7,10 +7,15 @@ export default {
         sh: {
             text: '上海',
             id: 73,
-        }
+        },
+        wh: {
+            text: '武汉',
+            id: 168,
+        },
     },
     CityeTextMapAbbrev: {
         '北京': 'bj',
         '上海': 'sh',
+        '武汉': 'wh',
     },
 }
