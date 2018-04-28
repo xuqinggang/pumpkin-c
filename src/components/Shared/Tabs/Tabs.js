@@ -175,8 +175,8 @@ class Tabs extends PureComponent<PropType, StateType> {
             active: activeIndex !== prevIndex && tabContent[activeIndex],
         });
 
-		return (
-			<div className={classnames(`${classPrefix}`, className)}>
+        return (
+            <div className={classnames(`${classPrefix}`, className)}>
                 <ul className={navClass}>
                     {
                         tabNav
@@ -201,8 +201,8 @@ class Tabs extends PureComponent<PropType, StateType> {
                         ) : 
                         null
                 }
-			</div>
-		);
+            </div>
+        );
 	}
 }
 

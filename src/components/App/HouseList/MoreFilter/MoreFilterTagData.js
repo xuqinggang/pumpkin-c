@@ -95,8 +95,20 @@ const floorTagsArr = [
 ];
 
 export default {
-    directs: directionTagsArr,
-    tags: featureTagsArr,
-    areaInfo: areaTagsArr,
-    floorInfo: floorTagsArr,
+    directs: {
+        title: '朝向',
+        arr: directionTagsArr,
+    },
+    tags: {
+        title: '标签',
+        arr: featureTagsArr,
+    },
+    areaInfo: {
+        title: '面积',
+        arr: areaTagsArr,
+    },
+    floorInfo: {
+        title: '楼层',
+        arr: floorTagsArr,
+    },
 };

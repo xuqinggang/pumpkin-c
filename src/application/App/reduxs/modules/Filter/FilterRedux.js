@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 import { combineReducers } from 'redux';
 
-import positionReducer from './PositionFilterRedux';
-import rentReducer from './RentFilterRedux';
+import positionReducer from './FilterPositionRedux';
+import rentReducer from './FilterRentRedux';
 
 /* const actions */
 export const filterSagaActions = {

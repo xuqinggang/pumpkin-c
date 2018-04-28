@@ -1,12 +1,12 @@
 import { select, call, put, take } from 'redux-saga/effects';
 
-import { positionFilterPutActions, positionFilterAjaxActions } from './PositionFilterRedux';
-import { positionOriginDataSelector, statePositionSelector } from './FilterSelector';
+import { positionFilterPutActions, positionFilterAjaxActions } from './FilterPositionRedux';
+import { originDataPositionSelector, statePositionSelector } from './FilterSelector';
 import { FILTER_SEPARATOR, TypeAndPrefixMap, TypeMapAlphaArr } from 'const/filter';
 
 import { getObjectKeyByIndex } from 'lib/util';
 
-export function* transPositionFilterUrl(filterUrlObj) {
+export function* transFilterPositionUrl(filterUrlObj) {
     console.log('transPositionUrl', filterUrlObj);
     // 由于位置筛选的原数据是通过异步获取的,更改state和label需要在异步之后
     // 而更改parmas可以同步
@@ -20,7 +20,7 @@ export function* transPositionFilterUrl(filterUrlObj) {
 }
 
 export function* changeFilterPosition(state) {
-    const originData = yield select(positionOriginDataSelector);
+    const originData = yield select(originDataPositionSelector);
 
     const paramsObj = {};
     let label = '';
@@ -78,7 +78,7 @@ function* transPositionUrlToParams(filterUrlObj) {
 
 function* transPositionUrlToState(filterUrlObj) {
     console.log('transPositionUrlToState', filterUrlObj);
-    const positionOriginData = yield select(positionOriginDataSelector);
+    const positionOriginData = yield select(originDataPositionSelector);
 
     const stateObj = {};
     let secondObj, firstObj;

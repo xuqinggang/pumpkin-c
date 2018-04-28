@@ -1,13 +1,20 @@
 import { call, all, spawn, take, put } from 'redux-saga/effects';
 
-import { ajaxPositionDistricts, ajaxPositionSubways } from 'reduxs/modules/ajax/ajaxSaga';
 import { filterSagaActions } from './FilterRedux';
-import { positionFilterSagaActions, positionFilterAjaxActions } from './PositionFilterRedux';
+import { positionFilterSagaActions, positionFilterAjaxActions } from './FilterPositionRedux';
 
-import { changeFilterPosition, transPositionFilterUrl } from './PositionFilterSaga';
-import { transRentFilterUrl } from './RentFilterSaga';
+import { ajaxPositionDistricts, ajaxPositionSubways } from 'reduxs/modules/ajax/ajaxSaga';
+import { changeFilterPosition, transPositionFilterUrl } from './FilterPositionSaga';
+import { transFilterRentUrl } from './FilterRentSaga';
+import { transFilterMoreUrl } from './FilterMoreSaga';
+import { transFilterHouseTypeUrl } from './FilterHouseTypeSaga';
 
-import { FilterRentAlphaArr, FilterPositionAlphaArr } from 'const/filter';
+import {
+    FilterRentAlphaArr,
+    FilterPositionAlphaArr,
+    FilterMoreAlphaArr,
+    FilterHouseTypeAlphaArr
+} from 'const/filter';
 import { sliceObjbyKeys } from 'lib/util';
 import { transFilterUrlToObj } from './util';
 // import { fetchSearchResults } from 'src/core/api';
@@ -65,10 +72,14 @@ function* watchFilterUrl() {
     // const filterPositionUrlObj = sliceObjbyKeys(filterUrlObj, FilterPositionAlphaArr);
     const filterRentUrlObj = sliceObjbyKeys(filterUrlObj, FilterRentAlphaArr);
     const filterPositionUrlObj = sliceObjbyKeys(filterUrlObj, FilterPositionAlphaArr);
+    const filterHouseTypeUrlObj = sliceObjbyKeys(filterUrlObj, FilterHouseTypeAlphaArr);
+    const filterMoreUrlObj = sliceObjbyKeys(filterUrlObj, FilterMoreAlphaArr);
 
     const yieldArr = [];
     filterPositionUrlObj && yieldArr.push(call(transPositionFilterUrl, filterPositionUrlObj));
     filterRentUrlObj && yieldArr.push(call(transRentFilterUrl, filterRentUrlObj));
+    filterHouseTypeUrlObj && yieldArr.push(call(transFilterHouseTypeUrl, filterHouseTypeUrlObj))
+    filterMoreUrlObj && yieldArr.push(call(transFilterMoreUrl, filterMoreUrlObj));
 
     yield yieldArr;
 }

@@ -13,7 +13,7 @@ import Filter from 'components/App/HouseList/Filter/Filter';
 /* saga action */
 import { houseListSagaActions } from 'reduxs/modules/HouseList/HouseListRedux';
 import { houseIndexSagaActions } from 'reduxs/modules/HouseIndex/HouseIndexRedux';
-import { positionFilterSagaActions } from 'reduxs/modules/Filter/PositionFilterRedux';
+import { positionFilterSagaActions } from 'reduxs/modules/Filter/FilterPositionRedux';
 
 /* selector */
 import { houseListsSelector } from 'reduxs/modules/HouseList/HouseListSelector';

@@ -66,7 +66,7 @@ export default class Tags extends Component {
 
         // tagItem
         const tagsList = tagsArr.map((tagItem, index) => {
-            return ( 
+            return (
                 <TagItem 
                     active={this.state.tagStateObj[index]}
                     key={index}

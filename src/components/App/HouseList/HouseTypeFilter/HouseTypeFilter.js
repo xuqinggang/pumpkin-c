@@ -42,32 +42,41 @@ class HouseTypeFilter extends Component {
     }
     
     render() {
-        const {
-            sharedRooms,
-            wholeRooms,
-        } = this.state;
-
-        console.log('HouseTypeFilter render', this.state)
         return (
             <div className={`${houseTypeClass}`}>
-                <TagsGroup
-                    type="sharedRooms"
-                    classPrefix={houseTypeClass}
-                    className={`${houseTypeClass}-shared`}
-                    tagsArr={HouseTypeFilterTagData.sharedRooms}
-                    label="合租"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={sharedRooms || {}}
-                />
-                <TagsGroup
-                    type="wholeRooms"
-                    classPrefix={houseTypeClass}
-                    className={`${houseTypeClass}-whole`}
-                    tagsArr={HouseTypeFilterTagData.wholeRooms}
-                    label="整租"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={wholeRooms || {}}
-                />
+                {
+                    Object.keys(HouseTypeFilterTagData).map((tagGroupType) => (
+                        <TagsGroup
+                            classPrefix={houseTypeClass}
+                            className={`${houseTypeClass}-${tagGroupType}`}
+                            type={tagGroupType}
+                            label={HouseTypeFilterTagDatap[tagGroupType].title}
+                            tagsArr={HouseTypeFilterTagData[tagGroupType].arr} 
+                            onTagsChange={this.onTagsChange}
+                            activeIndexObj={this.state[tagGroupType]}
+                        />
+                    ))
+                }
+                {
+                    // <TagsGroup
+                    //     type="sharedRooms"
+                    //     classPrefix={houseTypeClass}
+                    //     className={`${houseTypeClass}-shared`}
+                    //     tagsArr={HouseTypeFilterTagData.sharedRooms}
+                    //     label="合租"
+                    //     onTagsChange={this.onTagsChange}
+                    //     activeIndexObj={sharedRooms || {}}
+                    // />
+                    // <TagsGroup
+                    //     type="wholeRooms"
+                    //     classPrefix={houseTypeClass}
+                    //     className={`${houseTypeClass}-whole`}
+                    //     tagsArr={HouseTypeFilterTagData.wholeRooms}
+                    //     label="整租"
+                    //     onTagsChange={this.onTagsChange}
+                    //     activeIndexObj={wholeRooms || {}}
+                    // />
+                }
             </div>
         );
     }

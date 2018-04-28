@@ -10,7 +10,9 @@ export const filterParamsSelector = createSelector(
     }),
 );
 
-export const positionOriginDataSelector = state => state.filter.position.originData;
+// filter originData
+export const originDataPositionSelector = state => state.filter.position.originData;
+export const originDataHouseTypeSelector = state => state.filter.houseType.originData;
 
 // 筛选的所有信息
 export const filterInfoSelector = state => state.filter;

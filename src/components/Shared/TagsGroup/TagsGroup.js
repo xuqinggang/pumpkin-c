@@ -7,7 +7,6 @@ import { shallowEqual } from 'lib/util';
 export default class TagsGroup extends Component {
     constructor(props) {
         super(props);
-        console.log('props.activeIndexObj', props.activeIndexObj)
         this.state = {
             tagStateObj: props.activeIndexObj || {},
         };
@@ -41,7 +40,6 @@ export default class TagsGroup extends Component {
     }
 
     render() {
-        console.log('MoreTags render');
         const {
             className,
             classPrefix,
@@ -59,6 +57,6 @@ export default class TagsGroup extends Component {
                     activeIndexObj={this.state.tagStateObj}
                 />
             </div>
-        )
+        );
     }
 }

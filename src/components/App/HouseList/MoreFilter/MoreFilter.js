@@ -52,46 +52,62 @@ class MoreFilter extends PureComponent {
 
         return (
             <div className={`${moreClass}`}>
-                <TagsGroup
-                    type="directs"
-                    classPrefix={moreClass}
-                    className={`${moreClass}-direction`}
-                    tagItemClass="direction-item"
-                    tagsArr={MoreFilterTagData.directs}
-                    label="朝向"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={directs || {}}
-                />
-                <TagsGroup
-                    type="tags"
-                    classPrefix={moreClass}
-                    className={`${moreClass}-feature`}
-                    tagItemClass="feature-item"
-                    tagsArr={MoreFilterTagData.tags}
-                    label="标签"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={tags || {}}
-                />
-                <TagsGroup
-                    type="areaInfo"
-                    classPrefix={moreClass}
-                    className={`${moreClass}-area`}
-                    tagItemClass="area-item"
-                    tagsArr={MoreFilterTagData.areaInfo}
-                    label="面积"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={areaInfo || {}}
-                />
-                <TagsGroup
-                    type="floorInfo"
-                    classPrefix={moreClass}
-                    className={`${moreClass}-floor`}
-                    tagItemClass="floor-item"
-                    tagsArr={MoreFilterTagData.floorInfo}
-                    label="楼层"
-                    onTagsChange={this.onTagsChange}
-                    activeIndexObj={floorInfo || {}}
-                />
+                {
+                    Object.keys(MoreFilterTagData).map(tagGroupType => (
+                        <TagsGroup
+                            type={tagGroupType}
+                            classPrefix={moreClass}
+                            className={`${moreClass}-${tagGroupType}`}
+                            tagItemClass={`${tagGroupType}-item`}
+                            tagsArr={MoreFilterTagData[tagGroupType].arr}
+                            label={MoreFilterTagData[tagGroupType].title}
+                            onTagsChange={this.onTagsChange}
+                            activeIndexObj={this.state[tagGroupType] || {}}
+                        />
+                    ))
+                }
+                {
+                    // <TagsGroup
+                    //     type="directs"
+                    //     classPrefix={moreClass}
+                    //     className={`${moreClass}-direction`}
+                    //     tagItemClass="direction-item"
+                    //     tagsArr={MoreFilterTagData.directs}
+                    //     label="朝向"
+                    //     onTagsChange={this.onTagsChange}
+                    //     activeIndexObj={directs || {}}
+                    // />
+                    //     <TagsGroup
+                    //         type="tags"
+                    //         classPrefix={moreClass}
+                    //         className={`${moreClass}-feature`}
+                    //         tagItemClass="feature-item"
+                    //         tagsArr={MoreFilterTagData.tags}
+                    //         label="标签"
+                    //         onTagsChange={this.onTagsChange}
+                    //         activeIndexObj={tags || {}}
+                    //     />
+                    //     <TagsGroup
+                    //         type="areaInfo"
+                    //         classPrefix={moreClass}
+                    //         className={`${moreClass}-area`}
+                    //         tagItemClass="area-item"
+                    //         tagsArr={MoreFilterTagData.areaInfo}
+                    //         label="面积"
+                    //         onTagsChange={this.onTagsChange}
+                    //         activeIndexObj={areaInfo || {}}
+                    //     />
+                    //     <TagsGroup
+                    //         type="floorInfo"
+                    //         classPrefix={moreClass}
+                    //         className={`${moreClass}-floor`}
+                    //         tagItemClass="floor-item"
+                    //         tagsArr={MoreFilterTagData.floorInfo}
+                    //         label="楼层"
+                    //         onTagsChange={this.onTagsChange}
+                    //         activeIndexObj={floorInfo || {}}
+                    //     />
+                }
             </div>
         );
     }

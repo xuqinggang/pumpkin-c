@@ -1,10 +1,10 @@
 import { put, call } from 'redux-saga/effects';
 
-import { filterRentPutActions } from './RentFilterRedux';
+import { filterRentPutActions } from './FilterRentRedux';
 
 import { FILTER_ITEM_SEPARATOR, TypeAndPrefixMap } from 'const/filter';
 
-export function* transRentFilterUrl(filterUrlObj) {
+export function* transFilterRentUrl(filterUrlObj) {
     const alpha = TypeAndPrefixMap.priceInfo;
     const rentUrlStr = filterUrlObj[alpha];
     if (rentUrlStr) {

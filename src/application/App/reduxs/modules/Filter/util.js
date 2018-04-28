@@ -1,4 +1,64 @@
 import { FILTER_ITEM_SEPARATOR, FILTER_SEPARATOR, TypeAndPrefixMap } from 'const/filter';
+function fixLabelFun(text, tagGroupType) {
+    const tmpText = text === '不限' ? '' : text
+    return tagGroupType === 'sharedRooms' ? `合租${tmpText}` : `整租${tmpText}`;
+}
+export function transTagsState(tagsState, originData, fixLabelFun = text => text) {
+    let label = '',
+        url = '';
+    const paramsObj = {};
+
+    const urlRtArr = [];
+    let totalCount = 0;
+
+    tagsState && Object.keys(tagsState).forEach((tagGroupType) => {
+        const tagStateObj = tagsState[tagGroupType];
+
+        const urlArr = [];
+        let itemStr = '';
+
+        tagStateObj && Object.keys(tagStateObj).forEach((tagIndex) => {
+            const isSelected = tagStateObj[tagIndex];
+            // if选中
+            if (isSelected) {
+                totalCount++;
+                urlArr.push(tagIndex);
+
+                const originDataArr = originData[tagGroupType].arr;
+                const tagItem = originDataArr[tagIndex];
+                const tagValue = tagItem.value;
+
+                label = fixLabelFun(tagItem.text, tagGroupType);
+
+                // 如果没有，初始化为数组
+                if (!paramsObj[tagGroupType]) {
+                    paramsObj[tagGroupType] = [tagValue];
+                } else {
+                    paramsObj[tagGroupType].push(tagValue);
+                }
+            }
+        });
+
+        // 1l2
+        itemStr = urlArr.join(FILTER_ITEM_SEPARATOR);
+
+        const prefix = TypeAndPrefixMap[tagGroupType];
+        // item字符串非空
+        itemStr && urlRtArr.push(prefix + itemStr);
+    });
+
+    if (totalCount > 1) {
+        label = '多选';
+    }
+
+    url = urlRtArr.join(FILTER_SEPARATOR);
+
+    return {
+        label,
+        params: paramsObj,
+        url,
+    };
+}
 
 // tagsUrlObj: { f: 2l3, g:4 }
 // return stateObj: { sharedRooms: { 2: true, 3: true }, wholeRooms: { 4: true } }
