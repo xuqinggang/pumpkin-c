@@ -64,7 +64,10 @@ export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     ],
 });
 export const goShopDetail = withHistory(createShopDetailPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
+        withSearch,
+    ],
 });
 
 // login
