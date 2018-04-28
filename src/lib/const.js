@@ -1,3 +1,7 @@
+
+const isRmHead = () => window.location.href.indexOf('rmhead') !== -1;
+const isNanguaApp = () => window.navigator.userAgent.indexOf('NanguaApp') !== -1;
+
 export default {
     isWeiXin: () => window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == 'micromessenger', // 判断是否为微信浏览器 
     isAndroid: () => {
@@ -11,6 +15,7 @@ export default {
     },
     isiPhoneX: () => window.navigator.userAgent.indexOf('iPhone') !== -1 && window.screen.availHeight === 812 && window.screen.availWidth === 375,
     // eg:app中跳到h5优惠券需要去掉头部
-    isRmHead: () => window.location.href.indexOf('rmhead') !== -1,
-    isNanguaApp: () => window.navigator.userAgent.indexOf('NanguaApp') !== -1,
+    isRmHead,
+    isNanguaApp,
+    isLikeNativeView: () => isRmHead() && isNanguaApp(),
 };

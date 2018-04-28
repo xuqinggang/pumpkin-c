@@ -1,13 +1,8 @@
 import React, { PureComponent } from 'react';
 
 // 业务组件
-import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
-import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
-import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
 import HouseLists from 'components/App/HouseList/HouseLists';
 import Filter from 'components/App/HouseList/Filter/Filter';
-import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
-import BackTop from 'Shared/BackTop/BackTop';
 import EasyHead from 'Shared/EasyHead';
 
 import {
@@ -18,22 +13,61 @@ import {
 } from './stringifyState';
 import { parseUrl } from './parseUrl';
 import { transUrlFrgObjToStr } from './utils';
-import {
-    clearOtherFilter,
-    clearPositionFilter,
-    clearSearchStore,
-} from 'application/App/HouseSearch/transId';
-import { goHouseList } from 'application/App/routes/routes';
+import { goApartmentHouseList } from 'application/App/routes/routes';
 import { parseUrlQueryFields } from 'lib/util';
-import { isApp } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
 import { kzPv } from 'lib/pv';
+import {
+    InitStateFilterLabel,
+    InitStateFilterState,
+    InitStateFilterUrlFrg,
+} from 'application/App/HouseList/initState';
 
-import './styles.less';
+import './realStyles.less';
 
-const classPrefix = 'g-houselist';
+const classPrefix = 'g-realhouselist';
 
-export default class HouseList extends PureComponent {
+// 临时方案
+const storeKey = 'apartmentHouseFilter';
+const urlStoreKey = 'apartmentHouseUrl';
+
+window.setStore(storeKey, {
+    urlFrg: InitStateFilterUrlFrg,
+    state: {
+        ...InitStateFilterState,
+        nearby: '3', // km
+    },
+    label: {
+        ...InitStateFilterLabel,
+        nearby: '3km',
+    },
+    paramsObj: {},
+});
+
+// TODO 严重依赖 url 的规则 重构
+const getTitle = () => {
+    const { href } = window.location;
+    let title = '南瓜租房';
+    if (href.indexOf('apartment=') > -1) {
+        title = '精品房源';
+    }
+    if (href.indexOf('nearby=') > -1) {
+        title = '附近房源';
+    }
+    return title;
+};
+
+const stringifyNearbyState = (distance) => {
+    return {
+        url: '',
+        paramsObj: {
+            nearby: distance,
+        },
+        label: distance === '0' ? '不限' : `${distance}km`,
+    };
+};
+
+export default class RealHouseList extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -46,12 +80,15 @@ export default class HouseList extends PureComponent {
         // 从filter store中取出初始化到this相应变量上
         this._getStoreFilterInfo();
 
-        window.setStore('url', {
+        window.setStore(urlStoreKey, {
             filterQueryFieldsObj: queryFieldsObj,
             filterSearch: search,
         });
 
         this.urlPrefix = window.getStore('url').urlPrefix;
+
+        // TO THE TOP
+        window.scrollTo({ x: 0, y: 0 }, 0);
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -80,6 +117,7 @@ export default class HouseList extends PureComponent {
             houseType: stringifyHouseTypeState,
             more: stringifyMoreState,
             position: stringifyPostionState,
+            nearby: stringifyNearbyState,
         };
 
         const typeStringifStateFun = TypeMapStringifyState[type];
@@ -95,6 +133,9 @@ export default class HouseList extends PureComponent {
         this.filterLabel = Object.assign({}, this.filterLabel, { [type]: label });
         // 生成筛选参数
         this.filterParamsObj = Object.assign({}, this.filterParamsObj, paramsObj);
+
+        this.setNearbyInfo(this.filterParamsObj.nearby);
+
         // urlFrgObj
         this.urlFrgObj[type] = url;
 
@@ -105,10 +146,7 @@ export default class HouseList extends PureComponent {
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
 
-        // 清空搜索
-        clearSearchStore();
-
-        goHouseList(this.props.history)(urlFrgRt);
+        goApartmentHouseList(this.props.history)(urlFrgRt);
 
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
@@ -118,7 +156,7 @@ export default class HouseList extends PureComponent {
     }
 
     _setStoreFilterInfo() {
-        window.setStore('filter', {
+        window.setStore(storeKey, {
             state: this.filterState,
             label: this.filterLabel,
             paramsObj: this.filterParamsObj,
@@ -127,7 +165,7 @@ export default class HouseList extends PureComponent {
     }
 
     _getStoreFilterInfo() {
-        const filterStore = window.getStore('filter');
+        const filterStore = window.getStore(storeKey);
         const {
             label,
             state,
@@ -145,30 +183,34 @@ export default class HouseList extends PureComponent {
             apartmentId: this.queryFieldsObj.apartment || null,
             ...paramsObj,
         };
+        this.setNearbyInfo(this.queryFieldsObj.nearby);
         this._setStoreFilterInfo();
     }
 
-    _setStoreFilterUrlFrg(filterUrlFragment) {
-        window.setStore('url', {
-            filterUrlFragment,
-        });
+    setNearbyInfo = (nearby) => {
+        const location = window.getStore('location') || {};
+        const { lon, lat } = location;
+        if (lon && lat && nearby && nearby !== '0') {
+            this.filterParamsObj = {
+                ...this.filterParamsObj,
+                nearByInfo: {
+                    lon,
+                    lat,
+                    distance: nearby,
+                },
+            };
+        } else {
+            this.filterParamsObj = {
+                ...this.filterParamsObj,
+                nearByInfo: null,
+            };
+        }
     }
 
-
-    onClearSearch = () => {
-        clearPositionFilter();
-        clearOtherFilter();
-        clearSearchStore();
-        this._getStoreFilterInfo();
-
-        const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
-
-        // setStore url.filterUrlFragment
-        this._setStoreFilterUrlFrg(urlFrgRt);
-
-        goHouseList(this.props.history)(urlFrgRt);
-        
-        this.forceUpdate(); 
+    _setStoreFilterUrlFrg(filterUrlFragment) {
+        window.setStore(urlStoreKey, {
+            filterUrlFragment,
+        });
     }
     
     wxShare() {
@@ -211,46 +253,26 @@ export default class HouseList extends PureComponent {
     }
 
     render() {
-        const {
-            match,
-            history,
-        } = this.props;
-
-        const searchStore = window.getStore('search');
-        const searchRt = searchStore && searchStore.searchRt;
         return (
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
-                    <IndexHead
-                        match={match}
-                        history={history}
-                        searchRt={searchRt}
-                        onClearSearch={this.onClearSearch}
+                    <EasyHead
+                        renderRight={() => (
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{getTitle()}</span>
+                        )}
                     />
                 </div>
-                <IndexBanner />
-                <IndexRecommend />
                 <Filter
-                    className="filter"
+                    className={`${classPrefix}-filter`}
                     onFilterConfirm={this.onFilterConfirm}
                     onDynamicPtStateAndLabel={this._dynamicSetPtStateAndLabel}
                     filterState={this.filterState}
                     filterLabel={this.filterLabel}
+                    storeKey={storeKey}
                 />
                 <HouseLists
                     filterParams={this.filterParamsObj}
                 />
-                <div className={`${classPrefix}-fixbottom`}>
-                    {
-                        isApp() ?
-                            null
-                            : <BottomOpenNative
-                                className="fixbottom-opennative"
-                                schema={`api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify(this.filterParamsObj)}`}
-                            />
-                    }
-                    <BackTop className="fixbottom-backtop" />
-                </div>
             </div>
         );
     }

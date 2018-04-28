@@ -27,4 +27,8 @@ export default {
         window.send_stat_pv && window.send_stat_pv();
         next();
     },
+    withSearch: (history, url, next) => {
+        const { search } = window.location;
+        next(url + search);
+    },
 };

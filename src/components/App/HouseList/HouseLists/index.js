@@ -14,6 +14,9 @@ import './styles.less';
 
 const clsPrefix = 'm-houselists';
 
+// TODO 临时做法
+const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
+
 export default class HouseLists extends PureComponent {
     constructor(props) {
         super(props);
@@ -65,7 +68,7 @@ export default class HouseLists extends PureComponent {
 
         fetchRentUnitList({ filter: this.filterParams, pager: { curPage, totalPage } })
             .then((res) => {
-                let rentUnitList = this.state.rentUnitList;
+                let { rentUnitList } = this.state;
                 // 请求为初始化请求，需要设置rentUnitList为空
                 if (fetchType === 'INIT') {
                     rentUnitList = [];

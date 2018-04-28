@@ -12,29 +12,78 @@ import {
     goCommentList,
     goExclusiveShop,
     goApartmentDetail,
-    goHouseList,
+    goApartmentHouseList,
 } from 'application/App/routes/routes';
 import { Route, Switch } from 'react-router';
 
-import ApartmentDetail from '../ApartmentDetail';
-import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import { dynamicDocTitle } from 'lib/util';
-import { isRmHead, isNanguaApp } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
+import { execWxShare } from 'lib/wxShare';
 import initStore from 'application/App/initStore';
 
-const isLikeNativeView = () => isRmHead() && isNanguaApp();
+import ApartmentDetail from '../ApartmentDetail';
+import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
+import getCurrentPosition from 'lib/geolocation';
 
 import './styles.less';
 
 const classPrefix = 'g-apartmentindex';
 
+const urlStoreKey = 'apartmentHouseUrl';
+
 export default class ApartmentIndex extends PureComponent {
+
     constructor(props) {
         super(props);
         this.state = {
             brandApartments: {},
         };
+
+        getCurrentPosition().then((data) => {
+            const [lon, lat] = data;
+            window.setStore('location', {
+                lon,
+                lat,
+            });
+        }).catch(() => {
+            window.setStore('location', {
+                lon: 23,
+                lat: 24,
+            });
+        });
     }
+
+    wxShare = () => this.setShareData((data) => {
+        execWxShare(data);
+    })
+
+    setShareData = (callback) => {
+        const {
+            brandApartments: {
+                apartment,
+                banners,
+            },
+        } = this.state;
+
+        const imgUrl = (banners && banners[0] && `${banners[0].avatar}/imageView/v1/thumbnail/200x200`) ||
+                'https://pic.kuaizhan.com/g3/42/d4/5a65-2d67-4947-97fd-9844135d1fb764/imageView/v1/thumbnail/200x200';
+
+
+        const data = {
+            title: `南瓜租房 - ${apartment.name}`,
+            link: window.location.href.split('#')[0],
+            imgUrl,
+            desc: '住品牌公寓，享品质生活!',
+        };
+        callback(data);
+    }
+
+    setShareForIOS = () => this.setShareData((data) => {
+        window.postMessage(JSON.stringify({
+            data,
+            event: 'CUSTOM_SHARE',
+        }), '*');
+    })
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
@@ -42,7 +91,7 @@ export default class ApartmentIndex extends PureComponent {
         goExclusiveShop(this.props.history)(`z${this.apartmentId}`);
     }
     goApartmentDetail = () => goApartmentDetail(this.props.history)(this.apartmentId)
-    goHouseList = () => {
+    goHouseList = (isNearby = false) => {
         const filterStore = window.getStore('filter') || { filterParamsObj: {} };
         const { apartmentId } = this;
 
@@ -54,11 +103,15 @@ export default class ApartmentIndex extends PureComponent {
 
         initStore();
         const urlStore = window.getStore('url');
-        window.setStore('url', {
+        let filterSearch = `?apartment=${apartmentId}`;
+        if (isNearby) {
+            filterSearch = `${filterSearch}&nearby=3`;
+        }
+        window.setStore(urlStoreKey, {
             ...urlStore,
-            filterSearch: `?apartment=${apartmentId}`,
+            filterSearch,
         });
-        goHouseList(this.props.history)();
+        goApartmentHouseList(this.props.history)();
     }
 
     renderIndex() {
@@ -76,7 +129,7 @@ export default class ApartmentIndex extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 {
-                    !isRmHead() &&
+                    !isLikeNativeView() &&
                     <EasyHead
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>品牌公寓</span>
@@ -95,7 +148,7 @@ export default class ApartmentIndex extends PureComponent {
                 <ApartmentShop shops={boutiqueShops} goMore={this.goExclusiveShop} />
                 <div className="content-padding">
                     <RentUnitList list={boutiqueRentUnits} title="精品房源" goMore={this.goHouseList} />
-                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={this.goHouseList} />
+                    <RentUnitList list={nearbyRentUnits} title="附近房源" goMore={() => this.goHouseList(true)} />
                 </div>
             </div>
         );
@@ -118,6 +171,10 @@ export default class ApartmentIndex extends PureComponent {
         ajaxGetApartmentIndex(apartmentId).then((brandApartments) => {
             this.setState({
                 brandApartments,
+            }, () => {
+                // 得到公寓信息再注册微信分享内容
+                this.wxShare();
+                this.setShareForIOS();
             });
         });
         // TODO can move to routes

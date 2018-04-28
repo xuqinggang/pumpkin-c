@@ -59,7 +59,7 @@ export default class RoomSlider extends PureComponent {
     }
 
     handleTransitionEnd = (e) => {
-        console.log(e, 'handleTransitionEnd');
+        // console.log(e, 'handleTransitionEnd');
     }
 
     renderImages = (img, index) => {

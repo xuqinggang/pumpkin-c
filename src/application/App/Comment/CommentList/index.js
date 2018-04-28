@@ -40,7 +40,7 @@ export default class CommentList extends PureComponent {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
                 const { curPage, totalPage } = this.state.pager;
-                if (curPage < totalPage) {
+                if (curPage <= totalPage) {
                     this.onLoadMore();
                 }
             }
@@ -49,6 +49,10 @@ export default class CommentList extends PureComponent {
     }
 
     fetchData = (renew = false) => {
+        if (this.state.loading) {
+            return;
+        }
+        
         const { apartmentId } = this.props;
         const { pager, comments } = this.state;
         const { curPage } = pager;
@@ -58,21 +62,17 @@ export default class CommentList extends PureComponent {
         });
         ajaxGetCommentList(apartmentId, pager).then((data) => {
             let newComments;
-            let newPager;
 
             if (!renew) {
                 newComments = [...comments, ...data.comments];
-                newPager = {
-                    curPage: curPage + 1,
-                    totalPage: data.totalPage,
-                };
             } else {
                 newComments = data.comments;
-                newPager = {
-                    curPage: 1,
-                    totalPage: data.totalPage,
-                };
             }
+
+            const newPager = {
+                curPage: curPage + 1,
+                totalPage: data.totalPage,
+            };
 
             this.setState({
                 comments: newComments,

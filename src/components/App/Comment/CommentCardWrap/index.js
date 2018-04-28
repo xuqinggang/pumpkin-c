@@ -13,7 +13,6 @@ export default function CommentCardWrap(WrappedComponent) {
             const { remindComments } = this.state;
 
             remindComments.shift();
-            console.log('commentQueueStorage', remindComments);
             commentQueueStorage.shift();
 
             this.setState({
@@ -33,7 +32,7 @@ export default function CommentCardWrap(WrappedComponent) {
                 return (
                     <WrappedComponent
                         {...props}
-                        {...remindComments[remindComments.length - 1]}
+                        {...remindComments[0]}
                         handleClose={this.handleClose}
                     />
                 );

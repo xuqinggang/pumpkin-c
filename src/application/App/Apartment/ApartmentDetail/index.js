@@ -1,8 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import EasyHead from 'Shared/EasyHead';
 import './styles.less';
+import { isLikeNativeView } from 'lib/const';
 
 const classPrefix = 'g-apartmentdetail';
 
@@ -13,12 +14,14 @@ function ApartmentDetail({
 }) {
     return (
         <div className={`${classPrefix}`}>
-            <HouseHead
-                history={history}
-                renderRight={() => (
-                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓详情</span>
-                )}
-            />
+            {
+                !isLikeNativeView() &&
+                <EasyHead
+                    renderRight={() => (
+                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓详情</span>
+                    )}
+                />
+            }
             <div className="item">
                 <h2 className="title">公寓认证</h2>
                 <div className="f-display-flex">

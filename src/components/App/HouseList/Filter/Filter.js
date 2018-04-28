@@ -8,12 +8,20 @@ import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
 import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
 import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
+import NearbyFilterWrap from 'components/App/HouseList/NearbyFilter';
+
 import { getScrollTop, getFilterFixScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
 import './styles.less';
 
 const filterClass = 'm-filter';
+
+// TODO nearby=3
+const isJustNeedNearByFilter = () => {
+    const { href } = window.location;
+    return href.indexOf('nearby=') > -1;
+};
 
 export default class Filter extends PureComponent {
     constructor(props) {
@@ -27,6 +35,8 @@ export default class Filter extends PureComponent {
                 rent: false,
                 houseType: false,
                 more: false,
+
+                nearby: false,
             },
         };
     }
@@ -89,7 +99,7 @@ export default class Filter extends PureComponent {
             isFixed: true,
         }, () => {
             this._toggleForbideScrollThrough(newFilterShowState[type], isResetScrollTop);
-            this.listWrapDom.classList.add('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.add('f-list-addpadding');
         });
     }
 
@@ -106,7 +116,7 @@ export default class Filter extends PureComponent {
                 isFixed: true,
             });
 
-            this.listWrapDom.classList.add('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.add('f-list-addpadding');
 
             return;
         }
@@ -116,7 +126,7 @@ export default class Filter extends PureComponent {
                 isFixed: false,
             });
             // this.filterDom.classList.remove('f-filterdom-fixed');
-            this.listWrapDom.classList.remove('f-list-addpadding');
+            this.listWrapDom && this.listWrapDom.classList.remove('f-list-addpadding');
 
             return;
         }
@@ -154,10 +164,16 @@ export default class Filter extends PureComponent {
         this.props.onFilterConfirm({ type: 'more', state: moreState });
     }
 
+    onFilterNearbyConfirm = (distance) => {
+        this.handleFilterShowTap('nearby', true);
+        this.props.onFilterConfirm({ type: 'nearby', state: distance });
+    }
+
     componentDidMount() {
         this.listWrapDom = document.querySelector('.g-houselist');
         // 头部高度
-        this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
+        const gHouseListHead = document.querySelector('.g-houselist-head');
+        this.headDomHeight = Math.round((gHouseListHead && gHouseListHead.offsetHeight) || 0);
         this.filterFixScrollTop = getFilterFixScrollTop();
 
         window.addEventListener('scroll', this._fixFilterDom);
@@ -172,6 +188,7 @@ export default class Filter extends PureComponent {
             className,
             filterLabel,
             filterState,
+            storeKey,
         } = this.props;
 
         const {
@@ -189,23 +206,43 @@ export default class Filter extends PureComponent {
                 className={filterListClass}
             >
                 <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
-                    <DropDownScreen
-                        className={`${filterClass}-dropscreen-position`}
-                        show={filterShow.position}
-                        type="position"
-                        label={filterLabel.position}
-                        isMask={true}
-                        screenHeight="10.66667rem"
-                        isFullScreen={false}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <PositionFilterWrap
-                            type="position"
-                            filterState={filterState.position}
-                            onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
-                        />
-                    </DropDownScreen>
+                    {
+                        isJustNeedNearByFilter()
+                            ? <DropDownScreen
+                                className={`${filterClass}-dropscreen-nearby`}
+                                show={filterShow.nearby}
+                                type="nearby"
+                                label={filterLabel.nearby}
+                                isMask={true}
+                                screenHeight="10.66667rem"
+                                isFullScreen={false}
+                                onTouchTap={this.handleFilterShowTap}
+                            >
+                                <NearbyFilterWrap
+                                    type="nearby"
+                                    filterState={filterState.nearby}
+                                    onFilterConfirm={this.onFilterNearbyConfirm}
+                                />
+                            </DropDownScreen>
+                            : <DropDownScreen
+                                className={`${filterClass}-dropscreen-position`}
+                                show={filterShow.position}
+                                type="position"
+                                label={filterLabel.position}
+                                isMask={true}
+                                screenHeight="10.66667rem"
+                                isFullScreen={false}
+                                onTouchTap={this.handleFilterShowTap}
+                            >
+                                <PositionFilterWrap
+                                    type="position"
+                                    filterState={filterState.position}
+                                    onFilterConfirm={this.onFilterPositionConfirm}
+                                    onDynamicPtStateAndLabel={this.props.onDynamicPtStateAndLabel}
+                                    storeKey={storeKey}
+                                />
+                            </DropDownScreen>
+                    }
                 </li>
                 <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
                     <DropDownScreen

@@ -1,5 +1,5 @@
 import withHistory from './utils';
-import { routeChangeToIOS, pv } from 'application/App/routes/enhance';
+import { routeChangeToIOS, pv, withSearch } from 'application/App/routes/enhance';
 import { getFilterFixScrollTop, urlJoin } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 import { kzPv } from 'lib/pv';
@@ -49,7 +49,10 @@ export const goShopList = withHistory(createShopListPath, {
     beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
 });
 export const goExclusiveShop = withHistory(createExclusiveShopPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+        withSearch,
+    ],
 });
 export const goShopDetail = withHistory(createShopDetailPath, {
     beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
@@ -68,7 +71,16 @@ const createHouseListPath = () => {
     } = urlStore;
     return urlJoin('list', filterUrlFragment) + filterSearch;
 };
+const createApartmentHouseListPath = () => {
+    const urlStore = window.getStore('apartmentHouseUrl') || {};
+    const {
+        filterUrlFragment,
+        filterSearch = '',
+    } = urlStore;
+    return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
+};
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
+export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });
 
 // houseDetail
 const createHouseDetailPath = rentUnitId => `/detail/${rentUnitId}/`;

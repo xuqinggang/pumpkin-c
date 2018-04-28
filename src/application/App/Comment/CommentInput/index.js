@@ -23,6 +23,11 @@ export default class CommentInput extends PureComponent {
         };
     }
 
+    get hasEdited() {
+        const { content, images } = this.state;
+        return content || images.length > 0;
+    }
+
     handleSubmit = () => {
         const { match, apartmentId } = this.props;
         const { params: { rentUnitId } } = match;
@@ -106,7 +111,7 @@ export default class CommentInput extends PureComponent {
                     onContentChange={this.handleContentChange}
                 />
             </div>
-        )
+        );
     }
 
     componentWillMount() {
@@ -124,20 +129,21 @@ export default class CommentInput extends PureComponent {
     }
 
     render() {
-        const { history } = this.props;
         const { commentDone, title } = this.state;
 
         return (
             <div className={`${classPrefix}`}>
-                <EasyHead renderRight={() => (
-                    <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
-                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
-                        {
-                            !commentDone &&
-                            <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
-                        }
-                    </div>
-                )}
+                <EasyHead
+                    prompt={this.hasEdited ? '退出将丢失评价内容' : ''}
+                    renderRight={() => (
+                        <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                            {
+                                !commentDone &&
+                                <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                            }
+                        </div>
+                    )}
                 />
                 { this.renderMain() }
             </div>

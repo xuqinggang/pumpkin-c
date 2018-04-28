@@ -6,7 +6,7 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle } from 'lib/util';
-import { isRmHead, isNanguaApp } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
 import { goShopList, goExclusiveShop } from 'application/App/routes/routes';
@@ -18,8 +18,6 @@ import { apartmentFilterStoreKey, urlModuleSplit } from './filters/utils';
 import './styles.less';
 
 const classPrefix = 'g-shoplist';
-
-const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ShopList extends PureComponent {
 
@@ -41,7 +39,7 @@ export default class ShopList extends PureComponent {
         };
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
-        if (isSimulateNative()) {
+        if (isLikeNativeView()) {
             postRouteChangeToIOS({
                 canGoBack: false,
                 url: window.location.href,
@@ -201,7 +199,7 @@ export default class ShopList extends PureComponent {
         const listClass = classnames(
             `${classPrefix}-padding-top`,
             {
-                [`${classPrefix}-no-head`]: isRmHead(),
+                [`${classPrefix}-no-head`]: isLikeNativeView(),
             },
         );
 
@@ -209,7 +207,7 @@ export default class ShopList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
                     {
-                        !isRmHead()
+                        !isLikeNativeView()
                             ? <HouseHead
                                 history={history}
                                 renderRight={() => (
