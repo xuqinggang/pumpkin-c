@@ -35,10 +35,16 @@ export const goCommentList = withHistory(createCommentListPath, {
 const createApartmentPath = apartmentId => `/apartment/${apartmentId}`;
 const createApartmentDeatilPath = apartmentId => `/apartment/${apartmentId}/detail`;
 export const goApartment = withHistory(createApartmentPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '品牌公寓'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '品牌公寓'),
+        withSearch,
+    ],
 });
 export const goApartmentDetail = withHistory(createApartmentDeatilPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓详情'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '公寓详情'),
+        withSearch,
+    ],
 });
 
 // shop

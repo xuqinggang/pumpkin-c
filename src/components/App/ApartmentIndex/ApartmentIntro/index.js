@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './styles.less';
 
-const classPrefix = 'm-apartmentintro';
+const classPrefix = 'm-apartment-intro';
 
 export default class ApartmentIntro extends PureComponent {
     render() {
