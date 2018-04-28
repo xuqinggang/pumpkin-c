@@ -46,7 +46,10 @@ const createShopListPath = (filterParams = '') => `/shop/list/${filterParams}`;
 const createExclusiveShopPath = (filterParams = '') => `/shop/exclusive/${filterParams}`;
 const createShopDetailPath = shopId => `/shop/detail/${shopId}`;
 export const goShopList = withHistory(createShopListPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+        withSearch,
+    ],
 });
 export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     beforeRouteChange: [
