@@ -29,6 +29,7 @@ export default class HouseProfile extends PureComponent {
             <div className={`${classPrefix} ${className}`}>
                 <HouseProfileHead
                     houseProfileHeadData={houseProfileData.houseProfileHeadData || {}}
+                    onTouchApartment={this.props.onTouchApartment}
                 />
                 <h2 className={`${classPrefix}-title`}>{title}</h2>
                 <div className={`${classPrefix}-location`} onTouchTap={this.handleJumpMapTap}>
@@ -112,7 +113,9 @@ class HouseProfileHead extends PureComponent {
                 </div>
                 {
                     apartmentName ?
-                        <div className="f-display-inlineblock head-apartname-wrap">
+                        <div
+                            onTouchTap={this.props.onTouchApartment}
+                            className="f-display-inlineblock head-apartname-wrap">
                             <span className="f-display-inlineblock f-singletext-ellipsis head-apartname">
                                 {apartmentName}
                             </span>

@@ -1,3 +1,14 @@
+
+// 反转对象的属性和值
+export function reverseObjKeyValue(obj) {
+    const reverseObj = {};
+    for(let key in obj) {
+        reverseObj[obj[key]] = key;
+    }
+
+    return reverseObj;
+}
+
 // 时间格式化
 export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
     const date = new Date(timestamp);
@@ -31,7 +42,7 @@ export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
 // 防抖
 export function debounce(func, waitms, immediate) {
     let timer;
-    return function() {
+    return function debounceInner() {
         timer && clearTimeout(timer);
 
         if (immediate && !timer) {
@@ -40,34 +51,51 @@ export function debounce(func, waitms, immediate) {
             return;
         }
 
-        timer = setTimeout(function() {
+        timer = setTimeout(() => {
             clearTimeout(timer);
             timer = null;
             func();
         }, waitms);
-    }
+    };
 }
 
-export function parseUrlParams() {
-    let urlQuery = '';
-    const urlParamsObj = {};
+export function parseUrlQueryFields() {
+    const search = window.location.search;
+    const queryFieldsObj = {};
     const url = decodeURIComponent(window.location.href);
     const pt = url.indexOf('?');
-    if (pt === -1) return {
-        urlParamsObj,
-        urlQuery,
-    };
-    urlQuery = url.substr(pt+1);
-    const urlParamsArr = urlQuery.split('&');
-    urlParamsArr.forEach((paramStr) => {
-        if (!paramStr) return;
-        const keyAndValueArr = paramStr.split('=');
-        urlParamsObj[keyAndValueArr[0]] = keyAndValueArr[1];
+    if (pt === -1) {
+        return {
+            queryFieldsObj,
+            search,
+        };
+    }
+    const urlQuery = url.substr(pt + 1);
+    const queryFieldsArr = urlQuery.split('&');
+    queryFieldsArr.forEach((query) => {
+        if (!query) return;
+        const keyAndValueArr = query.split('=');
+        queryFieldsObj[keyAndValueArr[0]] = keyAndValueArr[1];
     });
     return {
-        urlParamsObj,
-        urlQuery,
+        queryFieldsObj,
+        search,
     };
+}
+
+export function hasSearchField(field) {
+    return window.location.search.indexOf(field) > -1;
+}
+
+export function stringifyUrlSearch(searchObj = {}) {
+    const searchArr = [];
+    searchObj && Object.keys(searchObj).forEach((searchParam) => {
+        const val = searchObj[searchParam];
+        searchArr.push(`${searchParam}=${val}`);
+    });
+    const searchStr = searchArr.join('&');
+
+    return searchStr ? `?${searchStr}` : '';
 }
 
 // 来自哪个页
@@ -80,22 +108,23 @@ export function getPageFrom(search) {
 // 拼接url
 // return /bj/nangua/list/
 export function urlJoin(...urlArr) {
-    const rt = urlArr.reduce(function(rt, cur) {
-        if (!cur) return rt;
+    const result = urlArr.reduce((rt, cur) => {
+        let tmpCur = cur;
+        if (!tmpCur) return rt;
 
-        if (cur.charAt(0) !== '/') {
-            cur = `/${cur}`;
+        if (tmpCur.charAt(0) !== '/') {
+            tmpCur = `/${tmpCur}`;
         }
 
-        const curLen = cur.length;
-        if (cur.charAt(curLen - 1) === '/') {
-            cur = cur.substr(0, curLen - 1);
+        const curLen = tmpCur.length;
+        if (tmpCur.charAt(curLen - 1) === '/') {
+            tmpCur = tmpCur.substr(0, curLen - 1);
         }
 
-        return `${rt}${cur}`;
+        return `${rt}${tmpCur}`;
     }, '');
 
-    return `${rt}/`;
+    return `${result}/`;
 }
 
 // 获取字符串长度（汉字算两个字符，字母数字算一个）
@@ -301,4 +330,14 @@ export function getWithDefault(obj, key, defaultVal) {
     } catch (e) {
         return defaultVal;
     }
+}
+
+const getDomOffsetHeight = (dom) => {
+    return (dom && dom.offsetHeight) || 0;
+};
+
+export const getFilterFixScrollTop = () => {
+    const bannerDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexbanner')));
+    const recommendDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexrecommend')));
+    return Math.round(bannerDomHeight) + Math.round(recommendDomHeight);
 }

@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
 
+import { goHouseDetail } from 'application/App/routes/routes';
 import { rentUnitShape } from 'baseData/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
 import { ModListImgUrl } from 'baseData/modUrlForCropImage';
-import { urlJoin, getWithDefault } from 'lib/util';
-import { kzPv } from 'lib/pv';
+import { getWithDefault } from 'lib/util';
 import './style.less';
+import { isRmHead, isNanguaApp } from 'lib/const';
+
+const isLikeNativeView = () => isRmHead() && isNanguaApp();
 
 const itemClassPrefix = 'm-houseitem';
 
@@ -30,15 +33,16 @@ class RentUnitItem extends PureComponent {
     }
 
     handleTouchTap() {
-        const urlPrefix = window.getStore('url').urlPrefix;
-        this.props.history.push(urlJoin(urlPrefix, `detail/${this.props.rentUnitId}`));
-
-        const urlStore = window.getStore('url');
-        if (urlStore && urlStore.urlParamsObj && urlStore.urlParamsObj.daili) {
-            kzPv(urlStore.urlParamsObj.daili, 'nangua_daili_detail');
+        // 南瓜租房 iOS 端打开, 模拟成原生页时打开原生详情页
+        if (isLikeNativeView()) {
+            window.location.href = `nangua://nanguazufang.cn?rentUnitId=${this.props.rentUnitId}`;
+            return;
         }
-        // 每次进入详情页，发送一次pv请求
-        window.send_stat_pv && window.send_stat_pv();
+        const {
+            history,
+            rentUnitId,
+        } = this.props;
+        goHouseDetail(history)(rentUnitId);
     }
 
     render() {
@@ -62,6 +66,8 @@ class RentUnitItem extends PureComponent {
             [`${imgClsPrefix}__loading`]: this.state.imgLoading,
         });
 
+        console.log('apartmentName', apartmentName)
+
         return (
             <div
                 onTouchTap={this.handleTouchTap}
@@ -82,7 +88,10 @@ class RentUnitItem extends PureComponent {
                 </div>
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
-                        <span className="title-apart f-vertical-middle">{apartmentName}</span>
+                        {
+                            apartmentName &&
+                            <span className="title-apart f-vertical-middle">{apartmentName}</span>
+                        }
                         {blockName}-{bedroomCount}居室-{getWithDefault(DirectTypeMapText, direct, '多个朝向')}
                     </li>
                     <ul className="intro-brief g-grid-row f-flex-justify-between">

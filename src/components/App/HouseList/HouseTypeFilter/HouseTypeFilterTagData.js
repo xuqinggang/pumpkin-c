@@ -1,5 +1,5 @@
 export default {
-    sharedTagsArr: [
+    sharedRooms: [
         {
             unique: true,
             text: '不限',
@@ -19,7 +19,7 @@ export default {
         },
     ],
 
-    wholeTagsArr: [
+    wholeRooms: [
         {
             unique: true,
             text: '不限',

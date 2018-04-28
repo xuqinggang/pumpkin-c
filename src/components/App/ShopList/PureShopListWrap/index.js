@@ -5,7 +5,7 @@ import NoShop from '../NoShop';
 import { ajaxGetShopList } from 'application/App/ShopList/ajaxInitShopList';
 import { shallowEqual } from 'lib/util';
 
-const classPrefix = 'm-pureapartmentlistwrap';
+const classPrefix = 'm-pureshoplistwrap';
 
 export default class PureShopListWrap extends PureComponent {
     constructor(props) {
@@ -16,25 +16,12 @@ export default class PureShopListWrap extends PureComponent {
             pager: {
                 curPage: 1,
                 totalPage: 1,
-            }
+            },
         };
     }
-    componentDidMount() {
-        // 南瓜租房 iOS APP 传来 cityId 等参数
-        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
-        this.cityId = cityId;
-
-        this.fetchData(true);
-    }
-    componentWillReceiveProps(nextProps, nextState) {
-        this.filterParams = nextProps.filterParams;
-        if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
-            this.fetchData(true);
-        }
-    }
-    fetchData = (renew=false) => {
+    fetchData = (renew = false) => {
         const { pager, apartmentList } = this.state;
-        let curPage = pager.curPage;
+        let { curPage } = pager;
 
         // fetching
         this.setState({
@@ -42,17 +29,16 @@ export default class PureShopListWrap extends PureComponent {
         });
 
         const cityId = this.cityId;
-        const apartmentFilter = window.getStore('apartmentFilter');
-        const filter = (apartmentFilter && apartmentFilter.filterParamsObj) || {};
+        const filterParamsObj = this.filterParams || {};
 
         ajaxGetShopList({
             filter: {
-                ...filter,
+                ...filterParamsObj,
                 cityId,
             },
             pager,
-        }).then(data => {
-            let newApartmentLists= [];
+        }).then((data) => {
+            let newApartmentLists = [];
             if (!renew) {
                 curPage += 1;
                 newApartmentLists = apartmentList.concat(data.list);
@@ -71,10 +57,25 @@ export default class PureShopListWrap extends PureComponent {
                     window.scrollTo(0, 0);
                 }
             });
-        })
+        });
     }
     handleLoadMore = () => {
         this.fetchData();
+    }
+    componentWillMount() {
+        // 南瓜租房 iOS APP 传来 cityId 等参数
+        const cityId = (window.iOS && window.iOS.getCityId()) || 1;
+        this.cityId = cityId;
+        this.filterParams = this.props.filterParams;
+
+        this.fetchData(true);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.filterParams = nextProps.filterParams;
+        console.log('filterParams', this.filterParams);
+        if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
+            this.fetchData(true);
+        }
     }
     render() {
         const {

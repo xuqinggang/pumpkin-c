@@ -3,6 +3,31 @@ import { getWithDefault } from 'lib/util';
 import { RentalTypeMapText, DirectTypeMapText, TagTypeMapText, ApartmentType } from 'baseData/MapData';
 import { AbbrevMapCity } from 'config/config';
 
+/**
+ * API: 保存用户电话记录
+ *
+ * DESC: 如果用户当时没有登录，应该先存在 localStorage 里
+ * 一旦用户登录会去 localStorage 取出拨打记录，然后发出该请求
+ *
+ * @param {Array} telList of {
+ *  apartmentId: string,
+ *  rentUnitId: string,
+ *  cityId: string,
+ *  title: string,
+ *  timestamp: int, // 拨打电话的大概时间
+ * }
+ */
+export function ajaxSaveTel(telList) {
+    return Service.post('/api/v1/brandApartments/phoneRecord', telList)
+        .then((data) => {
+            if (data.code === 200) {
+                return data.data;
+            }
+
+            throw new Error(data);
+        });
+}
+
 // 通过管家id动态请求虚拟手机号
 export function ajaxDynamicTel({ supervisorId, rentUnitId }) {
     return Service.get('/api/v1/common/getDynamicPhone', {
@@ -86,6 +111,7 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 // 集中式公寓
                 aptType,
                 onsaleCount,
+                apartment,
             } = houseDetailData;
 
 
@@ -119,6 +145,9 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             // 服务器端渲染seo相关数据
             const seoData = genSeoData(houseDetailData);
 
+            // 拨打电话需要存储的数据
+            const dataByContact = getDataByConcat(houseDetailData);
+
             return {
                 headData: { isCollected, },
                 sliderImgArr,
@@ -134,10 +163,12 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
                 communityIntroData,
                 contactButlerData,
                 houseTrafficData,
+                dataByContact,
                 extraData: {
                     rentalType,
                     aptType,
                     onsaleCount,
+                    apartmentId: apartment.id,
                 },
                 seoData,
             };
@@ -146,6 +177,21 @@ export default function ajaxInitHouseDetailData(rentUnitId) {
             console.log('err', err);
             return {};
         })
+}
+
+function getDataByConcat(houseDetailData) {
+    const {
+        apartment,
+        rentUnitId,
+        blockName,
+        bedroomCount,
+        direct,
+    } = houseDetailData;
+    return {
+        apartmentId: apartment.id,
+        rentUnitId,
+        title: `${blockName}-${bedroomCount}居室-${getWithDefault(DirectTypeMapText, direct, '多个朝向')}`,
+    };
 }
 
 function genSeoData(houseDetailData) {

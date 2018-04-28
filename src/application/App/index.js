@@ -1,14 +1,13 @@
-import React from 'react';
 import { hydrate } from 'react-dom';
-import injectTapEventPlugin from "react-tap-event-plugin";
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import createHistory from 'history/createBrowserHistory';
+
+// 全局样式
+import 'styles/index.less';
+import 'pumpkin-font-c';
 
 import './store';
 import routes from './routes';
-
-// 全局样式
-import 'styles/index';
-import 'pumpkin-font-c';
 
 const history = createHistory();
 

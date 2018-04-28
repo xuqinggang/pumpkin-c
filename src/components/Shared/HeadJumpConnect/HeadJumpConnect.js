@@ -5,13 +5,9 @@ import './styles.less';
 
 const classPrefix = 'm-headJump';
 
-export default function(jumpConditionObj = {}) {
-    return function(WrappedCom) {
+export default function HeadJumpConnectWrap(jumpConditionObj = {}) {
+    return function HeadJumpConnectInner(WrappedCom) {
         return class HeadJumpConnect extends Component {
-            constructor(props) {
-                super(props);
-            }
-
             handleBackBtnTap = () => {
                 if (this.refs.wrappedCom.onBackTap) {
                     this.refs.wrappedCom.onBackTap();
@@ -25,28 +21,26 @@ export default function(jumpConditionObj = {}) {
 
                 if (historyback) {
                     history.back();
-                    return;
                 }
             }
 
             render() {
                 const { className } = jumpConditionObj;
                 return (
-                    <div className={ classnames(classPrefix, 'g-grid-row', className) }>
+                    <div className={classnames(classPrefix, 'g-grid-row', className)}>
                         <span
                             onTouchTap={this.handleBackBtnTap}
                             className={`${classPrefix}-jumpbtn f-display-flex f-flex-align-center icon-back`}
-                        >
-                        </span>
-                        <WrappedCom {...this.props} ref="wrappedCom"/>
+                        />
+                        <WrappedCom {...this.props} ref="wrappedCom" />
                         {
                             // <div className={`${classPrefix}-other grid-col f-flex-align-center`}>
                             //     <WrappedCom />
                             //     </div>
                         }
                     </div>
-                )
+                );
             }
-        }
-    }
+        };
+    };
 }

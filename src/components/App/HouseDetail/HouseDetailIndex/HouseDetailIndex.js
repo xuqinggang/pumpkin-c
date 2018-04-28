@@ -18,11 +18,12 @@ import ContactButler from 'Shared/ContactButler/ContactButler';
 import OpenNative from 'Shared/OpenNative/OpenNative';
 
 import ajaxInitHouseDetail from 'application/App/HouseDetail/ajaxInitHouseDetail';
-import { dynamicDocTitle } from 'lib/util';
+import { dynamicDocTitle, getWithDefault } from 'lib/util';
 import { isApp, isRmHead, isNanguaApp } from 'lib/const';
-import { postRouteChangToIOS } from 'lib/patchNavChangeInIOS';
+import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { execWxShare } from 'lib/wxShare';
 import { AbbrevMapCity } from 'config/config';
+import { goApartment } from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -46,7 +47,7 @@ export default class HouseDetailIndex extends PureComponent {
         });
 
         if (isSimulateNative()) {
-            postRouteChangToIOS({
+            postRouteChangeToIOS({
                 canGoBack: true,
                 url: window.location.href,
             });
@@ -106,6 +107,12 @@ export default class HouseDetailIndex extends PureComponent {
         // 动态更改标题
         dynamicDocTitle(title + `-南瓜租房${cityText}租房`);
     }
+    
+    goApartment = goApartment(this.props.history)
+    handleTouchApartmet = () => {
+        // const { dataByContact: { apartmentId } } = this.state.houseDetailData;
+        // this.goApartment(apartmentId);
+    }
 
     componentWillUnmount() {
         // 把除此房源外的其余房源详情页数据给清除
@@ -148,6 +155,8 @@ export default class HouseDetailIndex extends PureComponent {
             contactButlerData,
             // 周边及交通,经纬度
             houseTrafficData,
+            // 打电话后需要本地存储的信息
+            dataByContact,
             // 额外信息
             extraData,
         } = this.state.houseDetailData;
@@ -188,6 +197,7 @@ export default class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-houseprofile`}
                     houseProfileData={houseProfileData || {}}
                     houseTrafficData={houseTrafficData || {}}
+                    onTouchApartment={this.handleTouchApartmet}
                 />
                 <HouseTags
                     className={`g-housedetail-module-padding ${classPrefix}-housetags`}
@@ -207,6 +217,7 @@ export default class HouseDetailIndex extends PureComponent {
                 <ApartmentIntro
                     className={`g-housedetail-module-padding ${classPrefix}-apartnameintro`}
                     apartmentIntroData={apartmentIntroData || {}}
+                    goApartment={this.handleTouchApartmet}
                 />
                 {
                     rentalType === 'SHARED' ? (
@@ -220,7 +231,7 @@ export default class HouseDetailIndex extends PureComponent {
                     className={`g-housedetail-module-padding ${classPrefix}-communityinfo`}
                     communityIntroData={communityIntroData || {}}
                 />
-                <ContactButler contactButlerData={contactButlerData || {}} />
+                <ContactButler houseData={dataByContact} contactButlerData={contactButlerData || {}} />
             </div>
         );
     }

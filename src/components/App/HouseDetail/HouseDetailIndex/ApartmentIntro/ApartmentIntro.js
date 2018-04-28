@@ -15,7 +15,7 @@ export default class ApartmentIntro extends PureComponent {
         const { name, image, intro } = apartmentIntroData;
 
         return (
-            <div className={`${classPrefix} ${className}`}>
+            <div className={`${classPrefix} ${className}`} onTouchTap={this.props.goApartment}>
                 <div className={`${classPrefix}-head`}>
                 {
                     withoutImage ? null :
@@ -37,6 +37,7 @@ ApartmentIntro.propTypes = {
         intro: PropTypes.string,
         image: PropTypes.string,
     }),
+    goApartment: PropTypes.func,
 };
 
 ApartmentIntro.defaultProps = {
@@ -46,6 +47,6 @@ ApartmentIntro.defaultProps = {
         name: '',
         intro: '',
         image: '',
-    }
+    },
+    goApartment: () => null,
 };
-

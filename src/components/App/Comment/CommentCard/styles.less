@@ -1,0 +1,46 @@
+@import (reference) '~styles/lib.less';
+
+.m-commentcard {
+    box-shadow: 0 8px 30px 0 rgba(0,0,0,0.10);
+    border-radius: 10px;
+    background: #FFFFFF;
+
+    & .close {
+        padding: 7px 15px 0;
+        text-align: right;
+        color: #DBDBDB;
+        height: 40px;
+
+        & .icon-small-close {
+            .font-size(40);
+        }
+    }
+
+    & .content {
+        height: 150px;
+        align-items: flex-start;
+        padding: 15px 0 20px;
+
+        & .tip {
+            color: #000;
+            .font-size(32);
+        }
+    
+        & .rent {
+            margin-top: 10px;
+            color: #999999;
+            .font-size(28);
+        }
+    }
+
+    & .wait-for-comment {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    &-button, .comment-button {
+        margin-top: 10px;
+        padding: 0 53px;
+    }
+}

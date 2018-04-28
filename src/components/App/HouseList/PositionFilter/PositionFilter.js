@@ -1,47 +1,48 @@
-import React, { Component, PureComponent } from 'react';
+/* @flow */
+
+import React, { PureComponent, createElement } from 'react';
 import classnames from 'classnames';
 
-import { Tabs, Tab } from 'Shared/Tabs'
-import { findArrayItemByPathIndex } from 'lib/util';
+import { Tabs, Tab } from 'Shared/Tabs';
 
 import './styles.less';
-// test data
-// const positionDataArr = [{
-//     around: {
-//         text: '区域',
-//         itemArr: [
-//             {
-//                 text: '不限'
-//             },
-//             {
-//                 text: '海淀',
-//                 itemArr: [
-//                     {
-//                         text: '不限',
-//                     },
-//                     {
-//                         text: '双榆树',
-//                     },
-//                     {
-//                         text: '中关村',
-//                     },
-//                     {
-//                         text: '五道口',
-//                     },
-//                 ]
-//             },
-//         ]
-//     },
-//     // subway: {
-//     // },
-//     // around: {
-//     // },
-// }];
+
+const TypeMapText = {
+    districts: '区域',
+    subways: '地铁',
+};
 
 const ptClass = 'm-ptfilter';
 
-export default class PositionFilter extends PureComponent {
-    constructor(props) {
+type StateType = {
+    firstItemSelectedIndex: number,
+    secondItemSelectedIndex: number,
+    thirdItemSelectedIndex: number,
+};
+
+type PropType = {
+    onFilterConfirm: Function,
+    positionFilterDataObj: {
+        [type: string]: {
+            [id: string]: {
+                text: string,
+                sub: {
+                    [id: string]: string,
+                },
+                isCanCancel?: boolean,
+            },
+        },
+    },
+    filterState: StateType,
+};
+
+export default class PositionFilter extends PureComponent<PropType, StateType> {
+    static defaultProps = {
+        onFilterConfirm: () => {},
+        positionFilterDataObj: {},
+    };
+
+    constructor(props: PropType) {
         super(props);
         this.state = {
             // 第一级item选中索引
@@ -56,20 +57,18 @@ export default class PositionFilter extends PureComponent {
     }
 
     // 阻止默认行为，阻止冒泡
-    handleStopEventTap = (e) => {
+    handleStopEventTap = (e: SyntheticEvent<>) => {
         e.stopPropagation();
         e.preventDefault();
     }
 
     // 回调函数-位置筛选 change
-    onPositionFilterChange = (stateData) => {
-        if (this.props.onFilterConfirm) {
-            this.props.onFilterConfirm(stateData);
-        }
+    onPositionFilterChange = (stateData: StateType) => {
+        this.props.onFilterConfirm(stateData);
     }
 
     // 回调函数-第三级item点击
-    onThirdItemTap = (index, ptData) => {
+    onThirdItemTap = (index: number) => {
         this.setState({
             thirdItemSelectedIndex: index,
         }, () => {
@@ -78,24 +77,26 @@ export default class PositionFilter extends PureComponent {
     }
 
     // 回调函数-第二级item点击
-    onSecondItemTap = (event, index) => {
-        const itemRt = findArrayItemByPathIndex(this.props.positionFilterDataArr, 
-            [this.state.firstItemSelectedIndex, index], 'itemArr');
-
+    onSecondItemTap = (event: SyntheticEvent<>, index: number) => {
         this.setState({
             secondItemSelectedIndex: index,
             thirdItemSelectedIndex: -1,
         }, () => {
-            // 如果点击的第二级item,是可取消（响应的）
-            if (itemRt && itemRt.isCanCancel) {
+            // // 如果点击的都是附近所属的二级列表
+            // if (this.state.firstItemSelectedIndex === 2) {
+            //     this.onPositionFilterChange(this.state);
+            //     return;
+            // }
+            // 如果索引为0,点击不限，直接响应
+            if (index === 0) {
                 this.onPositionFilterChange(this.state);
             }
         });
     }
 
     // 每点击第一级item，要将之前点击的第二，三级item取消掉
-    onFirstItemTap = (event, index) => {
-        if (this.state.firstItemSelectedIndex == index) return;
+    onFirstItemTap = (event: SyntheticEvent<>, index: number) => {
+        if (this.state.firstItemSelectedIndex === index) return;
 
         this.setState({
             firstItemSelectedIndex: index,
@@ -104,128 +105,108 @@ export default class PositionFilter extends PureComponent {
         });
     }
 
-    renderChildren() {
-        let {
-            positionFilterDataArr,
-        } = this.props;
-
-        const {
-            firstItemSelectedIndex,
-            secondItemSelectedIndex,
-            thirdItemSelectedIndex,
-        } = this.state;
-
+    renderThirdList(thirdDataObj: {}) {
         return (
-            <Tabs
-                defaultActiveIndex={0}
-                activeIndex={firstItemSelectedIndex}
-                className={ptClass}
-                navClassName={`${ptClass}-nav`}
-                contentClassName={`${ptClass}-content`}
-                onChange={this.onFirstItemTap}
-                direction='vertical'
-            >
-                {
-                    positionFilterDataArr.length && positionFilterDataArr.map((firstItemObj, index) => {
-                        return (
-                            <Tab
-                                label={firstItemObj.text}
-                                key={index}
-                                order={index}
-                                navItemClass={`${ptClass}-nav-item`}
-                                contentItemClass={`${ptClass}-content-item`}
-                            >
-                                <Tabs
-                                    defaultActiveIndex={-1}
-                                    activeIndex={secondItemSelectedIndex}
-                                    className={ptClass}
-                                    navClassName={`${ptClass}-nav`}
-                                    contentClassName={`${ptClass}-content`}
-                                    onChange={this.onSecondItemTap}
-                                    direction='vertical'
-                                >
-                                    {
-                                        firstItemObj.itemArr && firstItemObj.itemArr.length &&
-                                            firstItemObj.itemArr.map((secondItemObj, index) => {
-                                                return (
-                                                    // 第二级别 item
-                                                    <Tab
-                                                        label={secondItemObj.text}
-                                                        key={index}
-                                                        order={index}
-                                                        navItemClass={`${ptClass}-nav-item`}
-                                                        contentItemClass={`${ptClass}-content-item`}
-                                                    >
-                                                        {
-                                                            //第三级内容 列表list
-                                                            secondItemObj.itemArr && secondItemObj.itemArr.length ?
-                                                                <ThirdItemList thirdItemArr={secondItemObj.itemArr}
-                                                                    selectItemIndex={thirdItemSelectedIndex}
-                                                                    onChange={this.onThirdItemTap}
-                                                                />
-                                                                : null
-                                                        }
-                                                    </Tab>
-                                                );
-                                            })
-                                    }
-                                </Tabs>
-                            </Tab>
-                        );
-                    })
-                }
-            </Tabs>
+            <ThirdItemList
+                thirdDataObj={thirdDataObj}
+                selectItemIndex={this.state.thirdItemSelectedIndex}
+                onChange={this.onThirdItemTap}
+            />
         );
     }
 
-    componentWillMount() {
-        const {
-            filterState,
-        } = this.props;
+    renderSecondList(secondDataObj: {}) {
+        const children = secondDataObj && Object.keys(secondDataObj).map(
+            (secondId, index) => createElement(Tab, {
+                label: secondDataObj[secondId].text,
+                key: index,
+                navItemClass: `${ptClass}-nav-item`,
+                contentItemClass: `${ptClass}-content-item`,
+            }, this.renderThirdList(secondDataObj[secondId].sub)),
+        );
 
-        if (filterState) {
-            this.setState(filterState);
-        }
+        return createElement(Tabs, {
+            className: ptClass,
+            navClassName: `${ptClass}-nav`,
+            contentClassName: `${ptClass}-content`,
+            activeIndex: this.state.secondItemSelectedIndex,
+            onChange: this.onSecondItemTap,
+            direction: 'vertical',
+        }, children);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const filterState = nextProps.filterState;
+    renderFirstList() {
+        const {
+            positionFilterDataObj,
+        } = this.props;
 
-        if (filterState) {
-            this.setState(filterState);
-        }
+        const children = Object.keys(positionFilterDataObj).map(
+            (type, index) => createElement(Tab, {
+                label: TypeMapText[type],
+                key: index,
+                navItemClass: `${ptClass}-nav-item`,
+                contentItemClass: `${ptClass}-content-item`,
+            }, this.renderSecondList(positionFilterDataObj[type])),
+        );
+
+        return createElement(Tabs, {
+            className: ptClass,
+            navClassName: `${ptClass}-nav`,
+            contentClassName: `${ptClass}-content`,
+            activeIndex: this.state.firstItemSelectedIndex,
+            onChange: this.onFirstItemTap,
+            direction: 'vertical',
+        }, children);
+    }
+
+    componentWillReceiveProps(nextProps: PropType) {
+        const {
+            filterState,
+        } = nextProps;
+        this.setState(filterState);
     }
 
     render() {
         return (
             <div onTouchTap={this.handleStopEventTap}>
                 {
-                    this.renderChildren()
+                    this.renderFirstList()
                 }
             </div>
         );
     }
 }
 
+type PropTypeThirdItemList = {
+    selectItemIndex: number,
+    onChange: Function,
+    thirdDataObj: {
+        [id: string]: string,
+    },
+};
+
+type StateTypeThirdItemList = {
+    selectItemIndex: number,
+};
+
 // 第三级列表组件
-class ThirdItemList extends PureComponent {
-    constructor(props) {
+class ThirdItemList extends PureComponent<PropTypeThirdItemList, StateTypeThirdItemList> {
+    constructor(props: PropTypeThirdItemList) {
         super(props);
         this.state = {
-            thirdItemArr: props.thirdItemArr,
             selectItemIndex: props.selectItemIndex,
         };
     }
 
-    onThirdItemTap = (index, item) => {
-        this.props.onChange(index, item);
+    onThirdItemTap = (index: number) => {
+        this.props.onChange(index);
 
         this.setState({
             selectItemIndex: index,
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: PropTypeThirdItemList) {
         if ('selectItemIndex' in nextProps) {
             if (nextProps.selectItemIndex !== this.state.selectItemIndex) {
                 this.setState({
@@ -237,19 +218,22 @@ class ThirdItemList extends PureComponent {
 
     render() {
         const {
-            thirdItemArr,
             selectItemIndex,
         } = this.state;
 
+        const {
+            thirdDataObj,
+        } = this.props;
+
         return (
-            thirdItemArr && thirdItemArr.length ? (
+            thirdDataObj && Object.keys(thirdDataObj).length ? (
                 <ul className={`${ptClass}-third-list f-singletext-ellipsis`}>
                     {
-                        thirdItemArr.map((item, index) => {
+                        Object.keys(thirdDataObj).map((thirdId, index) => {
                             const isSelected = selectItemIndex === index;
                             return (
                                 <ThirdItem
-                                    info={item}
+                                    text={thirdDataObj[thirdId]}
                                     key={index}
                                     index={index}
                                     onThirdItemTap={this.onThirdItemTap}
@@ -265,25 +249,27 @@ class ThirdItemList extends PureComponent {
     }
 }
 
-class ThirdItem extends PureComponent {
-    handleTouchTap = (e) => {
+type PropTypeThirdItem = {
+    onThirdItemTap: Function,
+    index: number,
+    text: string,
+    isSelected: boolean,
+};
+
+class ThirdItem extends PureComponent<PropTypeThirdItem> {
+    handleTouchTap = () => {
         const {
             onThirdItemTap,
             index,
-            info,
         } = this.props;
 
-        if (onThirdItemTap) {
-            onThirdItemTap(index, info);
-        }
+        onThirdItemTap(index);
     }
 
     render() {
         const {
-            info,
-            onThirdItemTap,
             isSelected,
-            index,
+            text,
         } = this.props;
 
         const itemClass = classnames('item', {
@@ -292,7 +278,7 @@ class ThirdItem extends PureComponent {
 
         return (
             <li onTouchTap={this.handleTouchTap} className={itemClass}>
-                {info.text}
+                {text}
             </li>
         );
     }

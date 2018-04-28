@@ -2,6 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipe from 'react-swipe';
 
+/**
+ * function stop() {
+    //delay = 0;
+    delay = options.auto > 0 ? options.auto : 0;
+    clearTimeout(interval);
+  }
+ */
+
 import './styles.less';
 
 const classPrefix = 'm-shoproomslider';
@@ -18,8 +26,11 @@ export default class RoomSlider extends PureComponent {
     handleSlideChange = (curIndex) => {
         // FIX react-swipe Bug
         // when images length is 2, curIndex may be 0, 1, 2, 3
-        const { images } = this.props;
-        const len = images.length;
+        const { links, images } = this.props;
+
+        const items = links.length > 0 ? links : images;
+
+        const len = items.length;
         let index;
 
         if (curIndex >= len) {
@@ -29,40 +40,72 @@ export default class RoomSlider extends PureComponent {
         }
         this.setState({
             curIndex: index,
-        })
+        });
+    }
+
+    renderLinks = (link, index) => {
+        const { avatar, url } = link;
+        return (
+            <div className={`${classPrefix}-item-img`} key={index}>
+                {
+                    url ?
+                        <a href={url}>
+                            <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        </a>
+                        : <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                }
+            </div>
+        );
+    }
+
+    handleTransitionEnd = (e) => {
+        console.log(e, 'handleTransitionEnd');
+    }
+
+    renderImages = (img, index) => {
+        return (
+            <div className={`${classPrefix}-item-img`} key={index}>
+                <img src={img + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+            </div>
+        );
     }
 
     render() {
-        const { images, totalOnsaleCount } = this.props;
+        const { images, totalOnsaleCount, links } = this.props;
         const { curIndex } = this.state;
+
+        // if ((images && images.length <= 0) || !images) return null;
+        const items = links.length > 0 ? links : images;
 
         return (
             <div className={`${classPrefix}`}>
                 <ReactSwipe
                     className={`${classPrefix}-images`}
                     swipeOptions={{
-                        // continuous: true, 
+                        // continuous: true,
                         callback: this.handleSlideChange,
                         auto: 2000,
+                        transitionEnd: this.handleTransitionEnd,
                     }}
-                    key={images.length}
+                    ref={swiper => this.swiper = swiper}
+                    key={items.length}
                 >
                     {
-                        images.map((img, index) => (
-                            <div className={`${classPrefix}-item-img`} key={index}>
-                                <img src={img + imgCutModifier} alt="品牌公寓" key={index} className="img" />
-                            </div>
+                        items.map((item, index) => (
+                            links.length > 0
+                                ? this.renderLinks(item, index)
+                                : this.renderImages(item, index)
                         ))
                     }
                 </ReactSwipe>
                 {
-                    totalOnsaleCount > 0 ?
-                    <span className="tip">剩余{totalOnsaleCount}套可租</span> :
-                    null
+                    totalOnsaleCount > 0
+                        ? <span className="tip">剩余{totalOnsaleCount}套可租</span> 
+                        : null
                 }
                 <div className={`${classPrefix}-bullet f-display-flex f-flex-justify-center`}>
                     {
-                        images.map((_, index) => (
+                        items && items.length > 1 && items.map((_, index) => (
                             <div className={index === curIndex ? 'ring' : 'point'} key={index}></div>
                         ))
                     }
@@ -75,9 +118,14 @@ export default class RoomSlider extends PureComponent {
 RoomSlider.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
     totalOnsaleCount: PropTypes.number,
+    links: PropTypes.arrayOf({
+        avatar: PropTypes.string,
+        url: PropTypes.string,
+    })
 };
 
 RoomSlider.defaultProps = {
     images: [],
     totalOnsaleCount: 0,
+    links: [],
 };

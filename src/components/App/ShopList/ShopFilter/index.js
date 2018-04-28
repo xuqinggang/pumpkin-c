@@ -8,6 +8,7 @@ import BrandFilterWrap from '../BrandFilter';
 
 import { scrollTo, getScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
+import { apartmentFilterStoreKey } from 'application/App/ShopList/filters/utils';
 
 import './styles.less';
 
@@ -70,18 +71,15 @@ export default class ShopFilter extends PureComponent {
         });
     }
 
-
     // brandFilterState, ex:  { brand: {1:true, 2:false} }
     onFilterBrandConfirm = (brandFilterState) => {
         this.props.onFilterConfirm(brandFilterState);
-
         // 隐藏弹层
         this.handleFilterShowTap('brand', true);
     }
 
     onFilterPositionConfirm = (positionFilterState) => {
         this.props.onFilterConfirm({ position: positionFilterState });
-
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
     }
@@ -91,6 +89,7 @@ export default class ShopFilter extends PureComponent {
             className,
             filterState,
             filterLabel,
+            isExclusive,
         } = this.props;
         const {
             filterShow,
@@ -116,31 +115,35 @@ export default class ShopFilter extends PureComponent {
                     >
                         <PositionFilterWrap
                             type="position"
+                            storeKey={apartmentFilterStoreKey}
                             filterState={filterState.position}
                             onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetLabel}
+                            onDynamicPtStateAndLabel={this.props.onDynamicSetPositionLabel}
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
-                    <DropDownScreen
-                        className={`${classPrefix}-dropscreen-brand`}
-                        show={filterShow.brand}
-                        type="brand"
-                        label={filterLabel.brand}
-                        isMask={true}
-                        screenHeight="10.66667rem"
-                        isFullScreen={false}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <BrandFilterWrap
+                {
+                    !isExclusive &&
+                    <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                        <DropDownScreen
+                            className={`${classPrefix}-dropscreen-brand`}
+                            show={filterShow.brand}
                             type="brand"
-                            filterState={filterState.brand}
-                            onFilterConfirm={this.onFilterBrandConfirm}
-                            onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
-                        />
-                    </DropDownScreen>
-                </li>
+                            label={filterLabel.brand}
+                            isMask={true}
+                            screenHeight="10.66667rem"
+                            isFullScreen={false}
+                            onTouchTap={this.handleFilterShowTap}
+                        >
+                            <BrandFilterWrap
+                                type="brand"
+                                filterState={filterState.brand}
+                                onFilterConfirm={this.onFilterBrandConfirm}
+                                onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
+                            />
+                        </DropDownScreen>
+                    </li>
+                }
             </ul>
         );
     }

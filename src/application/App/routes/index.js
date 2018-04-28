@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Switch, Route } from 'react-router';
+import { Router } from 'react-router';
 
 import routerConfig from './config';
 
