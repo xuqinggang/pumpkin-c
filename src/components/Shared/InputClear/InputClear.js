@@ -44,6 +44,7 @@ export default class InputClear extends PureComponent {
             inputVal: '',
         }, () => {
             if (this.props.onChange) {
+                this.refs.inputDom.focus();
                 this.props.onChange(this.state.inputVal);
             }
         });
@@ -60,6 +61,9 @@ export default class InputClear extends PureComponent {
 
     render() {
         const {
+            inputVal,
+        } = this.state;
+        const {
             type,
             placeholder,
             className,
@@ -72,13 +76,17 @@ export default class InputClear extends PureComponent {
                     type={type}
                     placeholder={placeholder}
                     className={`${classPrefix}-input`}
-                    value={this.state.inputVal}
+                    value={inputVal}
                     onChange={this.onInputChange}
                 />
-                <span
-                    className={`icon-big-close ${classPrefix}-btn-clear`}
-                    onTouchTap={this.handleClearTap}
-                />
+                {
+                    inputVal ?
+                        <span
+                            className={`icon-big-close ${classPrefix}-btn-clear`}
+                            onTouchTap={this.handleClearTap}
+                        />
+                        : null
+                }
             </div>
         );
     }

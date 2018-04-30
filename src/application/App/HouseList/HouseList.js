@@ -105,7 +105,9 @@ export default class HouseList extends PureComponent {
         this._setStoreFilterUrlFrg(urlFrgRt);
 
         // 清空搜索
-        clearSearchStore();
+        if (type === 'position') {
+            clearSearchStore();
+        }
 
         goHouseList(this.props.history)(urlFrgRt);
 

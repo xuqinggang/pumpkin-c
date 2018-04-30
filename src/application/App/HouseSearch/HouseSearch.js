@@ -6,6 +6,7 @@ import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
 import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecord';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
@@ -48,6 +49,12 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
 
     handleSubmit = (e) => {
         e.preventDefault();
+
+        if (this.state.keyword === '') {
+            PopToolTip({text: '搜索关键字不能为空'});
+            return;
+        }
+
         setFilterStore({
             paramsObj: { keyword: this.state.keyword },
         });
