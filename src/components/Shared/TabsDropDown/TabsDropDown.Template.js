@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+import { CSSTransition } from 'react-transition-group'
 
 import './styles.less';
 
@@ -13,6 +14,7 @@ type PropType = {
 class TabsDropDownTemplate extends PureComponent<PropType> {
     render() {
         const {
+            index,
             children,
             isSelected,
         } = this.props;
@@ -28,10 +30,16 @@ class TabsDropDownTemplate extends PureComponent<PropType> {
 
         return (
             isSelected ?
+            <CSSTransition
+                key={index}
+                classNames="example"
+                timeout={{enter: 1000, exit: 1000}}
+            >
                 <div className={contentClassName}>
                     {children}
                 </div>
-                : null
+            </CSSTransition>
+            : null
         );
     }
 }

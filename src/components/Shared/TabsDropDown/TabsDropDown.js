@@ -13,6 +13,7 @@ import React, {
     isValidElement,
 } from 'react';
 import classnames from 'classnames';
+import { TransitionGroup } from 'react-transition-group';
 
 import TabsDropDownTab from './TabsDropDown.Tab';
 import TabsDropDownTemplate from './TabsDropDown.Template';
@@ -93,6 +94,7 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
                 tabContent.push(
                     // tab contentItem模板
                     createElement(TabsDropDownTemplate, {
+                        index,
                         key: index,
                         isSelected,
                         contentItemClass: tab.props.contentItemClass,
@@ -101,6 +103,7 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
             } else {
                 tabContent.push(null);
             }
+
             // tab navItem
             return cloneElement(tab, {
                 key: index,
@@ -131,10 +134,10 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
             className,
         } = this.props;
 
-//         const {
-//             activeIndex,
-//             prevIndex,
-//         } = this.state;
+        // const {
+        //     activeIndex,
+        //     prevIndex,
+        // } = this.state;
 
 
         const { tabContent, tabNav } = this.renderTabNavAndContent();
@@ -147,9 +150,11 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
                     }
                 </ul>
                 <div className={classnames(`${classPrefix}-content`)}>
-                    {
-                        tabContent
-                    }
+                    <TransitionGroup>
+                        {
+                            tabContent
+                        }
+                    </TransitionGroup>
                 </div>
             </div>
         );

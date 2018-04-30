@@ -20,6 +20,8 @@ import { houseListsSelector } from 'reduxs/modules/HouseList/HouseListSelector';
 import { houseIndexSelector } from 'reduxs/modules/HouseIndex/HouseIndexSelector';
 import { filterInfoSelector, filterUrlSelector } from 'reduxs/modules/Filter/FilterSelector';
 
+import TabsDropDown from 'Shared/TabsDropDown';
+
 // import { goHouseList } from 'application/App/routes/routes';
 
 // import { isApp } from 'lib/const';
@@ -45,9 +47,9 @@ export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.props.sagaHouseListInit({ filterUrl: props.filterUrl });
-        this.props.sagaHouseIndexInit();
-        this.props.sagaPositionOriginData();
+//         this.props.sagaHouseListInit({ filterUrl: props.filterUrl });
+//         this.props.sagaHouseIndexInit();
+//         this.props.sagaPositionOriginData();
     }
 
     // 搜索
@@ -71,22 +73,35 @@ export default class HouseList extends PureComponent {
             houseIndex,
             filterInfo,
         } = this.props;
-        console.log('HouseList render', this.props)
+        console.log('HouseList render', this.props);
         return (
-            <div className={`${classPrefix}`}>
-                <button onTouchTap={this.handleTestTap}>test</button>
-                <IndexBanner {...houseIndex.banner} />
-                <IndexRecommend recommends={houseIndex.recommends} />
-                <Filter
-                    className="filter"
-                    filterInfo={filterInfo}
-                    onFilterConfirm={this.onFilterConfirm}
-                />
-                <HouseLists
-                    {...houseList}
-                    onLoadMore={this.onLoadMore}
-                />
+            <div>
+                <TabsDropDown>
+                    <TabsDropDown.Tab
+                        label="asdf"
+                    >
+                        <div>
+                            TabsDropDownTemplate
+                        </div>
+                    </TabsDropDown.Tab>
+                </TabsDropDown>
             </div>
         );
+        // return (
+        //     <div className={`${classPrefix}`}>
+        //         <button onTouchTap={this.handleTestTap}>test</button>
+        //         <IndexBanner {...houseIndex.banner} />
+        //         <IndexRecommend recommends={houseIndex.recommends} />
+        //         <Filter
+        //             className="filter"
+        //             filterInfo={filterInfo}
+        //             onFilterConfirm={this.onFilterConfirm}
+        //         />
+        //         <HouseLists
+        //             {...houseList}
+        //             onLoadMore={this.onLoadMore}
+        //         />
+        //     </div>
+        // );
     }
 }
