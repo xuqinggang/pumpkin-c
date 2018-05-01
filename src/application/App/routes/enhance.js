@@ -19,7 +19,7 @@ import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
 
 export default {
     routeChangeToIOS: (history, to, next, title) => {
-        postRouteChangeToIOSV2({ to, title });
+        postRouteChangeToIOSV2({ to: `${window.location.origin}${to}${window.location.search}`, title });
         next();
     },
     pv: (history, url, next) => {

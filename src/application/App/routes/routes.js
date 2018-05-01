@@ -25,7 +25,10 @@ export const goIndex = withHistory(createIndexPath);
 
 // comment
 const createCommentInputPath = (apartmentId, rentUnitId) => `/comment/${apartmentId}/input/${rentUnitId}`;
-const createCommentListPath = apartmentId => `/comment/${apartmentId}/list`;
+const createCommentListPath = (apartmentId, newCommentId) => {
+    const search = newCommentId ? `?newCommentId=${newCommentId}` : '';
+    return `/comment/${apartmentId}/list${search}`;
+};
 export const goCommentInput = withHistory(createCommentInputPath);
 export const goCommentList = withHistory(createCommentListPath, {
     beforeRouteChange: [
