@@ -28,7 +28,10 @@ const createCommentInputPath = (apartmentId, rentUnitId) => `/comment/${apartmen
 const createCommentListPath = apartmentId => `/comment/${apartmentId}/list`;
 export const goCommentInput = withHistory(createCommentInputPath);
 export const goCommentList = withHistory(createCommentListPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+        withSearch,
+    ],
 });
 
 // apartment

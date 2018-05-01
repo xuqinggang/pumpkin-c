@@ -110,8 +110,8 @@ export default class HouseDetailIndex extends PureComponent {
     
     goApartment = goApartment(this.props.history)
     handleTouchApartmet = () => {
-        // const { dataByContact: { apartmentId } } = this.state.houseDetailData;
-        // this.goApartment(apartmentId);
+        const { dataByContact: { apartmentId } } = this.state.houseDetailData;
+        this.goApartment(apartmentId);
     }
 
     componentWillUnmount() {

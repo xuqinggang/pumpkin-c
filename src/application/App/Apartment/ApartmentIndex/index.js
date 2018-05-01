@@ -19,6 +19,7 @@ import { Route, Switch } from 'react-router';
 import { dynamicDocTitle } from 'lib/util';
 import { isLikeNativeView } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
+import { openSchema } from 'lib/webviewBridge';
 import initStore from 'application/App/initStore';
 
 import ApartmentDetail from '../ApartmentDetail';
@@ -96,8 +97,7 @@ export default class ApartmentIndex extends PureComponent {
         const { apartmentId } = this;
 
         if (isLikeNativeView()) {
-            window.location.href =
-                `nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`;
+            openSchema(`nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`);
             return;
         }
 
