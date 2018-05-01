@@ -20,6 +20,7 @@ export default class CommentInput extends PureComponent {
             score: 5,
             commentDone: false,
             title: '',
+            newCommentId: null,
         };
     }
 
@@ -43,19 +44,10 @@ export default class CommentInput extends PureComponent {
                 commentDone: true,
                 title: '评价完成',
             });
-            // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
-            const userInfo = window.getStore('meInfo');
-            const shiftComment = commentQueueStorage.shift();
-            window.setStore('selfComment', {
-                content,
-                images,
-                score,
-                rentUnitId,
-                updateTime: Date.now() / 1000,
-                userInfo,
-                title: shiftComment.title,
+            commentQueueStorage.shift();
+            this.setState({
+                newCommentId: data.id,
             });
-            // 待评价队列出队
         }).catch(() => {
             PopToolTip({ text: '评论提交失败' });
         });
@@ -81,8 +73,9 @@ export default class CommentInput extends PureComponent {
 
     renderSuccess = () => {
         const { apartmentId } = this.props;
+        const { newCommentId } = this.state;
         return (
-            <SuccessComment apartmentId={apartmentId} />
+            <SuccessComment apartmentId={apartmentId} newCommentId={newCommentId} />
         );
     }
 

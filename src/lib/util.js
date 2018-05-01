@@ -253,7 +253,7 @@ export function parseUrl(url) {
             if (key) {
                 rt.query[key] = val;
             }
-        })
+        });
     }
 
     return rt;
@@ -340,4 +340,20 @@ export const getFilterFixScrollTop = () => {
     const bannerDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexbanner')));
     const recommendDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexrecommend')));
     return Math.round(bannerDomHeight) + Math.round(recommendDomHeight);
-}
+};
+
+/**
+* 解析url参数
+* @param {String} name 参数名
+* @return {String} 值
+*/
+export const getQueryString = (url, name) => {
+    const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+    const querys = url.split('?')[1];
+
+    if (!querys) return null;
+
+    const r = querys.match(reg);
+    if (r != null) return decodeURIComponent(r[2]);
+    return null;
+};
