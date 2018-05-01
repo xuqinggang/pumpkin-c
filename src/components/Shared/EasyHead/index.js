@@ -13,7 +13,7 @@ class EasyHead extends Component {
         super(props);
         this.state = {
             showPrompt: false,
-        }
+        };
     }
 
     back = () => {
