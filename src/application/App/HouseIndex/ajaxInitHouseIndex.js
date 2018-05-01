@@ -9,8 +9,8 @@ export function ajaxInitHouseIndexBanner(cityId) {
                 return;
             }
 
-            return data.data;
-        })
+            return data.data || [];
+        });
 }
 
 export function ajaxInitHouseIndexRecommend(cityId) {
@@ -22,6 +22,6 @@ export function ajaxInitHouseIndexRecommend(cityId) {
                 return;
             }
 
-            return data.data;
-        })
+            return data.data || [];
+        });
 }

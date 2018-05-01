@@ -28,17 +28,26 @@ const createCommentInputPath = (apartmentId, rentUnitId) => `/comment/${apartmen
 const createCommentListPath = apartmentId => `/comment/${apartmentId}/list`;
 export const goCommentInput = withHistory(createCommentInputPath);
 export const goCommentList = withHistory(createCommentListPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+        withSearch,
+    ],
 });
 
 // apartment
 const createApartmentPath = apartmentId => `/apartment/${apartmentId}`;
 const createApartmentDeatilPath = apartmentId => `/apartment/${apartmentId}/detail`;
 export const goApartment = withHistory(createApartmentPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '品牌公寓'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '品牌公寓'),
+        withSearch,
+    ],
 });
 export const goApartmentDetail = withHistory(createApartmentDeatilPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓详情'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '公寓详情'),
+        withSearch,
+    ],
 });
 
 // shop
@@ -46,7 +55,10 @@ const createShopListPath = (filterParams = '') => `/shop/list/${filterParams}`;
 const createExclusiveShopPath = (filterParams = '') => `/shop/exclusive/${filterParams}`;
 const createShopDetailPath = shopId => `/shop/detail/${shopId}`;
 export const goShopList = withHistory(createShopListPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+        withSearch,
+    ],
 });
 export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     beforeRouteChange: [
@@ -55,7 +67,10 @@ export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     ],
 });
 export const goShopDetail = withHistory(createShopDetailPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
+        withSearch,
+    ],
 });
 
 // login

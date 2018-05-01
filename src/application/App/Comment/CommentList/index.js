@@ -4,7 +4,7 @@ import { PureCommentList } from 'components/App/Comment';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
 import { getDocHeight, getScrollTop, dynamicDocTitle } from 'lib/util';
 import { ajaxGetCommentList } from '../ajaxInitComment';
-import { isRmHead } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 
 import './styles.less';
 
@@ -109,7 +109,7 @@ export default class CommentList extends PureComponent {
         return (
             <div className={`${classPrefix}`}>
                 {
-                    !isRmHead() &&
+                    !isLikeNativeView() &&
                     <HouseHead
                         history={history}
                         renderRight={() => (

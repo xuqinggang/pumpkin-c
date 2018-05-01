@@ -85,7 +85,6 @@ export function stringifyRentState(rentState) {
     const paramsObj = {
         priceInfo: null,
     };
-    const seoData = '';
 
     if (rentState && rentState.length) {
         // [0, 20000] 代表无限，不拼接到url中
@@ -95,7 +94,7 @@ export function stringifyRentState(rentState) {
 
             if (rentState[0] === 0) {
                 label = `${rentState[1]}以下`;
-                paramsObj.priceInfo = { floor: rentState[0], ceil: null };
+                paramsObj.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             } else if (rentState[1] === 20000) {
                 label = `${rentState[0]}以上`;
                 paramsObj.priceInfo = { floor: null, ceil: rentState[1] };

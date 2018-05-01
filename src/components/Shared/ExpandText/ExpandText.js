@@ -40,6 +40,7 @@ export default class ExpandText extends PureComponent {
 
         return (
             <div className={classnames(classPrefix, className)}>
+                {/* <p className={`${classPrefix}-text`} style={{ color }}>{showIntroStr}</p> */}
                 <pre className={`${classPrefix}-text`} style={{ color }}>{showIntroStr}</pre>
                 {
                     isExpandBtnShow ?
