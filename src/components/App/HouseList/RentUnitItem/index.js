@@ -36,7 +36,7 @@ class RentUnitItem extends PureComponent {
     handleTouchTap() {
         // 南瓜租房 iOS 端打开, 模拟成原生页时打开原生详情页
         if (isLikeNativeView()) {
-            openSchema(`nangua://nanguazufang.cn?rentUnitId=${this.props.rentUnitId}`);
+            openSchema(`nangua://nanguazufang.cn?rentUnitId=${this.props.rentUnitId}&history=true`);
             return;
         }
         const {

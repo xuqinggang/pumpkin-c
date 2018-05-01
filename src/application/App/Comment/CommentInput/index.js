@@ -114,6 +114,13 @@ export default class CommentInput extends PureComponent {
         );
     }
 
+    fixIOSSoftKeyboard = (e) => {
+        if (e.target.tagName !== 'TEXTAREA') {
+            const textArea = document.getElementsByTagName('textarea');
+            textArea && textArea[0] && textArea[0].blur();
+        }
+    }
+
     componentWillMount() {
         const comments = commentQueueStorage.get();
         const comment = (comments && comments[0]) || { ttile: '评价' };
@@ -132,7 +139,7 @@ export default class CommentInput extends PureComponent {
         const { commentDone, title } = this.state;
 
         return (
-            <div className={`${classPrefix}`}>
+            <div onTouchTap={this.fixIOSSoftKeyboard} className={`${classPrefix}`}>
                 <EasyHead
                     prompt={this.hasEdited ? '退出将丢失评价内容' : ''}
                     renderRight={() => (

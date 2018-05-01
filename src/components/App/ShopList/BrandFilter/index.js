@@ -63,9 +63,6 @@ class BrandFilter extends PureComponent {
             });
             return;
         }
-        // 南瓜租房 iOS APP 传来 cityId 等参数
-        //  TODO 不该再使用该方式传 cityId 通过 webview 修改链接地址来实现
-        const cityId = (window.iOS && window.iOS.getCityId()) || null;
 
         ajaxGetBrandList().then((brandLabels) => {
             const formattedBrands = formatBrands(brandLabels);
