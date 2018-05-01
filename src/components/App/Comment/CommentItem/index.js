@@ -34,7 +34,7 @@ class CommentItem extends PureComponent {
     viewImage = () => {
         const { id } = this.props.comment;
         if (isLikeNativeView()) {
-            openSchema(`nangua://api.nanguazufang.cn/main?imageWithCommentId=${id}`);
+            openSchema(`nangua://api.nanguazufang.cn/main?imageWithCommentId=${id}&history=true`);
         }
     }
 
