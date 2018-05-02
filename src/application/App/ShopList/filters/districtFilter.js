@@ -37,10 +37,10 @@ export class DistrictFilterState extends AbstractFilterState {
         }
 
         const curDistrict = data.filter((district) => {
-            return district.id === state;
+            return district.id.toString() === state.toString();
         });
 
-        return curDistrict && curDistrict[0].name;
+        return curDistrict && curDistrict[0] && curDistrict[0].name;
     }
 
     getDataFromStore() {
