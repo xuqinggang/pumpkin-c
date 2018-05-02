@@ -1,5 +1,5 @@
 import AbstractFilterState from './baseFilters';
-import { urlModuleSplit, apartmentFilterStoreKey } from './utils';
+import { apartmentFilterStoreKey } from './utils';
 
 export class BrandFilterState extends AbstractFilterState {
     storeKey = apartmentFilterStoreKey;
@@ -58,8 +58,8 @@ export class BrandFilterState extends AbstractFilterState {
         return '多选';
     }
 
-    getDataFromStore() {
-        let data = window.getStore('apartmentBrandLabels');
+    getDataFromStore = () => {
+        const data = super.getDataFromStore();
         return (data && data.list) || [];
     }
 
@@ -68,22 +68,6 @@ export class BrandFilterState extends AbstractFilterState {
         let brandUrl = apartmentIds.join(this.urlInnerSplit);
         brandUrl = brandUrl ? `${this.urlStartsWith}${brandUrl}` : '';
         return brandUrl;
-    }
-
-    stringifyStateToUrl(filterUrlFragment) {
-        const urlFragment = filterUrlFragment || '';
-
-        const mouldes = urlFragment.split(urlModuleSplit);
-        const reservedMouldes = mouldes
-            .filter(item => !item.startsWith(this.urlStartsWith) && item !== '');
-
-        const brandUrl = this.stringifyParam();
-
-        if (brandUrl) {
-            reservedMouldes.push(brandUrl);
-        }
-
-        return reservedMouldes.join(urlModuleSplit);
     }
 
     parseUrl(urlModule) {

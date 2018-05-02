@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 
-import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
-import HouseTypeFilterTagData from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilterTagData';
 import './styles.less';
 
 const classPrefix = 'm-filterconfirm';
 
-export default function() {
-    return function(WrappedCom) {
+export default function (hasConfirmButton = true) {
+    return function filterWrap(WrappedCom) {
         return class FilterConfirmConnect extends Component {
             handleWrapTap = (e) => {
                 e.stopPropagation();
@@ -38,20 +35,23 @@ export default function() {
                             onFilterConfirm={this.props.onFilterConfirm}
                             onDynamicSetLabel={onDynamicSetLabel || (() => null)}
                         />
-                        <div className={`${classPrefix}-footer`}>
-                            <span
-                                className="f-display-inlineblock f-align-center footer-clear"
-                                onTouchTap={this.handleClearTap}
-                            >
-                                清空
-                            </span>
-                            <span
-                                className="f-display-inlineblock f-align-center footer-confirm"
-                                onTouchTap={this.handleConfirmTap}
-                            >
-                                确定
-                            </span>
-                        </div>
+                        {
+                            hasConfirmButton &&
+                            <div className={`${classPrefix}-footer`}>
+                                <span
+                                    className="f-display-inlineblock f-align-center footer-clear"
+                                    onTouchTap={this.handleClearTap}
+                                >
+                                    清空
+                                </span>
+                                <span
+                                    className="f-display-inlineblock f-align-center footer-confirm"
+                                    onTouchTap={this.handleConfirmTap}
+                                >
+                                    确定
+                                </span>
+                            </div>
+                        }
                     </div>
                 )
             }

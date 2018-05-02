@@ -11,6 +11,7 @@ import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
 import { goShopList, goExclusiveShop } from 'application/App/routes/routes';
 import { brandFilterBus } from './filters/brandFilter';
+import { districtFilterBus } from './filters/districtFilter';
 import { stringifyPostionState } from 'application/App/HouseList/stringifyState';
 import { parseUrl as parsePositionUrl } from 'application/App/HouseList/parseUrl';
 import { apartmentFilterStoreKey, urlModuleSplit } from './filters/utils';
@@ -36,6 +37,12 @@ export default class ShopList extends PureComponent {
                 label: brandFilterBus.label,
                 param: brandFilterBus.param,
             },
+            // 行政区域筛选
+            districtFilter: {
+                state: districtFilterBus.state,
+                label: districtFilterBus.label,
+                param: districtFilterBus.param,
+            },
         };
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
@@ -53,16 +60,29 @@ export default class ShopList extends PureComponent {
     }
 
     get filterLabel() {
-        const { positionFilter, brandFilter } = this.state;
-        return { position: positionFilter.label, brand: brandFilter.label };
+        const { positionFilter, brandFilter, districtFilter } = this.state;
+        console.log(districtFilter);
+        return {
+            position: positionFilter.label,
+            brand: brandFilter.label,
+            district: districtFilter.label,
+        };
     }
     get filterState() {
-        const { brandFilter, positionFilter } = this.state;
-        return { position: positionFilter.state, brand: brandFilter.state };
+        const { brandFilter, positionFilter, districtFilter } = this.state;
+        return {
+            position: positionFilter.state,
+            brand: brandFilter.state,
+            district: districtFilter.state,
+        };
     }
     get filterParamsObj() {
-        const { brandFilter, positionFilter } = this.state;
-        return { position: positionFilter.param, apartmentIds: brandFilter.param };
+        const { brandFilter, positionFilter, districtFilter } = this.state;
+        return {
+            position: positionFilter.param,
+            apartmentIds: brandFilter.param,
+            districtId: districtFilter.param,
+        };
     }
 
     wxShare = () => {
@@ -94,6 +114,16 @@ export default class ShopList extends PureComponent {
         const brandFilter = brandFilterBus.parseUrlToState(this.filterUrlFragment) || {};
         this.setState({
             brandFilter: { ...this.state.brandFilter, ...brandFilter },
+        });
+    }
+
+    dynamicSetDistrictLabel = (districts) => {
+        const label = districtFilterBus.setLabel(districts) || {};
+        this.setState({
+            districtFilter: {
+                ...this.state.districtFilter,
+                label,
+            },
         });
     }
 
@@ -137,13 +167,27 @@ export default class ShopList extends PureComponent {
         this.goShopList(composedUrl);
     }
 
+    handledDistrictSelect = (districtId) => {
+        const { filterUrlFragment } = this;
+        const {
+            filterState: districtFilter,
+            url: nextFilterUrlFragment,
+        } = districtFilterBus.parseStateToOthers(districtId, filterUrlFragment);
+        this.setState({
+            districtFilter,
+        });
+        this.goShopList(nextFilterUrlFragment);
+    }
+
     onFilterConfirm = (newState) => {
         if (!newState) return;
-        const { brand, position } = newState;
+        const { brand, position, district } = newState;
         if (brand) {
-            this.handleBrandSelect(newState.brand);
+            this.handleBrandSelect(brand);
         } else if (position) {
-            this.handlePositionSelect(newState.position);
+            this.handlePositionSelect(position);
+        } else if (district !== undefined) {
+            this.handledDistrictSelect(district);
         }
     }
 
@@ -168,6 +212,8 @@ export default class ShopList extends PureComponent {
         this.urlFrgObj = urlFrg;
         // get brand param from url
         const brandFilter = brandFilterBus.parseUrlToState(filterUrlFragment) || {};
+        // get district param from url
+        const districtFilter = districtFilterBus.parseUrlToState(filterUrlFragment) || {};
         this.setState({
             brandFilter: {
                 ...this.state.brandFilter,
@@ -177,6 +223,10 @@ export default class ShopList extends PureComponent {
                 ...this.state.positionFilter,
                 param: positionParam,
             },
+            districtFilter: {
+                ...this.state.districtFilter,
+                ...districtFilter,
+            }
         });
 
         this._setStoreFilterInfo();
@@ -211,7 +261,7 @@ export default class ShopList extends PureComponent {
                             ? <HouseHead
                                 history={history}
                                 renderRight={() => (
-                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
+                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>集中式公寓</span>
                                 )}
                             />
                             : null
@@ -225,6 +275,7 @@ export default class ShopList extends PureComponent {
                         onFilterReSume={this.onFilterReSume}
                         onDynamicSetPositionLabel={this.dynamicSetPositionFilterLabel}
                         onDynamicSetBrandLabel={this.dynamicSetBrandFilterLabelAndState}
+                        onDynamicSetDistrictLabel={this.dynamicSetDistrictLabel}
                         isExclusive={this.isExclusive}
                     />
                 </div>
