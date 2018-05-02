@@ -5,6 +5,7 @@ import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConne
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 import { ajaxGetBrandList } from 'application/App/ShopList/ajaxInitShopList';
 import { shallowEqual } from 'lib/util';
+import { brandFilterBus } from 'application/App/ShopList/filters/brandFilter';
 
 import './styles.less';
 
@@ -55,18 +56,17 @@ class BrandFilter extends PureComponent {
     }
 
     componentWillMount() {
-        // TODO 将这个拆出去
-        const apartmentBrandLabels = window.getStore('apartmentBrandLabels');
-        if (!!apartmentBrandLabels) {
+        const apartmentBrandLabels = brandFilterBus.getDataFromStore();
+        if (apartmentBrandLabels.length > 0) {
             this.setState({
-                brandLabels: apartmentBrandLabels.list,
+                brandLabels: apartmentBrandLabels,
             });
             return;
         }
 
         ajaxGetBrandList().then((brandLabels) => {
             const formattedBrands = formatBrands(brandLabels);
-            window.setStore('apartmentBrandLabels', {
+            brandFilterBus.setDataStore({
                 list: formattedBrands,
             });
             this.setState({

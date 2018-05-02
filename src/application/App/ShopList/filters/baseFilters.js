@@ -1,4 +1,4 @@
-import { urlModuleSplit } from './utils';
+import { urlModuleSplit, dataStoreKey } from './utils';
 
 // 模板方法模式
 export default class AbstractFilterState {
@@ -37,8 +37,8 @@ export default class AbstractFilterState {
 
         this.setFilterState(state);
 
-        const data = this.getDataFromStore();
-        const url = this.stringifyStateToUrl(filterUrlFragment, data);
+        // const data = this.getDataFromStore();
+        const url = this.stringifyStateToUrl(filterUrlFragment);
 
         return {
             filterState: {
@@ -75,6 +75,14 @@ export default class AbstractFilterState {
         }
     }
 
+    setDataStore(data) {
+        const oldData = window.getStore(dataStoreKey);
+        window.setStore(dataStoreKey, {
+            ...oldData,
+            [this.name]: data,
+        });
+    }
+
     setStore(state, param, label) {
         if (!(this.storeKey && this.name)) {
             throw new Error('you should set storeKey and name');
@@ -91,11 +99,30 @@ export default class AbstractFilterState {
         });
     }
 
+    stringifyStateToUrl(filterUrlFragment) {
+        const urlFragment = filterUrlFragment || '';
+
+        const mouldes = urlFragment.split(urlModuleSplit);
+        const reservedMouldes = mouldes
+            .filter(item => !item.startsWith(this.urlStartsWith) && item !== '');
+
+        const filterUrl = this.stringifyParam();
+
+        if (filterUrl) {
+            reservedMouldes.push(filterUrl);
+        }
+
+        return reservedMouldes.join(urlModuleSplit);
+    }
+
     parseUrl() { throw new Error('you need overwrite parseUrl'); }
 
     setParam(state) { throw new Error('you need overwrite setParam'); }
 
     setLabel(state) { throw new Error('you need overwrite setLabel'); }
 
-    getDataFromStore() { throw new Error('you need overwrite getDataFromStore'); }
+    getDataFromStore() {
+        const data = window.getStore(dataStoreKey);
+        return data && data[this.name];
+    }
 }
