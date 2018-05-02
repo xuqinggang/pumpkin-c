@@ -30,6 +30,7 @@ const classPrefix = 'g-realhouselist';
 // 临时方案
 const storeKey = 'apartmentHouseFilter';
 const urlStoreKey = 'apartmentHouseUrl';
+const houseListStoreKey = 'apartmentHouseList';
 
 window.setStore(storeKey, {
     urlFrg: InitStateFilterUrlFrg,
@@ -89,6 +90,9 @@ export default class RealHouseList extends PureComponent {
 
         // TO THE TOP
         window.scrollTo({ x: 0, y: 0 }, 0);
+
+        // init houselist
+        window.setStore(houseListStoreKey, null);
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -180,8 +184,8 @@ export default class RealHouseList extends PureComponent {
 
         // 筛选的请求参数
         this.filterParamsObj = {
-            apartmentId: this.queryFieldsObj.apartment || null,
             ...paramsObj,
+            apartmentId: this.queryFieldsObj.apartment || null,
         };
         this.setNearbyInfo(this.queryFieldsObj.nearby);
         this._setStoreFilterInfo();
@@ -272,6 +276,8 @@ export default class RealHouseList extends PureComponent {
                 />
                 <HouseLists
                     filterParams={this.filterParamsObj}
+                    storeKey={houseListStoreKey}
+                    filterStoreKey={storeKey}
                 />
             </div>
         );
