@@ -61,7 +61,6 @@ export default class ShopList extends PureComponent {
 
     get filterLabel() {
         const { positionFilter, brandFilter, districtFilter } = this.state;
-        console.log(districtFilter);
         return {
             position: positionFilter.label,
             brand: brandFilter.label,
@@ -138,12 +137,9 @@ export default class ShopList extends PureComponent {
     handleBrandSelect(brand) {
         const { filterUrlFragment } = this;
         const {
-            filterState: brandFilter,
+            // filterState: brandFilter,
             url: nextFilterUrlFragment,
         } = brandFilterBus.parseStateToOthers(brand, filterUrlFragment);
-        this.setState({
-            brandFilter,
-        });
         this.goShopList(nextFilterUrlFragment);
     }
 
@@ -159,23 +155,20 @@ export default class ShopList extends PureComponent {
                 label,
                 state: position,
             },
+        }, () => {
+            // 为 position 做的兼容
+            const brandUrl = brandFilterBus.stringifyParam();
+            const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
+            this.goShopList(composedUrl);
         });
-
-        // 为 position 做的兼容
-        const brandUrl = brandFilterBus.stringifyParam();
-        const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
-        this.goShopList(composedUrl);
     }
 
     handledDistrictSelect = (districtId) => {
         const { filterUrlFragment } = this;
         const {
-            filterState: districtFilter,
+            // filterState: districtFilter,
             url: nextFilterUrlFragment,
         } = districtFilterBus.parseStateToOthers(districtId, filterUrlFragment);
-        this.setState({
-            districtFilter,
-        });
         this.goShopList(nextFilterUrlFragment);
     }
 
@@ -192,7 +185,7 @@ export default class ShopList extends PureComponent {
     }
 
     // 为 position 做的兼容
-    _setStoreFilterInfo() {
+    setStoreFilterInfo() {
         const oldApartmentFilter = window.getStore(apartmentFilterStoreKey);
         window.setStore(apartmentFilterStoreKey, {
             ...oldApartmentFilter,
@@ -203,17 +196,15 @@ export default class ShopList extends PureComponent {
         });
     }
 
-    componentWillMount() {
-        // store filterUrlFragment for easy get
-        const { filterUrlFragment } = this.props.match.params;
+    getFilterFromUrl(filterUrlFragment) {
         this.filterUrlFragment = filterUrlFragment;
-        // get position param from url
+
         const { paramsObj: positionParam, urlFrg } = parsePositionUrl(filterUrlFragment) || {};
         this.urlFrgObj = urlFrg;
-        // get brand param from url
+
         const brandFilter = brandFilterBus.parseUrlToState(filterUrlFragment) || {};
-        // get district param from url
         const districtFilter = districtFilterBus.parseUrlToState(filterUrlFragment) || {};
+
         this.setState({
             brandFilter: {
                 ...this.state.brandFilter,
@@ -226,15 +217,25 @@ export default class ShopList extends PureComponent {
             districtFilter: {
                 ...this.state.districtFilter,
                 ...districtFilter,
-            }
+            },
         });
 
-        this._setStoreFilterInfo();
+        this.setStoreFilterInfo();
+    }
+
+    componentWillMount() {
+        const { filterUrlFragment } = this.props.match.params;
+        this.getFilterFromUrl(filterUrlFragment);
     }
 
     componentDidMount() {
         this.wxShare();
         dynamicDocTitle('集中式公寓');
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { filterUrlFragment } = nextProps.match.params;
+        this.getFilterFromUrl(filterUrlFragment);
     }
 
     render() {
