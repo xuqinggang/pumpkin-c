@@ -43,4 +43,3 @@ export default class InputSearch extends PureComponent<PropType> {
         );
     }
 }
-

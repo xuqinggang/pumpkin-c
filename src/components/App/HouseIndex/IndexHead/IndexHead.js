@@ -14,6 +14,7 @@ const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
     handleNavigateSearch = () => {
+        document.body.classList.remove('f-disscroll-through');
         goSearch(this.props.history)();
     }
 
