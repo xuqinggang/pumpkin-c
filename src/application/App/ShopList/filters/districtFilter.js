@@ -8,6 +8,12 @@ export class DistrictFilterState extends AbstractFilterState {
     // handle for url
     urlStartsWith = 'dis';
 
+    defaultFilter = {
+        state: null,
+        label: '位置',
+        param: null,
+    }
+
     constructor({
         label = '位置',
         param = null,
@@ -25,9 +31,7 @@ export class DistrictFilterState extends AbstractFilterState {
         return districtId;
     }
 
-    setLabel = (data) => {
-        const { state } = this;
-
+    setLabel = (data, state = this.state) => {
         if (!state) {
             return '位置';
         }
@@ -51,7 +55,7 @@ export class DistrictFilterState extends AbstractFilterState {
     stringifyParam() {
         const district = this.param;
         if (!district) {
-            return '';
+            return null;
         }
         const districtUrl = `${this.urlStartsWith}${district}`;
         return districtUrl;
@@ -60,7 +64,7 @@ export class DistrictFilterState extends AbstractFilterState {
     parseUrl(urlModule) {
         const data = this.getDataFromStore();
         const districtIdUrl = urlModule.slice(this.urlStartsWith.length);
-        const districtId = districtIdUrl || this.state;
+        const districtId = districtIdUrl || null;
 
         const state = districtId;
         const param = districtId;

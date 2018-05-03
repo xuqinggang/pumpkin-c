@@ -9,6 +9,12 @@ export class BrandFilterState extends AbstractFilterState {
     urlInnerSplit = '$';
     urlStartsWith = 'z';
 
+    defaultFilter = {
+        state: {},
+        label: '品牌',
+        param: [],
+    }
+
     constructor({
         label = '品牌',
         param = [],
@@ -98,3 +104,6 @@ export class BrandFilterState extends AbstractFilterState {
 }
 
 export const brandFilterBus = new BrandFilterState({});
+
+// for debugger
+// window.brandFilterBus = brandFilterBus;

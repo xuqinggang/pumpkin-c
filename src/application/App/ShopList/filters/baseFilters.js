@@ -9,6 +9,12 @@ export default class AbstractFilterState {
     urlInnerSplit;
     urlStartsWith;
 
+    defaultFilter = {
+        state: {},
+        label: '',
+        param: {},
+    }
+
     constructor({
         state = {},
         label = '',
@@ -17,6 +23,13 @@ export default class AbstractFilterState {
         this.state = state;
         this.label = label;
         this.param = param;
+    }
+
+    setDefaultFilter = () => {
+        this.state = this.defaultFilter.state;
+        this.label = this.defaultFilter.label;
+        this.param = this.defaultFilter.param;
+        return this.defaultFilter;
     }
 
     // for set state
@@ -51,28 +64,30 @@ export default class AbstractFilterState {
     }
 
     parseUrlToState(filterUrlFragment) {
-        if (!filterUrlFragment) {
-            return;
+        if (filterUrlFragment) {
+            const mouldes = filterUrlFragment.split(urlModuleSplit);
+            // TODO 仅仅通过 startsWith 的方式不足以应对更加复杂的情况
+            // 比如 无法区分 d 和 dis 开头的数据
+            let curMoudle = mouldes.filter(module => module.startsWith(this.urlStartsWith));
+            curMoudle = curMoudle.length > 0 ? curMoudle[0] : undefined;
+            if (curMoudle) {
+                const {
+                    state,
+                    param,
+                    label,
+                } = this.parseUrl(curMoudle);
+                this.state = state;
+                this.param = param;
+                this.label = label;
+                return {
+                    state,
+                    param,
+                    label,
+                };
+            }
         }
 
-        const mouldes = filterUrlFragment.split(urlModuleSplit);
-        let curMoudle = mouldes.filter(module => module.startsWith(this.urlStartsWith));
-        curMoudle = curMoudle.length > 0 ? curMoudle[0] : undefined;
-        if (curMoudle) {
-            const {
-                state,
-                param,
-                label,
-            } = this.parseUrl(curMoudle);
-            this.state = state;
-            this.param = param;
-            this.label = label;
-            return {
-                state,
-                param,
-                label,
-            };
-        }
+        return this.setDefaultFilter();
     }
 
     setDataStore(data) {

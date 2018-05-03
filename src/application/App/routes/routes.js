@@ -63,6 +63,15 @@ export const goShopList = withHistory(createShopListPath, {
         withSearch,
     ],
 });
+/**
+ * 是否是改变当前页的一些参数
+ * 改变本页的一些参数认为是没有跳页
+ */
+export const changeExclusiveShopQuery = withHistory(createExclusiveShopPath, {
+    beforeRouteChange: [
+        withSearch,
+    ],
+});
 export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     beforeRouteChange: [
         (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
