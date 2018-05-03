@@ -99,7 +99,7 @@ export default function HouseSearchConnectFunWrap() {
 
                 // 清空 houseList store
                 window.setStore('houseList', null);
-                
+
                 jumpHouseList(this.props.history);
             }
 

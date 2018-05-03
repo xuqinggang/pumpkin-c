@@ -8,6 +8,7 @@ import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecord';
 import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
+import { historyRecordStorage } from 'application/App/storage';
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
@@ -54,6 +55,13 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             PopToolTip({text: '搜索关键字不能为空'});
             return;
         }
+
+        // storage
+        historyRecordStorage.update({
+            type: 'keywords',
+            text: this.state.keyword,
+            fieldValue: this.state.keyword,
+        });
 
         setFilterStore({
             paramsObj: { keyword: this.state.keyword },
