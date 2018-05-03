@@ -94,14 +94,12 @@ export function stringifyRentState(rentState) {
 
             if (rentState[0] === 0) {
                 label = `${rentState[1]}以下`;
-                paramsObj.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             } else if (rentState[1] === 20000) {
                 label = `${rentState[0]}以上`;
-                paramsObj.priceInfo = { floor: null, ceil: rentState[1] };
             } else {
                 label = `${rentState[0]}-${rentState[1]}`;
-                paramsObj.priceInfo = { floor: rentState[0], ceil: rentState[1] };
             }
+            paramsObj.priceInfo = { floor: rentState[0], ceil: rentState[1] };
         }
     }
 
