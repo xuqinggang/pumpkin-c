@@ -20,7 +20,13 @@ export default class CommentInput extends PureComponent {
             score: 5,
             commentDone: false,
             title: '',
+            newCommentId: null,
         };
+    }
+
+    get hasEdited() {
+        const { content, images } = this.state;
+        return content || images.length > 0;
     }
 
     handleSubmit = () => {
@@ -38,19 +44,10 @@ export default class CommentInput extends PureComponent {
                 commentDone: true,
                 title: '评价完成',
             });
-            // TODO 评价成功在第一个显示, 简单处理, 后面用 redux
-            const userInfo = window.getStore('meInfo');
-            const shiftComment = commentQueueStorage.shift();
-            window.setStore('selfComment', {
-                content,
-                images,
-                score,
-                rentUnitId,
-                updateTime: Date.now() / 1000,
-                userInfo,
-                title: shiftComment.title,
+            commentQueueStorage.shift();
+            this.setState({
+                newCommentId: data.id,
             });
-            // 待评价队列出队
         }).catch(() => {
             PopToolTip({ text: '评论提交失败' });
         });
@@ -76,8 +73,9 @@ export default class CommentInput extends PureComponent {
 
     renderSuccess = () => {
         const { apartmentId } = this.props;
+        const { newCommentId } = this.state;
         return (
-            <SuccessComment apartmentId={apartmentId} />
+            <SuccessComment apartmentId={apartmentId} newCommentId={newCommentId} />
         );
     }
 
@@ -106,7 +104,14 @@ export default class CommentInput extends PureComponent {
                     onContentChange={this.handleContentChange}
                 />
             </div>
-        )
+        );
+    }
+
+    fixIOSSoftKeyboard = (e) => {
+        if (e.target.tagName !== 'TEXTAREA') {
+            const textArea = document.getElementsByTagName('textarea');
+            textArea && textArea[0] && textArea[0].blur();
+        }
     }
 
     componentWillMount() {
@@ -124,20 +129,21 @@ export default class CommentInput extends PureComponent {
     }
 
     render() {
-        const { history } = this.props;
         const { commentDone, title } = this.state;
 
         return (
-            <div className={`${classPrefix}`}>
-                <EasyHead renderRight={() => (
-                    <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
-                        <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
-                        {
-                            !commentDone &&
-                            <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
-                        }
-                    </div>
-                )}
+            <div onTouchTap={this.fixIOSSoftKeyboard} className={`${classPrefix}`}>
+                <EasyHead
+                    prompt={this.hasEdited ? '退出将丢失评价内容' : ''}
+                    renderRight={() => (
+                        <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
+                            <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
+                            {
+                                !commentDone &&
+                                <div className={`${classPrefix}-submit f-singletext-ellipsis`} onTouchTap={this.handleSubmit}>提交</div>
+                            }
+                        </div>
+                    )}
                 />
                 { this.renderMain() }
             </div>

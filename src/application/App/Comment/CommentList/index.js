@@ -2,24 +2,31 @@ import React, { PureComponent } from 'react';
 
 import { PureCommentList } from 'components/App/Comment';
 import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
-import { getDocHeight, getScrollTop, dynamicDocTitle } from 'lib/util';
-import { ajaxGetCommentList } from '../ajaxInitComment';
-import { isRmHead } from 'lib/const';
+import { getDocHeight, getScrollTop, dynamicDocTitle, getQueryString } from 'lib/util';
+import { ajaxGetCommentList, ajaxGetComment } from '../ajaxInitComment';
+import { isLikeNativeView } from 'lib/const';
 
 import './styles.less';
 
 const classPrefix = 'g-commentlist';
 
-const getSelfComment = () => {
-    const comment = window.getStore('selfComment');
-    return comment;
-}
+const upgradeComment = (comments, selfComment) => {
+    if (!selfComment || !selfComment.id) {
+        return comments;
+    }
+    const selfCommentId = selfComment.id;
+    const newComments = comments.filter(comment => comment.id !== selfCommentId);
+    return [selfComment, ...newComments];
+};
+
+const newCommentIdKey = 'newCommentId';
 
 export default class CommentList extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
+            selfComment: null,
             comments: [],
             pager: {
                 curPage: 1,
@@ -27,6 +34,7 @@ export default class CommentList extends PureComponent {
             },
             loading: false,
         };
+        this.selfCommentId = getQueryString(window.location.href, newCommentIdKey);
     }
 
     onLoadMore = () => {
@@ -40,7 +48,7 @@ export default class CommentList extends PureComponent {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
                 const { curPage, totalPage } = this.state.pager;
-                if (curPage < totalPage) {
+                if (curPage <= totalPage) {
                     this.onLoadMore();
                 }
             }
@@ -49,6 +57,10 @@ export default class CommentList extends PureComponent {
     }
 
     fetchData = (renew = false) => {
+        if (this.state.loading) {
+            return;
+        }
+        
         const { apartmentId } = this.props;
         const { pager, comments } = this.state;
         const { curPage } = pager;
@@ -58,21 +70,17 @@ export default class CommentList extends PureComponent {
         });
         ajaxGetCommentList(apartmentId, pager).then((data) => {
             let newComments;
-            let newPager;
 
             if (!renew) {
                 newComments = [...comments, ...data.comments];
-                newPager = {
-                    curPage: curPage + 1,
-                    totalPage: data.totalPage,
-                };
             } else {
                 newComments = data.comments;
-                newPager = {
-                    curPage: 1,
-                    totalPage: data.totalPage,
-                };
             }
+
+            const newPager = {
+                curPage: curPage + 1,
+                totalPage: data.totalPage,
+            };
 
             this.setState({
                 comments: newComments,
@@ -87,6 +95,11 @@ export default class CommentList extends PureComponent {
 
     componentWillMount() {
         this.fetchData(true);
+        ajaxGetComment(this.selfCommentId).then((data) => {
+            this.setState({
+                selfComment: data,
+            });
+        });
         dynamicDocTitle('公寓评价');
     }
 
@@ -101,15 +114,14 @@ export default class CommentList extends PureComponent {
 
     render() {
         const { history, apartmentId } = this.props;
-        const { comments, loading } = this.state;
+        const { comments, loading, selfComment } = this.state;
 
-        const selfComment = getSelfComment();
-        const composedComment = selfComment ? [selfComment, ...comments] : comments;
+        const composedComment = upgradeComment(comments, selfComment);
 
         return (
             <div className={`${classPrefix}`}>
                 {
-                    !isRmHead() &&
+                    !isLikeNativeView() &&
                     <HouseHead
                         history={history}
                         renderRight={() => (

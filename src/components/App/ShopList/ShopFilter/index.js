@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDownScreen from 'Shared/DropDownScreen/DropDownScreen';
 
-// 两种筛选组件
+// 筛选组件
 import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
 import BrandFilterWrap from '../BrandFilter';
+import DistrictFilterWrap from '../DistrictFilter';
 
-import { scrollTo, getScrollTop } from 'lib/util';
-import { animateScrollTop } from 'lib/animate';
+import { getScrollTop } from 'lib/util';
 import { apartmentFilterStoreKey } from 'application/App/ShopList/filters/utils';
 
 import './styles.less';
@@ -21,6 +21,7 @@ export default class ShopFilter extends PureComponent {
             filterShow: {
                 position: false,
                 brand: false,
+                district: false,
             },
         };
     }
@@ -45,7 +46,6 @@ export default class ShopFilter extends PureComponent {
         newFilterShowState[type] = !preFilterShowState[type];
 
         this._filterShow(newFilterShowState, type, isResetScrollTop);
-
     }
 
     // 禁止滚动穿透
@@ -84,6 +84,11 @@ export default class ShopFilter extends PureComponent {
         this.handleFilterShowTap('position', true);
     }
 
+    onFilterDistrictConfirm = (districtState) => {
+        this.props.onFilterConfirm({ district: districtState });
+        this.handleFilterShowTap('district', true);
+    }
+
     render() {
         const {
             className,
@@ -95,54 +100,78 @@ export default class ShopFilter extends PureComponent {
             filterShow,
             isFixed,
         } = this.state;
-        const filterListClass = classnames('g-grid-row', `${classPrefix}`, className);
+        const filterListClass = classnames('g-grid-row', `${classPrefix}`, className, {
+            [`${classPrefix}-right`]: isExclusive,
+        });
         // 滚动穿透处理
         this._toggleForbideScrollThrough();
         return (
             <ul
                 ref={(dom) => { this.filterDom = dom; }}
-                className={filterListClass}>
-                <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
-                    <DropDownScreen
-                        className={`${classPrefix}-dropscreen-position`}
-                        show={filterShow.position}
-                        type="position"
-                        label={filterLabel.position}
-                        isMask={true}
-                        screenHeight="10.66667rem"
-                        isFullScreen={false}
-                        onTouchTap={this.handleFilterShowTap}
-                    >
-                        <PositionFilterWrap
-                            type="position"
-                            storeKey={apartmentFilterStoreKey}
-                            filterState={filterState.position}
-                            onFilterConfirm={this.onFilterPositionConfirm}
-                            onDynamicPtStateAndLabel={this.props.onDynamicSetPositionLabel}
-                        />
-                    </DropDownScreen>
-                </li>
+                className={filterListClass}
+            >
                 {
-                    !isExclusive &&
-                    <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
-                        <DropDownScreen
-                            className={`${classPrefix}-dropscreen-brand`}
-                            show={filterShow.brand}
-                            type="brand"
-                            label={filterLabel.brand}
-                            isMask={true}
-                            screenHeight="10.66667rem"
-                            isFullScreen={false}
-                            onTouchTap={this.handleFilterShowTap}
-                        >
-                            <BrandFilterWrap
-                                type="brand"
-                                filterState={filterState.brand}
-                                onFilterConfirm={this.onFilterBrandConfirm}
-                                onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
-                            />
-                        </DropDownScreen>
-                    </li>
+                    !isExclusive ?
+                        [
+                            <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                                <DropDownScreen
+                                    className={`${classPrefix}-dropscreen-position`}
+                                    show={filterShow.position}
+                                    type="position"
+                                    label={filterLabel.position}
+                                    isMask={true}
+                                    screenHeight="10.66667rem"
+                                    isFullScreen={false}
+                                    onTouchTap={this.handleFilterShowTap}
+                                >
+                                    <PositionFilterWrap
+                                        type="position"
+                                        storeKey={apartmentFilterStoreKey}
+                                        filterState={filterState.position}
+                                        onFilterConfirm={this.onFilterPositionConfirm}
+                                        onDynamicPtStateAndLabel={this.props.onDynamicSetPositionLabel}
+                                    />
+                                </DropDownScreen>
+                            </li>,
+                            <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                                <DropDownScreen
+                                    className={`${classPrefix}-dropscreen-brand`}
+                                    show={filterShow.brand}
+                                    type="brand"
+                                    label={filterLabel.brand}
+                                    isMask={true}
+                                    screenHeight="10.66667rem"
+                                    isFullScreen={false}
+                                    onTouchTap={this.handleFilterShowTap}
+                                >
+                                    <BrandFilterWrap
+                                        type="brand"
+                                        filterState={filterState.brand}
+                                        onFilterConfirm={this.onFilterBrandConfirm}
+                                        onDynamicSetLabel={this.props.onDynamicSetBrandLabel}
+                                    />
+                                </DropDownScreen>
+                            </li>,
+                        ] :
+                        <li className={`f-display-flex f-flex-align-center ${classPrefix}-item`}>
+                            <DropDownScreen
+                                className={`${classPrefix}-dropscreen-district`}
+                                show={filterShow.district}
+                                type="district"
+                                label={filterLabel.district}
+                                isMask={true}
+                                screenHeight="10.66667rem"
+                                isFullScreen={false}
+                                onTouchTap={this.handleFilterShowTap}
+                            >
+                                <DistrictFilterWrap
+                                    type="district"
+                                    filterState={filterState.district}
+                                    onFilterConfirm={this.onFilterDistrictConfirm}
+                                    onDynamicSetLabel={this.props.onDynamicSetDistrictLabel}
+                                />
+                            </DropDownScreen>
+                        </li>
                 }
             </ul>
         );

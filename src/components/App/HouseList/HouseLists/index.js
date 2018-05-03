@@ -14,6 +14,9 @@ import './styles.less';
 
 const clsPrefix = 'm-houselists';
 
+// TODO 临时做法
+const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
+
 export default class HouseLists extends PureComponent {
     constructor(props) {
         super(props);
@@ -65,7 +68,7 @@ export default class HouseLists extends PureComponent {
 
         fetchRentUnitList({ filter: this.filterParams, pager: { curPage, totalPage } })
             .then((res) => {
-                let rentUnitList = this.state.rentUnitList;
+                let { rentUnitList } = this.state;
                 // 请求为初始化请求，需要设置rentUnitList为空
                 if (fetchType === 'INIT') {
                     rentUnitList = [];
@@ -88,7 +91,8 @@ export default class HouseLists extends PureComponent {
                 this.setState(newState);
 
                 // setStore
-                window.setStore('houseList', newState);
+                const storeKey = this.props.storeKey || 'houseList';
+                window.setStore(storeKey, newState);
             })
     }
 
@@ -105,9 +109,14 @@ export default class HouseLists extends PureComponent {
     }
 
     componentWillMount() {
-        const storeHouseListState = window.getStore('houseList');
-        const filterStore = window.getStore('filter') || {};
+        const storeKey = this.props.storeKey || 'houseList';
+        const filterStoreKey = this.props.filterStoreKey || 'filter';
+
+        const storeHouseListState = window.getStore(storeKey);
+        const filterStore = window.getStore(filterStoreKey) || {};
         const { paramsObj } = filterStore || {};
+
+        // console.log(this.props.filterParams, 'this.props.filterParams', paramsObj);
 
         if (storeHouseListState && shallowEqual(this.props.filterParams, paramsObj)) {
             this.setState(storeHouseListState, () => {
@@ -157,10 +166,10 @@ export default class HouseLists extends PureComponent {
                 ref={ (listDom) => { this.listDom = listDom; } }
                 style={{'minHeight': `${minHeight}px`}}>
                 {
-                    // rentUnitList.length > 0 &&
-                    //     <div className={`${clsPrefix}-comment`}>
-                    //         <CommentCard />
-                    //     </div>
+                    rentUnitList.length > 0 &&
+                        <div className={`${clsPrefix}-comment`}>
+                            <CommentCard />
+                        </div>
                 }
                 <RentUnitList
                     list={rentUnitList}

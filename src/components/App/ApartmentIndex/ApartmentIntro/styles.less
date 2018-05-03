@@ -1,6 +1,6 @@
 @import (reference) '~styles/lib.less';
 
-.m-apartmentintro {
+.m-apartment-intro {
     height: 160px;
     & img {
         width: 100px;
@@ -8,7 +8,7 @@
     }
 
     & .intro-wrap {
-        width: 350px;
+        // width: 350px;
         padding: 0 25px;
 
         & .name {
@@ -20,6 +20,8 @@
         }
 
         & .price {
+            display: inline-block;
+            max-width: 200px;
             color: #F38D39;
             .font-size(28);
 
@@ -32,6 +34,7 @@
         .intro {
             .font-size(28);
             // max-height: 85px;
+            max-width: 412px;
             color: #999999;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -43,13 +46,14 @@
     }
 
     & .score-wrap {
-        padding-left: 12px;
+        padding-left: 18px;
         text-align: center;
         border-left: 1px solid #EAEAEA;
 
         & .score {
             color: #F38D39;
             .font-size(40);
+            font-weight: bold;
         }
 
         & .go-comments {
@@ -59,6 +63,8 @@
             & i {
                 display: inline-block;
                 transform: rotateZ(-90deg);
+                color: #D8D8D8;
+                .font-size(18);
             }
         }
     }

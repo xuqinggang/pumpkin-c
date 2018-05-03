@@ -6,11 +6,12 @@ import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/Hou
 
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle } from 'lib/util';
-import { isRmHead, isNanguaApp } from 'lib/const';
+import { isLikeNativeView } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
 import { goShopList, goExclusiveShop } from 'application/App/routes/routes';
 import { brandFilterBus } from './filters/brandFilter';
+import { districtFilterBus } from './filters/districtFilter';
 import { stringifyPostionState } from 'application/App/HouseList/stringifyState';
 import { parseUrl as parsePositionUrl } from 'application/App/HouseList/parseUrl';
 import { apartmentFilterStoreKey, urlModuleSplit } from './filters/utils';
@@ -18,8 +19,6 @@ import { apartmentFilterStoreKey, urlModuleSplit } from './filters/utils';
 import './styles.less';
 
 const classPrefix = 'g-shoplist';
-
-const isSimulateNative = () => isRmHead() && isNanguaApp();
 
 export default class ShopList extends PureComponent {
 
@@ -38,10 +37,16 @@ export default class ShopList extends PureComponent {
                 label: brandFilterBus.label,
                 param: brandFilterBus.param,
             },
+            // 行政区域筛选
+            districtFilter: {
+                state: districtFilterBus.state,
+                label: districtFilterBus.label,
+                param: districtFilterBus.param,
+            },
         };
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
-        if (isSimulateNative()) {
+        if (isLikeNativeView()) {
             postRouteChangeToIOS({
                 canGoBack: false,
                 url: window.location.href,
@@ -55,16 +60,28 @@ export default class ShopList extends PureComponent {
     }
 
     get filterLabel() {
-        const { positionFilter, brandFilter } = this.state;
-        return { position: positionFilter.label, brand: brandFilter.label };
+        const { positionFilter, brandFilter, districtFilter } = this.state;
+        return {
+            position: positionFilter.label,
+            brand: brandFilter.label,
+            district: districtFilter.label,
+        };
     }
     get filterState() {
-        const { brandFilter, positionFilter } = this.state;
-        return { position: positionFilter.state, brand: brandFilter.state };
+        const { brandFilter, positionFilter, districtFilter } = this.state;
+        return {
+            position: positionFilter.state,
+            brand: brandFilter.state,
+            district: districtFilter.state,
+        };
     }
     get filterParamsObj() {
-        const { brandFilter, positionFilter } = this.state;
-        return { position: positionFilter.param, apartmentIds: brandFilter.param };
+        const { brandFilter, positionFilter, districtFilter } = this.state;
+        return {
+            position: positionFilter.param,
+            apartmentIds: brandFilter.param,
+            districtId: districtFilter.param,
+        };
     }
 
     wxShare = () => {
@@ -99,6 +116,16 @@ export default class ShopList extends PureComponent {
         });
     }
 
+    dynamicSetDistrictLabel = (districts) => {
+        const label = districtFilterBus.setLabel(districts) || {};
+        this.setState({
+            districtFilter: {
+                ...this.state.districtFilter,
+                label,
+            },
+        });
+    }
+
     goShopList = (filterUrlFragment) => {
         if (this.isExclusive) {
             goExclusiveShop(this.props.history)(filterUrlFragment);
@@ -110,12 +137,9 @@ export default class ShopList extends PureComponent {
     handleBrandSelect(brand) {
         const { filterUrlFragment } = this;
         const {
-            filterState: brandFilter,
+            // filterState: brandFilter,
             url: nextFilterUrlFragment,
         } = brandFilterBus.parseStateToOthers(brand, filterUrlFragment);
-        this.setState({
-            brandFilter,
-        });
         this.goShopList(nextFilterUrlFragment);
     }
 
@@ -131,26 +155,37 @@ export default class ShopList extends PureComponent {
                 label,
                 state: position,
             },
+        }, () => {
+            // 为 position 做的兼容
+            const brandUrl = brandFilterBus.stringifyParam();
+            const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
+            this.goShopList(composedUrl);
         });
+    }
 
-        // 为 position 做的兼容
-        const brandUrl = brandFilterBus.stringifyParam();
-        const composedUrl = brandUrl ? url + urlModuleSplit + brandUrl : url;
-        this.goShopList(composedUrl);
+    handledDistrictSelect = (districtId) => {
+        const { filterUrlFragment } = this;
+        const {
+            // filterState: districtFilter,
+            url: nextFilterUrlFragment,
+        } = districtFilterBus.parseStateToOthers(districtId, filterUrlFragment);
+        this.goShopList(nextFilterUrlFragment);
     }
 
     onFilterConfirm = (newState) => {
         if (!newState) return;
-        const { brand, position } = newState;
+        const { brand, position, district } = newState;
         if (brand) {
-            this.handleBrandSelect(newState.brand);
+            this.handleBrandSelect(brand);
         } else if (position) {
-            this.handlePositionSelect(newState.position);
+            this.handlePositionSelect(position);
+        } else if (district !== undefined) {
+            this.handledDistrictSelect(district);
         }
     }
 
     // 为 position 做的兼容
-    _setStoreFilterInfo() {
+    setStoreFilterInfo() {
         const oldApartmentFilter = window.getStore(apartmentFilterStoreKey);
         window.setStore(apartmentFilterStoreKey, {
             ...oldApartmentFilter,
@@ -161,15 +196,15 @@ export default class ShopList extends PureComponent {
         });
     }
 
-    componentWillMount() {
-        // store filterUrlFragment for easy get
-        const { filterUrlFragment } = this.props.match.params;
+    getFilterFromUrl(filterUrlFragment) {
         this.filterUrlFragment = filterUrlFragment;
-        // get position param from url
+
         const { paramsObj: positionParam, urlFrg } = parsePositionUrl(filterUrlFragment) || {};
         this.urlFrgObj = urlFrg;
-        // get brand param from url
+
         const brandFilter = brandFilterBus.parseUrlToState(filterUrlFragment) || {};
+        const districtFilter = districtFilterBus.parseUrlToState(filterUrlFragment) || {};
+
         this.setState({
             brandFilter: {
                 ...this.state.brandFilter,
@@ -179,14 +214,28 @@ export default class ShopList extends PureComponent {
                 ...this.state.positionFilter,
                 param: positionParam,
             },
+            districtFilter: {
+                ...this.state.districtFilter,
+                ...districtFilter,
+            },
         });
 
-        this._setStoreFilterInfo();
+        this.setStoreFilterInfo();
+    }
+
+    componentWillMount() {
+        const { filterUrlFragment } = this.props.match.params;
+        this.getFilterFromUrl(filterUrlFragment);
     }
 
     componentDidMount() {
         this.wxShare();
         dynamicDocTitle('集中式公寓');
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { filterUrlFragment } = nextProps.match.params;
+        this.getFilterFromUrl(filterUrlFragment);
     }
 
     render() {
@@ -201,7 +250,7 @@ export default class ShopList extends PureComponent {
         const listClass = classnames(
             `${classPrefix}-padding-top`,
             {
-                [`${classPrefix}-no-head`]: isRmHead(),
+                [`${classPrefix}-no-head`]: isLikeNativeView(),
             },
         );
 
@@ -209,11 +258,11 @@ export default class ShopList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-fixed-top`}>
                     {
-                        !isRmHead()
+                        !isLikeNativeView()
                             ? <HouseHead
                                 history={history}
                                 renderRight={() => (
-                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{'集中式公寓'}</span>
+                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>集中式公寓</span>
                                 )}
                             />
                             : null
@@ -227,6 +276,7 @@ export default class ShopList extends PureComponent {
                         onFilterReSume={this.onFilterReSume}
                         onDynamicSetPositionLabel={this.dynamicSetPositionFilterLabel}
                         onDynamicSetBrandLabel={this.dynamicSetBrandFilterLabelAndState}
+                        onDynamicSetDistrictLabel={this.dynamicSetDistrictLabel}
                         isExclusive={this.isExclusive}
                     />
                 </div>

@@ -11,8 +11,11 @@ Service.reqServer = (url, paramters = {}, type = 'GET', extraConf = {}) => {
         timeout = 10000,
     } = extraConf;
 
+    let mergedParamters = paramters;
+
     if (commonParamters) {
-        Object.assign(paramters, commonParamters);
+        // 应该让特定性强的 paramters 覆盖一般性强的 commonParamters
+        mergedParamters = Object.assign({}, commonParamters, paramters);
     }
 
     if (url.indexOf('http') === -1 && urlPrefix) {
@@ -23,15 +26,15 @@ Service.reqServer = (url, paramters = {}, type = 'GET', extraConf = {}) => {
         const xmlHttp = new XMLHttpRequest();
         // 请求参数
         let reqData = '';
-        if (typeof paramters === 'object' && Object.keys(paramters).length) {
-            for (const key in paramters) {
+        if (typeof mergedParamters === 'object' && Object.keys(mergedParamters).length) {
+            for (const key in mergedParamters) {
                 // 请求参数拼接
-                if (Object.prototype.hasOwnProperty.call(paramters, key)) {
+                if (Object.prototype.hasOwnProperty.call(mergedParamters, key)) {
                     // 传参为数组时， 需要解析成json字符串
-                    if (paramters[key] instanceof Array) {
-                        reqData += key + '=' + JSON.stringify(paramters[key]) + '&';
+                    if (mergedParamters[key] instanceof Array) {
+                        reqData += key + '=' + JSON.stringify(mergedParamters[key]) + '&';
                     } else {
-                        reqData += key + '=' + paramters[key] + '&';
+                        reqData += key + '=' + mergedParamters[key] + '&';
                     }
                 }
             }
@@ -86,13 +89,13 @@ Service.reqServer = (url, paramters = {}, type = 'GET', extraConf = {}) => {
                 // do set by yourself
                 // xmlHttp.setRequestHeader('Content-type', 'multipart/form-data');
                 const form = new FormData();
-                for (const key in paramters) {
-                    form.append(key, paramters[key]);
+                for (const key in mergedParamters) {
+                    form.append(key, mergedParamters[key]);
                 }
                 xmlHttp.send(form);
             } else {
                 xmlHttp.setRequestHeader('Content-type', 'application/json');
-                xmlHttp.send(JSON.stringify(paramters));
+                xmlHttp.send(JSON.stringify(mergedParamters));
             }
 
         }

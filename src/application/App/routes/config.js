@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router';
 
 import HouseDetail from 'application/App/HouseDetail/HouseDetail';
 import HouseList from 'application/App/HouseList/HouseList';
+import RealHouseList from 'application/App/HouseList/RealHouseList';
 import HouseLogin from 'application/App/HouseLogin/HouseLogin';
 import HouseMe from 'application/App/HouseMe/HouseMe';
 import HouseAboutUs from 'application/App/HouseAboutUs/HouseAboutUs';
@@ -35,11 +36,14 @@ class WrapRouter extends PureComponent {
         initStore();
 
         // Server配置ajax url前缀, /bj/nangua
+        // 优先使用 南瓜租房 iOS APP 传来 cityId
+        const cityId = window.iOS && window.iOS.getCityId();
+        const commonParamters = {
+            cityId: cityId || AbbrevMapCity[cityName].id,
+        };
         Service.baseConfig = {
             urlPrefix: this.urlPrefix,
-            commonParamters: {
-                cityId: AbbrevMapCity[cityName].id,
-            },
+            commonParamters,
         };
     }
 
@@ -57,6 +61,8 @@ class WrapRouter extends PureComponent {
                 <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />
                 <Route exact path={`${this.urlPrefix}/city`} component={HouseCity} />
                 <Route path={`${this.urlPrefix}/detail`} component={HouseDetail} />
+                {/* TODO fuck 上线前改的, 临时方案, 等redux重构完，新起一个页面重用筛选的逻辑  */}
+                <Route exact path={`${this.urlPrefix}/list/apartment/:filterUrlFragment?`} component={RealHouseList} />
                 <Route exact path={`${this.urlPrefix}/list/:filterUrlFragment?`} component={HouseList} />
                 <Route exact path={`${this.urlPrefix}/search`} component={HouseSearch} />
                 <Route exact path={`${this.urlPrefix}/:filterUrlFragment?`} component={HouseList} />

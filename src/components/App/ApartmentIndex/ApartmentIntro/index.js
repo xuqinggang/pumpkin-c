@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './styles.less';
 
-const classPrefix = 'm-apartmentintro';
+const classPrefix = 'm-apartment-intro';
 
 export default class ApartmentIntro extends PureComponent {
     render() {
@@ -14,7 +14,7 @@ export default class ApartmentIntro extends PureComponent {
                 <div className="intro-wrap" onTouchTap={goDetail}>
                     <div>
                         <span className="name f-singletext-ellipsis">{name}</span>
-                        <span className="price">¥{minPrice}元/月<span>起</span></span>
+                        <span className="price f-singletext-ellipsis">¥{minPrice}元/月<span>起</span></span>
                     </div>
                     <div className="intro">
                         {slogan}
