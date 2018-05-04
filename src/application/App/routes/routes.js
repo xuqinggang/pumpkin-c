@@ -1,25 +1,8 @@
 import withHistory from './utils';
 import { routeChangeToIOS, pv, withSearch } from 'application/App/routes/enhance';
-import { getFilterFixScrollTop, urlJoin } from 'lib/util';
-import { animateScrollTop } from 'lib/animate';
+import { urlJoin } from 'lib/util';
 import { kzPv } from 'lib/pv';
 
-// TODO house list v2
-// const createListPath = ({
-//     filterParam = '', queryParam = {},
-// }) => {
-//     const queryArray = Object.keys(queryParam).map(key => `${key}=${queryParam[key]}`);
-//     const queryString = queryArray.join('&');
-//     return filterParam ? `/list/${filterParam}/?${queryString}` : `/list/?${queryString}`;
-// };
-// export const goRentUnitList = withHistory(createListPath, {
-//     afterRouteChange: (history, to, next = () => null) => {
-//         // 800 毫秒等待渲染
-//         setTimeout(() => {
-//             animateScrollTop(0, (757 * window.lib.flexible.rem) / 75, 300);
-//         }, 800);
-//     },
-// });
 const createIndexPath = () => '/';
 export const goIndex = withHistory(createIndexPath);
 
