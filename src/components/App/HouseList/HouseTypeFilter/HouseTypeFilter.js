@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
-import HouseTypeFilterTagData from './HouseTypeFilterTagData';
 
 import './styles.less';
 
@@ -42,15 +41,20 @@ class HouseTypeFilter extends Component {
     }
     
     render() {
+        const {
+            originData: HouseTypeFilterTagData,
+        } = this.props;
+
         return (
             <div className={`${houseTypeClass}`}>
                 {
-                    Object.keys(HouseTypeFilterTagData).map((tagGroupType) => (
+                    HouseTypeFilterTagData && Object.keys(HouseTypeFilterTagData).map((tagGroupType, index) => (
                         <TagsGroup
+                            key={index}
                             classPrefix={houseTypeClass}
                             className={`${houseTypeClass}-${tagGroupType}`}
                             type={tagGroupType}
-                            label={HouseTypeFilterTagDatap[tagGroupType].title}
+                            label={HouseTypeFilterTagData[tagGroupType].title}
                             tagsArr={HouseTypeFilterTagData[tagGroupType].arr} 
                             onTagsChange={this.onTagsChange}
                             activeIndexObj={this.state[tagGroupType]}

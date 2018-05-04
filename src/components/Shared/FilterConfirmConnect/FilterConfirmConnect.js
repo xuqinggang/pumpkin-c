@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
-import HouseTypeFilterTagData from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilterTagData';
 import './styles.less';
 
 const classPrefix = 'm-filterconfirm';
 
-export default function() {
-    return function(WrappedCom) {
+export default function () {
+    return function (WrappedCom) {
         return class FilterConfirmConnect extends Component {
             handleWrapTap = (e) => {
                 e.stopPropagation();
@@ -16,27 +14,20 @@ export default function() {
             }
 
             handleConfirmTap = () => {
-                this.refs.wrappedInstance._confirmState();
+                this.wrappedInstance._confirmState();
             }
 
             // 事件处理程序-清空点击
             handleClearTap = () => {
-                this.refs.wrappedInstance._clearState();
+                this.wrappedInstance._clearState();
             }
 
             render() {
-                const {
-                    filterState,
-                    onDynamicSetLabel,
-                } = this.props;
-
                 return (
                     <div className={`${classPrefix}`} onTouchTap={this.handleWrapTap}>
                         <WrappedCom
-                            ref='wrappedInstance'
-                            filterState={filterState}
-                            onFilterConfirm={this.props.onFilterConfirm}
-                            onDynamicSetLabel={onDynamicSetLabel || (() => null)}
+                            ref={(inst) => { this.wrappedInstance = inst; }}
+                            {...this.props}
                         />
                         <div className={`${classPrefix}-footer`}>
                             <span

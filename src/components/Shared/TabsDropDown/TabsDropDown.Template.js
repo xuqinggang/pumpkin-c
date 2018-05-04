@@ -1,8 +1,7 @@
 /* @flow */
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Children, cloneElement } from 'react';
 import classnames from 'classnames';
-import { CSSTransition } from 'react-transition-group'
 
 import './styles.less';
 
@@ -17,6 +16,7 @@ class TabsDropDownTemplate extends PureComponent<PropType> {
             index,
             children,
             isSelected,
+            onUpdateActiveIndex,
         } = this.props;
         // if(!isSelected) {
         //     templateStyle.width = 0;
@@ -29,17 +29,13 @@ class TabsDropDownTemplate extends PureComponent<PropType> {
         });
 
         return (
-            isSelected ?
-            <CSSTransition
-                key={index}
-                classNames="example"
-                timeout={{enter: 1000, exit: 1000}}
-            >
-                <div className={contentClassName}>
-                    {children}
-                </div>
-            </CSSTransition>
-            : null
+            <div className={contentClassName}>
+                {
+                    cloneElement(Children.only(children), {
+                        onUpdateActiveIndex,
+                    })
+                }
+            </div>
         );
     }
 }

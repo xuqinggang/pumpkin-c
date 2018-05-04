@@ -36,7 +36,7 @@ type StateType = {
 };
 
 class Tabs extends PureComponent<PropType, StateType> {
-	// 默认 props
+    // 默认 props
     static defaultProps = {
         activeIndex: -1,
         direction: 'horizon',
@@ -46,19 +46,19 @@ class Tabs extends PureComponent<PropType, StateType> {
 
     activeNavItemDom: ?HTMLElement;
     barDom: ?HTMLElement;
-	
-	constructor(props: PropType) {
+
+    constructor(props: PropType) {
         super(props);
         const {
             activeIndex,
         } = this.props;
 
-		// 组件的状态由外部控制(通过props传递'activeIndex')或者由组件内部控制
+        // 组件的状态由外部控制(通过props传递'activeIndex')或者由组件内部控制
         this.state = {
             activeIndex,
             prevIndex: -1,
         };
-	}
+    }
 
     // 回调函数-每一个tab的点击
     onTouchTap = (event: SyntheticEvent<>, activeIndex: number, itemData: {}) => {
@@ -84,23 +84,23 @@ class Tabs extends PureComponent<PropType, StateType> {
         }, 0)
     }
 
-	getTabs(props: PropType = this.props) {
-		const tabs = [];
-		// 处理了props.children为undefined和数组和单一对象的情况
-		Children.forEach(props.children, tab => {
-			if(isValidElement(tab)) {
-				tabs.push(tab)
-			}
-		});
-		
-		return tabs;
+    getTabs(props: PropType = this.props) {
+        const tabs = [];
+        // 处理了props.children为undefined和数组和单一对象的情况
+        Children.forEach(props.children, tab => {
+            if(isValidElement(tab)) {
+                tabs.push(tab)
+            }
+        });
+
+        return tabs;
     }
 
-	renderTabNavAndContent() {
-		const tabs = this.getTabs();
+    renderTabNavAndContent() {
+        const tabs = this.getTabs();
         const tabContent = [];
 
-		// 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
+        // 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
         const tabNav = tabs.map((tab, index) => {
             const isSelected = this.state.activeIndex === index;
             if (tab.props.children) {
@@ -125,13 +125,13 @@ class Tabs extends PureComponent<PropType, StateType> {
             });
         });
 
-		return {
-			tabContent,
-			tabNav
-		}
+        return {
+            tabContent,
+            tabNav
+        }
     }
 
-	// 由外组件更新时才会调用此方法
+    // 由外组件更新时才会调用此方法
     componentWillReceiveProps(nextProps: PropType) {
         if('activeIndex' in nextProps) {
             this.setState({
@@ -151,7 +151,7 @@ class Tabs extends PureComponent<PropType, StateType> {
             this._translateTabBar(this.activeNavItemDom);
         }
     }
-    
+
     render() {
         const { 
             className,
@@ -203,7 +203,7 @@ class Tabs extends PureComponent<PropType, StateType> {
                 }
             </div>
         );
-	}
+    }
 }
 
 export default Tabs;

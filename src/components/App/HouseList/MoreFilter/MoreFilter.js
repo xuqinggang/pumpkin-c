@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 
 import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
-import MoreFilterTagData from './MoreFilterTagData';
 
 import './styles.less';
 
@@ -50,11 +49,16 @@ class MoreFilter extends PureComponent {
             floorInfo,
         } = this.state;
 
+        const {
+            originData: MoreFilterTagData,
+        } = this.props;
+
         return (
             <div className={`${moreClass}`}>
                 {
-                    Object.keys(MoreFilterTagData).map(tagGroupType => (
+                    MoreFilterTagData && Object.keys(MoreFilterTagData).map((tagGroupType, index) => (
                         <TagsGroup
+                            key={index}
                             type={tagGroupType}
                             classPrefix={moreClass}
                             className={`${moreClass}-${tagGroupType}`}
@@ -65,48 +69,6 @@ class MoreFilter extends PureComponent {
                             activeIndexObj={this.state[tagGroupType] || {}}
                         />
                     ))
-                }
-                {
-                    // <TagsGroup
-                    //     type="directs"
-                    //     classPrefix={moreClass}
-                    //     className={`${moreClass}-direction`}
-                    //     tagItemClass="direction-item"
-                    //     tagsArr={MoreFilterTagData.directs}
-                    //     label="朝向"
-                    //     onTagsChange={this.onTagsChange}
-                    //     activeIndexObj={directs || {}}
-                    // />
-                    //     <TagsGroup
-                    //         type="tags"
-                    //         classPrefix={moreClass}
-                    //         className={`${moreClass}-feature`}
-                    //         tagItemClass="feature-item"
-                    //         tagsArr={MoreFilterTagData.tags}
-                    //         label="标签"
-                    //         onTagsChange={this.onTagsChange}
-                    //         activeIndexObj={tags || {}}
-                    //     />
-                    //     <TagsGroup
-                    //         type="areaInfo"
-                    //         classPrefix={moreClass}
-                    //         className={`${moreClass}-area`}
-                    //         tagItemClass="area-item"
-                    //         tagsArr={MoreFilterTagData.areaInfo}
-                    //         label="面积"
-                    //         onTagsChange={this.onTagsChange}
-                    //         activeIndexObj={areaInfo || {}}
-                    //     />
-                    //     <TagsGroup
-                    //         type="floorInfo"
-                    //         classPrefix={moreClass}
-                    //         className={`${moreClass}-floor`}
-                    //         tagItemClass="floor-item"
-                    //         tagsArr={MoreFilterTagData.floorInfo}
-                    //         label="楼层"
-                    //         onTagsChange={this.onTagsChange}
-                    //         activeIndexObj={floorInfo || {}}
-                    //     />
                 }
             </div>
         );

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
 import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
 import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
-import Filter from 'components/App/HouseList/Filter/Filter';
+import Filter from 'components/App/HouseList/FilterTest/FilterTest';
 // import Filter from 'components/App/HouseList/Filter/Filter';
 // import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
@@ -76,15 +76,36 @@ export default class HouseList extends PureComponent {
         console.log('HouseList render', this.props);
         return (
             <div>
-                <TabsDropDown>
-                    <TabsDropDown.Tab
-                        label="asdf"
-                    >
-                        <div>
-                            TabsDropDownTemplate
-                        </div>
-                    </TabsDropDown.Tab>
-                </TabsDropDown>
+                <Filter filterInfo={filterInfo} />
+                {
+                    // <TabsDropDown
+                    // >
+                    //     <TabsDropDown.Tab
+                    //         label="asdf"
+                    //     >
+                    //     <div>
+                    //         TabsDropDownTemplate111
+                    //     </div>
+                    //     <div>111</div>
+                    //     <div>111</div>
+                    //     <div>111</div>
+                    //     <div>111</div>
+                    //     </TabsDropDown.Tab>
+                    //     <TabsDropDown.Tab
+                    //         label="asdf22"
+                    //     >
+                    //     <div>
+                    //         TabsDropDownTemplate22
+                    //     </div>
+                    //     <div>222</div>
+                    //     <div>222</div>
+                    //     <div>222</div>
+                    //     <div>222</div>
+                    //     <div>222</div>
+                    //     <div>222</div>
+                    //     </TabsDropDown.Tab>
+                    // </TabsDropDown>
+                }
             </div>
         );
         // return (

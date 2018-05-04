@@ -1,12 +1,26 @@
 .m-tabsdropdown {
+    position: relative;
+
+    &-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
     &-content {
+        box-sizing: border-box;
+        width: 100%;
+        position: absolute;
+        top: 88px;
+        left: 0;
+
         .content-item {
+            display: none;
+            height: 0;
             width: 100%;
-            height: 300px;
-            background: black;
+            overflow: hidden;
+            transition: height 400ms ease-in;
         }
     }
-}
-.example-enter {
-    opacity: 0.01;
 }

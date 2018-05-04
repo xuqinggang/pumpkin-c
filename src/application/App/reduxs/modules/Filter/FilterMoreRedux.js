@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
+
 /* init state */
 const initStateMore = {
     state: {
@@ -16,6 +18,7 @@ const initStateMore = {
         floorInfo: null,
     },
     url: '',
+    originData: MoreFilterTagData,
 };
 
 /* const actions */

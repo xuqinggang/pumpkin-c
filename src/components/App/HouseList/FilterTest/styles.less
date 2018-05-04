@@ -1,0 +1,41 @@
+@import (reference) '~styles/lib.less';
+
+.m-filter {
+    &-tabscollapse {
+    }
+
+    &-label {
+        .label-text {
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+            .font-size(28);
+        }
+
+        .label-icon {
+            display: inline-block;
+            vertical-align: middle;
+            color: #d8d8d8;
+            transition: all ease-in 0.45s;
+            .font-size(16);
+        }
+    }
+    
+    &-tabscollapse-nav {
+        box-sizing: border-box;
+        padding: 0 46px;
+        height: 88px;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        .font-size(28);
+
+        .nav-item {
+            &.active {
+                .label-icon {
+                    color: #f38d39;
+                    transform: rotateZ(180deg);
+                }
+            }
+        }
+    }
+}

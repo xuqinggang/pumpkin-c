@@ -1,19 +1,13 @@
-// <TabsDropDown>
-//     <TabsDropDown.Tab>
-
-//     </TabsDropDown.Tab>
-// </TabsDropDown>
 /* @flow */
 
 import React, {
     PureComponent,
-    createElement,
     cloneElement,
     Children,
     isValidElement,
 } from 'react';
 import classnames from 'classnames';
-import { TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 import TabsDropDownTab from './TabsDropDown.Tab';
 import TabsDropDownTemplate from './TabsDropDown.Template';
@@ -23,10 +17,10 @@ import './styles.less';
 const classPrefix = 'm-tabsdropdown';
 
 type PropType = {
-    className: string,
+    className?: string,
+    navClass?: string,
+    contentClass?: string,
     children: React$Node,
-    mask: boolean,
-    autoScreen: boolean,
     activeIndex: number,
 };
 
@@ -35,6 +29,7 @@ type StateType = {
     prevIndex: number
 };
 
+/* eslint no-param-reassign: ["error", { "props": false }] */
 export default class TabsDropDown extends PureComponent<PropType, StateType> {
     static Tab: React$ComponentType<*>;
     static Template: React$ComponentType<*>;
@@ -46,18 +41,35 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         // onChange: () => {},
     };
 
-    constructor(props: PropType) {
-        super(props);
-        const {
-            activeIndex,
-        } = this.props;
+    state = {
+        activeIndex: this.props.activeIndex,
+        prevIndex: -1,
+    };
+    navDom = null;
+    contentHeight = '0px';
 
-        // 组件的状态由外部控制(通过props传递'activeIndex')或者由组件内部控制
-        this.state = {
-            activeIndex,
-            prevIndex: -1,
-        };
-    }
+    // node: content-item
+    transitionStage = {
+        onEnter: (node: HTMLElement) => {
+            node.style.display = 'block';
+        },
+        onEntering: (node: HTMLElement) => {
+            node.style.height = this.contentHeight;
+        },
+        // onEntered: (node: HTMLElement) => {
+        // },
+        onExit: (node: HTMLElement) => {
+            node.style.height = '0px';
+            if (this.state.prevIndex !== -1) {
+                node.style.display = 'none';
+            }
+        },
+        // onExiting: (node: HTMLElement) => {
+        // },
+        onExited: (node: HTMLElement) => {
+            node.style.display = 'none';
+        },
+    };
 
     // 回调函数-每一个tab的点击
     onTouchTap = (event: SyntheticEvent<>, activeIndex: number) => {
@@ -68,7 +80,19 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
                 activeIndex,
                 prevIndex,
             });
+        } else {
+            this.setState({
+                activeIndex: -1,
+                prevIndex: -1,
+            });
         }
+    }
+
+    onUpdateActiveIndex = (activeIndex: number) => {
+        this.setState({
+            activeIndex,
+            prevIndex: this.state.activeIndex,
+        });
     }
 
     getTabs(props: PropType = this.props) {
@@ -90,26 +114,31 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         // 尽量减少不必要组件的创建(ex:<TabNav/>, <TabContent/>)
         const tabNav = tabs.map((tab, index) => {
             const isSelected = this.state.activeIndex === index;
-            if (tab.props.children) {
-                tabContent.push(
-                    // tab contentItem模板
-                    createElement(TabsDropDownTemplate, {
-                        index,
-                        key: index,
-                        isSelected,
-                        contentItemClass: tab.props.contentItemClass,
-                    }, tab.props.children),
-                );
-            } else {
-                tabContent.push(null);
-            }
+            tabContent.push(
+                <CSSTransition
+                    in={isSelected}
+                    key={index}
+                    mountOnEnter={false}
+                    unmountOnExit={false}
+                    timeout={{ enter: 1000, exit: 1000 }}
+                    classNames="tabsdropdown"
+                    {...this.transitionStage}
+                >
+                    <TabsDropDownTemplate
+                        index={index}
+                        isSelected={isSelected}
+                        onUpdateActiveIndex={this.onUpdateActiveIndex}
+                    >
+                        {tab.props.children}
+                    </TabsDropDownTemplate>
+                </CSSTransition>,
+            );
 
             // tab navItem
             return cloneElement(tab, {
                 key: index,
                 index, // 组件的索引
                 isSelected,
-                // customRef: (dom) => { if (isSelected) this.activeNavItemDom = dom; },
                 onTouchTap: this.onTouchTap,
             });
         });
@@ -120,11 +149,21 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         };
     }
 
+    componentDidMount() {
+        if (this.navDom) {
+            const rectInfo = this.navDom.getBoundingClientRect();
+            const contentHeight = window.innerHeight - rectInfo.height - rectInfo.top;
+            this.contentHeight = `${contentHeight}px`;
+        }
+    }
+
     // 由外组件更新时才会调用此方法
     componentWillReceiveProps(nextProps: PropType) {
         if ('activeIndex' in nextProps) {
+            const prevIndex = this.state.activeIndex;
             this.setState({
                 activeIndex: nextProps.activeIndex,
+                prevIndex,
             });
         }
     }
@@ -132,6 +171,8 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
     render() {
         const {
             className,
+            navClass,
+            contentClass,
         } = this.props;
 
         // const {
@@ -139,22 +180,22 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         //     prevIndex,
         // } = this.state;
 
-
         const { tabContent, tabNav } = this.renderTabNavAndContent();
 
         return (
             <div className={classnames(`${classPrefix}`, className)}>
-                <ul className={classnames(`${classPrefix}-nav`)}>
+                <ul
+                    className={classnames(`${classPrefix}-nav`, navClass)}
+                    ref={(node) => { this.navDom = node; }}
+                >
                     {
                         tabNav
                     }
                 </ul>
-                <div className={classnames(`${classPrefix}-content`)}>
-                    <TransitionGroup>
-                        {
-                            tabContent
-                        }
-                    </TransitionGroup>
+                <div className={classnames(`${classPrefix}-content`, contentClass)}>
+                    {
+                        tabContent
+                    }
                 </div>
             </div>
         );

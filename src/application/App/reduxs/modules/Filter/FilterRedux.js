@@ -3,6 +3,8 @@ import { combineReducers } from 'redux';
 
 import positionReducer from './FilterPositionRedux';
 import rentReducer from './FilterRentRedux';
+import houseTypeReducer from './FilterHouseTypeRedux';
+import moreReducer from './FilterMoreRedux';
 
 /* const actions */
 export const filterSagaActions = {
@@ -16,4 +18,6 @@ export const filterSagaActions = {
 export default combineReducers({
     position: positionReducer,
     rent: rentReducer,
+    houseType: houseTypeReducer,
+    more: moreReducer,
 });
