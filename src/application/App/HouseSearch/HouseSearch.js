@@ -13,7 +13,7 @@ import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPosition
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
 import { setFilterStore, setSearchStore } from './transId';
-import { clearOtherFilter, clearPositionFilter } from 'application/App/HouseSearch/transId';
+import { clearOtherFilter, clearPositionFilter, jumpHouseList } from 'application/App/HouseSearch/transId';
 
 import { debounce } from 'lib/util';
 
@@ -75,7 +75,7 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         });
 
         setSearchStore(this.state.keyword);
-        goHouseList(this.props.history)();
+        jumpHouseList(this.props.history);
     }
 
     _ajaxSearchHits = () => {
