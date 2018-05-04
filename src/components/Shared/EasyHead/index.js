@@ -18,7 +18,6 @@ class EasyHead extends Component {
 
     back = () => {
         if (!this.props.prompt) {
-            console.log(this.props.backCount, 'this.props.backCount');
             window.history.go(-this.props.backCount);
             return;
         }

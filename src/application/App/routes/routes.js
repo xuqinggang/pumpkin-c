@@ -84,10 +84,10 @@ const createHouseListPath = () => {
 const createApartmentHouseListPath = () => {
     const urlStore = window.getStore('apartmentHouseUrl') || {};
     const {
-        filterUrlFragment,
+        // filterUrlFragment = '',
         filterSearch = '',
     } = urlStore;
-    return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
+    return urlJoin('list/apartment') + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
 export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });

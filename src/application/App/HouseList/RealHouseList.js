@@ -33,7 +33,7 @@ const urlStoreKey = 'apartmentHouseUrl';
 const houseListStoreKey = 'apartmentHouseList';
 
 
-const initState = () => {
+export const initApartmentListState = () => {
     window.setStore(storeKey, {
         urlFrg: InitStateFilterUrlFrg,
         state: {
@@ -47,8 +47,7 @@ const initState = () => {
         paramsObj: {},
     });
 };
-initState();
-
+initApartmentListState();
 
 // TODO 严重依赖 url 的规则 重构
 const getTitle = () => {
