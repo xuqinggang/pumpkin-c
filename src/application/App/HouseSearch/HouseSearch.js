@@ -13,6 +13,8 @@ import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPosition
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
 import { setFilterStore, setSearchStore } from './transId';
+import { clearOtherFilter, clearPositionFilter } from 'application/App/HouseSearch/transId';
+
 import { debounce } from 'lib/util';
 
 import './styles.less';
@@ -56,6 +58,11 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             return;
         }
 
+        // 清空 store
+        window.setStore('houseList', null);
+        clearPositionFilter();
+        clearOtherFilter();
+        
         // storage
         historyRecordStorage.update({
             type: 'keywords',
@@ -68,8 +75,6 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         });
 
         setSearchStore(this.state.keyword);
-        // 清空 houseList store
-        window.setStore('houseList', null);
         goHouseList(this.props.history)();
     }
 
