@@ -161,15 +161,16 @@ export default class HouseLists extends PureComponent {
             pager,
             minHeight,
         } = this.state;
+
         return (
             <div className={clsPrefix}
                 ref={ (listDom) => { this.listDom = listDom; } }
                 style={{'minHeight': `${minHeight}px`}}>
                 {
-                    // rentUnitList.length > 0 &&
-                    //     <div className={`${clsPrefix}-comment`}>
-                    //         <CommentCard />
-                    //     </div>
+                    rentUnitList.length > 0 && !isApartmentHouseList() &&
+                        <div className={`${clsPrefix}-comment`}>
+                            <CommentCard />
+                        </div>
                 }
                 <RentUnitList
                     list={rentUnitList}
