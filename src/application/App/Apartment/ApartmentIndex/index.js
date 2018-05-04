@@ -25,6 +25,7 @@ import initStore from 'application/App/initStore';
 import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import getCurrentPosition from 'lib/geolocation';
+import { initApartmentListState } from 'application/App/HouseList/RealHouseList';
 
 import './styles.less';
 
@@ -102,6 +103,7 @@ export default class ApartmentIndex extends PureComponent {
         }
 
         initStore();
+        initApartmentListState();
         const urlStore = window.getStore('url');
         let filterSearch = `?apartment=${apartmentId}`;
         if (isNearby) {
@@ -111,7 +113,7 @@ export default class ApartmentIndex extends PureComponent {
             ...urlStore,
             filterSearch,
         });
-        goApartmentHouseList(this.props.history)();
+        goApartmentHouseList(this.props.history)(true);
     }
 
     renderIndex() {
