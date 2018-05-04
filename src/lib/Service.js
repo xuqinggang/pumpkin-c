@@ -15,7 +15,7 @@ Service.reqServer = (url, paramters = {}, type = 'GET', extraConf = {}) => {
 
     if (commonParamters) {
         // 应该让特定性强的 paramters 覆盖一般性强的 commonParamters
-        mergedParamters = Object.assign({}, commonParamters, paramters);
+        mergedParamters = Object.assign({}, paramters, commonParamters);
     }
 
     if (url.indexOf('http') === -1 && urlPrefix) {
