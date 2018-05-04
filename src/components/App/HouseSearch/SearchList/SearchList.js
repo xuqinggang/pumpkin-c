@@ -31,15 +31,15 @@ const TypeMapTitle = {
 }
 
 export default class SearchList extends PureComponent<PropType> {
-    onOtherSearchItemTap = () => {
+    // onOtherSearchItemTap = () => {
 
-    }
-    onPositionSearchItemTap = (data) => {
-        console.log('data', data);
-    }
-    onSeachItemTap = () => {
+    // }
+    // onPositionSearchItemTap = (data) => {
+    //     console.log('data', data);
+    // }
+    // onSeachItemTap = () => {
 
-    }
+    // }
 
     renderChildren() {
         const {
@@ -56,8 +56,6 @@ export default class SearchList extends PureComponent<PropType> {
                     searchDataArr={searchData[type]}
                     title={TypeMapTitle[type]}
                     type={type}
-                    onPositionSearchItemTap={this.onPositionSearchItemTap}
-                    onOtherSearchItemTap={this.onOtherSearchItemTap}
                 />
             );
         });
