@@ -75,6 +75,13 @@ export default class HouseList extends PureComponent {
             state,
         } = typeFilterStateObj;
 
+        // 清空搜索
+        if (type === 'position') {
+            clearOtherFilter();
+            clearSearchStore();
+            this._getStoreFilterInfo();
+        }
+
         const TypeMapStringifyState = {
             rent: stringifyRentState,
             houseType: stringifyHouseTypeState,
@@ -104,9 +111,6 @@ export default class HouseList extends PureComponent {
 
         // setStore url.filterUrlFragment
         this._setStoreFilterUrlFrg(urlFrgRt);
-
-        // 清空搜索
-        clearSearchStore();
 
         goHouseList(this.props.history)(urlFrgRt);
 

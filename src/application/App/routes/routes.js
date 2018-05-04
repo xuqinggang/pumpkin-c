@@ -1,34 +1,23 @@
 import withHistory from './utils';
 import { routeChangeToIOS, pv, withSearch } from 'application/App/routes/enhance';
-import { getFilterFixScrollTop, urlJoin } from 'lib/util';
-import { animateScrollTop } from 'lib/animate';
+import { urlJoin } from 'lib/util';
 import { kzPv } from 'lib/pv';
 
-// TODO house list v2
-// const createListPath = ({
-//     filterParam = '', queryParam = {},
-// }) => {
-//     const queryArray = Object.keys(queryParam).map(key => `${key}=${queryParam[key]}`);
-//     const queryString = queryArray.join('&');
-//     return filterParam ? `/list/${filterParam}/?${queryString}` : `/list/?${queryString}`;
-// };
-// export const goRentUnitList = withHistory(createListPath, {
-//     afterRouteChange: (history, to, next = () => null) => {
-//         // 800 毫秒等待渲染
-//         setTimeout(() => {
-//             animateScrollTop(0, (757 * window.lib.flexible.rem) / 75, 300);
-//         }, 800);
-//     },
-// });
 const createIndexPath = () => '/';
 export const goIndex = withHistory(createIndexPath);
 
 // comment
 const createCommentInputPath = (apartmentId, rentUnitId) => `/comment/${apartmentId}/input/${rentUnitId}`;
-const createCommentListPath = apartmentId => `/comment/${apartmentId}/list`;
+const createCommentListPath = (apartmentId, newCommentId) => {
+    const search = newCommentId ? `?newCommentId=${newCommentId}` : '';
+    return `/comment/${apartmentId}/list${search}`;
+};
 export const goCommentInput = withHistory(createCommentInputPath);
 export const goCommentList = withHistory(createCommentListPath, {
-    beforeRouteChange: (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '公寓评价'),
+        withSearch,
+    ],
 });
 
 // apartment
@@ -54,6 +43,15 @@ const createShopDetailPath = shopId => `/shop/detail/${shopId}`;
 export const goShopList = withHistory(createShopListPath, {
     beforeRouteChange: [
         (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+        withSearch,
+    ],
+});
+/**
+ * 是否是改变当前页的一些参数
+ * 改变本页的一些参数认为是没有跳页
+ */
+export const changeExclusiveShopQuery = withHistory(createExclusiveShopPath, {
+    beforeRouteChange: [
         withSearch,
     ],
 });
@@ -83,12 +81,16 @@ const createHouseListPath = () => {
     } = urlStore;
     return urlJoin('list', filterUrlFragment) + filterSearch;
 };
-const createApartmentHouseListPath = () => {
+const createApartmentHouseListPath = (isFirstEnter = false) => {
     const urlStore = window.getStore('apartmentHouseUrl') || {};
     const {
         filterUrlFragment,
         filterSearch = '',
     } = urlStore;
+    if (isFirstEnter) {
+        return urlJoin('list/apartment') + filterSearch;
+    }
+    console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
     return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });

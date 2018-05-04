@@ -8,8 +8,8 @@ import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
 import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
 import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
+import { clearOtherFilter, clearPositionFilter } from 'application/App/HouseSearch/transId';
 import NearbyFilterWrap from 'components/App/HouseList/NearbyFilter';
-
 import { getScrollTop, getFilterFixScrollTop } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
@@ -134,6 +134,10 @@ export default class Filter extends PureComponent {
 
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionState) => {
+        // 先清理
+        clearOtherFilter();
+        clearPositionFilter();
+
         // 隐藏弹层
         this.handleFilterShowTap('position', true);
 
@@ -142,6 +146,7 @@ export default class Filter extends PureComponent {
 
     // rentFilterState, ex: [1300, 1400]
     onFilterRentConfirm = (rentState) => {
+
         // 隐藏弹层
         this.handleFilterShowTap('rent', true);
 

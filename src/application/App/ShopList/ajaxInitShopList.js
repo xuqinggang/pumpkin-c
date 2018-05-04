@@ -13,6 +13,20 @@ export function ajaxGetBrandList() {
         });
 }
 
+// 获取有该门店的行政区
+export function ajaxGetShopDistrict(apartmentId) {
+    return Service.get('/api/v1/brandApartments/district', {
+        apartmentId,
+    })
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data.district;
+            }
+
+            throw new Error(res);
+        });
+}
+
 // 获取门店列表
 export function ajaxGetShopList({ filter, pager } = {}) {
 
@@ -24,8 +38,8 @@ export function ajaxGetShopList({ filter, pager } = {}) {
         const { position } = filter;
         delete filterParams.position;
         filterParams = {
-            ...filterParams,
             ...position,
+            ...filterParams,
         };
     }
 
@@ -61,9 +75,8 @@ export function ajaxGetShopList({ filter, pager } = {}) {
             message: res.msg,
         };
     })
-    .catch(e => ({
-        type: 'CRASH',
-        message: e.message,
-    }));
+        .catch(e => ({
+            type: 'CRASH',
+            message: e.message,
+        }));
 }
-

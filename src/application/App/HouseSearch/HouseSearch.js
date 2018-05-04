@@ -6,11 +6,15 @@ import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
 import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecord';
+import PopToolTip from 'Shared/PopToolTip/PopToolTip';
 
+import { historyRecordStorage } from 'application/App/storage';
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
 import { setFilterStore, setSearchStore } from './transId';
+import { clearOtherFilter, clearPositionFilter, jumpHouseList } from 'application/App/HouseSearch/transId';
+
 import { debounce } from 'lib/util';
 
 import './styles.less';
@@ -48,14 +52,30 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
 
     handleSubmit = (e) => {
         e.preventDefault();
+
+        if (this.state.keyword === '') {
+            PopToolTip({text: '搜索关键字不能为空'});
+            return;
+        }
+
+        // 清空 store
+        window.setStore('houseList', null);
+        clearPositionFilter();
+        clearOtherFilter();
+        
+        // storage
+        historyRecordStorage.update({
+            type: 'keywords',
+            text: this.state.keyword,
+            fieldValue: this.state.keyword,
+        });
+
         setFilterStore({
             paramsObj: { keyword: this.state.keyword },
         });
 
         setSearchStore(this.state.keyword);
-        // 清空 houseList store
-        window.setStore('houseList', null);
-        goHouseList(this.props.history)();
+        jumpHouseList(this.props.history);
     }
 
     _ajaxSearchHits = () => {

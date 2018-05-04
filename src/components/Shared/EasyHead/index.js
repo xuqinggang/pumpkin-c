@@ -13,12 +13,12 @@ class EasyHead extends Component {
         super(props);
         this.state = {
             showPrompt: false,
-        }
+        };
     }
 
     back = () => {
         if (!this.props.prompt) {
-            window.history.back();
+            window.history.go(-this.props.backCount);
             return;
         }
 
@@ -64,11 +64,13 @@ class EasyHead extends Component {
 EasyHead.propTypes = {
     renderRight: PropTypes.func,
     prompt: PropTypes.string,
+    backCount: PropTypes.number,
 };
 
 EasyHead.defaultProps = {
     renderRight: () => null,
     prompt: '',
+    backCount: 1,
 };
 
 export default EasyHead;

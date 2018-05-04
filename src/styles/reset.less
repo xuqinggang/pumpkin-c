@@ -31,6 +31,18 @@ input, select, textarea {
     font-size: 100%
 }
 
+input[type=search] {
+    -webkit-appearance: textfield;
+    -webkit-box-sizing: content-box;
+    font-family: inherit;
+    font-size: 100%;
+}
+
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button {
+    display: none;
+}
+
 fieldset,
 img {
     border:0

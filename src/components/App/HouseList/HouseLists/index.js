@@ -91,7 +91,8 @@ export default class HouseLists extends PureComponent {
                 this.setState(newState);
 
                 // setStore
-                window.setStore('houseList', newState);
+                const storeKey = this.props.storeKey || 'houseList';
+                window.setStore(storeKey, newState);
             })
     }
 
@@ -108,9 +109,14 @@ export default class HouseLists extends PureComponent {
     }
 
     componentWillMount() {
-        const storeHouseListState = window.getStore('houseList');
-        const filterStore = window.getStore('filter') || {};
+        const storeKey = this.props.storeKey || 'houseList';
+        const filterStoreKey = this.props.filterStoreKey || 'filter';
+
+        const storeHouseListState = window.getStore(storeKey);
+        const filterStore = window.getStore(filterStoreKey) || {};
         const { paramsObj } = filterStore || {};
+
+        // console.log(this.props.filterParams, 'this.props.filterParams', paramsObj);
 
         if (storeHouseListState && shallowEqual(this.props.filterParams, paramsObj)) {
             this.setState(storeHouseListState, () => {

@@ -13,7 +13,7 @@ import {
 } from './stringifyState';
 import { parseUrl } from './parseUrl';
 import { transUrlFrgObjToStr } from './utils';
-import { goApartmentHouseList } from 'application/App/routes/routes';
+import { goApartmentHouseList, goApartment } from 'application/App/routes/routes';
 import { parseUrlQueryFields } from 'lib/util';
 import { execWxShare } from 'lib/wxShare';
 import { kzPv } from 'lib/pv';
@@ -30,19 +30,24 @@ const classPrefix = 'g-realhouselist';
 // 临时方案
 const storeKey = 'apartmentHouseFilter';
 const urlStoreKey = 'apartmentHouseUrl';
+const houseListStoreKey = 'apartmentHouseList';
 
-window.setStore(storeKey, {
-    urlFrg: InitStateFilterUrlFrg,
-    state: {
-        ...InitStateFilterState,
-        nearby: '3', // km
-    },
-    label: {
-        ...InitStateFilterLabel,
-        nearby: '3km',
-    },
-    paramsObj: {},
-});
+
+export const initApartmentListState = () => {
+    window.setStore(storeKey, {
+        urlFrg: InitStateFilterUrlFrg,
+        state: {
+            ...InitStateFilterState,
+            nearby: '3', // km
+        },
+        label: {
+            ...InitStateFilterLabel,
+            nearby: '3km',
+        },
+        paramsObj: {},
+    });
+};
+initApartmentListState();
 
 // TODO 严重依赖 url 的规则 重构
 const getTitle = () => {
@@ -78,7 +83,7 @@ export default class RealHouseList extends PureComponent {
         this.queryFieldsObj = queryFieldsObj;
 
         // 从filter store中取出初始化到this相应变量上
-        this._getStoreFilterInfo();
+        this.getStoreFilterInfo();
 
         window.setStore(urlStoreKey, {
             filterQueryFieldsObj: queryFieldsObj,
@@ -89,6 +94,13 @@ export default class RealHouseList extends PureComponent {
 
         // TO THE TOP
         window.scrollTo({ x: 0, y: 0 }, 0);
+
+        // init houselist
+        window.setStore(houseListStoreKey, null);
+
+        this.state = {
+            queryCount: 0,
+        };
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -140,13 +152,17 @@ export default class RealHouseList extends PureComponent {
         this.urlFrgObj[type] = url;
 
         // setStore filter
-        this._setStoreFilterInfo();
+        this.setStoreFilterInfo();
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
 
         // setStore url.filterUrlFragment
-        this._setStoreFilterUrlFrg(urlFrgRt);
+        this.setStoreFilterUrlFrg(urlFrgRt);
 
-        goApartmentHouseList(this.props.history)(urlFrgRt);
+        goApartmentHouseList(this.props.history)();
+
+        this.setState({
+            queryCount: this.state.queryCount + 1,
+        });
 
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
@@ -155,7 +171,7 @@ export default class RealHouseList extends PureComponent {
         }, 500);
     }
 
-    _setStoreFilterInfo() {
+    setStoreFilterInfo() {
         window.setStore(storeKey, {
             state: this.filterState,
             label: this.filterLabel,
@@ -164,7 +180,7 @@ export default class RealHouseList extends PureComponent {
         });
     }
 
-    _getStoreFilterInfo() {
+    getStoreFilterInfo() {
         const filterStore = window.getStore(storeKey);
         const {
             label,
@@ -180,11 +196,11 @@ export default class RealHouseList extends PureComponent {
 
         // 筛选的请求参数
         this.filterParamsObj = {
-            apartmentId: this.queryFieldsObj.apartment || null,
             ...paramsObj,
+            apartmentId: this.queryFieldsObj.apartment || null,
         };
         this.setNearbyInfo(this.queryFieldsObj.nearby);
-        this._setStoreFilterInfo();
+        this.setStoreFilterInfo();
     }
 
     setNearbyInfo = (nearby) => {
@@ -207,7 +223,7 @@ export default class RealHouseList extends PureComponent {
         }
     }
 
-    _setStoreFilterUrlFrg(filterUrlFragment) {
+    setStoreFilterUrlFrg(filterUrlFragment) {
         window.setStore(urlStoreKey, {
             filterUrlFragment,
         });
@@ -225,7 +241,7 @@ export default class RealHouseList extends PureComponent {
 
     componentWillMount() {
         const filterUrlFragment = this.props.match.params.filterUrlFragment;
-        this._setStoreFilterUrlFrg(filterUrlFragment);
+        this.setStoreFilterUrlFrg(filterUrlFragment);
 
         const filterStore = parseUrl(filterUrlFragment);
 
@@ -240,7 +256,7 @@ export default class RealHouseList extends PureComponent {
             this.filterLabel = Object.assign({}, this.filterLabel, label);
             this.filterState = Object.assign({}, this.filterState, state);
             this.urlFrgObj = Object.assign(this.urlFrgObj, urlFrg);
-            this._setStoreFilterInfo();
+            this.setStoreFilterInfo();
         }
     }
 
@@ -257,6 +273,7 @@ export default class RealHouseList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
                     <EasyHead
+                        backCount={this.state.queryCount + 1}
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>{getTitle()}</span>
                         )}
@@ -272,6 +289,8 @@ export default class RealHouseList extends PureComponent {
                 />
                 <HouseLists
                     filterParams={this.filterParamsObj}
+                    storeKey={houseListStoreKey}
+                    filterStoreKey={storeKey}
                 />
             </div>
         );

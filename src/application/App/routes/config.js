@@ -36,11 +36,14 @@ class WrapRouter extends PureComponent {
         initStore();
 
         // Server配置ajax url前缀, /bj/nangua
+        // 优先使用 南瓜租房 iOS APP 传来 cityId
+        const cityId = window.iOS && window.iOS.getCityId();
+        const commonParamters = {
+            cityId: cityId || AbbrevMapCity[cityName].id,
+        };
         Service.baseConfig = {
             urlPrefix: this.urlPrefix,
-            commonParamters: {
-                cityId: AbbrevMapCity[cityName].id,
-            },
+            commonParamters,
         };
     }
 

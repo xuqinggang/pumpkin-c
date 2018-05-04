@@ -59,3 +59,15 @@ export function ajaxPostImage(file) {
             throw new Error(res);
         });
 }
+
+// 获取单个评论
+export function ajaxGetComment(commentId) {
+    return Service.get(`/api/v1/brandApartments/comments/${commentId}`)
+        .then((res) => {
+            if (res.code === 200) {
+                return res.data;
+            }
+
+            throw new Error(res);
+        });
+}

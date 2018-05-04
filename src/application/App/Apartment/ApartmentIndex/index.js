@@ -19,11 +19,13 @@ import { Route, Switch } from 'react-router';
 import { dynamicDocTitle } from 'lib/util';
 import { isLikeNativeView } from 'lib/const';
 import { execWxShare } from 'lib/wxShare';
+import { openSchema } from 'lib/webviewBridge';
 import initStore from 'application/App/initStore';
 
 import ApartmentDetail from '../ApartmentDetail';
 import { ajaxGetApartmentIndex } from '../ajaxInitApartmentIndex';
 import getCurrentPosition from 'lib/geolocation';
+import { initApartmentListState } from 'application/App/HouseList/RealHouseList';
 
 import './styles.less';
 
@@ -96,12 +98,12 @@ export default class ApartmentIndex extends PureComponent {
         const { apartmentId } = this;
 
         if (isLikeNativeView()) {
-            window.location.href =
-                `nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`;
+            openSchema(`nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`);
             return;
         }
 
         initStore();
+        initApartmentListState();
         const urlStore = window.getStore('url');
         let filterSearch = `?apartment=${apartmentId}`;
         if (isNearby) {
@@ -111,7 +113,7 @@ export default class ApartmentIndex extends PureComponent {
             ...urlStore,
             filterSearch,
         });
-        goApartmentHouseList(this.props.history)();
+        goApartmentHouseList(this.props.history)(true);
     }
 
     renderIndex() {
