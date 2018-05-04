@@ -76,9 +76,6 @@ export default class RealHouseList extends PureComponent {
     constructor(props) {
         super(props);
 
-        // console.log('con');
-        // initState();
-
         const {
             queryFieldsObj,
             search,
@@ -161,7 +158,7 @@ export default class RealHouseList extends PureComponent {
         // setStore url.filterUrlFragment
         this.setStoreFilterUrlFrg(urlFrgRt);
 
-        goApartmentHouseList(this.props.history)(urlFrgRt);
+        goApartmentHouseList(this.props.history)();
 
         this.setState({
             queryCount: this.state.queryCount + 1,

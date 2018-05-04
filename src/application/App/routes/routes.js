@@ -81,13 +81,17 @@ const createHouseListPath = () => {
     } = urlStore;
     return urlJoin('list', filterUrlFragment) + filterSearch;
 };
-const createApartmentHouseListPath = () => {
+const createApartmentHouseListPath = (isFirstEnter = false) => {
     const urlStore = window.getStore('apartmentHouseUrl') || {};
     const {
-        // filterUrlFragment = '',
+        filterUrlFragment,
         filterSearch = '',
     } = urlStore;
-    return urlJoin('list/apartment') + filterSearch;
+    if (isFirstEnter) {
+        return urlJoin('list/apartment') + filterSearch;
+    }
+    console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
+    return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
 export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });

@@ -113,7 +113,7 @@ export default class ApartmentIndex extends PureComponent {
             ...urlStore,
             filterSearch,
         });
-        goApartmentHouseList(this.props.history)();
+        goApartmentHouseList(this.props.history)(true);
     }
 
     renderIndex() {
