@@ -42,9 +42,9 @@ export default class ShopDetail extends PureComponent {
     }
 
     goApartment = () => {
-        // const { history } = this.props;
-        // const { apartmentDetailData } = this.state;
-        // goApartment(history)(apartmentDetailData.apartmentId);
+        const { history } = this.props;
+        const { apartmentDetailData } = this.state;
+        goApartment(history)(apartmentDetailData.apartmentId);
     }
 
     handleJumpMapTap = () => {
