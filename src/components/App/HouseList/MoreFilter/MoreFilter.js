@@ -1,54 +1,42 @@
+/* @flow */
+
 import React, { PureComponent } from 'react';
 
-import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
+import FilterConfirmConnect from 'components/App/HouseList/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 
 import './styles.less';
 
 const moreClass = 'm-morefilter';
 
-class MoreFilter extends PureComponent {
-    constructor(props) {
+type PropType = {
+    initialState: moreStateType,
+    filterState: moreStateType,
+    originData: moreOriginDataType,
+    onChange: Function,
+};
+
+@FilterConfirmConnect()
+export default class MoreFilter extends PureComponent<PropType, moreStateType> {
+    constructor(props: PropType) {
         super(props);
-        this.initialState = {
-            directs: {},
-            areaInfo: {},
-            tags: {},
-            floorInfo: {},
-        };
-
         // state, ex: { direction: { 0: false, 1: true }, area: { 3: true } }
-        this.state = props.filterState || this.initialState;
+        this.state = props.filterState || this.props.initialState;
     }
 
-    onTagsChange = (type, tagsStateObj) => {
-        this.setState({
-            [type]: tagsStateObj,
-        });
+    onTagsChange = (type: string, tagsStateObj: {}) => {
+        const newState = Object.assign({}, this.state, { [type]: tagsStateObj });
+        this.setState(newState);
+        this.props.onChange(newState);
     }
 
-    // 清空state
-    _clearState = () => {
-        this.setState(this.initialState);
-    }
-
-    // 确认state
-    _confirmState = () => {
-        this.props.onFilterConfirm(this.state);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(Object.assign({}, this.initialState, nextProps.filterState));
+    componentWillReceiveProps(nextProps: PropType) {
+        if ('filterState' in nextProps) {
+            this.setState(nextProps.filterState);
+        }
     }
 
     render() {
-        const {
-            directs,
-            tags,
-            areaInfo,
-            floorInfo,
-        } = this.state;
-
         const {
             originData: MoreFilterTagData,
         } = this.props;
@@ -74,5 +62,3 @@ class MoreFilter extends PureComponent {
         );
     }
 }
-
-export default FilterConfirmConnect()(MoreFilter);

@@ -1,9 +1,11 @@
+/* @flow */
+
 import { createAction, handleActions } from 'redux-actions';
 
 import { dataAdapterPostion } from './dataAdapter';
 
 /* init state */
-const initStatePosition = {
+export const initStatePosition: positionReduxType = {
     state: {
         firstIndex: 0,
         secondIndex: -1,

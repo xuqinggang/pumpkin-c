@@ -1,7 +1,9 @@
+/* @flow */
+
 import { createAction, handleActions } from 'redux-actions';
 
 /* init state */
-const initStateRent = {
+export const initStateRent: rentReduxType = {
     state: [0, 20000],
     label: '租金',
     params: {
@@ -19,7 +21,7 @@ export const filterRentPutActions = {
 };
 
 export default handleActions({
-    [filterRentPutActions.UPDATE_FILTER_RENT](state, action) {
+    [filterRentPutActions.UPDATE_FILTER_RENT](state: rentReduxType, action) {
         const {
             url,
             params,

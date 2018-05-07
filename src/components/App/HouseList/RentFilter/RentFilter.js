@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
+import FilterConfirmConnect from 'components/App/HouseList/FilterConfirmConnect/FilterConfirmConnect';
 import Slider from 'Shared/Slider/Slider';
 
 import './styles.less';

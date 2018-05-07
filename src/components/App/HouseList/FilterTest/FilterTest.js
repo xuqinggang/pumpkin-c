@@ -10,56 +10,40 @@ import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
 import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
 import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
 
+import { initStateMore } from 'reduxs/modules/Filter/FilterMoreRedux';
+import { initStateRent } from 'reduxs/modules/Filter/FilterRentRedux';
+import { initStateHouseType } from 'reduxs/modules/Filter/FilterHouseTypeRedux';
+
 import './styles.less';
 
 const classPrefix = 'm-filter';
 
-export default class Filter extends PureComponent {
+type PropType = {
+    onFilterConfirm: (obj: {type: string, state: filterStateType}) => void,
+    filterInfo: filterReduxType,
+    className?: string,
+};
 
+export default class Filter extends PureComponent<PropType> {
     // 回调函数-筛选数据确定回调函数
-    onFilterPositionConfirm = (positionState) => {
-        // 隐藏弹层
-        this.handleFilterShowTap('position', true);
-
+    onFilterPositionConfirm = (positionState: positionStateType) => {
         this.props.onFilterConfirm({ type: 'position', state: positionState });
     }
 
     // rentFilterState, ex: [1300, 1400]
-    onFilterRentConfirm = (rentState) => {
-        // 隐藏弹层
-        this.handleFilterShowTap('rent', true);
-
+    onFilterRentConfirm = (rentState: rentStateType) => {
         this.props.onFilterConfirm({ type: 'rent', state: rentState });
     }
 
     // filterState, ex: { shared: {1:true, 2:false} }
-    onFilterHouseTypeConfirm = (houseTypeState) => {
-        // 隐藏弹层
-        this.handleFilterShowTap('houseType', true);
-
+    onFilterHouseTypeConfirm = (houseTypeState: houseTypeStateType) => {
         this.props.onFilterConfirm({ type: 'houseType', state: houseTypeState });
     }
 
     // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
-    onFilterMoreConfirm = (moreState) => {
-        // 隐藏弹层
-        this.handleFilterShowTap('more', true);
-
-        this.props.onFilterConfirm({ type: 'more', state: moreState });
-    }
-
-    componentDidMount() {
-        // TODO:  <25-04-18, Me> // 
-        // this.listWrapDom = document.querySelector('.g-houselist');
-        // // 头部高度
-        // this.headDomHeight = Math.round(document.querySelector('.g-houselist-head').offsetHeight);
-        // this.filterFixScrollTop = getFilterFixScrollTop();
-
-        window.addEventListener('scroll', this._fixFilterDom);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this._fixFilterDom);
+    onFilterMoreConfirm = (moreState: moreStateType) => {
+        console.log('onFilterMoreConfirm', moreState);
+        // this.props.onFilterConfirm({ type: 'more', state: moreState });
     }
 
     render() {
@@ -98,6 +82,7 @@ export default class Filter extends PureComponent {
                     }
                 >
                     <RentFilterWrap
+                        initialState={initStateRent.state}
                         filterState={rent.state}
                         onFilterConfirm={this.onFilterRentConfirm}
                     />
@@ -108,6 +93,7 @@ export default class Filter extends PureComponent {
                     }
                 >
                     <HouseTypeFilterWrap
+                        initialState={initStateHouseType.state}
                         filterState={houseType.state}
                         originData={houseType.originData}
                         onFilterConfirm={this.onFilterHouseTypeConfirm}
@@ -119,6 +105,7 @@ export default class Filter extends PureComponent {
                     }
                 >
                     <MoreFilterWrap
+                        initialState={initStateMore.state}
                         filterState={more.state}
                         originData={more.originData}
                         onFilterConfirm={this.onFilterMoreConfirm}

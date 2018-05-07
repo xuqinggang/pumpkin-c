@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
+import FilterConfirmConnect from 'components/App/HouseList/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 
 import './styles.less';

@@ -1,18 +1,20 @@
+/* @flow */
+
 import { createAction, handleActions } from 'redux-actions';
 
 import HouseTypeFilterTagData from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilterTagData';
 
 /* init state */
-const initStateHouseType = {
+export const initStateHouseType: houseTypeReduxType = {
     state: {
         sharedRooms: {},
         wholeRooms: {},
     },
-    label: '房型',
     params: {
         sharedRooms: null,
         wholeRooms: null,
     },
+    label: '房型',
     url: '',
     originData: HouseTypeFilterTagData,
 };

@@ -9,14 +9,20 @@ import './styles.less';
 const classPrefix = 'm-positionfilterwrap';
 
 type PropType = {
-    onFilterConfirm: Function,
-    originData: ?positionOriginDataType,
+    onFilterConfirm: ({}) => void,
+    originData: positionOriginDataType,
+    // 设置激活索引，通过设置-1可以收起面板
     onUpdateActiveIndex: (number) => void,
+    filterState: positionStateType,
 };
 
 export default class PositionFilterWrap extends PureComponent<PropType> {
+    onFilterConfirm = (arg: {}) => {
+        this.props.onFilterConfirm(arg);
+        this.props.onUpdateActiveIndex(-1);
+    }
+
     handleMaskTap = () => {
-        // 通过设置索引为-1，使collapse收起
         this.props.onUpdateActiveIndex(-1);
     }
 

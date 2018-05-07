@@ -5,11 +5,12 @@ import { filterRentPutActions } from './FilterRentRedux';
 import { FILTER_ITEM_SEPARATOR, TypeAndPrefixMap } from 'const/filter';
 
 export function* transFilterRentUrl(filterUrlObj) {
-    const alpha = TypeAndPrefixMap.priceInfo;
-    const rentUrlStr = filterUrlObj[alpha];
+    const alpha = TypeAndPrefixMap.priceInfo,
+        rentUrlStr = filterUrlObj[alpha];
+
     if (rentUrlStr) {
-        const tmpRentState = rentUrlStr.split(FILTER_ITEM_SEPARATOR);
-        const rentState = [parseInt(tmpRentState[0], 10), parseInt(tmpRentState[1], 10)];
+        const tmpRentState = rentUrlStr.split(FILTER_ITEM_SEPARATOR),
+            rentState = [parseInt(tmpRentState[0], 10), parseInt(tmpRentState[1], 10)];
         yield call(changeFilterRent, rentState);
     }
 }

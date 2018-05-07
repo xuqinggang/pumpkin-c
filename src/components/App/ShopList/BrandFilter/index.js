@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import FilterConfirmConnect from 'Shared/FilterConfirmConnect/FilterConfirmConnect';
+import FilterConfirmConnect from 'components/App/HouseList/FilterConfirmConnect/FilterConfirmConnect';
 import TagsGroup from 'Shared/TagsGroup/TagsGroup';
 import { ajaxGetBrandList } from 'application/App/ShopList/ajaxInitShopList';
 import { brandParamsToStateLabels } from 'application/App/ShopList/stateToParams';

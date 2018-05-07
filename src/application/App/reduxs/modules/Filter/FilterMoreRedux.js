@@ -1,9 +1,11 @@
+/* @flow */
+
 import { createAction, handleActions } from 'redux-actions';
 
 import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
 
 /* init state */
-const initStateMore = {
+export const initStateMore: moreReduxType = {
     state: {
         directs: {},
         tags: {},

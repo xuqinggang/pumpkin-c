@@ -1,5 +1,13 @@
+// position
+declare type positionParamsType = {
+    districtId: ?number,
+    circleId: ?number,
+    subwayId: ?number,
+    stationId: ?number
+};
+
 declare type positionOriginDataType = {
-    [type: string]: {
+    [type: string]: ?{
         [id: string]: {
             text: string,
             sub: {
@@ -8,4 +16,96 @@ declare type positionOriginDataType = {
             isCanCancel?: boolean,
         },
     },
+};
+
+declare type positionStateType = {
+    firstIndex: number,
+    secondIndex: number,
+    thirdIndex: number,
+};
+
+declare type positionReduxType = {
+    state: positionStateType,
+    params: positionParamsType,
+    label: string,
+    url: string,
+    originData: positionOriginDataType,
+};
+
+// rent
+declare type rentStateType = [number, number];
+declare type rentParamsType = {
+    priceInfo: ?{ floor: number, ceil: number },
+};
+declare type rentReduxType = {
+    state: rentStateType,
+    params: rentParamsType,
+    url: string,
+    label: string,
+};
+
+// houseType
+declare type houseTypeParamsType = {
+    sharedRooms: ?[string],
+    wholeRooms: ?[string],
+};
+
+declare type houseTypeStateType = {
+    sharedRooms: {
+        [index: string]: boolean,
+    },
+    wholeRooms: {
+        [index: string]: boolean,
+    },
+};
+
+declare type houseTypeReduxType = {
+    state: houseTypeStateType,
+    params: houseTypeParamsType,
+    url: string,
+    label: string,
+    originData: {},
+};
+
+// more
+declare type moreStateType = {
+    directs: {
+        [index: string]: boolean,
+    },
+    tags: {
+        [index: string]: boolean,
+    },
+    areaInfo: {
+        [index: string]: boolean,
+    },
+    floorInfo: {
+        [index: string]: boolean,
+    },
+};
+
+declare type moreParamsType = {
+    directs: ?[string],
+    tags: ?[string],
+    areaInfo: ?[{}],
+    floorInfo: ?[{}],
+};
+
+declare type moreOriginDataType = {};
+
+declare type moreReduxType = {
+    state: moreStateType,
+    params: moreParamsType,
+    url: string,
+    label: string,
+    originData: moreOriginDataType,
+};
+
+
+// filter
+declare type filterStateType = | positionStateType | rentStateType | moreStateType | houseTypeStateType;
+declare type filterReduxType = {
+    position: positionReduxType,
+    rent: rentReduxType,
+    houseType: houseTypeReduxType,
+    more: moreReduxType,
 };
