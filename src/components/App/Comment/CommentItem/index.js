@@ -11,6 +11,8 @@ import { isLikeNativeView } from 'lib/const';
 
 import { openSchema } from 'lib/webviewBridge';
 
+import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
+
 import './styles.less';
 
 const classPrefix = 'm-commentitem';
@@ -31,10 +33,16 @@ class CommentItem extends PureComponent {
         goHouseDetail(this.props.history)(rentUnitId);
     }
 
-    viewImage = () => {
-        const { id } = this.props.comment;
+    viewImage = (index) => {
+        const { comment: { images, id } } = this.props;
+
         if (isLikeNativeView()) {
             openSchema(`nangua://api.nanguazufang.cn/main?imageWithCommentId=${id}&history=true`);
+        } else {
+            ImagePreviewWrap({
+                index,
+                images,
+            });
         }
     }
 
@@ -84,7 +92,7 @@ class CommentItem extends PureComponent {
                     <ExpandText color="#666" intro={content || '此用户未填写评价内容'} />
                     {
                         images && images.map((image, index) => (
-                            <img onTouchTap={this.viewImage} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
+                            <img onTouchTap={() => this.viewImage(index)} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
