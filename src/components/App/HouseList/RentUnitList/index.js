@@ -38,7 +38,7 @@ export default class RentUnitList extends Component {
             <div className={clsPrefix}>
                 {
                     this.props.list.map((rentalUnit, index) => (
-                        <RentUnitItem key={index} {...rentalUnit} />
+                        <RentUnitItem key={index} {...rentalUnit} isApartmentHouseList={this.props.isApartmentHouseList} />
                     ))
                 }
                 {
@@ -56,6 +56,7 @@ RentUnitList.propTypes = {
     onLoadMore: PropTypes.func,
     loading: PropTypes.bool,
     pager: pagerShape,
+    isApartmentHouseList: PropTypes.bool,
 };
 
 RentUnitList.defaultProps = {
@@ -66,4 +67,5 @@ RentUnitList.defaultProps = {
         curPage: 1,
         totalPage: 1,
     },
+    isApartmentHouseList: false,
 };

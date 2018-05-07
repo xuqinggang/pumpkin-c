@@ -1,3 +1,19 @@
-.pswp__counter {
-    color: #fff;
+@import (reference) '~styles/lib.less';
+
+.pswp__ui {
+    z-index: 1;
+}
+
+.pswp__top-bar {
+    height: 88px;
+    background-color: #111;
+    & .pswp__back {
+        color: #fff;
+        .font-size(40);
+        padding: 0 30px;
+    }
+    & .pswp__counter {
+        color: #fff;
+        .font-size(40);
+    }
 }

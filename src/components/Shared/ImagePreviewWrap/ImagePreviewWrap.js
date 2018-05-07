@@ -81,7 +81,8 @@ export default class ImagePreviewWrap extends PureComponent {
                             <div className="pswp__item" />
                         </div>
                         <div className="pswp__ui pswp__ui--hidden">
-                            <div className="pswp__top-bar">
+                            <div className="pswp__top-bar f-display-flex f-flex-align-center">
+                                <a href="javascript:history.back();" className="icon-back pswp__back" />
                                 <div className="pswp__counter" />
                                 {/* <button className="pswp__button pswp__button--close" title="Close (Esc)" />
                                 <button className="pswp__button pswp__button--share" title="Share" />

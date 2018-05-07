@@ -177,6 +177,7 @@ export default class HouseLists extends PureComponent {
                     pager={pager}
                     loading={isFetching}
                     onLoadMore={this.handleLoadMore}
+                    isApartmentHouseList={isApartmentHouseList}
                 />
                 {
                     this.fetchType === 'INIT' && isFetchCrash ?

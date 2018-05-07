@@ -138,6 +138,7 @@ export default class DropDownScreen extends PureComponent {
             label,
             children,
             isMask,
+            className,
         } = this.props;
 
         const {
@@ -156,7 +157,7 @@ export default class DropDownScreen extends PureComponent {
         });
 
         return (
-            <div className={`${dropClass}`}>
+            <div className={`${dropClass} ${className}`}>
                 <div
                     className={`${dropClass}-label-wrap`}
                     onTouchTap={this.handleHeadTap}
