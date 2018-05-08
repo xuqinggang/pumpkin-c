@@ -26,7 +26,7 @@ export default class PureShopList extends PureComponent {
             // 向下滚动
             if ((getDocHeight() - window.innerHeight - scrollTop) <= reserveSize) {
                 const { curPage, totalPage } = this.props.pager;
-                if (curPage < totalPage) {
+                if (curPage - 1 < totalPage) {
                     this.props.onLoadMore();
                 }
             }
