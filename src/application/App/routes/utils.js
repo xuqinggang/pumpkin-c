@@ -48,3 +48,21 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
 };
 
 export default withHistory;
+
+/**
+ * @param {String} qs 'a=b&c=d'
+ * @returns {Object} {a: 'b', c: 'd'}
+ */
+export const queryStringToObject = (qs) => {
+    const qsArr = qs.split('&');
+    const qsObj = {};
+    qsArr.forEach((qsItem) => {
+        const [name, value] = qsItem.split('=');
+        qsObj[name] = value;
+    });
+    return qsObj;
+};
+
+export const generateUrl = (baseUrl, query) => {
+    return `${baseUrl}?${JSON.stringify(query).replace(/[\"\{\}]/g, '').replace(/\:/g, '=').replace(/\,/g, "&")}`;
+};
