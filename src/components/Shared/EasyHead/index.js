@@ -17,6 +17,11 @@ class EasyHead extends Component {
     }
 
     back = () => {
+        if (this.props.backToSomewhere) {
+            this.props.backToSomewhere();
+            return;
+        }
+
         if (!this.props.prompt) {
             window.history.go(-this.props.backCount);
             return;
@@ -65,12 +70,14 @@ EasyHead.propTypes = {
     renderRight: PropTypes.func,
     prompt: PropTypes.string,
     backCount: PropTypes.number,
+    backToSomewhere: PropTypes.func,
 };
 
 EasyHead.defaultProps = {
     renderRight: () => null,
     prompt: '',
     backCount: 1,
+    backToSomewhere: null,
 };
 
 export default EasyHead;

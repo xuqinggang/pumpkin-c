@@ -58,4 +58,4 @@ NearbyFilter.propTypes = {};
 
 NearbyFilter.defaultProps = {};
 
-export default FilterConfirmConnect()(NearbyFilter);
+export default FilterConfirmConnect(false)(NearbyFilter);
