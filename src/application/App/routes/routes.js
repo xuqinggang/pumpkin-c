@@ -94,7 +94,7 @@ const createApartmentHouseListPath = (isFirstEnter = false) => {
     return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
-export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });
+export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: [pv, withSearch] });
 
 // houseDetail
 const createHouseDetailPath = rentUnitId => `/detail/${rentUnitId}/`;
@@ -108,7 +108,8 @@ export const goHouseDetail = withHistory(createHouseDetailPath, {
             }
             next();
         },
-        (history, to, next) => routeChangeToIOS(history, to, next, '房源详情')
+        (history, to, next) => routeChangeToIOS(history, to, next, '房源详情'),
+        withSearch,
     ],
 });
 
