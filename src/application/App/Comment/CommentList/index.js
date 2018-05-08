@@ -38,7 +38,13 @@ export default class CommentList extends PureComponent {
         this.selfCommentId = getQueryString(window.location.href, newCommentIdKey);
     }
 
-    goHouseList = goHouseList(this.props.history);
+    goHouseList = () => {
+        if (this.selfCommentId) {
+            goHouseList(this.props.history)();
+        } else {
+            window.history.back();
+        }
+    }
 
     onLoadMore = () => {
         this.fetchData();

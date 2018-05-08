@@ -19,7 +19,7 @@ export default class ImagePreviewWrap extends PureComponent {
     show = () => {
         const { images, index } = this.props;
 
-        const items = images.map((each) => {
+        const items = images.filter(each => each).map((each) => {
             const eachSplit = each.split('//');
             let url;
             if (eachSplit.length <= 1) {
