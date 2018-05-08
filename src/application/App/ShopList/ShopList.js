@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import { ShopFilter, PureShopListWrap } from 'components/App/ShopList';
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import EasyHead from 'Shared/EasyHead';
 
 import { execWxShare } from 'lib/wxShare';
 import { dynamicDocTitle } from 'lib/util';
@@ -43,6 +43,8 @@ export default class ShopList extends PureComponent {
                 label: districtFilterBus.label,
                 param: districtFilterBus.param,
             },
+
+            queryCount: 0,
         };
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
@@ -182,6 +184,10 @@ export default class ShopList extends PureComponent {
         } else if (district !== undefined) {
             this.handledDistrictSelect(district);
         }
+
+        this.setState({
+            queryCount: this.state.queryCount + 1,
+        });
     }
 
     // 为 position 做的兼容
@@ -259,8 +265,8 @@ export default class ShopList extends PureComponent {
                 <div className={`${classPrefix}-fixed-top`}>
                     {
                         !isLikeNativeView()
-                            ? <HouseHead
-                                history={history}
+                            ? <EasyHead
+                                backCount={this.state.queryCount + 1}
                                 renderRight={() => (
                                     <span className={`${classPrefix}-title f-singletext-ellipsis`}>集中式公寓</span>
                                 )}

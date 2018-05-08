@@ -92,7 +92,7 @@ class CommentItem extends PureComponent {
                     <ExpandText color="#666" intro={content || '此用户未填写评价内容'} />
                     {
                         images && images.map((image, index) => (
-                            <img onTouchTap={() => this.viewImage(index)} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
+                            image && <img onTouchTap={() => this.viewImage(index)} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
                     <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>

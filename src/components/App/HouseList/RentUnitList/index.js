@@ -56,7 +56,7 @@ RentUnitList.propTypes = {
     onLoadMore: PropTypes.func,
     loading: PropTypes.bool,
     pager: pagerShape,
-    isApartmentHouseList: PropTypes.bool,
+    isApartmentHouseList: PropTypes.func,
 };
 
 RentUnitList.defaultProps = {
@@ -67,5 +67,5 @@ RentUnitList.defaultProps = {
         curPage: 1,
         totalPage: 1,
     },
-    isApartmentHouseList: false,
+    isApartmentHouseList: () => false,
 };
