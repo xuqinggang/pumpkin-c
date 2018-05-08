@@ -90,7 +90,7 @@ const createApartmentHouseListPath = (isFirstEnter = false) => {
     if (isFirstEnter) {
         return urlJoin('list/apartment') + filterSearch;
     }
-    console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
+    // console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
     return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
