@@ -29,6 +29,13 @@ export default {
     },
     withSearch: (history, url, next) => {
         const { search } = window.location;
-        next(url + search);
+
+        let newUrl;
+        if (search) {
+            newUrl = url.indexOf('?') > -1 ? url + '&' + search.slice(1) : url + search;
+        } else {
+            newUrl = url;
+        }
+        next(newUrl);
     },
 };
