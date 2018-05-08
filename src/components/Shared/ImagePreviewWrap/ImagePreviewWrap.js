@@ -53,16 +53,18 @@ export default class ImagePreviewWrap extends PureComponent {
                 preloaderEl: false,
             },
         );
+        const { innerHeight } = window;
+        const imageMaxHeight = innerHeight * 0.85;
         gallery.listen('gettingData', (index, item) => {
             if (item.w < 1 || item.h < 1) {
                 const img = new Image();
                 img.onload = () => {
-                    if (img.width <= 750) {
+                    if (img.height <= imageMaxHeight) {
                         item.w = img.width;
                         item.h = img.height;
                     } else {
-                        item.w = 750;
-                        item.h = (img.height * 750) / img.width;
+                        item.w = (img.width * imageMaxHeight) / img.height;
+                        item.h = imageMaxHeight;
                     }
                     gallery.invalidateCurrItems();
                     gallery.updateSize(true);
