@@ -174,7 +174,7 @@ export default class ApartmentIndex extends PureComponent {
             this.setState({
                 brandApartments,
             }, () => {
-                // 得到公寓信息再注册微信分享内容
+                //  得到公寓信息再注册微信分享内容
                 this.wxShare();
                 this.setShareForIOS();
             });
