@@ -74,7 +74,7 @@ class CommentItem extends PureComponent {
                     }
                     <div className="f-display-flex f-flex-justify-between right-wrap">
                         <div className="stars-wrap">
-                            <div className="nickname">{nickname}</div>
+                            <div className="nickname f-singletext-ellipsis">{nickname}</div>
                             <Stars
                                 className="stars"
                                 count={5}

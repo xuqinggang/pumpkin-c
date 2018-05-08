@@ -156,10 +156,10 @@ export default class RealHouseList extends PureComponent {
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
 
         // setStore url.filterUrlFragment
-        this.setStoreFilterUrlFrg(urlFrgRt);
+        this.setStoreFilterUrlFrg(urlFrgRt, `?nearby=${this.filterParamsObj.nearby}&apartment=${this.queryFieldsObj.apartment}`);
 
         goApartmentHouseList(this.props.history)();
-
+    
         this.setState({
             queryCount: this.state.queryCount + 1,
         });
@@ -223,9 +223,10 @@ export default class RealHouseList extends PureComponent {
         }
     }
 
-    setStoreFilterUrlFrg(filterUrlFragment) {
+    setStoreFilterUrlFrg(filterUrlFragment, filterSearch) {
         window.setStore(urlStoreKey, {
             filterUrlFragment,
+            filterSearch,
         });
     }
     
