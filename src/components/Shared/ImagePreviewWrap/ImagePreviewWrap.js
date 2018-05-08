@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import 'photoswipe/dist/photoswipe.css';
+// import 'photoswipe/dist/photoswipe.css';
 import PhotoSwipe from 'photoswipe/dist/photoswipe.min';
 import PhotoSwipeUI from 'photoswipe/dist/photoswipe-ui-default.min';
 
