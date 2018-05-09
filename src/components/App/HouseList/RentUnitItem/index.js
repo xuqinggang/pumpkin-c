@@ -12,6 +12,7 @@ import { isRmHead, isNanguaApp } from 'lib/const';
 import { openSchema } from 'lib/webviewBridge';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
+const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
 
 const itemClassPrefix = 'm-houseitem';
 
@@ -61,8 +62,6 @@ class RentUnitItem extends PureComponent {
             price,
             aptType,
             apartmentName,
-
-            isApartmentHouseList,
         } = this.props;
         const imgClsPrefix = `${itemClassPrefix}-img`;
         const imgCls = classNames(imgClsPrefix, {
