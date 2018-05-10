@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ReactSwipe from 'react-swipe';
 
 import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
+import { openIOSImageView } from 'lib/webviewBridge';
+import { isLikeNativeView } from 'lib/const';
 
 import './styles.less';
 
@@ -69,10 +71,15 @@ export default class RoomSlider extends PureComponent {
         } else {
             items = images;
         }
-        ImagePreviewWrap({
-            index,
-            images: items,
-        });
+
+        if (isLikeNativeView()) {
+            openIOSImageView(items, index);
+        } else {
+            ImagePreviewWrap({
+                index,
+                images: items,
+            });
+        }
     }
 
     renderImages = (img, index) => {
