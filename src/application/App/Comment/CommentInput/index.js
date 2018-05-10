@@ -134,7 +134,7 @@ export default class CommentInput extends PureComponent {
         return (
             <div onTouchTap={this.fixIOSSoftKeyboard} className={`${classPrefix}`}>
                 <EasyHead
-                    prompt={this.hasEdited ? '退出将丢失评价内容' : ''}
+                    prompt={this.hasEdited && !commentDone ? '退出将丢失评价内容' : ''}
                     renderRight={() => (
                         <div className={`${classPrefix}-head-right f-display-flex f-flex-justify-between`}>
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>{title}</span>
