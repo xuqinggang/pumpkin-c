@@ -8,7 +8,7 @@ import { ajaxVerifyCode, ajaxSlideCaptcha } from 'application/App/HouseLogin/aja
 import { goLoginTel } from 'application/App/routes/routes';
 import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
 import { regTel } from 'lib/regExp';
-import { urlJoin, dynamicScript } from 'lib/util';
+import { urlJoin, isHasCookie, getQueryString } from 'lib/util';
 
 import './styles.less';
 
@@ -72,9 +72,22 @@ export default class LoginTel extends PureComponent {
                 this.setState({
                     isTelValid: true,
                 });
-            })
+            });
     }
-    
+
+    componentWillMount() {
+        // 如果登录就跳转出去
+        const { urlPrefix } = window.getStore('url');
+        if (isHasCookie('sid')) {
+            const pageFrom = getQueryString(window.location.href, 'pagefrom');
+            if (pageFrom) {
+                this.props.history.replace(pageFrom);
+            } else {
+                this.props.history.replace(urlJoin(urlPrefix, 'me'));
+            }
+        }
+    }
+
     render() {
         const {
             telVal,

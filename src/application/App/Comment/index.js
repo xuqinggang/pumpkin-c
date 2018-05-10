@@ -20,13 +20,17 @@ class Comment extends PureComponent {
                 <Route
                     exact
                     path={`${url}/input/:rentUnitId`}
-                    render={props => (
-                        isHasCookie('sid') ? (
+                    render={(props) => {
+                        const { match, apartmentId } = props;
+                        const { params: { rentUnitId } } = match;
+                        const loginBackUrl = `${url}/input/${rentUnitId}`;
+
+                        return isHasCookie('sid') ? (
                             <CommentInput {...props} apartmentId={apartmentId} />
                         ) : (
-                            <Redirect to={`${urlPrefix}/login`} />
+                            <Redirect to={`${urlPrefix}/login?pagefrom=${loginBackUrl}`} />
                         )
-                    )}
+                    }}
                 />
                 <Route
                     exact
