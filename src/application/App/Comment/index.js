@@ -21,7 +21,7 @@ class Comment extends PureComponent {
                     exact
                     path={`${url}/input/:rentUnitId`}
                     render={(props) => {
-                        const { match, apartmentId } = props;
+                        const { match } = props;
                         const { params: { rentUnitId } } = match;
                         const loginBackUrl = `${url}/input/${rentUnitId}`;
 
