@@ -24,7 +24,7 @@ function ApartmentDetail({
             }
             <div className="item">
                 <h2 className="title">公寓认证</h2>
-                <div className="f-display-flex">
+                <div className="f-display-flex authWrap">
                     {
                         authentications.map((auth, index) => (
                             <div className="auth" key={index}>
