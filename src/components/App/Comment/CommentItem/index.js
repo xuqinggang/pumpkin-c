@@ -9,7 +9,7 @@ import Stars from '../Stars';
 import { DirectTypeMapText } from 'baseData/MapData';
 import { isLikeNativeView } from 'lib/const';
 
-import { openSchema } from 'lib/webviewBridge';
+import { openSchema, openIOSImageView } from 'lib/webviewBridge';
 
 import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
 
@@ -37,7 +37,7 @@ class CommentItem extends PureComponent {
         const { comment: { images, id } } = this.props;
 
         if (isLikeNativeView()) {
-            openSchema(`nangua://api.nanguazufang.cn/main?imageWithCommentId=${id}&imageIndex=${index}&history=true`);
+            openIOSImageView(images, index);
         } else {
             ImagePreviewWrap({
                 index,

@@ -81,7 +81,7 @@ class BrandFilter extends PureComponent {
         if (!shallowEqual(nextProps.filterState, this.props.filterState)) {
             this.setState({
                 brand: nextProps.filterState,
-            })
+            });
         }
     }
 
