@@ -215,7 +215,9 @@ export default class RealHouseList extends PureComponent {
                     distance: nearby,
                 },
             };
-        } else {
+        }
+
+        if (nearby === '0') {
             this.filterParamsObj = {
                 ...this.filterParamsObj,
                 nearByInfo: null,
