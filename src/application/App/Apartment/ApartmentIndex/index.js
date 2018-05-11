@@ -77,6 +77,7 @@ export default class ApartmentIndex extends PureComponent {
             imgUrl,
             desc: '住品牌公寓，上南瓜租房!',
             slogan: '住品牌公寓，上南瓜租房',
+            isWeb: true,
         };
         callback(data);
     }
