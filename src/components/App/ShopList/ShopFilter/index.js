@@ -52,7 +52,7 @@ export default class ShopFilter extends PureComponent {
     _toggleForbideScrollThrough(isForbide, isResetScrollTop) {
         const body = document.body;
         const { filterShow } = this.state;
-        const isFiltering = filterShow.position || filterShow.brand;
+        const isFiltering = filterShow.position || filterShow.brand || filterShow.district;
 
         if (isFiltering) {
             body.classList.add('f-disscroll-through');
