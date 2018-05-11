@@ -9,7 +9,9 @@ import Stars from '../Stars';
 import { DirectTypeMapText } from 'baseData/MapData';
 import { isLikeNativeView } from 'lib/const';
 
-import { openSchema } from 'lib/webviewBridge';
+import { openSchema, openIOSImageView } from 'lib/webviewBridge';
+
+import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
 
 import './styles.less';
 
@@ -31,10 +33,16 @@ class CommentItem extends PureComponent {
         goHouseDetail(this.props.history)(rentUnitId);
     }
 
-    viewImage = () => {
-        const { id } = this.props.comment;
+    viewImage = (index) => {
+        const { comment: { images, id } } = this.props;
+
         if (isLikeNativeView()) {
-            openSchema(`nangua://api.nanguazufang.cn/main?imageWithCommentId=${id}&history=true`);
+            openIOSImageView(images, index);
+        } else {
+            ImagePreviewWrap({
+                index,
+                images,
+            });
         }
     }
 
@@ -62,11 +70,11 @@ class CommentItem extends PureComponent {
                     {
                         avatar
                             ? <img className="avatar" src={avatar} alt="" />
-                            : <div className="circle-avatar" />
+                            : <img className="avatar" src={require('./images/avatar.png')} alt="" />
                     }
                     <div className="f-display-flex f-flex-justify-between right-wrap">
                         <div className="stars-wrap">
-                            <div className="nickname">{nickname}</div>
+                            <div className="nickname f-singletext-ellipsis">{nickname}</div>
                             <Stars
                                 className="stars"
                                 count={5}
@@ -84,16 +92,19 @@ class CommentItem extends PureComponent {
                     <ExpandText color="#666" intro={content || '此用户未填写评价内容'} />
                     {
                         images && images.map((image, index) => (
-                            <img onTouchTap={this.viewImage} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
+                            image && <img onTouchTap={() => this.viewImage(index)} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
-                    <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
-                        <img src={require('./images/little-house.png')} alt="" />
-                        {
-                            title
-                                ? title
-                                : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
-                        }
+                    <div className="rent-unit f-flex-justify-between f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
+                        <div className="f-display-flex f-flex-align-center">
+                            <img src={require('./images/little-house.png')} alt="" />
+                            {
+                                title
+                                    ? title
+                                    : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
+                            }
+                        </div>
+                        <div className={`icon-next ${classPrefix}-next`} />
                     </div>
                 </div>
             </div>

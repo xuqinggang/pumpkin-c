@@ -8,3 +8,7 @@ export const openSchema = (schema) => {
         console.log(e);
     }
 };
+
+export const openIOSImageView = (images, index) => {
+    openSchema(`nangua://api.nanguazufang.cn/main?galleryImages=${encodeURIComponent(images)}&imageIndex=${index}&history=true`);
+};

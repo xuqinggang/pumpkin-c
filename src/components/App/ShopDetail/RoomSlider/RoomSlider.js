@@ -2,13 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipe from 'react-swipe';
 
-/**
- * function stop() {
-    //delay = 0;
-    delay = options.auto > 0 ? options.auto : 0;
-    clearTimeout(interval);
-  }
- */
+import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
+import { openIOSImageView } from 'lib/webviewBridge';
+import { isLikeNativeView } from 'lib/const';
 
 import './styles.less';
 
@@ -43,8 +39,13 @@ export default class RoomSlider extends PureComponent {
         });
     }
 
+    linkNumber = 0;
     renderLinks = (link, index) => {
         const { avatar, url } = link;
+        if (url) {
+            this.linkNumber = this.linkNumber + 1;
+        }
+        const linkNumberBefore = this.linkNumber;
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
                 {
@@ -52,7 +53,7 @@ export default class RoomSlider extends PureComponent {
                         <a href={url}>
                             <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
                         </a>
-                        : <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        : <img onTouchTap={() => this.handleImageView(index - linkNumberBefore)} src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
                 }
             </div>
         );
@@ -62,9 +63,31 @@ export default class RoomSlider extends PureComponent {
         // console.log(e, 'handleTransitionEnd');
     }
 
+    handleImageView = (index) => {
+        console.log('index', index);
+        
+        const { links, images } = this.props;
+        let items;
+        if (links.length) {
+            // 去掉跳转链接
+            items = links.filter(link => !link.url).map(link => link.avatar);
+        } else {
+            items = images;
+        }
+
+        if (isLikeNativeView()) {
+            openIOSImageView(items, index);
+        } else {
+            ImagePreviewWrap({
+                index,
+                images: items,
+            });
+        }
+    }
+
     renderImages = (img, index) => {
         return (
-            <div className={`${classPrefix}-item-img`} key={index}>
+            <div onTouchTap={this.handleImageView} className={`${classPrefix}-item-img`} key={index}>
                 <img src={img + imgCutModifier} alt="品牌公寓" key={index} className="img" />
             </div>
         );
@@ -76,6 +99,9 @@ export default class RoomSlider extends PureComponent {
 
         // if ((images && images.length <= 0) || !images) return null;
         const items = links.length > 0 ? links : images;
+
+        // render 前都得设置为 0
+        this.linkNumber = 0;
 
         return (
             <div className={`${classPrefix}`}>

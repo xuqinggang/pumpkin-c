@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
 
 import './styles.less';
 
@@ -82,6 +83,14 @@ class PubImgUpload extends Component {
         });
     }
 
+    handlePreview = (index) => {
+        const { images } = this.state;
+        ImagePreviewWrap({
+            index,
+            images,
+        });
+    }
+
     componentWillMount() {
         const { images } = this.props;
         this.setState({
@@ -99,7 +108,7 @@ class PubImgUpload extends Component {
                     images.map((image, index) => (
                         <div key={index} className="item">
                             <div className="img-wrap">
-                                <img src={`${image}${imgCutModifier}`} alt={index} />
+                                <img onClick={() => this.handlePreview(index)} src={`${image}${imgCutModifier}`} alt={index} />
                                 <img
                                     className="delete"
                                     alt=""

@@ -1,4 +1,5 @@
 import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
+import { queryStringToObject, generateUrl } from './utils';
 
 // enhance 其实不是必要的 可以用以下方式替代
 /**
@@ -29,6 +30,19 @@ export default {
     },
     withSearch: (history, url, next) => {
         const { search } = window.location;
-        next(url + search);
+        let newUrl;
+        if (search) {
+            const [baseUrl, urlQs] = url.split('?');
+
+            const a = queryStringToObject(urlQs || '');
+            const b = queryStringToObject(search.split('?')[1]);
+
+            const query = Object.assign({}, b, a);
+            newUrl = generateUrl(baseUrl, query);
+        } else {
+            newUrl = url;
+        }
+
+        next(newUrl);
     },
 };

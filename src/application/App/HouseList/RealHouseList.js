@@ -13,7 +13,7 @@ import {
 } from './stringifyState';
 import { parseUrl } from './parseUrl';
 import { transUrlFrgObjToStr } from './utils';
-import { goApartmentHouseList, goApartment } from 'application/App/routes/routes';
+import { replaceApartmentHouseList, goApartment } from 'application/App/routes/routes';
 import { parseUrlQueryFields } from 'lib/util';
 import { execWxShare } from 'lib/wxShare';
 import { kzPv } from 'lib/pv';
@@ -98,9 +98,9 @@ export default class RealHouseList extends PureComponent {
         // init houselist
         window.setStore(houseListStoreKey, null);
 
-        this.state = {
-            queryCount: 0,
-        };
+        // this.state = {
+        //     queryCount: 0,
+        // };
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -156,13 +156,13 @@ export default class RealHouseList extends PureComponent {
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
 
         // setStore url.filterUrlFragment
-        this.setStoreFilterUrlFrg(urlFrgRt);
+        this.setStoreFilterUrlFrg(urlFrgRt, `?nearby=${this.filterParamsObj.nearby || 3}&apartment=${this.queryFieldsObj.apartment}`);
 
-        goApartmentHouseList(this.props.history)();
-
-        this.setState({
-            queryCount: this.state.queryCount + 1,
-        });
+        replaceApartmentHouseList(this.props.history)();
+    
+        // this.setState({
+        //     queryCount: this.state.queryCount + 1,
+        // });
 
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
@@ -215,7 +215,9 @@ export default class RealHouseList extends PureComponent {
                     distance: nearby,
                 },
             };
-        } else {
+        }
+
+        if (nearby === '0') {
             this.filterParamsObj = {
                 ...this.filterParamsObj,
                 nearByInfo: null,
@@ -223,9 +225,10 @@ export default class RealHouseList extends PureComponent {
         }
     }
 
-    setStoreFilterUrlFrg(filterUrlFragment) {
+    setStoreFilterUrlFrg(filterUrlFragment, filterSearch) {
         window.setStore(urlStoreKey, {
             filterUrlFragment,
+            filterSearch,
         });
     }
     
@@ -273,7 +276,7 @@ export default class RealHouseList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
                     <EasyHead
-                        backCount={this.state.queryCount + 1}
+                        // backCount={this.state.queryCount + 1}
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>{getTitle()}</span>
                         )}

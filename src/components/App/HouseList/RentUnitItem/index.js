@@ -12,6 +12,7 @@ import { isRmHead, isNanguaApp } from 'lib/const';
 import { openSchema } from 'lib/webviewBridge';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
+const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
 
 const itemClassPrefix = 'm-houseitem';
 
@@ -88,7 +89,7 @@ class RentUnitItem extends PureComponent {
                 <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
                         {
-                            apartmentName &&
+                            apartmentName && !isApartmentHouseList() &&
                             <span className="title-apart f-vertical-middle">{apartmentName}</span>
                         }
                         {blockName}-{bedroomCount}居室-{getWithDefault(DirectTypeMapText, direct, '多个朝向')}

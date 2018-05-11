@@ -7,7 +7,11 @@ const routeChange = (history, to) => {
     history.push(to);
 };
 
-const withHistory = (createPath, enhance) => history => (...arg) => {
+const replaceRouteChange = (history, to) => {
+    history.replace(to);
+};
+
+const withHistory = (createPath, enhance, isReplace = false) => history => (...arg) => {
     if (!history.push) throw new Error('need react router history');
     const {
         beforeRouteChange = [],
@@ -29,7 +33,7 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
     const tasks = [
         ...defaultBeforeRoutes,
         ...beforeTasks,
-        routeChange,
+        isReplace ? replaceRouteChange : routeChange,
         ...afterTasks,
         ...defaultAfterRoutes,
     ];
@@ -48,3 +52,21 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
 };
 
 export default withHistory;
+
+/**
+ * @param {String} qs 'a=b&c=d'
+ * @returns {Object} {a: 'b', c: 'd'}
+ */
+export const queryStringToObject = (qs) => {
+    const qsArr = qs.split('&');
+    const qsObj = {};
+    qsArr.forEach((qsItem) => {
+        const [name, value] = qsItem.split('=');
+        qsObj[name] = value;
+    });
+    return qsObj;
+};
+
+export const generateUrl = (baseUrl, query) => {
+    return `${baseUrl}?${JSON.stringify(query).replace(/[\"\{\}]/g, '').replace(/\:/g, '=').replace(/\,/g, "&")}`;
+};

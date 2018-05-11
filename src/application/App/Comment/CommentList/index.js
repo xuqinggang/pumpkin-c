@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 
 import { PureCommentList } from 'components/App/Comment';
-import HouseHead from 'components/App/HouseDetail/HouseDetailIndex/HouseHead/HouseHead';
+import EasyHead from 'Shared/EasyHead';
 import { getDocHeight, getScrollTop, dynamicDocTitle, getQueryString } from 'lib/util';
 import { ajaxGetCommentList, ajaxGetComment } from '../ajaxInitComment';
 import { isLikeNativeView } from 'lib/const';
+import { goHouseList } from 'application/App/routes/routes';
 
 import './styles.less';
 
@@ -35,6 +36,14 @@ export default class CommentList extends PureComponent {
             loading: false,
         };
         this.selfCommentId = getQueryString(window.location.href, newCommentIdKey);
+    }
+
+    goHouseList = () => {
+        if (this.selfCommentId) {
+            goHouseList(this.props.history)();
+        } else {
+            window.history.back();
+        }
     }
 
     onLoadMore = () => {
@@ -116,26 +125,26 @@ export default class CommentList extends PureComponent {
         const { history, apartmentId } = this.props;
         const { comments, loading, selfComment } = this.state;
 
-        const composedComment = upgradeComment(comments, selfComment);
+        const composedComments = upgradeComment(comments, selfComment);
 
         return (
             <div className={`${classPrefix}`}>
                 {
                     !isLikeNativeView() &&
-                    <HouseHead
-                        history={history}
+                    <EasyHead
+                        backToSomewhere={this.goHouseList}
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>公寓评价</span>
                         )}
                     />
                 }
-                { comments.length === 0 && !loading &&                 
+                { composedComments.length === 0 && !loading &&                 
                     <div className={`${classPrefix}-empty g-grid-col f-flex-align-center`}>
                         <img src={require('./images/comment-empty.png')} alt="" />
                         <p className="no-comment">暂无评价</p>
                     </div>
-                }  
-                <PureCommentList comments={composedComment} />
+                }
+                <PureCommentList comments={composedComments} />
                 {
                     loading && <p className="loading">加载中...</p>
                 }

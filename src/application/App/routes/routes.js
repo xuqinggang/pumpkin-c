@@ -46,21 +46,18 @@ export const goShopList = withHistory(createShopListPath, {
         withSearch,
     ],
 });
-/**
- * 是否是改变当前页的一些参数
- * 改变本页的一些参数认为是没有跳页
- */
-export const changeExclusiveShopQuery = withHistory(createExclusiveShopPath, {
-    beforeRouteChange: [
-        withSearch,
-    ],
-});
 export const goExclusiveShop = withHistory(createExclusiveShopPath, {
     beforeRouteChange: [
         (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
         withSearch,
     ],
 });
+export const replaceExclusiveShop = withHistory(createShopListPath, {
+    beforeRouteChange: [
+        (history, to, next) => routeChangeToIOS(history, to, next, '精品门店'),
+        withSearch,
+    ],
+}, true);
 export const goShopDetail = withHistory(createShopDetailPath, {
     beforeRouteChange: [
         (history, to, next) => routeChangeToIOS(history, to, next, '门店详情'),
@@ -90,11 +87,12 @@ const createApartmentHouseListPath = (isFirstEnter = false) => {
     if (isFirstEnter) {
         return urlJoin('list/apartment') + filterSearch;
     }
-    console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
+    // console.log(filterUrlFragment, isFirstEnter, 'isFirstEnter');
     return urlJoin('list/apartment', filterUrlFragment) + filterSearch;
 };
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
-export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: pv });
+export const goApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: [pv, withSearch] });
+export const replaceApartmentHouseList = withHistory(createApartmentHouseListPath, { beforeRouteChange: [pv, withSearch] }, true);
 
 // houseDetail
 const createHouseDetailPath = rentUnitId => `/detail/${rentUnitId}/`;
@@ -108,7 +106,8 @@ export const goHouseDetail = withHistory(createHouseDetailPath, {
             }
             next();
         },
-        (history, to, next) => routeChangeToIOS(history, to, next, '房源详情')
+        (history, to, next) => routeChangeToIOS(history, to, next, '房源详情'),
+        withSearch,
     ],
 });
 

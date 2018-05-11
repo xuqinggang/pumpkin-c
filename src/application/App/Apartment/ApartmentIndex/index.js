@@ -72,10 +72,12 @@ export default class ApartmentIndex extends PureComponent {
 
 
         const data = {
-            title: `南瓜租房 - ${apartment.name}`,
+            title: `${apartment.name}`,
             link: window.location.href.split('#')[0],
             imgUrl,
-            desc: '住品牌公寓，享品质生活!',
+            desc: '住品牌公寓，上南瓜租房!',
+            slogan: '住品牌公寓，上南瓜租房',
+            isWeb: true,
         };
         callback(data);
     }
@@ -98,7 +100,7 @@ export default class ApartmentIndex extends PureComponent {
         const { apartmentId } = this;
 
         if (isLikeNativeView()) {
-            openSchema(`nangua://api.nanguazufang.cn/main?rentUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`);
+            openSchema(`nangua://api.nanguazufang.cn/main?fineUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`);
             return;
         }
 
@@ -174,7 +176,7 @@ export default class ApartmentIndex extends PureComponent {
             this.setState({
                 brandApartments,
             }, () => {
-                // 得到公寓信息再注册微信分享内容
+                //  得到公寓信息再注册微信分享内容
                 this.wxShare();
                 this.setShareForIOS();
             });

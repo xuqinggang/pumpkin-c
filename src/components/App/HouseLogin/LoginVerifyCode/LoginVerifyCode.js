@@ -6,7 +6,7 @@ import CountDownBtn from 'Shared/CountDownBtn/CountDownBtn';
 
 import { ajaxLogin, ajaxVerifyCode } from 'application/App/HouseLogin/ajaxLogin';
 import { genSlideCaptcha } from 'application/App/HouseLogin/utils';
-import { getPageFrom, urlJoin } from 'lib/util';
+import { getPageFrom, urlJoin, getQueryString, isHasCookie } from 'lib/util';
 import { lastUserIdStorage, commentQueueStorage, commentListStorage } from 'application/App/storage';
 
 const classPrefix = 'm-houselogin';
@@ -25,7 +25,8 @@ export default class LoginVerifyCode extends PureComponent {
 
         // 登录来自哪个页面：（列表页或者详情页）
         const search = props.location.search;
-        this.pageFrom = getPageFrom(search);
+        // this.pageFrom = getPageFrom(search);
+        this.pageFrom = getQueryString(search, 'pagefrom');
     }
 
     removeLastUserPhoneRecord = (uid) => {
@@ -40,6 +41,7 @@ export default class LoginVerifyCode extends PureComponent {
     ajaxUserLogin(tel, verifyCode) {
         ajaxLogin(tel, verifyCode)
             .then((infoObj) => {
+
                 // 存储个人信息
                 window.setStore('meInfo', infoObj);
                 if (this.pageFrom === 'detail') {
@@ -47,7 +49,10 @@ export default class LoginVerifyCode extends PureComponent {
                     this.props.history.replace(urlJoin(this.urlPrefix, `detail/${rentUnitId}`)+`?pagefrom=login`);
                     return;
                 }
-                this.props.history.replace(urlJoin(this.urlPrefix, 'me'));
+
+                // 成功后后退
+                window.history.go(-1);
+
                 this.removeLastUserPhoneRecord(infoObj.uid);
             })
             .catch((err) => {
