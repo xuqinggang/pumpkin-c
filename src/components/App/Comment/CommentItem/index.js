@@ -70,7 +70,7 @@ class CommentItem extends PureComponent {
                     {
                         avatar
                             ? <img className="avatar" src={avatar} alt="" />
-                            : <div className="circle-avatar" />
+                            : <img className="avatar" src={require('./images/avatar.png')} alt="" />
                     }
                     <div className="f-display-flex f-flex-justify-between right-wrap">
                         <div className="stars-wrap">
