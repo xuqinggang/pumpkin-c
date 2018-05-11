@@ -9,7 +9,7 @@ import { dynamicDocTitle } from 'lib/util';
 import { isLikeNativeView } from 'lib/const';
 import { postRouteChangeToIOS } from 'lib/patchNavChangeInIOS';
 import { AbbrevMapCity } from 'config/config';
-import { goShopList, goExclusiveShop } from 'application/App/routes/routes';
+import { goShopList, replaceExclusiveShop } from 'application/App/routes/routes';
 import { brandFilterBus } from './filters/brandFilter';
 import { districtFilterBus } from './filters/districtFilter';
 import { stringifyPostionState } from 'application/App/HouseList/stringifyState';
@@ -44,7 +44,7 @@ export default class ShopList extends PureComponent {
                 param: districtFilterBus.param,
             },
 
-            queryCount: 0,
+            // queryCount: 0,
         };
 
         // 目前的情况比较单纯，可以认为在这页就会跳出 webview 页
@@ -130,7 +130,7 @@ export default class ShopList extends PureComponent {
 
     goShopList = (filterUrlFragment) => {
         if (this.isExclusive) {
-            goExclusiveShop(this.props.history)(filterUrlFragment);
+            replaceExclusiveShop(this.props.history)(filterUrlFragment);
         } else {
             goShopList(this.props.history)(filterUrlFragment);
         }
@@ -185,9 +185,9 @@ export default class ShopList extends PureComponent {
             this.handledDistrictSelect(district);
         }
 
-        this.setState({
-            queryCount: this.state.queryCount + 1,
-        });
+        // this.setState({
+        //     queryCount: this.state.queryCount + 1,
+        // });
     }
 
     // 为 position 做的兼容
@@ -266,7 +266,7 @@ export default class ShopList extends PureComponent {
                     {
                         !isLikeNativeView()
                             ? <EasyHead
-                                backCount={this.state.queryCount + 1}
+                                // backCount={this.state.queryCount + 1}
                                 renderRight={() => (
                                     <span className={`${classPrefix}-title f-singletext-ellipsis`}>集中式公寓</span>
                                 )}

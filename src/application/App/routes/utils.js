@@ -7,7 +7,11 @@ const routeChange = (history, to) => {
     history.push(to);
 };
 
-const withHistory = (createPath, enhance) => history => (...arg) => {
+const replaceRouteChange = (history, to) => {
+    history.replace(to);
+};
+
+const withHistory = (createPath, enhance, isReplace = false) => history => (...arg) => {
     if (!history.push) throw new Error('need react router history');
     const {
         beforeRouteChange = [],
@@ -29,7 +33,7 @@ const withHistory = (createPath, enhance) => history => (...arg) => {
     const tasks = [
         ...defaultBeforeRoutes,
         ...beforeTasks,
-        routeChange,
+        isReplace ? replaceRouteChange : routeChange,
         ...afterTasks,
         ...defaultAfterRoutes,
     ];

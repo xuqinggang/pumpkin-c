@@ -12,7 +12,7 @@ export default class ApartmentIntro extends PureComponent {
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
                 <img src={image} alt={name} onTouchTap={goDetail} />
                 <div className="intro-wrap" onTouchTap={goDetail}>
-                    <div>
+                    <div className={`${classPrefix}-first-line`}>
                         <span className="name f-singletext-ellipsis">{name}</span>
                         <span className="price f-singletext-ellipsis">¥{minPrice}元/月<span>起</span></span>
                     </div>

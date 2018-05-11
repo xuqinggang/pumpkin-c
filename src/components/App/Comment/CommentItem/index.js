@@ -95,13 +95,16 @@ class CommentItem extends PureComponent {
                             image && <img onTouchTap={() => this.viewImage(index)} className="comment-img" src={`${image}${imgCutModifier}`} alt="" key={index} />
                         ))
                     }
-                    <div className="rent-unit f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
-                        <img src={require('./images/little-house.png')} alt="" />
-                        {
-                            title
-                                ? title
-                                : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
-                        }
+                    <div className="rent-unit f-flex-justify-between f-display-flex f-flex-align-center" onTouchTap={() => this.handleTouchTap(rentUnitId)}>
+                        <div className="f-display-flex f-flex-align-center">
+                            <img src={require('./images/little-house.png')} alt="" />
+                            {
+                                title
+                                    ? title
+                                    : `${blockName}-${bedroomCount}居室-${DirectTypeMapText[direct]}`
+                            }
+                        </div>
+                        <div className={`icon-next ${classPrefix}-next`} />
                     </div>
                 </div>
             </div>
