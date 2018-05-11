@@ -30,7 +30,9 @@ export default class ApartmentShop extends PureComponent {
 
         return (
             <div className={classnames(classPrefix)}>
-                <TitleWithMore title="精品门店" goMore={goMore} />
+                <div className="more-title-wrap">
+                    <TitleWithMore title="精品门店" goMore={goMore} />
+                </div>
                 <SimpleScroll key={shops.length} className={`${classPrefix}-wrapper`}>
                     <ul className={`${classPrefix}-list`}>
                         {
