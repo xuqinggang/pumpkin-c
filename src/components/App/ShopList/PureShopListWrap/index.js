@@ -37,8 +37,8 @@ export default class PureShopListWrap extends PureComponent {
             pager,
         }).then((data) => {
             let newApartmentLists = [];
+            curPage += 1;
             if (!renew) {
-                curPage += 1;
                 newApartmentLists = apartmentList.concat(data.list);
             } else {
                 newApartmentLists = data.list;
@@ -67,7 +67,7 @@ export default class PureShopListWrap extends PureComponent {
     }
     componentWillReceiveProps(nextProps) {
         this.filterParams = nextProps.filterParams;
-        console.log('filterParams', this.filterParams);
+        // console.log('filterParams', this.filterParams);
         if (this.filterParams && !shallowEqual(this.filterParams, this.props.filterParams)) {
             this.fetchData(true);
         }
