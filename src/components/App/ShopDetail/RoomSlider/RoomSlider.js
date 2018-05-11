@@ -45,6 +45,7 @@ export default class RoomSlider extends PureComponent {
         if (url) {
             this.linkNumber = this.linkNumber + 1;
         }
+        const linkNumberBefore = this.linkNumber;
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
                 {
@@ -52,7 +53,7 @@ export default class RoomSlider extends PureComponent {
                         <a href={url}>
                             <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
                         </a>
-                        : <img onTouchTap={() => this.handleImageView(index - this.linkNumber)} src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        : <img onTouchTap={() => this.handleImageView(index - linkNumberBefore)} src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
                 }
             </div>
         );
@@ -63,6 +64,8 @@ export default class RoomSlider extends PureComponent {
     }
 
     handleImageView = (index) => {
+        console.log('index', index);
+        
         const { links, images } = this.props;
         let items;
         if (links.length) {
