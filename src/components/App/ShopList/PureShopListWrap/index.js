@@ -31,7 +31,7 @@ export default class PureShopListWrap extends PureComponent {
         const pagerParams = renew ? {
             curPage: 1,
             totalPage: 1,
-        } : curPage;
+        } : pager;
 
         const filterParamsObj = this.filterParams || {};
 
