@@ -72,7 +72,7 @@ export default class ApartmentIndex extends PureComponent {
 
 
         const data = {
-            title: `南瓜租房 - ${apartment.name}`,
+            title: `${apartment.name}`,
             link: window.location.href.split('#')[0],
             imgUrl,
             desc: '住品牌公寓，享品质生活!',
