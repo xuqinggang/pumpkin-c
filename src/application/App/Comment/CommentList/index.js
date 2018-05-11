@@ -104,7 +104,7 @@ export default class CommentList extends PureComponent {
 
     componentWillMount() {
         this.fetchData(true);
-        ajaxGetComment(this.selfCommentId).then((data) => {
+        this.selfCommentId && ajaxGetComment(this.selfCommentId).then((data) => {
             this.setState({
                 selfComment: data,
             });

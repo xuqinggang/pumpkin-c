@@ -28,13 +28,18 @@ export default class PureShopListWrap extends PureComponent {
             loading: true,
         });
 
+        const pagerParams = renew ? {
+            curPage: 1,
+            totalPage: 1,
+        } : curPage;
+
         const filterParamsObj = this.filterParams || {};
 
         ajaxGetShopList({
             filter: {
                 ...filterParamsObj,
             },
-            pager,
+            pager: pagerParams,
         }).then((data) => {
             let newApartmentLists = [];
             curPage += 1;
