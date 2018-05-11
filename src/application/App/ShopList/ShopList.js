@@ -268,7 +268,10 @@ export default class ShopList extends PureComponent {
                             ? <EasyHead
                                 // backCount={this.state.queryCount + 1}
                                 renderRight={() => (
-                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>集中式公寓</span>
+                                    <span className={`${classPrefix}-title f-singletext-ellipsis`}>{
+                                        this.isExclusive ? '精品门店' : '集中式公寓'
+                                    }
+                                    </span>
                                 )}
                             />
                             : null

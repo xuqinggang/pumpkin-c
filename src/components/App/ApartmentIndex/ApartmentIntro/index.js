@@ -5,12 +5,16 @@ import './styles.less';
 
 const classPrefix = 'm-apartment-intro';
 
+const isShowImg = window.screen.width > 320;
+
 export default class ApartmentIntro extends PureComponent {
     render() {
         const { name, image, slogan, minPrice, score, goCommentList, goDetail } = this.props;
         return (
             <div className={`${classPrefix} g-grid-row f-flex-align-center`}>
-                <img src={image} alt={name} onTouchTap={goDetail} />
+                {
+                    isShowImg && <img src={image} alt={name} onTouchTap={goDetail} />
+                }
                 <div className="intro-wrap" onTouchTap={goDetail}>
                     <div className={`${classPrefix}-first-line`}>
                         <span className="name f-singletext-ellipsis">{name}</span>
