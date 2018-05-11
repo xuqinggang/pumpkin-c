@@ -77,7 +77,7 @@ class DistrictFilter extends PureComponent {
 
         return (
             <div className={`${classPrefix}`}>
-                <ul>
+                <ul className="list-wrap">
                     {
                         mergedDistricts.map(item => (
                             <li
