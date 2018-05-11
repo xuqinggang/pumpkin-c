@@ -75,7 +75,7 @@ export default class ApartmentIndex extends PureComponent {
             title: `${apartment.name}`,
             link: window.location.href.split('#')[0],
             imgUrl,
-            desc: '住品牌公寓，享品质生活!',
+            desc: '住品牌公寓，上南瓜租房!',
         };
         callback(data);
     }
