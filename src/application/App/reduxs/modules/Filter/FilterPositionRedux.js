@@ -43,8 +43,10 @@ export const positionFilterSagaActions = {
 // put
 export const positionFilterPutActions = {
     UPDATE_FILTER_POSITION: 'update_filter_position',
+    FILTER_POSITION_CLEAR: 'filter_position_clear',
 
     updateFilterPosition: createAction('update_filter_position'),
+    filterPositionClear: createAction('filter_position_clear'),
 };
 
 export default handleActions({
@@ -67,7 +69,18 @@ export default handleActions({
             url: url === undefined ? state.url : url,
             label: label || state.label,
             state: newState === undefined ? state.state : { ...state.state, ...newState },
-            params,
+            params: params || state.params,
+        };
+    },
+    [positionFilterPutActions.FILTER_POSITION_CLEAR](state) {
+        const {
+            originData,
+            ...extra
+        } = initStatePosition;
+
+        return {
+            ...state,
+            ...extra,
         };
     },
 }, initStatePosition);

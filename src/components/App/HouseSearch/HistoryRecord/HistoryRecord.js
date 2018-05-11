@@ -10,22 +10,31 @@ import './styles.less';
 
 const classPrefix = 'm-historyrecord';
 
-export default class HistoryRecord extends PureComponent<{}> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            historyRecordArr: historyRecordStorage.get() || [],
-        };
-    }
+type PropType = {
+    onSearchItemTap: (item: recordItemType) => void,
+};
+
+type StateType = {
+    historyRecordArr: [recordItemType],
+};
+
+export default class HistoryRecord extends PureComponent<PropType, StateType> {
+    state = {
+        historyRecordArr: historyRecordStorage.get(),
+    };
 
     handleClearHistoryRecord = () => {
-        historyRecordStorage.remove();
-        this.setState({
-            historyRecordArr: [],
-        });
+        // historyRecordStorage.remove();
+        // this.setState({
+        //     historyRecordArr: [],
+        // });
     }
 
     render() {
+        const {
+            onSearchItemTap,
+        } = this.props;
+
         const {
             historyRecordArr,
         } = this.state;
@@ -39,7 +48,10 @@ export default class HistoryRecord extends PureComponent<{}> {
                         onTouchTap={this.handleClearHistoryRecord}
                     />
                 </div>
-                <RecordList list={historyRecordArr} />
+                <RecordList
+                    list={historyRecordArr}
+                    onSearchItemTap={onSearchItemTap}
+                />
             </div>
         );
     }

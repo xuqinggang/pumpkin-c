@@ -1,24 +1,24 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 
-import HouseSearchConnect from 'application/App/HouseSearch/HouseSearchConnect';
+// import HouseSearchConnect from 'application/App/HouseSearch/HouseSearchConnect';
 
 import './styles.less';
 
 const classPrefix = 'm-recordlist';
 
 type PropType = {
-    list: Array<{
-        text: string,
-    }>,
-}
+    onSearchItemTap: (item: recordItemType) => void,
+    list: [recordItemType],
+};
 
 export default class RecordList extends PureComponent<PropType> {
     render() {
         const {
             list = [],
+            onSearchItemTap,
         } = this.props;
 
         return (
@@ -26,6 +26,7 @@ export default class RecordList extends PureComponent<PropType> {
                 {
                     list && list.map((item, index) => (
                         <RecordItem
+                            onSearchItemTap={onSearchItemTap}
                             className={`${classPrefix}-item`}
                             item={item}
                             key={index}
@@ -38,22 +39,21 @@ export default class RecordList extends PureComponent<PropType> {
 }
 
 type ItemPropType = {
-    className: string,
-    onPositionSearchItemTap: Function,
-    item: {
-        text: string,
-    },
+    className?: string,
+    onSearchItemTap: (item: recordItemType) => void,
+    item: recordItemType,
 };
 
-@HouseSearchConnect()
+// @HouseSearchConnect()
 class RecordItem extends PureComponent<ItemPropType> {
     handleSearchTap = () => {
         const {
             item,
-            onPositionSearchItemTap,
-            onOtherSearchItemTap,
+            onSearchItemTap,
+            // onPositionSearchItemTap,
+            // onOtherSearchItemTap,
         } = this.props;
-
+        onSearchItemTap(item);
         // let {
         //     text,
         //     type, // `apartments,districts,subways,stations,circles,blocks,keywords(关键词搜索)`
@@ -62,20 +62,20 @@ class RecordItem extends PureComponent<ItemPropType> {
         //     field,
         //     fieldValue,
         // } = item;
-        let {
-            type,
-        } = item;
+        // let {
+        //     type,
+        // } = item;
 
-        switch (type) {
-            case 'districts':
-            case 'subways':
-            case 'stations':
-            case 'circles':
-                onPositionSearchItemTap(item);
-                break;
-            default:
-                onOtherSearchItemTap(item);
-        }
+        // switch (type) {
+        //     case 'districts':
+        //     case 'circles':
+        //     case 'subways':
+        //     case 'stations':
+        //         onPositionSearchItemTap(item);
+        //         break;
+        //     default:
+        //         onOtherSearchItemTap(item);
+        // }
     }
 
     render() {

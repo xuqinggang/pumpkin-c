@@ -1,0 +1,21 @@
+declare type recordItemType = {
+    type: string, // apartments,districts,subways,stations,circles,blocks,keywords
+    text: string,
+    field?: string, // circleId |
+    fieldValue?: string,
+    superField?: string,
+    superFieldValue?: string,
+};
+
+declare type searchHitItemType = {
+    image?: string,
+    iconClass?: string,
+    subName?: string,
+    count: number,
+    type: string, // apartments,districts,subways,stations,circles,blocks,keywords
+    text: string,
+    field?: string, // circleId |
+    fieldValue?: string,
+    superField?: string,
+    superFieldValue?: string,
+};

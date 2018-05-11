@@ -18,6 +18,7 @@ type PropType = {
 
 export default class PositionFilterWrap extends PureComponent<PropType> {
     onFilterConfirm = (arg: {}) => {
+        console.log('onFilterConfirm', arg);
         this.props.onFilterConfirm(arg);
         this.props.onUpdateActiveIndex(-1);
     }
@@ -30,9 +31,8 @@ export default class PositionFilterWrap extends PureComponent<PropType> {
         const {
             filterState,
             originData,
-            onFilterConfirm,
         } = this.props;
-
+console.log('originData', originData)
         return (
             <div
                 className={`${classPrefix}-mask`}
@@ -43,7 +43,7 @@ export default class PositionFilterWrap extends PureComponent<PropType> {
                         <PositionFilter
                             filterState={filterState}
                             positionFilterDataObj={originData}
-                            onFilterConfirm={onFilterConfirm}
+                            onFilterConfirm={this.onFilterConfirm}
                         />
                         : null
                 }

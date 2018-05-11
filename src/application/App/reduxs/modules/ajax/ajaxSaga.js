@@ -6,6 +6,8 @@ import {
     houseRecommendAjaxActions,
 } from 'reduxs/modules/HouseIndex/HouseIndexRedux';
 
+import { topSearchAjaxActions } from 'reduxs/modules/Search/SearchRedux';
+
 import ajax from './ajax';
 
 function* ajaxEntities(ajaxFunction, actions = {}, paramsObj) {
@@ -37,4 +39,7 @@ export const ajaxHouseIndexBanner =
     ajaxEntities.bind(null, ajax.ajaxHouseIndexBanner, houseBannerAjaxActions);
 export const ajaxHouseIndexRecommend =
     ajaxEntities.bind(null, ajax.ajaxHouseIndexRecommend, houseRecommendAjaxActions);
+
+// houseSearch
+export const ajaxTopSearches = ajaxEntities.bind(null, ajax.ajaxTopSearches, topSearchAjaxActions);
 

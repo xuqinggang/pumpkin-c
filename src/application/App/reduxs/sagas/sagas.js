@@ -3,6 +3,8 @@ import { all } from 'redux-saga/effects';
 import houseListSagas from 'reduxs/modules/HouseList/HouseListSaga';
 import houseIndexSagas from 'reduxs/modules/HouseIndex/HouseIndexSaga';
 import filterSagas from 'reduxs/modules/Filter/FilterSaga';
+import urlSagas from 'reduxs/modules/Url/UrlSaga';
+import searchSagas from 'reduxs/modules/Search/SearchSaga';
 
 export default function* rootSaga () {
     // console.log('hello saga');
@@ -18,6 +20,8 @@ export default function* rootSaga () {
             ...houseListSagas,
             ...houseIndexSagas,
             ...filterSagas,
+            ...urlSagas,
+            ...searchSagas,
         ]);
     } catch(err) {
         console.log('rootSaga', err);

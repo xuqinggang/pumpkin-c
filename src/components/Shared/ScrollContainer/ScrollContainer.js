@@ -9,10 +9,10 @@ import './style.less';
 const classPrefix = 'm-scrollcontainer';
 
 export default class ScrollContainer extends PureComponent {
-	static defaultProps = {
+    static defaultProps = {
         reserveSize: 100,
         onlyOnce: false, // 到达底部或者顶部只触发一次
-        onBottomLoad: () => {}
+        onBottomLoad: () => {},
     };
 
     constructor(props) {
@@ -22,7 +22,7 @@ export default class ScrollContainer extends PureComponent {
         this.debounceScrollFunc = debounce(this.handleScroll, 17, true);
     }
 
-    handleScroll = () => {
+    handleScroll = (e) => {
         const wrapperDom = this.wrapperDom;
 
         const {

@@ -3,9 +3,9 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import { shallowEqual } from 'lib/util';
-
 import './styles.less';
+
+const classPrefix = 'm-tabsdropdown';
 
 type PropType = {
     index: number,
@@ -38,7 +38,7 @@ export default class TabsDropDownTab extends PureComponent<PropType> {
             customRef,
         } = this.props;
 
-        const itemClass = classnames('nav-item', {
+        const itemClass = classnames(`${classPrefix}-nav-item`, {
             active: isSelected,
         });
 

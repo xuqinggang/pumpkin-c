@@ -1,3 +1,5 @@
+/* @flow */
+
 import { getObjectKeyByIndex } from 'lib/util';
 
 const TypeMapName = {
@@ -36,11 +38,10 @@ const TypeMapName = {
 //         },
 //     },
 // };
-export function dataAdapterPostion(originArr) {
-    console.log('originArr', originArr);
+export function dataAdapterPostion(originArr: []) {
     const distObj = {};
 
-    originArr.forEach(originItem => {
+    originArr.forEach((originItem) => {
         const type = getObjectKeyByIndex(originItem, 0);
         const itemArr = originItem[type];
 

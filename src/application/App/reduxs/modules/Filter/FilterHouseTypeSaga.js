@@ -1,19 +1,17 @@
 import { put, call, select } from 'redux-saga/effects';
 
-import { originDataHouseTypeSelector } from './FilterSelector';
+import { houseTypeOriginDataSelector } from './FilterSelector';
 import { filterHouseTypePutActions } from './FilterHouseTypeRedux';
 
-import { FILTER_ITEM_SEPARATOR, FILTER_SEPARATOR, TypeAndPrefixMap } from 'const/filter';
+import { transTagsState, transTagsUrlObjToState } from './utils';
 
-import { transTagsState, transTagsUrlObjToState } from './util';
-
-export function* transFilterHouseTypeUrl(filterUrlObj) {
+export function* transHouseTypeFilterUrl(filterUrlObj) {
     const stateHouseType = transTagsUrlObjToState(filterUrlObj);
-    yield call(changeFilterHouseType, stateHouseType);
+    yield call(changeHouseTypeFilter, stateHouseType);
 }
 
-export function* changeFilterHouseType(stateHouseType) {
-    const originDataHouseType = yield select(originDataHouseTypeSelector);
+export function* changeHouseTypeFilter(stateHouseType) {
+    const originDataHouseType = yield select(houseTypeOriginDataSelector);
 
     const {
         url,

@@ -3,8 +3,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
-import HouseSearchConnect from 'application/App/HouseSearch/HouseSearchConnect';
-
 import './styles.less';
 
 const classPrefix = 'm-searchblock';
@@ -13,15 +11,8 @@ type PropType = {
     className?: string,
     title: string,
     type: string,
-    onTap: () => void,
-    searchDataArr: Array<{
-        id: number,
-        image?: string,
-        iconClass?: string,
-        name: string,
-        subName?: string,
-        count: number,
-    }>,
+    onSearchItemTap: (item: recordItemType) => void,
+    searchHitArr: [searchHitItemType],
 };
 
 export default class SearchBlock extends PureComponent<PropType> {
@@ -30,110 +21,118 @@ export default class SearchBlock extends PureComponent<PropType> {
             type,
             className,
             title,
-            searchDataArr = [],
+            searchHitArr = [],
+            onSearchItemTap,
         } = this.props;
 
         return (
             <div className={classnames(classPrefix, className)}>
                 <h2 className={`${classPrefix}-title`}>{title}</h2>
                 {
-                    searchDataArr.map((item, index) =>
+                    searchHitArr.map((item, index) => (
                         <SearchItem
+                            onSearchItemTap={onSearchItemTap}
                             key={index}
                             item={item}
                             type={type}
                         />
-                    )
+                    ))
                 }
             </div>
         );
     }
 }
 
-@HouseSearchConnect()
-class SearchItem extends PureComponent {
-    handleOtherSearchItemTap = () => {
-        const {
-            type,
-            item,
-        } = this.props;
-        const {
-            name,
-            id,
-        } = item;
-        const paramsObj = {
-            fieldValue: id,
-            text: name, 
-           type,
-        };
+type searchItemType = {
+    item: searchHitItemType,
+    type: string,
+    onSearchItemTap: (item: recordItemType) => void,
+};
 
-        this.props.onOtherSearchItemTap(paramsObj);
-    }
+class SearchItem extends PureComponent<searchItemType> {
+    // handleOtherSearchItemTap = () => {
+    //     const {
+    //         type,
+    //         item,
+    //     } = this.props;
+    //     const {
+    //         name,
+    //         id,
+    //     } = item;
+    //     const paramsObj = {
+    //         fieldValue: id,
+    //         text: name,
+    //         type,
+    //     };
 
-    handlePositionSearchItemTap = () => {
-        const {
-            type,
-            item,
-        } = this.props;
-        const {
-            name,
-            id,
-            superId,
-        } = item;
+    //     this.props.onOtherSearchItemTap(paramsObj);
+    // }
 
-        const paramsObj = {
-            type,
-            text: name,
-        };
+    // handlePositionSearchItemTap = () => {
+    //     const {
+    //         type,
+    //         item,
+    //     } = this.props;
+    //     const {
+    //         name,
+    //         id,
+    //         superId,
+    //     } = item;
 
-        if (type === 'subways') {
-            if (!superId) {
-                Object.assign(paramsObj, {
-                    fieldValue: id,
-                    field: 'subwayId',
-                });
-            } else {
-                Object.assign(paramsObj, {
-                    fieldValue: id,
-                    field: 'stationId',
-                    superField: 'subwayId',
-                    superFieldValue: superId,
-                });
-            }
-        } else if (type === 'circles') {
-            Object.assign(paramsObj, {
-                fieldValue: id,
-                field: 'circleId',
-                superField: 'districtId',
-                superFieldValue: superId,
-            });
-        } else if (type === 'districts') {
-            Object.assign(paramsObj, {
-                fieldValue: id,
-                field: 'districtId',
-            });
-        }
+    //     const paramsObj = {
+    //         type,
+    //         text: name,
+    //     };
 
-        this.props.onPositionSearchItemTap(paramsObj);
-    }
+    //     if (type === 'subways') {
+    //         if (!superId) {
+    //             Object.assign(paramsObj, {
+    //                 fieldValue: id,
+    //                 field: 'subwayId',
+    //             });
+    //         } else {
+    //             Object.assign(paramsObj, {
+    //                 fieldValue: id,
+    //                 field: 'stationId',
+    //                 superField: 'subwayId',
+    //                 superFieldValue: superId,
+    //             });
+    //         }
+    //     } else if (type === 'circles') {
+    //         Object.assign(paramsObj, {
+    //             fieldValue: id,
+    //             field: 'circleId',
+    //             superField: 'districtId',
+    //             superFieldValue: superId,
+    //         });
+    //     } else if (type === 'districts') {
+    //         Object.assign(paramsObj, {
+    //             fieldValue: id,
+    //             field: 'districtId',
+    //         });
+    //     }
+
+    //     this.props.onPositionSearchItemTap(paramsObj);
+    // }
 
     handleItemTap = () => {
         const {
-            type,
             item,
+            onSearchItemTap,
         } = this.props;
 
-        switch (type) {
-            case 'subways':
-            case 'circles':
-            case 'districts':
-                this.handlePositionSearchItemTap();
-                break;
-            default:
-                this.handleOtherSearchItemTap();
-        }
+        onSearchItemTap(item);
+        // switch (type) {
+        //     case 'subways':
+        //     case 'circles':
+        //     case 'districts':
+        //         this.handlePositionSearchItemTap();
+        //         break;
+        //     default:
+        //         this.handleOtherSearchItemTap();
+        // }
     }
-    
+
     render() {
         const {
             item,
@@ -148,6 +147,7 @@ class SearchItem extends PureComponent {
                 {
                     type === 'apartments' ?
                         <img
+                            alt=""
                             src={item.image}
                             className="item-icon"
                         /> :
@@ -158,7 +158,7 @@ class SearchItem extends PureComponent {
                         <div className="f-display-inlineblock">
                             <span
                                 className="item-name"
-                                dangerouslySetInnerHTML={{__html: item.name}}
+                                dangerouslySetInnerHTML={{ __html: item.text }}
                             />
                             <span className="item-subname">{item.subName}</span>
                         </div>

@@ -1,5 +1,7 @@
+export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // 根据key数组截取对象
-export function sliceObjbyKeys(obj, keys) {
+export function sliceObjbyByKeys(obj, keys) {
     if (!(obj && keys && keys.length)) return null;
 
     const distObj = {};
@@ -60,12 +62,13 @@ export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
 
 // 防抖
 export function debounce(func, waitms, immediate) {
+    console.log('func', func, waitms, immediate)
     let timer;
-    return function debounceInner() {
+    return function debounceInner(...arg) {
         timer && clearTimeout(timer);
 
         if (immediate && !timer) {
-            func();
+            func(...arg);
             immediate = false;
             return;
         }
@@ -73,7 +76,7 @@ export function debounce(func, waitms, immediate) {
         timer = setTimeout(() => {
             clearTimeout(timer);
             timer = null;
-            func();
+            func(...arg);
         }, waitms);
     };
 }
@@ -351,12 +354,10 @@ export function getWithDefault(obj, key, defaultVal) {
     }
 }
 
-const getDomOffsetHeight = (dom) => {
-    return (dom && dom.offsetHeight) || 0;
-};
+const getDomOffsetHeight = dom => (dom && dom.offsetHeight) || 0;
 
 export const getFilterFixScrollTop = () => {
     const bannerDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexbanner')));
     const recommendDomHeight = Math.round(getDomOffsetHeight(document.querySelector('.m-indexrecommend')));
     return Math.round(bannerDomHeight) + Math.round(recommendDomHeight);
-}
+};

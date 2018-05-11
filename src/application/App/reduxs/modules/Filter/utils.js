@@ -1,9 +1,25 @@
 import { FILTER_ITEM_SEPARATOR, FILTER_SEPARATOR, TypeAndPrefixMap } from 'const/filter';
-function fixLabelFun(text, tagGroupType) {
-    const tmpText = text === '不限' ? '' : text
-    return tagGroupType === 'sharedRooms' ? `合租${tmpText}` : `整租${tmpText}`;
+
+// function fixLabelFunc(text, tagGroupType) {
+//     const tmpText = text === '不限' ? '' : text;
+//     return tagGroupType === 'sharedRooms' ? `合租${tmpText}` : `整租${tmpText}`;
+// }
+export function filterUrlObjJoin(urlObj) {
+    const urlArr = [];
+    urlObj && Object.keys(urlObj).forEach((alpha) => {
+        const val = urlObj[alpha];
+        if (val !== undefined) {
+            urlArr.push(`${alpha}${val}`);
+        }
+    });
+    return filterUrlFrgArrJoin(urlArr);
 }
-export function transTagsState(tagsState, originData, fixLabelFun = text => text) {
+
+export function filterUrlFrgArrJoin(urlArr) {
+    return urlArr.filter(val => val !== '' && val !== undefined).join(FILTER_SEPARATOR);
+}
+
+export function transTagsState(tagsState, originData, fixLabelFunc = text => text) {
     let label = '',
         url = '';
     const paramsObj = {};
@@ -21,14 +37,14 @@ export function transTagsState(tagsState, originData, fixLabelFun = text => text
             const isSelected = tagStateObj[tagIndex];
             // if选中
             if (isSelected) {
-                totalCount++;
+                totalCount+=1;
                 urlArr.push(tagIndex);
 
                 const originDataArr = originData[tagGroupType].arr;
                 const tagItem = originDataArr[tagIndex];
                 const tagValue = tagItem.value;
 
-                label = fixLabelFun(tagItem.text, tagGroupType);
+                label = fixLabelFunc(tagItem.text, tagGroupType);
 
                 // 如果没有，初始化为数组
                 if (!paramsObj[tagGroupType]) {

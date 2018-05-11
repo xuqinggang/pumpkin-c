@@ -1,8 +1,8 @@
 import Service from 'lib/Service';
 
-export function ajaxHouseList({ filterParams, limit, offset } = {}) {
+export function ajaxHouseList({ params, limit, offset } = {}) {
     return Service.post('/api/v1/rentUnits/search', {
-        ...filterParams,
+        ...params,
         offset,
         limit,
     });

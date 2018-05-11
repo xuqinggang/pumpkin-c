@@ -2,10 +2,14 @@ import { combineReducers } from 'redux';
 
 import houseListReducer from 'reduxs/modules/HouseList/HouseListRedux';
 import houseIndexReducer from 'reduxs/modules/HouseIndex/HouseIndexRedux';
-import FilterReducer from 'reduxs/modules/Filter/FilterRedux';
+import filterReducer from 'reduxs/modules/Filter/FilterRedux';
+import urlReducer from 'reduxs/modules/Url/UrlRedux';
+import searchReducer from 'reduxs/modules/Search/SearchRedux';
 
 export default combineReducers({
-    filter: FilterReducer,
+    filter: filterReducer,
     houseList: houseListReducer,
     houseIndex: houseIndexReducer,
+    url: urlReducer,
+    search: searchReducer,
 });

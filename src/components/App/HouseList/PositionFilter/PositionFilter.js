@@ -22,17 +22,7 @@ type StateType = {
 
 type PropType = {
     onFilterConfirm: Function,
-    positionFilterDataObj: {
-        [type: string]: {
-            [id: string]: {
-                text: string,
-                sub: {
-                    [id: string]: string,
-                },
-                isCanCancel?: boolean,
-            },
-        },
-    },
+    positionFilterDataObj: positionOriginDataType,
     filterState: StateType,
 };
 
@@ -64,6 +54,7 @@ export default class PositionFilter extends PureComponent<PropType, StateType> {
 
     // 回调函数-位置筛选 change
     onPositionFilterChange = (stateData: StateType) => {
+        console.log('onFilterConfirm', this.props.onFilterConfirm, stateData)
         this.props.onFilterConfirm(stateData);
     }
 

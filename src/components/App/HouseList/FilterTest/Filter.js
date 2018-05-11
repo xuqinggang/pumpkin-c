@@ -7,8 +7,9 @@ import TabsDropDown from 'Shared/TabsDropDown/TabsDropDown';
 // 四种筛选组件
 import PositionFilterWrap from 'components/App/HouseList/PositionFilterWrap/PositionFilterWrap';
 import RentFilterWrap from 'components/App/HouseList/RentFilter/RentFilter';
-import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
-import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
+// import MoreFilterWrap from 'components/App/HouseList/MoreFilter/MoreFilter';
+// import HouseTypeFilterWrap from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilter';
+import TagsFilterWrap from 'components/App/HouseList/TagsFilter/TagsFilter';
 
 import { initStateMore } from 'reduxs/modules/Filter/FilterMoreRedux';
 import { initStateRent } from 'reduxs/modules/Filter/FilterRentRedux';
@@ -19,12 +20,20 @@ import './styles.less';
 const classPrefix = 'm-filter';
 
 type PropType = {
-    onFilterConfirm: (obj: {type: string, state: filterStateType}) => void,
     filterInfo: filterReduxType,
-    className?: string,
+    onFilterConfirm: (confirmInfo: {type: string, state: filterStateType}) => void,
+    onChange: (activeIndex: number) => void,
+    outControl: boolean,
+    activeIndex: number,
 };
 
 export default class Filter extends PureComponent<PropType> {
+    static defaultProps = {
+        onChange: () => {},
+        outControl: false,
+        activeIndex: -1,
+    };
+
     // 回调函数-筛选数据确定回调函数
     onFilterPositionConfirm = (positionState: positionStateType) => {
         this.props.onFilterConfirm({ type: 'position', state: positionState });
@@ -42,14 +51,15 @@ export default class Filter extends PureComponent<PropType> {
 
     // moreFilterState, ex: { direction: {1:true, 2:false}, floor: {} }
     onFilterMoreConfirm = (moreState: moreStateType) => {
-        console.log('onFilterMoreConfirm', moreState);
-        // this.props.onFilterConfirm({ type: 'more', state: moreState });
+        this.props.onFilterConfirm({ type: 'more', state: moreState });
     }
 
     render() {
         const {
-            className,
             filterInfo,
+            onChange,
+            outControl,
+            activeIndex,
         } = this.props;
 
         const {
@@ -64,6 +74,9 @@ export default class Filter extends PureComponent<PropType> {
                 className={`${classPrefix}-tabscollapse`}
                 navClass={`${classPrefix}-tabscollapse-nav`}
                 contentClass={`${classPrefix}-tabscollapse-content`}
+                outControl={outControl}
+                activeIndex={activeIndex}
+                onChange={onChange}
             >
                 <TabsDropDown.Tab
                     label={
@@ -92,7 +105,7 @@ export default class Filter extends PureComponent<PropType> {
                         <LabelIcon label={houseType.label} />
                     }
                 >
-                    <HouseTypeFilterWrap
+                    <TagsFilterWrap
                         initialState={initStateHouseType.state}
                         filterState={houseType.state}
                         originData={houseType.originData}
@@ -104,7 +117,7 @@ export default class Filter extends PureComponent<PropType> {
                         <LabelIcon label={more.label} />
                     }
                 >
-                    <MoreFilterWrap
+                    <TagsFilterWrap
                         initialState={initStateMore.state}
                         filterState={more.state}
                         originData={more.originData}

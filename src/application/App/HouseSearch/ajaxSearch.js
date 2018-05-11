@@ -1,7 +1,13 @@
 import Service from 'lib/Service';
 
 const TypeMapSubName = {
-    apartments: {},
+    apartments: {
+        type: 'apartments',
+        text: '',
+        field: 'apartments',
+        fieldValue: '',
+        image: '',
+    },
     districts: {
         iconClass: 'icon-region',
     },
@@ -11,7 +17,10 @@ const TypeMapSubName = {
     stations: {
         iconClass: 'icon-subway2',
         subName: ['subwayName'],
-        superId: 'subwayId',
+        field: 'stationId',
+        fieldValue: '',
+        superField: 'subwayId',
+        superFieldValue: '',
     },
     circles: {
         iconClass: 'icon-trade-area',

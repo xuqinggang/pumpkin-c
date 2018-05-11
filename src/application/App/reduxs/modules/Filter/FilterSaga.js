@@ -1,53 +1,43 @@
 import { call, all, spawn, take, put } from 'redux-saga/effects';
 
 import { filterSagaActions } from './FilterRedux';
-import { positionFilterSagaActions, positionFilterAjaxActions } from './FilterPositionRedux';
+import { positionFilterSagaActions, positionFilterAjaxActions, positionFilterPutActions } from './FilterPositionRedux';
+import { searchPutActions } from 'reduxs/modules/Search/SearchRedux';
+import { houseListSagaActions, houseListPutActions } from 'reduxs/modules/HouseList/HouseListRedux';
+import { urlSagaActions } from 'reduxs/modules/Url/UrlRedux';
 
+import { ajaxHouseListStep } from 'reduxs/modules/HouseList/HouseListSaga';
 import { ajaxPositionDistricts, ajaxPositionSubways } from 'reduxs/modules/ajax/ajaxSaga';
-import { changeFilterPosition, transPositionFilterUrl } from './FilterPositionSaga';
-import { transFilterRentUrl } from './FilterRentSaga';
-import { transFilterMoreUrl } from './FilterMoreSaga';
-import { transFilterHouseTypeUrl } from './FilterHouseTypeSaga';
+
+import { changePositionFilter, transPositionFilterUrl } from './FilterPositionSaga';
+import { changeRentFilter, transRentFilterUrl } from './FilterRentSaga';
+import { changeMoreFilter, transMoreFilterUrl } from './FilterMoreSaga';
+import { changeHouseTypeFilter, transHouseTypeFilterUrl } from './FilterHouseTypeSaga';
 
 import {
     FilterRentAlphaArr,
     FilterPositionAlphaArr,
     FilterMoreAlphaArr,
-    FilterHouseTypeAlphaArr
+    FilterHouseTypeAlphaArr,
 } from 'const/filter';
-import { sliceObjbyKeys } from 'lib/util';
-import { transFilterUrlToObj } from './util';
-// import { fetchSearchResults } from 'src/core/api';
-// import history from 'src/core/history';
-// import { getTracklistById } from 'src/core/tracklists';
-// import { searchActions } from './actions';
+import { sliceObjbyByKeys } from 'lib/util';
+import { transFilterUrlToObj } from './utils';
 
+const registChangeFilter = {
+    position: changePositionFilter,
+    rent: changeRentFilter,
+    houseType: changeHouseTypeFilter,
+    more: changeMoreFilter,
+};
 
-// export function* loadSearchResults({payload}) {
-//   const { query, tracklistId } = payload;
-//   const tracklist = yield select(getTracklistById, tracklistId);
-//   if (tracklist && tracklist.isNew) {
-//     yield call(fetchSearchResults, tracklistId, query);
-//   }
-// }
-
-
-//=====================================
-//  WATCHERS
-//-------------------------------------
-
-// export function* watchLoadSearchResults() {
-//   yield takeLatest(searchActions.LOAD_SEARCH_RESULTS, loadSearchResults);
-// }
-
-// export function* watchNavigateToSearch() {
-//   while (true) {
-//     const { payload } = yield take(searchActions.NAVIGATE_TO_SEARCH);
-//     yield history.push(payload);
-//   }
-// }
+function* changeFilter(type, state) {
+    console.log('changeFilter', type, state);
+    const corresChangeFilter = registChangeFilter[type];
+    yield call(corresChangeFilter, state);
+}
 
 /* watcher */
+
 // 请求位置筛选的原始数据
 function* watchPositionOriginData() {
     yield take(positionFilterSagaActions.POSITION_ORIGINDATA_INIT);
@@ -60,34 +50,49 @@ function* watchFilterConfirm() {
     while (true) {
         const { payload } = yield take(filterSagaActions.FILTER_CONFIRM);
         const { type, state } = payload;
-        yield call(changeFilterPosition, state);
+        // 位置筛选 清空search和位置
+        if (type === 'position') {
+            // 清空搜索
+            yield put(searchPutActions.searchClearPut());
+            // 清空位置
+            yield put(positionFilterPutActions.filterPositionClear());
+        }
+
+        // 清空houseList
+        yield put(houseListPutActions.houseListClear());
+
+        yield call(changeFilter, type, state);
+
+        // 请求houseList
+        yield call(ajaxHouseListStep);
+
+        yield put(urlSagaActions.urlNavigate({ type: 'houseList' }));
     }
 }
 
-// filterUrl筛选
-function* watchFilterUrl() {
-    const { payload } = yield take(filterSagaActions.FILTERURL_INIT);
-    const { filterUrl='' } = payload;
+// filterUrl筛选-根据url更改state,params,label
+export function* transFilterUrl(filterUrl) {
+    // const { payload } = yield take(filterSagaActions.FILTERURL_INIT);
+    // const { filterUrl = '' } = payload;
     const filterUrlObj = transFilterUrlToObj(filterUrl);
-    // const filterPositionUrlObj = sliceObjbyKeys(filterUrlObj, FilterPositionAlphaArr);
-    const filterRentUrlObj = sliceObjbyKeys(filterUrlObj, FilterRentAlphaArr);
-    const filterPositionUrlObj = sliceObjbyKeys(filterUrlObj, FilterPositionAlphaArr);
-    const filterHouseTypeUrlObj = sliceObjbyKeys(filterUrlObj, FilterHouseTypeAlphaArr);
-    const filterMoreUrlObj = sliceObjbyKeys(filterUrlObj, FilterMoreAlphaArr);
+    // const filterPositionUrlObj = sliceObjbyByKeys(filterUrlObj, FilterPositionAlphaArr);
+    const filterRentUrlObj = sliceObjbyByKeys(filterUrlObj, FilterRentAlphaArr);
+    const filterPositionUrlObj = sliceObjbyByKeys(filterUrlObj, FilterPositionAlphaArr);
+    const filterHouseTypeUrlObj = sliceObjbyByKeys(filterUrlObj, FilterHouseTypeAlphaArr);
+    const filterMoreUrlObj = sliceObjbyByKeys(filterUrlObj, FilterMoreAlphaArr);
 
     const yieldArr = [];
     filterPositionUrlObj && yieldArr.push(call(transPositionFilterUrl, filterPositionUrlObj));
     filterRentUrlObj && yieldArr.push(call(transRentFilterUrl, filterRentUrlObj));
-    filterHouseTypeUrlObj && yieldArr.push(call(transFilterHouseTypeUrl, filterHouseTypeUrlObj))
-    filterMoreUrlObj && yieldArr.push(call(transFilterMoreUrl, filterMoreUrlObj));
-
+    filterHouseTypeUrlObj && yieldArr.push(call(transHouseTypeFilterUrl, filterHouseTypeUrlObj));
+    filterMoreUrlObj && yieldArr.push(call(transMoreFilterUrl, filterMoreUrlObj));
     yield yieldArr;
 }
 
 const filterSagas = [
     spawn(watchPositionOriginData),
     spawn(watchFilterConfirm),
-    spawn(watchFilterUrl),
+    // spawn(watchFilterUrl),
     // fork(watchNavigateToFilter)
 ];
 export default filterSagas;

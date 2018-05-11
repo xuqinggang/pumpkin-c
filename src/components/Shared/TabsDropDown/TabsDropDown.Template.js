@@ -5,6 +5,8 @@ import classnames from 'classnames';
 
 import './styles.less';
 
+const classPrefix = 'm-tabsdropdown';
+
 type PropType = {
     isSelected: boolean,
     children: React$Node,
@@ -24,7 +26,7 @@ class TabsDropDownTemplate extends PureComponent<PropType> {
         //     templateStyle.overflow = 'hidden';
         // }
 
-        const contentClassName = classnames('content-item', {
+        const contentClassName = classnames(`${classPrefix}-content-item`, {
             active: isSelected,
         });
 
@@ -33,6 +35,7 @@ class TabsDropDownTemplate extends PureComponent<PropType> {
                 {
                     cloneElement(Children.only(children), {
                         onUpdateActiveIndex,
+                        isSelected,
                     })
                 }
             </div>

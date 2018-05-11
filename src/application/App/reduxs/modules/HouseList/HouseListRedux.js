@@ -28,9 +28,11 @@ export const houseListAjaxActions = {
 // saga
 export const houseListSagaActions = {
     HOUSELIST_INIT: 'houselist_init',
+    HOUSELIST_FILTER: 'houselist_filter',
     HOUSELIST_ADD: 'houselist_add',
 
     houseListInit: createAction('houselist_init'),
+    houseListFilter: createAction('houselist_filter'),
     houseListAdd: createAction('houselist_add'),
 };
 // put
@@ -64,7 +66,7 @@ export default handleActions({
             isPending: false,
         };
     },
-    [houseListAjaxActions.HOUSELIST_FAILED](state, action) {
+    [houseListAjaxActions.HOUSELIST_FAILED](state) {
         return {
             ...state,
             isPending: false,

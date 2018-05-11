@@ -2,7 +2,7 @@
 
 import { createAction, handleActions } from 'redux-actions';
 
-import HouseTypeFilterTagData from 'components/App/HouseList/HouseTypeFilter/HouseTypeFilterTagData';
+import HouseTypeOriginData from 'components/App/HouseList/TagsFilter/HouseTypeOriginData';
 
 /* init state */
 export const initStateHouseType: houseTypeReduxType = {
@@ -16,7 +16,7 @@ export const initStateHouseType: houseTypeReduxType = {
     },
     label: '房型',
     url: '',
-    originData: HouseTypeFilterTagData,
+    originData: HouseTypeOriginData,
 };
 
 /* const actions */

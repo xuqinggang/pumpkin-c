@@ -1,16 +1,16 @@
 import { put, call, select } from 'redux-saga/effects';
 
 import { originDataMoreSelector } from './FilterSelector';
-import { filterMorePutActions } from './FilterHouseTypeRedux';
+import { filterMorePutActions } from './FilterMoreRedux';
 
-import { transTagsState, transTagsUrlObjToState } from './util';
+import { transTagsState, transTagsUrlObjToState } from './utils';
 
-export function* transFilterMoreUrl(filterUrlObj) {
+export function* transMoreFilterUrl(filterUrlObj) {
     const stateMore = transTagsUrlObjToState(filterUrlObj);
-    yield call(changeFilterMore, stateMore);
+    yield call(changeMoreFilter, stateMore);
 }
 
-export function* changeFilterMore(stateMore) {
+export function* changeMoreFilter(stateMore) {
     const originDataMore = yield select(originDataMoreSelector);
 
     const {

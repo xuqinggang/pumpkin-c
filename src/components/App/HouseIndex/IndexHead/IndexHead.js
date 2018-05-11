@@ -14,7 +14,7 @@ const classPrefix = 'm-indexhead';
 
 export default class IndexHead extends PureComponent {
     handleNavigateSearch = () => {
-        goSearch(this.props.history)();
+        this.props.urlNavigate({type: 'houseSearch'});
     }
 
     handleNavigateMe = () => {

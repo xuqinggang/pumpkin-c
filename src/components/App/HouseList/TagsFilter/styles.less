@@ -1,0 +1,73 @@
+@import (reference) '~styles/lib.less';
+
+.m-tagsfilter {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 40px 0 110px 22px;
+    overflow-y: scroll;
+
+    &-title {
+        margin-bottom: 40px;
+        font-family: PingFangSC-Medium;
+        .font-size(40);
+    }
+
+    &-item {
+        line-height: 1;
+        margin-right: 30px;
+        .font-size(28);
+    }
+
+    &-directs {
+        margin-bottom: 70px;
+
+        .directs-item {
+            width: 115px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &-tags {
+        margin-bottom: 46px;
+
+        .tags-item {
+            width: inherit;
+            margin-bottom: 32px;
+            padding: 16px 20px;
+
+            &:nth-child(4n) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &-areaInfo {
+        margin-bottom: 70px;
+
+        .areaInfo-item {
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &-sharedRooms {
+        margin-bottom: 70px;
+    }
+
+    &-wholeRooms {
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .m-tagsfilter {
+        &-tags {
+            .tags-item {
+                margin-right: 8px;
+            }
+        }
+    }
+}

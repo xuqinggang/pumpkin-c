@@ -39,7 +39,8 @@ export default function FilterConfirmConnectDecorators() {
 
             // 事件处理程序-确认回调
             handleConfirmTap = () => {
-                this.props.onUpdateActiveIndex(-1);
+                // this.props.onUpdateActiveIndex(-1);
+                console.log('handleConfirmTap', this.state.filterState);
                 this.props.onFilterConfirm(this.state.filterState);
             }
 

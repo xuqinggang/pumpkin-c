@@ -1,12 +1,14 @@
+/* @flow */
+
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 // 业务组件
-// import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
+import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
 import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
 import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
-import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
-import Filter from 'components/App/HouseList/FilterTest/FilterTest';
+import HouseLists from 'components/App/HouseList/HouseListsT/HouseLists';
+import Filter from 'components/App/HouseList/FilterTest/FilterScrollFixed';
 // import Filter from 'components/App/HouseList/Filter/Filter';
 // import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
 
@@ -14,13 +16,15 @@ import Filter from 'components/App/HouseList/FilterTest/FilterTest';
 import { houseListSagaActions } from 'reduxs/modules/HouseList/HouseListRedux';
 import { houseIndexSagaActions } from 'reduxs/modules/HouseIndex/HouseIndexRedux';
 import { positionFilterSagaActions } from 'reduxs/modules/Filter/FilterPositionRedux';
+import { filterSagaActions } from 'reduxs/modules/Filter/FilterRedux';
+import { searchSagaActions } from 'reduxs/modules/Search/SearchRedux';
+import { urlSagaActions } from 'reduxs/modules/Url/UrlRedux';
 
 /* selector */
 import { houseListsSelector } from 'reduxs/modules/HouseList/HouseListSelector';
 import { houseIndexSelector } from 'reduxs/modules/HouseIndex/HouseIndexSelector';
-import { filterInfoSelector, filterUrlSelector } from 'reduxs/modules/Filter/FilterSelector';
-
-import TabsDropDown from 'Shared/TabsDropDown';
+import { filterInfoSelector, filterMatchUrlSelector } from 'reduxs/modules/Filter/FilterSelector';
+import { searchKeywordSelector, searchTextSelector } from 'reduxs/modules/Search/SearchSelector';
 
 // import { goHouseList } from 'application/App/routes/routes';
 
@@ -33,23 +37,28 @@ import './styles.less';
 const classPrefix = 'g-houselist';
 
 @connect((state, props) => ({
+    searchText: searchTextSelector(state),
     houseList: houseListsSelector(state),
     houseIndex: houseIndexSelector(state),
     filterInfo: filterInfoSelector(state),
-    filterUrl: filterUrlSelector(props),
+    filterUrl: filterMatchUrlSelector(props),
 }), {
+    sagaFilterConfirm: filterSagaActions.filterConfirm,
+    sageFilterInit: filterSagaActions.filterUrlInit,
     sagaHouseListInit: houseListSagaActions.houseListInit,
     sagaHouseListAdd: houseListSagaActions.houseListAdd,
     sagaHouseIndexInit: houseIndexSagaActions.houseIndexInit,
     sagaPositionOriginData: positionFilterSagaActions.positionOriginDataInit,
+    sagaSearchClear: searchSagaActions.searchClear,
+    sagaUrlNavigate: urlSagaActions.urlNavigate,
 })
 export default class HouseList extends PureComponent {
     constructor(props) {
         super(props);
 
-//         this.props.sagaHouseListInit({ filterUrl: props.filterUrl });
-//         this.props.sagaHouseIndexInit();
-//         this.props.sagaPositionOriginData();
+        this.props.sagaHouseListInit({ filterUrl: props.filterUrl });
+        this.props.sagaHouseIndexInit();
+        this.props.sagaPositionOriginData();
     }
 
     // 搜索
@@ -61,7 +70,12 @@ export default class HouseList extends PureComponent {
     }
 
     // 筛选确认
-    onFilterConfirm = () => {
+    onFilterConfirm = (confirmInfo: { type: string, state: filterStateType }) => {
+        this.props.sagaFilterConfirm(confirmInfo);
+    }
+
+    onClearSearch = () => {
+        this.props.sagaSearchClear();
     }
 
     handleTestTap = () => {
@@ -72,40 +86,29 @@ export default class HouseList extends PureComponent {
             houseList,
             houseIndex,
             filterInfo,
+            searchText,
+
+            sagaUrlNavigate,
         } = this.props;
         console.log('HouseList render', this.props);
         return (
-            <div>
-                <Filter filterInfo={filterInfo} />
-                {
-                    // <TabsDropDown
-                    // >
-                    //     <TabsDropDown.Tab
-                    //         label="asdf"
-                    //     >
-                    //     <div>
-                    //         TabsDropDownTemplate111
-                    //     </div>
-                    //     <div>111</div>
-                    //     <div>111</div>
-                    //     <div>111</div>
-                    //     <div>111</div>
-                    //     </TabsDropDown.Tab>
-                    //     <TabsDropDown.Tab
-                    //         label="asdf22"
-                    //     >
-                    //     <div>
-                    //         TabsDropDownTemplate22
-                    //     </div>
-                    //     <div>222</div>
-                    //     <div>222</div>
-                    //     <div>222</div>
-                    //     <div>222</div>
-                    //     <div>222</div>
-                    //     <div>222</div>
-                    //     </TabsDropDown.Tab>
-                    // </TabsDropDown>
-                }
+            <div className={`${classPrefix}`}>
+                <IndexHead
+                    className={`${classPrefix}-head`}
+                    searchRt={searchText}
+                    onClearSearch={this.onClearSearch}
+                    urlNavigate={sagaUrlNavigate}
+                />
+                <IndexBanner {...houseIndex.banner} />
+                <IndexRecommend recommends={houseIndex.recommends} />
+                <Filter
+                    filterInfo={filterInfo}
+                    onFilterConfirm={this.onFilterConfirm}
+                />
+                <HouseLists
+                    {...houseList}
+                    onLoadMore={this.onLoadMore}
+                />
             </div>
         );
         // return (

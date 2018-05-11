@@ -22,6 +22,8 @@ type PropType = {
     contentClass?: string,
     children: React$Node,
     activeIndex: number,
+    outControl: boolean,
+    onChange: Function,
 };
 
 type StateType = {
@@ -38,7 +40,8 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
     static defaultProps = {
         activeIndex: -1,
         autoScreen: false,
-        // onChange: () => {},
+        outControl: false,
+        onChange: () => {},
     };
 
     state = {
@@ -60,7 +63,7 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         // },
         onExit: (node: HTMLElement) => {
             node.style.height = '0px';
-            if (this.state.prevIndex !== -1) {
+            if (this.state.activeIndex !== -1) {
                 node.style.display = 'none';
             }
         },
@@ -71,8 +74,21 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         },
     };
 
+    calculateContentHeight() {
+        if (this.navDom) {
+            const rectInfo = this.navDom.getBoundingClientRect();
+            const contentHeight = window.innerHeight - rectInfo.height - rectInfo.top;
+            this.contentHeight = `${contentHeight}px`;
+        }
+    }
+
     // 回调函数-每一个tab的点击
     onTouchTap = (event: SyntheticEvent<>, activeIndex: number) => {
+        if (this.props.outControl) {
+            this.props.onChange(activeIndex);
+            return;
+        }
+
         const prevIndex = this.state.activeIndex;
 
         if (prevIndex !== activeIndex) {
@@ -83,7 +99,7 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
         } else {
             this.setState({
                 activeIndex: -1,
-                prevIndex: -1,
+                prevIndex: prevIndex,
             });
         }
     }
@@ -150,11 +166,7 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
     }
 
     componentDidMount() {
-        if (this.navDom) {
-            const rectInfo = this.navDom.getBoundingClientRect();
-            const contentHeight = window.innerHeight - rectInfo.height - rectInfo.top;
-            this.contentHeight = `${contentHeight}px`;
-        }
+        this.calculateContentHeight();
     }
 
     // 由外组件更新时才会调用此方法
@@ -166,6 +178,10 @@ export default class TabsDropDown extends PureComponent<PropType, StateType> {
                 prevIndex,
             });
         }
+    }
+
+    componentDidUpdate() {
+        this.calculateContentHeight();
     }
 
     render() {

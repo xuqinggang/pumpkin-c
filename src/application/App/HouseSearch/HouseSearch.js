@@ -1,11 +1,14 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 
 import InputSearch from 'Shared/InputSearch/InputSearch';
 import SearchList from 'components/App/HouseSearch/SearchList/SearchList';
 import HitSearch from 'components/App/HouseSearch/HitSearch/HitSearch';
 import HistoryRecord from 'components/App/HouseSearch/HistoryRecord/HistoryRecord';
+
+import { searchSagaActions } from 'reduxs/modules/Search/SearchRedux';
 
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
@@ -20,6 +23,11 @@ type StateType = {
     searchData: Object,
 };
 
+@connect((state) => ({
+    topSearches: topSearchesSelector(state),
+}), {
+    sagaSearchKeywordAdd: searchSagaActions.searchKeywordAdd,
+})
 export default class HouseSearch extends PureComponent<{}, StateType> {
     constructor(props: {}) {
         super(props);
@@ -63,6 +71,11 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
         goHouseList(this.props.history)();
     }
 
+    onSearchItemTap = (type, data) => {
+
+    }
+
+
     componentWillMount() {
         // 请求position筛选数据
         ajaxInitPositionData()
@@ -93,8 +106,13 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
                 <div
                     onTouchTap={this.handleStopPropagation}
                 >
-                    <HitSearch history={history} />
-                    <HistoryRecord />
+                    <HitSearch
+                        onSearchItemTap={this.onSearchItemTap}
+                        topSearches={topSearches}
+                    />
+                    <HistoryRecord
+                        onSearchItemTap={this.onSearchItemTap}
+                    />
                     <SearchList searchData={searchData} />
                 </div>
             </div>

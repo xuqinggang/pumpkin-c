@@ -2,7 +2,7 @@
 
 import { createAction, handleActions } from 'redux-actions';
 
-import MoreFilterTagData from 'components/App/HouseList/MoreFilter/MoreFilterTagData';
+import MoreFilterOriginData from 'components/App/HouseList/TagsFilter/MoreFilterOriginData';
 
 /* init state */
 export const initStateMore: moreReduxType = {
@@ -20,7 +20,7 @@ export const initStateMore: moreReduxType = {
         floorInfo: null,
     },
     url: '',
-    originData: MoreFilterTagData,
+    originData: MoreFilterOriginData,
 };
 
 /* const actions */

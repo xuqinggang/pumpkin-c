@@ -1,26 +1,33 @@
-import { select, call, put, take } from 'redux-saga/effects';
+import { select, call, put, take, spawn } from 'redux-saga/effects';
 
 import { positionFilterPutActions, positionFilterAjaxActions } from './FilterPositionRedux';
-import { originDataPositionSelector, statePositionSelector } from './FilterSelector';
+import { positionOriginDataSelector, positionStateSelector } from './FilterSelector';
 import { FILTER_SEPARATOR, TypeAndPrefixMap, TypeMapAlphaArr } from 'const/filter';
+import { filterUrlObjJoin } from './utils';
 
 import { getObjectKeyByIndex } from 'lib/util';
 
-export function* transFilterPositionUrl(filterUrlObj) {
-    console.log('transPositionUrl', filterUrlObj);
+export function* transPositionFilterUrl(filterUrlObj) {
     // 由于位置筛选的原数据是通过异步获取的,更改state和label需要在异步之后
     // 而更改parmas可以同步
     yield call(transPositionUrlToParams, filterUrlObj);
+    yield spawn(asyncUpdate);
 
-    // 监听数据异步获取之后更改state和label
-    yield take(positionFilterAjaxActions.POSITION_ORIGINDATA_FULFILLED);
-    yield call(transPositionUrlToState, filterUrlObj);
-    const positionState = yield select(statePositionSelector);
-    yield call(changeFilterPosition, positionState);
+    function* asyncUpdate() {
+        // 监听数据异步获取之后更改state和label
+        const originData = yield select(positionOriginDataSelector);
+        // 如果position originData已经获取到则不需要监听
+        if (!originData.districts || !originData.subways) {
+            yield take(positionFilterAjaxActions.POSITION_ORIGINDATA_FULFILLED);
+        }
+        yield call(transPositionUrlToState, filterUrlObj);
+        const positionState = yield select(positionStateSelector);
+        yield call(changePositionFilter, positionState);
+    }
 }
 
-export function* changeFilterPosition(state) {
-    const originData = yield select(originDataPositionSelector);
+export function* changePositionFilter(state) {
+    const originData = yield select(positionOriginDataSelector);
 
     const paramsObj = {};
     let label = '';
@@ -39,31 +46,35 @@ export function* changeFilterPosition(state) {
     const urlArr = [];
     const alphaArr = TypeMapAlphaArr[type];
 
-    if (secondIndex !== -1) {
+    if (secondIndex !== -1 && secondIndex !== 0) {
         const secondParamKey = TypeAndPrefixMap[alphaArr[0]];
         const secondId = getObjectKeyByIndex(firstObj, secondIndex);
-        paramsObj[secondParamKey] = secondId;
+        paramsObj[secondParamKey] = parseInt(secondId, 10);
 
         urlArr.push(`${alphaArr[0]}${secondId}`);
         const secondObj = firstObj[secondId];
         label = secondObj.text;
 
         if (thirdIndex !== -1) {
+            const thirdObj = secondObj.sub;
             const thirdParamKey = TypeAndPrefixMap[alphaArr[1]];
-            const thirdId = getObjectKeyByIndex(secondObj, thirdIndex);
-            paramsObj[thirdParamKey] = thirdId;
+            const thirdId = getObjectKeyByIndex(thirdObj, thirdIndex);
+            paramsObj[thirdParamKey] = parseInt(thirdId, 10);
 
             urlArr.push(`${alphaArr[1]}${thirdId}`);
-            const thirdObj = secondObj.sub;
             label = thirdObj[thirdId];
         }
     }
 
     url = urlArr.join(FILTER_SEPARATOR);
 
-    yield put(positionFilterPutActions.updateFilterPosition({ url, params: paramsObj, state, label }));
+    yield put(positionFilterPutActions.updateFilterPosition({
+        url,
+        params: paramsObj,
+        state,
+        label,
+    }));
 }
-
 
 function* transPositionUrlToParams(filterUrlObj) {
     const paramsObj = {};
@@ -72,19 +83,20 @@ function* transPositionUrlToParams(filterUrlObj) {
             paramsObj[TypeAndPrefixMap[alpha]] = parseInt(filterUrlObj[alpha], 10);
         }
     });
-
-    yield put(positionFilterPutActions.updateFilterPosition({ params: paramsObj }));
+    yield put(positionFilterPutActions.updateFilterPosition({
+        params: paramsObj,
+        url: filterUrlObjJoin(filterUrlObj),
+    }));
 }
 
 function* transPositionUrlToState(filterUrlObj) {
-    console.log('transPositionUrlToState', filterUrlObj);
-    const positionOriginData = yield select(originDataPositionSelector);
+    const positionOriginData = yield select(positionOriginDataSelector);
 
     const stateObj = {};
     let secondObj, firstObj;
 
     filterUrlObj && Object.keys(filterUrlObj).forEach((alpha, index) => {
-        const idVal = filterUrlObj[alpha];
+        const idVal = String(filterUrlObj[alpha]);
 
         if (index === 0) {
             // TypeAndPrefixMap.districtId = 'a', alpha === 'a' 则firstIndex = 0

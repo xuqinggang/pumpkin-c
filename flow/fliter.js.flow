@@ -59,6 +59,8 @@ declare type houseTypeStateType = {
     },
 };
 
+declare type houseTypeOriginDataType = {};
+
 declare type houseTypeReduxType = {
     state: houseTypeStateType,
     params: houseTypeParamsType,
