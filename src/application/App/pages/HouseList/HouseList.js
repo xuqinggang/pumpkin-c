@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import IndexHead from 'components/App/HouseIndex/IndexHead/IndexHead';
 import IndexBanner from 'components/App/HouseIndex/IndexBanner/IndexBanner';
 import IndexRecommend from 'components/App/HouseIndex/IndexRecommend/IndexRecommend';
-import HouseLists from 'components/App/HouseList/HouseListsT/HouseLists';
+import HouseLists from 'components/App/HouseList/HouseLists/HouseLists';
 import Filter from 'components/App/HouseList/FilterTest/FilterScrollFixed';
 // import Filter from 'components/App/HouseList/Filter/Filter';
 // import BottomOpenNative from 'Shared/BottomOpenNative/BottomOpenNative';
@@ -67,6 +67,8 @@ export default class HouseList extends PureComponent {
 
     // 滚动加载
     onLoadMore = () => {
+        console.log('onLoadMore')
+        this.props.sagaHouseListAdd();
     }
 
     // 筛选确认

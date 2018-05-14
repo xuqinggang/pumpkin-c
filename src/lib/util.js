@@ -1,5 +1,24 @@
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+export const emptyFunc = () => {};
+
+export const toggleForbidScrollThrough = (function toggleForbidScrollThrough() {
+    let scrollTop;
+    return function toggleForbidScrollThroughInner(isForbide) {
+        if (isForbide) {
+            scrollTop = getScrollTop();
+            // position fixed会使滚动位置丢失，所以利用top定位
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollTop}px`;
+        } else {
+            // 恢复时，需要还原之前的滚动位置
+            document.body.style.position = 'static';
+            document.body.style.top = '0px';
+            window.scrollTo(0, scrollTop);
+        }
+    };
+}());
+
 // 根据key数组截取对象
 export function sliceObjbyByKeys(obj, keys) {
     if (!(obj && keys && keys.length)) return null;
@@ -23,7 +42,7 @@ export function getObjectKeyByIndex(obj, index) {
 // 反转对象的属性和值
 export function reverseObjKeyValue(obj) {
     const reverseObj = {};
-    for(let key in obj) {
+    for(const key in obj) {
         reverseObj[obj[key]] = key;
     }
 
@@ -33,36 +52,37 @@ export function reverseObjKeyValue(obj) {
 // 时间格式化
 export function dateFormat(timestamp, fmt = 'yyyy-MM-dd') {
     const date = new Date(timestamp);
-    const o = {
+    const o = {
         // 月份
-        'M+': date.getMonth()  +  1,
+        'M+': date.getMonth() + 1,
         // 日
-        'd+': date.getDate(),
+        'd+': date.getDate(),
         // 小时
-        'h+': date.getHours(),
+        'h+': date.getHours(),
         // 分
         'm+': date.getMinutes(),
         // 秒
-        's+': date.getSeconds(),
-        //季度 
-        'q+': Math.floor((date.getMonth()  +  3)  /  3),
+        's+': date.getSeconds(),
+        // 季度
+        'q+': Math.floor((date.getMonth() + 3) / 3),
         // 毫秒
-        'S': date.getMilliseconds(),
+        S: date.getMilliseconds(),
     };
     if (/(y+)/.test(fmt)) {
-        fmt  =  fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
-    for (let k in o) {
-        if (new RegExp("(" + k + ")").test(fmt)) {
+
+    for (let k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         }
     }
-    return fmt;
+
+    return fmt;
 }
 
 // 防抖
 export function debounce(func, waitms, immediate) {
-    console.log('func', func, waitms, immediate)
     let timer;
     return function debounceInner(...arg) {
         timer && clearTimeout(timer);
@@ -151,13 +171,12 @@ export function urlJoin(...urlArr) {
 
 // 获取字符串长度（汉字算两个字符，字母数字算一个）
 export function getByteLen(val) {
-    var len = 0;
-    for (var i = 0; i < val.length; i++) {
-        var a = val.charAt(i);
+    let len = 0;
+    for (let i = 0; i < val.length; i++) {
+        const a = val.charAt(i);
         if (a.match(/[^\x00-\xff]/ig) != null) {
             len += 2;
-        }
-        else {
+        } else {
             len += 1;
         }
     }
@@ -165,27 +184,29 @@ export function getByteLen(val) {
 }
 
 export function getCookie(key) {
-    let arr, reg = new RegExp("(^| )"+key+"=([^;]*)(;|$)");
+    const reg = new RegExp(`(^| )${key}=([^;]*(;|$))`);
+    const arr = document.cookie.match(reg);
 
-    if (arr = document.cookie.match(reg)) return unescape(arr[2]);
-    else return null;
+    if (arr) return unescape(arr[2]);
+
+    return null;
 }
 
 // 删除cookie需要指定path
 export function clearCookie(key) {
-    let exp = new Date();
+    const exp = new Date();
     exp.setTime(exp.getTime() - 1);
-    let cval = getCookie(key);
-    if(cval != null) {
-        document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString() + "; path=/";
+    const cval = getCookie(key);
+    if (cval != null) {
+        document.cookie = `${key}=${cval};expires=${exp.toGMTString()};path=/`;
     }
 }
 
 export function setCookie(key, value) {
     const deltaDay = 30;
     const exp = new Date();
-    exp.setTime(exp.getTime() + deltaDay*24*60*60*1000);
-    document.cookie = key + "="+ value + ";expires=" + exp.toGMTString() + ";path=/";
+    exp.setTime(exp.getTime() + (deltaDay * 24 * 60 * 60 * 1000));
+    document.cookie = `${key}=${value};expires=${exp.toGMTString()};path=/`;
 }
 
 export function isHasCookie(key) {
@@ -204,18 +225,18 @@ export function dynamicScript(src, callback) {
         return;
     }
 
-    var bodyDom = document.getElementsByTagName('body')[0];
-    var script= document.createElement('script');
-    script.type= 'text/javascript';
-    script.onload = script.onreadystatechange = function() {
-        if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete" ) {
+    const bodyDom = document.getElementsByTagName('body')[0];
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.onload = script.onreadystatechange = function ready() {
+        if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
             callback();
             dynamicScriptObj[src] = true;
             // Handle memory leak in IE
-            script.onload = script.onreadystatechange = null; 
+            script.onload = script.onreadystatechange = null;
         }
     };
-    script.src= src;
+    script.src = src;
     bodyDom.appendChild(script);
 }
 
@@ -227,7 +248,7 @@ export function findArrayItemByPathIndex(arr, pathIndexArr, nextLevelName) {
         return itemResult;
     }
 
-    let tmpPathIndexArr = pathIndexArr.slice(1);
+    const tmpPathIndexArr = pathIndexArr.slice(1);
     tmpPathIndexArr && tmpPathIndexArr.forEach(function(index) {
         itemResult = itemResult[nextLevelName][index];
     });
@@ -243,7 +264,7 @@ export function dynamicDocTitle(title) {
 
 // 切割数组
 export function divideArray(array, limit) {
-    if (!array || (array && 0 === array.length)) return [];
+    if (!array || (array && array.length === 0)) return [];
 
     const newArray = [];
     let cutPt = 0;
@@ -255,7 +276,7 @@ export function divideArray(array, limit) {
         cutPt += limit;
         endPt += limit;
         cutArr = array.slice(cutPt, endPt);
-    };
+    }
 
     return newArray;
 }
@@ -275,7 +296,7 @@ export function parseUrl(url) {
             if (key) {
                 rt.query[key] = val;
             }
-        })
+        });
     }
 
     return rt;
@@ -284,7 +305,7 @@ export function parseUrl(url) {
 export function shallowEqual(objA, objB) {
     // 如果objA和objB是严格相等，结果相等
     if (objA === objB) {
-        return true
+        return true;
     }
 
     if (!objA || !objB) {
@@ -292,26 +313,26 @@ export function shallowEqual(objA, objB) {
     }
 
     // 获取 objA 和 objB 的所有属性
-    const keysA = Object.keys(objA)
-    const keysB = Object.keys(objB)
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
 
     // 属性长度不相等，结果不相等
     if (keysA.length !== keysB.length) {
-        return false
+        return false;
     }
 
     // 使用hasWon引用Object.prototype.hasOwnProperty方法
-    const hasOwn = Object.prototype.hasOwnProperty
+    const hasOwn = Object.prototype.hasOwnProperty;
 
     // objB 中不含有 objA 中的属性，结果不相等
     for (let i = 0; i < keysA.length; i++) {
         if (!hasOwn.call(objB, keysA[i]) ||
             objA[keysA[i]] !== objB[keysA[i]]) {
-            return false
+            return false;
         }
     }
 
-    return true 
+    return true;
 }
 
 export const isValidValue = value => (!(value == null || value === ''));

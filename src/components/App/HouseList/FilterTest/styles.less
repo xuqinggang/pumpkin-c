@@ -1,7 +1,35 @@
 @import (reference) '~styles/lib.less';
 
+.m-filterfix {
+    position: fixed;
+    // 理论上是88px和头部高度一样,但由于兼容性会有缝隙，所以减少2px遮蔽缝隙
+    top: 86px;
+    width: 100%;
+    z-index: 1001;
+}
+
 .m-filter {
+
     &-tabscollapse {
+    }
+
+    &-tabscollapse-nav {
+        box-sizing: border-box;
+        padding: 0 46px;
+        height: 88px;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        .font-size(28);
+
+        .nav-item {
+            &.active {
+                .label-icon {
+                    color: #f38d39;
+                    transform: rotateZ(180deg);
+                }
+            }
+        }
     }
 
     &-label {
@@ -18,24 +46,6 @@
             color: #d8d8d8;
             transition: all ease-in 0.45s;
             .font-size(16);
-        }
-    }
-    
-    &-tabscollapse-nav {
-        box-sizing: border-box;
-        padding: 0 46px;
-        height: 88px;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        .font-size(28);
-
-        .nav-item {
-            &.active {
-                .label-icon {
-                    color: #f38d39;
-                    transform: rotateZ(180deg);
-                }
-            }
         }
     }
 }

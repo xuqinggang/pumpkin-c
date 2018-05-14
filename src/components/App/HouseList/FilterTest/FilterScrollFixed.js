@@ -1,9 +1,10 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 
 import Filter from './Filter';
-import { getScrollTop, getFilterFixScrollTop } from 'lib/util';
+import { getScrollTop, getFilterFixScrollTop, toggleForbidScrollThrough } from 'lib/util';
 import { animateScrollTop } from 'lib/animate';
 
 type PropType = {
@@ -13,24 +14,57 @@ type PropType = {
 
 type StateType = {
     activeIndex: number,
+    isFixed: boolean,
 };
 
 export default class FilterScrollFixed extends PureComponent<PropType, StateType> {
-    destScrollTop: number;
-
     state = {
         activeIndex: -1,
+        isFixed: false,
     };
 
+    destScrollTop: number;
+
+    // _setFixedState() => {
+    //     this.setState({
+    //         isFixed:
+    //     })
+    // }
+
+    _scrollingFixFilterDom = () => {
+        const {
+            isFixed,
+            activeIndex,
+        } = this.state;
+        if (activeIndex !== -1) return;
+
+        const scrollTop = getScrollTop();
+
+        if (scrollTop >= this.destScrollTop && !isFixed) {
+            this.setState({
+                isFixed: true,
+            });
+        } else if (scrollTop < this.destScrollTop && isFixed && activeIndex === -1) {
+            this.setState({
+                isFixed: false,
+            });
+        }
+    }
     _updateActiveIndex(activeIndex: number) {
         const prevIndex = this.state.activeIndex;
         if (activeIndex === prevIndex) {
             this.setState({
                 activeIndex: -1,
+                isFixed: true,
+            }, () => {
+                toggleForbidScrollThrough(false);
             });
         } else {
             this.setState({
                 activeIndex,
+                isFixed: true,
+            }, () => {
+                toggleForbidScrollThrough(true);
             });
         }
     }
@@ -43,7 +77,7 @@ export default class FilterScrollFixed extends PureComponent<PropType, StateType
 
     onChange = (activeIndex: number) => {
         const curScrollTop = getScrollTop();
-
+        console.log('curScrollTop', curScrollTop);
         if (curScrollTop < this.destScrollTop) {
             animateScrollTop(curScrollTop, this.destScrollTop, 250, () => {
                 this._updateActiveIndex(activeIndex);
@@ -55,18 +89,25 @@ export default class FilterScrollFixed extends PureComponent<PropType, StateType
 
     componentDidMount() {
         this.destScrollTop = getFilterFixScrollTop();
+        console.log('destScrollTop', this.destScrollTop);
+        window.addEventListener('scroll', this._scrollingFixFilterDom);
     }
 
     render() {
         const {
             activeIndex,
+            isFixed,
         } = this.state;
         const {
             filterInfo,
         } = this.props;
 
+        const filterFixedClass = classnames({
+            'm-filterfix': isFixed,
+        });
+
         return (
-            <div>
+            <div className={filterFixedClass}>
                 <Filter
                     filterInfo={filterInfo}
                     onFilterConfirm={this.onFilterConfirm}

@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PureComponent } from 'react';
 
 import RentUnitList from '../RentUnitList';
@@ -11,40 +13,44 @@ import { shallowEqual, getScrollTop } from 'lib/util';
 
 import './styles.less';
 
-const clsPrefix = 'm-houselists';
+const classPrefix = 'm-houselists';
 
-export default class HouseLists extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
+type PropType = {
+    onLoadMore: Function,
+    isPending: boolean,
+    isError: boolean,
+    isInit: boolean,
+    rentUnits: [rentUnitItemType],
+    suggestRentUnits: [rentUnitItemType],
+};
 
-
-    handleLoadMore = () => {
-        this.handleFetchList('MORE');
-    }
-
+export default class HouseLists extends PureComponent<PropType> {
     render() {
         const {
-            isFetchCrash,
             rentUnits,
             suggestRentUnits,
-            isFetching,
-            pager,
-            minHeight,
+            isPending,
+            isError,
+            isInit,
+            onLoadMore,
         } = this.props;
+
         return (
-            <div className={clsPrefix}
-                ref={ (listDom) => { this.listDom = listDom; } }
-                style={{'minHeight': `${minHeight}px`}}>
-                <RentUnitList
-                    list={rentUnits}
-                    pager={pager}
-                    loading={isFetching}
-                    onLoadMore={this.handleLoadMore}
-                />
+            <div
+                className={classPrefix}
+            >
                 {
-                    this.fetchType === 'INIT' && isFetchCrash ?
+                    isInit && isError ?
                         <SingnalLessNote />
+                        : null
+                }
+                {
+                    rentUnits.length > 0 ?
+                        <RentUnitList
+                            list={rentUnits}
+                            isLoading={isPending}
+                            onScrollBottom={onLoadMore}
+                        />
                         : null
                 }
                 {

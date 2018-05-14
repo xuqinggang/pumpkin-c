@@ -1,38 +1,24 @@
-import React, { PureComponent } from 'react';
-import classNames from 'classnames';
-import { withRouter } from 'react-router';
+/* @flow */
 
+import React, { PureComponent } from 'react';
+
+import ImagePlaceHolder from 'Shared/ImagePlaceHolder/ImagePlaceHolder';
 import { goHouseDetail } from 'application/App/routes/routes';
 import { rentUnitShape } from 'baseData/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
-import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { getWithDefault } from 'lib/util';
-import './style.less';
+import { clipImgUrl } from 'lib/helper';
 import { isRmHead, isNanguaApp } from 'lib/const';
+import placeholder from 'images/nangua.png';
+
+import './style.less';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
 
-const itemClassPrefix = 'm-houseitem';
+const classPrefix = 'm-rentunititem';
 
-class RentUnitItem extends PureComponent {
-    constructor(props) {
-        super(props);
-        // window.isServerRender 标识是服务器端渲染
-        this.state = {
-            imgLoading: window.isServerRender ? false : true,
-        };
-
-        this.handleImageLoad = this.handleImageLoad.bind(this);
-        this.handleTouchTap = this.handleTouchTap.bind(this);
-    }
-
-    handleImageLoad() {
-        this.setState({
-            imgLoading: false,
-        });
-    }
-
-    handleTouchTap() {
+export default class RentUnitItem extends PureComponent<rentUnitItemType> {
+    handleTouchTap = () => {
         // 南瓜租房 iOS 端打开, 模拟成原生页时打开原生详情页
         if (isLikeNativeView()) {
             window.location.href = `nangua://nanguazufang.cn?rentUnitId=${this.props.rentUnitId}`;
@@ -61,30 +47,24 @@ class RentUnitItem extends PureComponent {
             aptType,
             apartmentName,
         } = this.props;
-        const imgClsPrefix = `${itemClassPrefix}-img`;
-        const imgCls = classNames(imgClsPrefix, {
-            [`${imgClsPrefix}__loading`]: this.state.imgLoading,
-        });
 
         return (
             <div
                 onTouchTap={this.handleTouchTap}
-                className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
+                className={`${classPrefix} g-grid-row f-flex-justify-start`}
             >
-                <div className={`${itemClassPrefix}-img-wrap`}>
-                    <img
-                        className={imgCls}
-                        src={ModListImgUrl(imgUrl)}
-                        alt="房源图片"
-                        onLoad={this.handleImageLoad}
+                <div className={`${classPrefix}-img-wrap`}>
+                    <ImagePlaceHolder
+                        src={clipImgUrl(imgUrl)}
+                        placeholder={placeholder}
                     />
                     {
                         aptType === 'CENTRALIZED' ?
-                            <span className={`${itemClassPrefix}-apttype`}>集中式</span> :
-                        null
+                            <span className="apttype">集中式</span>
+                            : null
                     }
                 </div>
-                <ul className={`${itemClassPrefix}-intro g-grid-col f-flex-justify-between`}>
+                <ul className={`${classPrefix}-intro g-grid-col f-flex-justify-between`}>
                     <li className="intro-title" >
                         <span className="title-apart f-vertical-middle">{apartmentName}</span>
                         {blockName}-{bedroomCount}居室-{getWithDefault(DirectTypeMapText, direct, '多个朝向')}
@@ -97,11 +77,11 @@ class RentUnitItem extends PureComponent {
                                 >
                                     {RentalTypeMapText[rentalType]}
                                 </span>
-                                <i className={`${itemClassPrefix}--gap`}>/</i>
+                                <i className={`${classPrefix}--gap`}>/</i>
                                 <span className="f-display-inlineblock tags-item">
                                     {area}㎡
                                 </span>
-                                <i className={`${itemClassPrefix}--gap`}>/</i>
+                                <i className={`${classPrefix}--gap`}>/</i>
                                 <span className="f-display-inlineblock tags-item">
                                     {floor ? `${floor}/` : ''}{totalFloor}层
                                 </span>
@@ -122,7 +102,9 @@ class RentUnitItem extends PureComponent {
                                 <span
                                     key={tag}
                                     className="u-houselist-tag-round"
-                                >{tag}</span>
+                                >
+                                    {tag}
+                                </span>
                             ))
                         }
                     </li>
@@ -131,7 +113,3 @@ class RentUnitItem extends PureComponent {
         );
     }
 }
-
-RentUnitItem.propTypes = rentUnitShape.isRequired;
-
-export default withRouter(RentUnitItem);

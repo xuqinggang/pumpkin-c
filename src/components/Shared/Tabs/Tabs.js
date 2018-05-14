@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import classnames from 'classnames';
 
-import TabTemplate from './TabTemplate.js'
+import TabTemplate from './TabTemplate'
 import { TSF, TRANSLATEZ } from 'lib/css3Hooks';
 
 import './styles.less';
@@ -22,8 +22,8 @@ type PropType = {
     barClassName?: string, // tabbar class
     navClassName?: string, // 导航nav class
     contentClassName?: string, // 内容区域 class
-    style: {},
-    children: any,
+    style?: Object,
+    children?: React$Node,
     activeIndex: number,
     onChange: Function,
     direction: string, // horizon vertical,
@@ -44,21 +44,14 @@ class Tabs extends PureComponent<PropType, StateType> {
         onChange: () => {},
     };
 
+    state = {
+        // 组件的状态由外部控制(通过props传递'activeIndex')或者由组件内部控制
+        activeIndex: this.props.activeIndex,
+        prevIndex: -1,
+    };
+
     activeNavItemDom: ?HTMLElement;
     barDom: ?HTMLElement;
-
-    constructor(props: PropType) {
-        super(props);
-        const {
-            activeIndex,
-        } = this.props;
-
-        // 组件的状态由外部控制(通过props传递'activeIndex')或者由组件内部控制
-        this.state = {
-            activeIndex,
-            prevIndex: -1,
-        };
-    }
 
     // 回调函数-每一个tab的点击
     onTouchTap = (event: SyntheticEvent<>, activeIndex: number, itemData: {}) => {
@@ -182,12 +175,12 @@ class Tabs extends PureComponent<PropType, StateType> {
                         tabNav
                     }
                     {
-                        isBar ? 
+                        isBar ?
                             <span
-                                ref={(dom) => {this.barDom = dom;}}
+                                ref={(dom) => { this.barDom = dom; }}
                                 className={classnames(`${classPrefix}-bar`, barClassName)}
-                            /> :
-                            null
+                            />
+                            : null
                     }
                 </ul>
                 {
@@ -198,8 +191,8 @@ class Tabs extends PureComponent<PropType, StateType> {
                                     tabContent
                                 }
                             </div>
-                        ) : 
-                        null
+                        )
+                        : null
                 }
             </div>
         );

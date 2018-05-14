@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+/* @flow */
 
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 
 import { debounce } from 'lib/util';
@@ -8,22 +9,30 @@ import './style.less';
 
 const classPrefix = 'm-scrollcontainer';
 
-export default class ScrollContainer extends PureComponent {
+type PropType = {
+    reserveSize: number,
+    onBottomLoad: Function,
+    onlyOnce: boolean,
+    children: ?React$Node,
+    className?: string,
+    style?: Object,
+};
+
+export default class ScrollContainer extends PureComponent<PropType> {
     static defaultProps = {
         reserveSize: 100,
-        onlyOnce: false, // 到达底部或者顶部只触发一次
+        onlyOnce: false, // 每次到达底部或者顶部只触发一次
         onBottomLoad: () => {},
     };
 
-    constructor(props) {
-        super(props);
-        this.lastScrollTop = 0;
-        this.isHitOnce = false;
-        this.debounceScrollFunc = debounce(this.handleScroll, 17, true);
-    }
+    lastScrollTop: number = 0;
+    isHitOnce: boolean = false;
+    debounceScrollFunc: Function = debounce(this.handleScroll, 17, true);
+    wrapperDom: ?HTMLElement;
 
-    handleScroll = (e) => {
+    handleScroll = () => {
         const wrapperDom = this.wrapperDom;
+        if (!wrapperDom) return;
 
         const {
             reserveSize,
@@ -34,11 +43,10 @@ export default class ScrollContainer extends PureComponent {
         if (wrapperDom.scrollTop < this.lastScrollTop) {
             this.isHitOnce = false;
             this.lastScrollTop = wrapperDom.scrollTop;
-            return ;
+            return;
         }
-        this.lastScrollTop = wrapperDom.scrollTop;
 
-        if (wrapperDom.scrollHeight - wrapperDom.offsetHeight - wrapperDom.scrollTop <= reserveSize) {
+        if ((wrapperDom.scrollHeight - wrapperDom.offsetHeight - wrapperDom.scrollTop) <= reserveSize) {
             if (!this.isHitOnce && onlyOnce) {
                 this.isHitOnce = true;
                 onBottomLoad();
@@ -46,15 +54,16 @@ export default class ScrollContainer extends PureComponent {
                 onBottomLoad();
             }
         }
+
+        this.lastScrollTop = wrapperDom.scrollTop;
     }
 
     componentDidMount() {
-        this.wrapperDom.addEventListener('scroll', this.debounceScrollFunc)
-        // this.wrapperDom.addEventListener('scroll', this.handleScroll)
+        this.wrapperDom && this.wrapperDom.addEventListener('scroll', this.debounceScrollFunc);
     }
 
     componentWillUnmount() {
-        this.wrapperDom.removeEventListener('scroll', this.debounceScrollFunc);
+        this.wrapperDom && this.wrapperDom.removeEventListener('scroll', this.debounceScrollFunc);
     }
 
     render() {

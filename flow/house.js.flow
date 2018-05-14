@@ -1,0 +1,16 @@
+declare type rentUnitItemType = {
+    rentUnitId: string,
+    tags: [],
+    imgUrl: string,
+    floor: number,
+    totalFloor: number,
+    area: number,
+    rentalType: string,
+    address: string,
+    blockName: string,
+    bedroomCount: number,
+    direct: string,
+    price: number,
+    aptType: string,
+    apartmentName: string,
+};

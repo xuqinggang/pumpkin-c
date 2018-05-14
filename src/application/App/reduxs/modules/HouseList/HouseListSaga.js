@@ -15,12 +15,12 @@ import {
 
 
 // 请求房源列表
-export function* ajaxHouseListStep() {
-    const houseList = yield select(houseListsSelector);
-    const {
-        offset,
-        limit,
-    } = houseList;
+export function* ajaxHouseListStep(offset, limit) {
+    // const houseList = yield select(houseListsSelector);
+    // const {
+    //     offset,
+    //     limit,
+    // } = houseList;
 
     // 获得筛选参数
     const filterParams = yield select(filterParamsSelector);
@@ -30,46 +30,73 @@ export function* ajaxHouseListStep() {
     const params = Object.assign({}, filterParams, searchParams);
 
     // ajax请求
-    yield call(ajaxHouseList, { params, offset, limit });
+    return yield call(ajaxHouseList, { params, offset, limit });
 }
 
 // 首次进入-初始化房源列表
 function* initHouseList({ filterUrl, search } = {}) {
     const houseList = yield select(houseListsSelector);
-
+    const {
+        offset,
+        limit,
+        isInit,
+    } = houseList;
     // 判断是否为初始化，避免再次请求
-    if (houseList && houseList.isInit) {
+    if (isInit) {
         // 根据filterUrl初始化filterInfo
         yield call(transFilterUrl, filterUrl);
         // yield put(filterSagaActions.filterUrlInit({ filterUrl }));
-        yield call(ajaxHouseListStep);
+        yield call(ajaxHouseListStep, offset, limit);
     }
 }
 
 // 筛选-初始化房源列表
 function* filterHouseList() {
     yield put(houseListPutActions.houseListClear());
-    yield call(ajaxHouseListStep);
+    const {
+        limit,
+        offset,
+    } = yield select(houseListsSelector);
+
+    yield call(ajaxHouseListStep, offset, limit);
 }
 
 // // 添加房源列表(操作:滚动)
-// function* addHouseList(action = {}) {
-//     const {
-//         filterParams = {},
-//         offset = 0,
-//         limit = 20,
-//     } = action.payload || {};
-//     const result = yield call(ajaxHouseList, { filterParams, offset, limit });
-// console.log('result', result);
-//     // 添加
-//     yield put(addHouseListAction(result));
-// }
+function* addHouseList() {
+    const {
+        isPending,
+        offset,
+        limit,
+        total,
+    } = yield select(houseListsSelector);
+    const nextOffset = offset + limit;
+    if (!isPending && nextOffset < total) {
+        yield call(ajaxHouseListStep, offset + limit, limit);
+    }
+    // const {
+    //     filterParams = {},
+    //     offset = 0,
+    //     limit = 20,
+    // } = action.payload || {};
+    // const result = yield call(ajaxHouseList, { filterParams, offset, limit });
+    // console.log('result', result);
+    // // 添加
+    // yield put(addHouseListAction(result));
+}
 
 /* watcher */
 function* watcherHouseListInit() {
     while (true) {
         const { payload } = yield take(houseListSagaActions.HOUSELIST_INIT);
         yield call(initHouseList, payload);
+    }
+}
+
+// 添加房源-滚动
+function* watcherHouseListAdd() {
+    while (true) {
+        yield take(houseListSagaActions.HOUSELIST_ADD);
+        yield call(addHouseList);
     }
 }
 
@@ -80,5 +107,7 @@ function* watcherHouseListFilter() {
 const houseListSagas = [
     fork(watcherHouseListInit),
     fork(watcherHouseListFilter),
+    fork(watcherHouseListAdd),
 ];
+
 export default houseListSagas;
