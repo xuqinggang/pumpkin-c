@@ -42,10 +42,11 @@ export default class PureShopListWrap extends PureComponent {
             pager: pagerParams,
         }).then((data) => {
             let newApartmentLists = [];
-            curPage += 1;
             if (!renew) {
+                curPage += 1;
                 newApartmentLists = apartmentList.concat(data.list);
             } else {
+                curPage = 2;
                 newApartmentLists = data.list;
             }
             this.setState({
