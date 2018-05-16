@@ -5,6 +5,8 @@ import houseIndexSagas from 'reduxs/modules/HouseIndex/HouseIndexSaga';
 import filterSagas from 'reduxs/modules/Filter/FilterSaga';
 import urlSagas from 'reduxs/modules/Url/UrlSaga';
 import searchSagas from 'reduxs/modules/Search/SearchSaga';
+import locationSagas from 'reduxs/modules/Location/LocationSaga';
+
 
 export default function* rootSaga () {
     // console.log('hello saga');
@@ -22,6 +24,7 @@ export default function* rootSaga () {
             ...filterSagas,
             ...urlSagas,
             ...searchSagas,
+            ...locationSagas,
         ]);
     } catch(err) {
         console.log('rootSaga', err);

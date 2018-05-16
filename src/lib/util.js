@@ -1,3 +1,35 @@
+
+export function checkVarInterval(varString) {
+    function checkVar(varArr) {
+        let tmpVar = window;
+        return varArr.every((varItem) => {
+            tmpVar = tmpVar[varItem];
+            return tmpVar !== undefined;
+        });
+    }
+    const timeout = 10000;
+
+    return new Promise((resolve, reject) => {
+        const startTime = +Date.now();
+        const varArr = varString.split('.');
+        if (checkVar(varArr)) {
+            resolve();
+            return;
+        }
+
+        const timer = setInterval(() => {
+            if (checkVar(varArr)) {
+                clearInterval(timer);
+                resolve();
+                return;
+            }
+            if (+Date.now() - startTime > timeout) {
+                reject();
+            }
+        }, 20);
+    });
+}
+
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export const emptyFunc = () => {};

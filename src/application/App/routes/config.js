@@ -9,6 +9,7 @@ import HouseDetail from 'application/App/HouseDetail/HouseDetail';
 // import HouseList from 'application/App/HouseList/HouseList';
 // import HouseSearch from 'application/App/HouseSearch/HouseSearch';
 import HouseList from 'application/App/pages/HouseList/HouseList';
+import HouseWork from 'application/App/pages/HouseWork/HouseWork';
 import HouseSearch from 'application/App/pages/HouseSearch/HouseSearch';
 
 import HouseLogin from 'application/App/HouseLogin/HouseLogin';
@@ -68,6 +69,7 @@ class WrapRouter extends PureComponent {
                     // <Route exact path={`${this.urlPrefix}/shop/list/:filterUrlFragment?`} component={ShopList} />
                     // <Route exact path={`${this.urlPrefix}/shop/:filterUrlFragment?`} component={ShopList} />
                     }
+                <Route path={`${this.urlPrefix}/work/`} component={HouseWork} />
                 <Route path={`${this.urlPrefix}/login`} component={HouseLogin} />
                 <Route path={`${this.urlPrefix}/me`} component={HouseMe} />
                 <Route exact path={`${this.urlPrefix}/about`} component={HouseAboutUs} />

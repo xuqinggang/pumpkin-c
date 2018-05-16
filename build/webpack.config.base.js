@@ -1,9 +1,6 @@
 import webpack from 'webpack';
-import ExtractTextPlugin from "extract-text-webpack-plugin";
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import StyleLintPlugin from 'stylelint-webpack-plugin';
-import StyleLintFormatter from 'stylelint-formatter-pretty';
-import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import path from 'path';
 
 import baseConfig from './baseConfig';
@@ -37,8 +34,8 @@ const webpackBaseConf = {
     },
 
     resolve: {
-        // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口 
-        mainFields: ['jsnext:main','main'],
+        // webpack去读取es目录下的代码需要使用jsnext:main字段配置的入口
+        mainFields: ['jsnext:main', 'main'],
         // 配置模块库（通常是指node_modules）所在的位置
         // 默认的配置会采用向上递归搜索的方式去寻找node_modules，但通常项目目录里只有一个node_modules在项目根目录，为了减少搜索我们直接写明node_modules的全路径：
         modules: [resolve('node_modules')],
