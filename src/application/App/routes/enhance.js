@@ -1,5 +1,6 @@
 import { postRouteChangeToIOSV2 } from 'lib/patchNavChangeInIOS';
 import { queryStringToObject, generateUrl } from './utils';
+import { isLikeNativeView } from 'lib/const';
 
 // enhance 其实不是必要的 可以用以下方式替代
 /**
@@ -20,7 +21,9 @@ import { queryStringToObject, generateUrl } from './utils';
 
 export default {
     routeChangeToIOS: (history, to, next, title) => {
-        postRouteChangeToIOSV2({ to: `${window.location.origin}${to}${window.location.search}`, title });
+        if (isLikeNativeView()) {
+            postRouteChangeToIOSV2({ to: `${window.location.origin}${to}${window.location.search}`, title });
+        }
         next();
     },
     pv: (history, url, next) => {

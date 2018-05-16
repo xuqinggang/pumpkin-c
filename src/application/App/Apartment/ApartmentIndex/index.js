@@ -178,7 +178,9 @@ export default class ApartmentIndex extends PureComponent {
             }, () => {
                 //  得到公寓信息再注册微信分享内容
                 this.wxShare();
-                this.setShareForIOS();
+                if (isLikeNativeView()) {
+                    this.setShareForIOS();
+                }
             });
         });
         // TODO can move to routes
