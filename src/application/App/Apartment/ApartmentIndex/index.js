@@ -100,7 +100,11 @@ export default class ApartmentIndex extends PureComponent {
         const { apartmentId } = this;
 
         if (isLikeNativeView()) {
-            openSchema(`nangua://api.nanguazufang.cn/main?fineUnitFilter=${JSON.stringify({ ...filterStore, apartmentId })}`);
+            if (isNearby) {
+                openSchema(`nangua://api.nanguazufang.cn/main?nearbyUnitFilter=${JSON.stringify({ apartmentId })}`);
+            } else {
+                openSchema(`nangua://api.nanguazufang.cn/main?fineUnitFilter=${JSON.stringify({ apartmentId })}`);
+            }
             return;
         }
 
@@ -178,7 +182,9 @@ export default class ApartmentIndex extends PureComponent {
             }, () => {
                 //  得到公寓信息再注册微信分享内容
                 this.wxShare();
-                this.setShareForIOS();
+                if (isLikeNativeView()) {
+                    this.setShareForIOS();
+                }
             });
         });
         // TODO can move to routes
