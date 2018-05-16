@@ -25,7 +25,7 @@ export default class ApartmentIntro extends PureComponent {
                     </div>
                 </div>
                 <div className="score-wrap">
-                    <div className="score">{score === 0 ? 5.0 : score}</div>
+                    <div className="score">{score === 0 ? '5.0' : score.toString()}</div>
                     <div className="go-comments f-display-flex f-flex-align-center" onTouchTap={goCommentList}>查看评价<i className="icon-pull-down" /></div>
                 </div>
             </div>
