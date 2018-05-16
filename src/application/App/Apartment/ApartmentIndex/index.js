@@ -101,7 +101,7 @@ export default class ApartmentIndex extends PureComponent {
 
         if (isLikeNativeView()) {
             if (isNearby) {
-                openSchema(`nangua://api.nanguazufang.cn/main?nearbyUnitFilter=${JSON.stringify({ apartmentId })}`);
+                openSchema(`nangua://api.nanguazufang.cn/main?nearbyUnitFilter=${JSON.stringify({ apartmentId, nearByInfo: { distance: 3 } })}`);
             } else {
                 openSchema(`nangua://api.nanguazufang.cn/main?fineUnitFilter=${JSON.stringify({ apartmentId })}`);
             }
