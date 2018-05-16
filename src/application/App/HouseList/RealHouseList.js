@@ -229,7 +229,6 @@ export default class RealHouseList extends PureComponent {
                 queryString += `&${queryKey}=${querys[queryKey]}`;
             }
         });
-        console.log(queryString, 'queryString');
         window.setStore(urlStoreKey, {
             filterUrlFragment,
             queryString,
