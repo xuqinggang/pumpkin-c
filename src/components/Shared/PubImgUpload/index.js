@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
+import PopToolTip from '../PopToolTip/PopToolTip';
 
 import './styles.less';
 
@@ -19,6 +20,9 @@ class PubImgUpload extends Component {
 
         this.$imgInput = null;
     }
+
+    // 图片限制
+    imageSizeLimit = 5 * 1024 * 1024;
 
     handleAddImage = () => {
         const { limit } = this.props;
@@ -60,7 +64,13 @@ class PubImgUpload extends Component {
 
         // 只上传 limit 以内的图片
         let fileArray = Array.from(files);
-        fileArray = fileArray.slice(0, limit - currentImageCount);
+        fileArray = fileArray.slice(0, limit - currentImageCount).filter((file) => {
+            if (file && file.size > this.imageSizeLimit) {
+                PopToolTip({ text: '图片大小不能超过5M' });
+                return false;
+            }
+            return true;
+        });
 
         this.setState({
             loading: true,

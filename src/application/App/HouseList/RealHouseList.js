@@ -97,10 +97,6 @@ export default class RealHouseList extends PureComponent {
 
         // init houselist
         window.setStore(houseListStoreKey, null);
-
-        // this.state = {
-        //     queryCount: 0,
-        // };
     }
 
     // 由于位置筛选，数据是异步请求的，所以需要等异步请求完后，再动态的改变label
@@ -156,13 +152,12 @@ export default class RealHouseList extends PureComponent {
         const urlFrgRt = transUrlFrgObjToStr(this.urlFrgObj);
 
         // setStore url.filterUrlFragment
-        this.setStoreFilterUrlFrg(urlFrgRt, `?nearby=${this.filterParamsObj.nearby || 3}&apartment=${this.queryFieldsObj.apartment}`);
+        this.setStoreFilterUrlFrg(urlFrgRt, {
+            nearby: this.filterParamsObj.nearby,
+            apartment: this.queryFieldsObj.apartment,
+        });
 
         replaceApartmentHouseList(this.props.history)();
-    
-        // this.setState({
-        //     queryCount: this.state.queryCount + 1,
-        // });
 
         // 未知原因，需要设置延时来确保微信分享正常
         const timer = setTimeout(() => {
@@ -225,13 +220,21 @@ export default class RealHouseList extends PureComponent {
         }
     }
 
-    setStoreFilterUrlFrg(filterUrlFragment, filterSearch) {
+    setStoreFilterUrlFrg = (filterUrlFragment, querys = {}) => {
+        let queryString = '';
+        Object.keys(querys).forEach((queryKey, index) => {
+            if (index === 0) {
+                queryString += `?${queryKey}=${querys[queryKey]}`;
+            } else {
+                queryString += `&${queryKey}=${querys[queryKey]}`;
+            }
+        });
         window.setStore(urlStoreKey, {
             filterUrlFragment,
-            filterSearch,
+            queryString,
         });
     }
-    
+
     wxShare() {
         // 分享
         execWxShare({
@@ -276,7 +279,6 @@ export default class RealHouseList extends PureComponent {
             <div className={`${classPrefix}`}>
                 <div className={`${classPrefix}-head`}>
                     <EasyHead
-                        // backCount={this.state.queryCount + 1}
                         renderRight={() => (
                             <span className={`${classPrefix}-title f-singletext-ellipsis`}>{getTitle()}</span>
                         )}

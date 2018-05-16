@@ -7,6 +7,15 @@ const classPrefix = 'm-apartment-intro';
 
 const isShowImg = window.screen.width > 320;
 
+const formatPrice = (price) => {
+    const stringPrice = price.toString();
+    if (stringPrice.indexOf('.') === -1) {
+        return `${stringPrice}.0`;
+    }
+
+    return stringPrice;
+};
+
 export default class ApartmentIntro extends PureComponent {
     render() {
         const { name, image, slogan, minPrice, score, goCommentList, goDetail } = this.props;
@@ -25,7 +34,7 @@ export default class ApartmentIntro extends PureComponent {
                     </div>
                 </div>
                 <div className="score-wrap">
-                    <div className="score">{score === 0 ? 5.0 : score}</div>
+                    <div className="score">{score === 0 ? '5.0' : formatPrice(score)}</div>
                     <div className="go-comments f-display-flex f-flex-align-center" onTouchTap={goCommentList}>查看评价<i className="icon-pull-down" /></div>
                 </div>
             </div>
