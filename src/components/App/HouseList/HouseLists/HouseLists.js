@@ -33,6 +33,7 @@ export default class HouseLists extends PureComponent<PropType> {
             isError,
             isInit,
             onLoadMore,
+            urlNavigate,
         } = this.props;
 
         return (
@@ -50,6 +51,7 @@ export default class HouseLists extends PureComponent<PropType> {
                             list={rentUnits}
                             isLoading={isPending}
                             onScrollBottom={onLoadMore}
+                            urlNavigate={urlNavigate}
                         />
                         : null
                 }
@@ -58,6 +60,7 @@ export default class HouseLists extends PureComponent<PropType> {
                     rentUnits.length === 0 && suggestRentUnits.length > 0 ?
                         <RentUnitsSuggest
                             list={suggestRentUnits}
+                            urlNavigate={urlNavigate}
                         />
                         : null
                 }

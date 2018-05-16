@@ -21,13 +21,18 @@ export default class RentUnitList extends PureComponent<PropType> {
         const {
             list,
             isLoading,
+            urlNavigate,
         } = this.props;
 
         return (
             <div className={clsPrefix}>
                 {
                     list.map((rentalUnit, index) => (
-                        <RentUnitItem key={index} {...rentalUnit} />
+                        <RentUnitItem
+                            {...rentalUnit}
+                            key={index}
+                            urlNavigate={urlNavigate}
+                        />
                     ))
                 }
                 {

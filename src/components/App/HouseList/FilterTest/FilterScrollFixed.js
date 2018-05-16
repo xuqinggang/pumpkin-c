@@ -72,12 +72,10 @@ export default class FilterScrollFixed extends PureComponent<PropType, StateType
     onFilterConfirm = (confirmInfo: { type: string, state: filterStateType }) => {
         this.props.onFilterConfirm(confirmInfo);
         this._updateActiveIndex(-1);
-        console.log('onFilterConfirm')
     }
 
     onChange = (activeIndex: number) => {
         const curScrollTop = getScrollTop();
-        console.log('curScrollTop', curScrollTop);
         if (curScrollTop < this.destScrollTop) {
             animateScrollTop(curScrollTop, this.destScrollTop, 250, () => {
                 this._updateActiveIndex(activeIndex);
@@ -89,8 +87,11 @@ export default class FilterScrollFixed extends PureComponent<PropType, StateType
 
     componentDidMount() {
         this.destScrollTop = getFilterFixScrollTop();
-        console.log('destScrollTop', this.destScrollTop);
         window.addEventListener('scroll', this._scrollingFixFilterDom);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this._scrollingFixFilterDom);
     }
 
     render() {

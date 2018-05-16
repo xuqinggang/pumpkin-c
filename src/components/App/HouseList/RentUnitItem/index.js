@@ -18,17 +18,20 @@ const isLikeNativeView = () => isRmHead() && isNanguaApp();
 const classPrefix = 'm-rentunititem';
 
 export default class RentUnitItem extends PureComponent<rentUnitItemType> {
-    handleTouchTap = () => {
+    handleTouchTap = (e) => {
+        console.log('topLevelType', 'handleTouchTap', e, e._targetInst, e._dispatchListeners);
         // 南瓜租房 iOS 端打开, 模拟成原生页时打开原生详情页
         if (isLikeNativeView()) {
             window.location.href = `nangua://nanguazufang.cn?rentUnitId=${this.props.rentUnitId}`;
             return;
         }
+
         const {
-            history,
             rentUnitId,
         } = this.props;
-        goHouseDetail(history)(rentUnitId);
+
+        // goHouseDetail(history)(rentUnitId);
+        this.props.urlNavigate({type: 'houseDetail', val: rentUnitId});
     }
 
     render() {

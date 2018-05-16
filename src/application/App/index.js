@@ -1,6 +1,6 @@
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin-fix';
 
 import configureStore from './reduxs/configureStore';
 import history from './history';
@@ -16,7 +16,7 @@ import './store';
 import routes from './routes';
 
 // 注册onTouchTap
-injectTapEventPlugin();
+injectTapEventPlugin({ tapMoveThreshold: 5 });
 
 hydrate(
     <Provider store={store}>

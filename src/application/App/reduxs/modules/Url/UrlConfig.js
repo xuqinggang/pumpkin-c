@@ -3,8 +3,6 @@ import { withHistory } from './utils';
 import { pv } from './enhance';
 import { filterUrlSelector } from 'reduxs/modules/Filter/FilterSelector';
 
-export const createHouseDetailPath = rentUnitId => `/detail/${rentUnitId}/`;
-
 export function* createHouseListPath() {
     const filterUrlFragment = yield select(filterUrlSelector);
     return `/list/${filterUrlFragment}`;
@@ -13,10 +11,14 @@ export function* createHouseListPath() {
 }
 export const goHouseList = withHistory(createHouseListPath, { beforeRouteChange: pv });
 
+const createHouseDetailPath = (rentUnitId) => `/detail/${rentUnitId}/`;
+export const goHouseDetail = withHistory(createHouseDetailPath);
+
 const createHouseSearchPath = () => '/search/';
 export const goHouseSearch = withHistory(createHouseSearchPath);
 
 export default {
     houseList: goHouseList,
     houseSearch: goHouseSearch,
+    houseDetail: goHouseDetail,
 };

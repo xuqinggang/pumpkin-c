@@ -109,6 +109,7 @@ export default class HouseList extends PureComponent {
                 />
                 <HouseLists
                     {...houseList}
+                    urlNavigate={sagaUrlNavigate}
                     onLoadMore={this.onLoadMore}
                 />
             </div>
