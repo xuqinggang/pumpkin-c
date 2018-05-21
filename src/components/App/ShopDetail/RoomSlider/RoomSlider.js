@@ -52,7 +52,7 @@ export default class RoomSlider extends PureComponent {
             <div className={`${classPrefix}-item-img`} key={index}>
                 {
                     bannerType === 'VIDEO' &&
-                    <img className="video-image" src={videoImage} alt="视频" />
+                    <img className="video-image" onTouchTap={() => this.handleGoVideo(url)} src={videoImage} alt="视频" />
                 }
                 {
                     url ?
@@ -69,7 +69,11 @@ export default class RoomSlider extends PureComponent {
         // console.log(e, 'handleTransitionEnd');
     }
 
-    handleImageView = (index) => {        
+    handleGoVideo = (url) => {
+        window.location.href = url;
+    }
+
+    handleImageView = (index) => {
         const { links, images } = this.props;
         let items;
         if (links.length) {
