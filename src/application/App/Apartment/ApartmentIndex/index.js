@@ -55,7 +55,7 @@ export default class ApartmentIndex extends PureComponent {
         });
 
         if (isLikeNativeView()) {
-            this.setDynamicIOSTitle('南瓜租房');
+            this.setDynamicIOSTitle('品牌公寓');
         }
     }
 
