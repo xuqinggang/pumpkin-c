@@ -144,6 +144,10 @@ class SearchItem extends PureComponent {
             <div
                 onTouchTap={this.handleItemTap}
                 className={`g-grid-row f-flex-align-center ${classPrefix}-item`}
+                data-event-track-click
+                data-event-track-param-element="SEARCH_PROMPT_ITEM"
+                data-event-track-param-page="SEARCH"
+                data-event-track-param-event="CLICK"
             >
                 {
                     type === 'apartments' ?

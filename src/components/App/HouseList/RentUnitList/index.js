@@ -38,7 +38,7 @@ export default class RentUnitList extends Component {
             <div className={clsPrefix}>
                 {
                     this.props.list.map((rentalUnit, index) => (
-                        <RentUnitItem key={index} {...rentalUnit} />
+                        <RentUnitItem key={index} {...rentalUnit} index={index}/>
                     ))
                 }
                 {

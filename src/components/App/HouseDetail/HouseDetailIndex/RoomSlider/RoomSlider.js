@@ -197,6 +197,10 @@ class RoomSlider extends PureComponent {
                     key={index}
                     className={itemClass}
                     onTouchTap={this.handleTextTap.bind(this, index)}
+                    data-event-track-click
+                    data-event-track-param-element={imgInfo.element}
+                    data-event-track-param-page="HOUSE_DETAIL"
+                    data-event-track-param-event="CLICK"
                 >
                     <span className="f-display-inlineblock text">{imgInfo.text}</span>
                 </div>

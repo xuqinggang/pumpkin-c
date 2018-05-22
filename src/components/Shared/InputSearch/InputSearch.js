@@ -26,6 +26,7 @@ export default class InputSearch extends PureComponent<PropType> {
             placeholder,
             maxLength,
             autofocus,
+            track,
         } = this.props;
 
         return (
@@ -33,6 +34,7 @@ export default class InputSearch extends PureComponent<PropType> {
                 <span className={`icon-search ${classPrefix}-btn-search`} />
                 <InputClear
                     type="search"
+                    track={track}
                     className={`${classPrefix}-input-wrapper`}
                     onChange={onInputChange}
                     placeholder={placeholder}

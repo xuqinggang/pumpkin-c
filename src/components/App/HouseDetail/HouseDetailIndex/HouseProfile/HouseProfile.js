@@ -32,7 +32,14 @@ export default class HouseProfile extends PureComponent {
                     onTouchApartment={this.props.onTouchApartment}
                 />
                 <h2 className={`${classPrefix}-title`}>{title}</h2>
-                <div className={`${classPrefix}-location`} onTouchTap={this.handleJumpMapTap}>
+                <div
+                    className={`${classPrefix}-location`}
+                    onTouchTap={this.handleJumpMapTap}
+                    data-event-track-click
+                    data-event-track-param-element="DETAIL_SUBWAY"
+                    data-event-track-param-page="HOUSE_DETAIL"
+                    data-event-track-param-event="CLICK"
+                >
                     <span
                         className="f-display-inlineblock f-vertical-middle f-singletext-ellipsis location-text"
                     >
@@ -104,6 +111,10 @@ class HouseProfileHead extends PureComponent {
                     <span
                         className="f-display-inlineblock  f-vertical-middle head-paytype-wrap"
                         onTouchTap={this.handleSelectPayTypeTouchTap}
+                        data-event-track-click
+                        data-event-track-param-element="DETAIL_MORE_PRICE"
+                        data-event-track-param-page="HOUSE_DETAIL"
+                        data-event-track-param-event="CLICK"
                     >
                         <span className="f-display-inlineblock f-vertical-middle head-paytype">
                             {PayTypeMapName[selectedPayType]}价
@@ -115,7 +126,12 @@ class HouseProfileHead extends PureComponent {
                     apartmentName ?
                         <div
                             onTouchTap={this.props.onTouchApartment}
-                            className="f-display-inlineblock head-apartname-wrap">
+                            className="f-display-inlineblock head-apartname-wrap"
+                            data-event-track-click
+                            data-event-track-param-element="DETAIL_APARTMENT_BUTTON"
+                            data-event-track-param-page="HOUSE_DETAIL"
+                            data-event-track-param-event="CLICK"
+                        >
                             <span className="f-display-inlineblock f-singletext-ellipsis head-apartname">
                                 {apartmentName}
                             </span>

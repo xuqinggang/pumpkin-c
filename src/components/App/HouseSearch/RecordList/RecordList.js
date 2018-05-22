@@ -16,6 +16,9 @@ type PropType = {
 }
 
 export default class RecordList extends PureComponent<PropType> {
+    static defaultProps = {
+        track: {},
+    };
     render() {
         const {
             list = [],
@@ -29,6 +32,7 @@ export default class RecordList extends PureComponent<PropType> {
                             className={`${classPrefix}-item`}
                             item={item}
                             key={index}
+                            track={this.props.track}
                         />
                     ))
                 }
@@ -88,6 +92,7 @@ class RecordItem extends PureComponent<ItemPropType> {
             <li
                 className={className}
                 onTouchTap={this.handleSearchTap}
+                {...this.props.track}
             >
                 {item.text}
             </li>

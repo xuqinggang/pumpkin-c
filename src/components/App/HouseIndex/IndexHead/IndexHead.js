@@ -45,6 +45,10 @@ export default class IndexHead extends PureComponent {
                 <div
                     className={`f-display-flex f-flex-align-center ${classPrefix}-location`}
                     onTouchTap={this.handleNavigateCity}
+                    data-event-track-click
+                    data-event-track-param-element="HOME_SWITCH_CITY"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
                 >
                     <span
                         className="f-vertical-middle location-text"

@@ -9,6 +9,7 @@ const classPrefix = 'm-inputclear';
 
 export default class InputClear extends PureComponent {
     static defaultProps = {
+        track: {},
         type: 'text',
         placeholder: '',
         maxLength: 999999,
@@ -84,6 +85,7 @@ export default class InputClear extends PureComponent {
                         <span
                             className={`icon-big-close ${classPrefix}-btn-clear`}
                             onTouchTap={this.handleClearTap}
+                            {...this.props.track}
                         />
                         : null
                 }

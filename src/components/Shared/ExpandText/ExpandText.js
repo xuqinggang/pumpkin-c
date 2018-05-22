@@ -47,6 +47,22 @@ export default class ExpandText extends PureComponent {
                         <span
                             onTouchTap={this.handleExpandTap}
                             className={`${classPrefix}-expandbtn f-display-inlineblock`}
+                            data-event-track-click
+                            data-event-track-param-element={
+                                !isExpand ?
+                                    (
+                                        this.props.type === 'apartment' ?
+                                        'DETAIL_APARTMENT_INTRODUCE_UNFOLD'
+                                        : 'DETAIL_HOUSE_INTRODUCE_UNFOLD'
+                                    )
+                                    : (
+                                        this.props.type === 'apartment' ?
+                                        'DETAIL_APARTMENT_INTRODUCE_COLLAPSE'
+                                        : 'DETAIL_HOUSE_INTRODUCE_COLLAPSE'
+                                    )
+                            }
+                            data-event-track-param-page="HOUSE_DETAIL"
+                            data-event-track-param-event="CLICK"
                         >
                             {
                                 !isExpand ? '展开' : '收起'

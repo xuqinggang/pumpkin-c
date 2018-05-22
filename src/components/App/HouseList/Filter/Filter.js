@@ -210,7 +210,13 @@ export default class Filter extends PureComponent {
                 ref={(dom) => { this.filterDom = dom; }}
                 className={filterListClass}
             >
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                <li
+                    className={`f-display-flex f-flex-align-center ${filterClass}-item`}
+                    data-event-track-click
+                    data-event-track-param-element="HOME_POSITION"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
+                >
                     {
                         isJustNeedNearByFilter()
                             ? <DropDownScreen
@@ -249,7 +255,13 @@ export default class Filter extends PureComponent {
                             </DropDownScreen>
                     }
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                <li
+                    className={`f-display-flex f-flex-align-center ${filterClass}-item`}
+                    data-event-track-click
+                    data-event-track-param-element="HOME_RENT"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
+                >
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-rent`}
                         show={filterShow.rent}
@@ -265,7 +277,13 @@ export default class Filter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                <li
+                    className={`f-display-flex f-flex-align-center ${filterClass}-item`}
+                    data-event-track-click
+                    data-event-track-param-element="HOME_ROOM_TYPE"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
+                >
                     <DropDownScreen
                         className={`${filterClass}-dropscreen-rent`}
                         show={filterShow.houseType}
@@ -281,7 +299,13 @@ export default class Filter extends PureComponent {
                         />
                     </DropDownScreen>
                 </li>
-                <li className={`f-display-flex f-flex-align-center ${filterClass}-item`}>
+                <li
+                    className={`f-display-flex f-flex-align-center ${filterClass}-item`}
+                    data-event-track-click
+                    data-event-track-param-element="HOME_MORE"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
+                >
                     <DropDownScreen
                         show={filterShow.more}
                         type="more"

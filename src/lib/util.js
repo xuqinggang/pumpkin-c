@@ -1,8 +1,12 @@
+export function isIos() {
+    const ua = window.navigator.userAgent;
+    return /iPhone|iPad|iPod/i.test(ua);
+}
 
 // 反转对象的属性和值
 export function reverseObjKeyValue(obj) {
     const reverseObj = {};
-    for(let key in obj) {
+    for (const key in obj) {
         reverseObj[obj[key]] = key;
     }
 

@@ -72,6 +72,10 @@ class RentUnitItem extends PureComponent {
             <div
                 onTouchTap={this.handleTouchTap}
                 className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
+                data-event-track-click
+                data-event-track-param-element={`HOUSE${this.props.index}`}
+                data-event-track-param-page="INDEX_HOUSE"
+                data-event-track-param-event="CLICK"
             >
                 <div className={`${itemClassPrefix}-img-wrap`}>
                     <img
