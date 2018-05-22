@@ -6,6 +6,8 @@ import ImagePreviewWrap from 'Shared/ImagePreviewWrap';
 import { openIOSImageView } from 'lib/webviewBridge';
 import { isLikeNativeView } from 'lib/const';
 
+import videoImage from './video.png';
+
 import './styles.less';
 
 const classPrefix = 'm-shoproomslider';
@@ -41,7 +43,7 @@ export default class RoomSlider extends PureComponent {
 
     linkNumber = 0;
     renderLinks = (link, index) => {
-        const { avatar, url } = link;
+        const { avatar, url, bannerType } = link;
         if (url) {
             this.linkNumber = this.linkNumber + 1;
         }
@@ -49,11 +51,15 @@ export default class RoomSlider extends PureComponent {
         return (
             <div className={`${classPrefix}-item-img`} key={index}>
                 {
+                    bannerType === 'VIDEO' &&
+                    <img className="video-image" onTouchTap={() => this.handleGoVideo(url)} src={videoImage} alt="视频" />
+                }
+                {
                     url ?
                         <a href={url}>
-                            <img src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                            <img className="slider-img" src={avatar + imgCutModifier} alt="品牌公寓" key={index} />
                         </a>
-                        : <img onTouchTap={() => this.handleImageView(index - linkNumberBefore)} src={avatar + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                        : <img className="slider-img" onTouchTap={() => this.handleImageView(index - linkNumberBefore)} src={avatar + imgCutModifier} alt="品牌公寓" key={index} />
                 }
             </div>
         );
@@ -63,9 +69,11 @@ export default class RoomSlider extends PureComponent {
         // console.log(e, 'handleTransitionEnd');
     }
 
+    handleGoVideo = (url) => {
+        window.location.href = url;
+    }
+
     handleImageView = (index) => {
-        console.log('index', index);
-        
         const { links, images } = this.props;
         let items;
         if (links.length) {
@@ -88,7 +96,7 @@ export default class RoomSlider extends PureComponent {
     renderImages = (img, index) => {
         return (
             <div onTouchTap={this.handleImageView} className={`${classPrefix}-item-img`} key={index}>
-                <img src={img + imgCutModifier} alt="品牌公寓" key={index} className="img" />
+                <img className="slider-img" src={img + imgCutModifier} alt="品牌公寓" key={index} />
             </div>
         );
     }

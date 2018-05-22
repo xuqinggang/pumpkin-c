@@ -53,6 +53,10 @@ export default class ApartmentIndex extends PureComponent {
                 lat: 24,
             });
         });
+
+        if (isLikeNativeView()) {
+            this.setDynamicIOSTitle('品牌公寓');
+        }
     }
 
     wxShare = () => this.setShareData((data) => {
@@ -88,6 +92,15 @@ export default class ApartmentIndex extends PureComponent {
             event: 'CUSTOM_SHARE',
         }), '*');
     })
+
+    setDynamicIOSTitle = (title) => {
+        window.postMessage(JSON.stringify({
+            data: {
+                title,
+            },
+            event: 'CHANGE_TITLE',
+        }), '*');
+    }
 
     apartmentId = this.props.match.params.apartmentId
     goCommentList = () => goCommentList(this.props.history)(this.apartmentId)
