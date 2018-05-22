@@ -12,10 +12,15 @@ export default {
             text: '武汉',
             id: 168,
         },
+        gz: {
+            text: '广州',
+            id: 195,
+        },
     },
     CityeTextMapAbbrev: {
-        '北京': 'bj',
-        '上海': 'sh',
-        '武汉': 'wh',
+        北京: 'bj',
+        上海: 'sh',
+        武汉: 'wh',
+        广州: 'gz',
     },
-}
+};
