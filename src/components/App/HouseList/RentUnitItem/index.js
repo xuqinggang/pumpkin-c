@@ -10,7 +10,7 @@ import { getWithDefault } from 'lib/util';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { openSchema } from 'lib/webviewBridge';
 import nanguaPv from 'lib/nanguaPv';
-import { genFilterStatisticsParasm } from 'App/HouseList/getStatisticData';
+import { genFilterStatisticsParasm } from 'application/App/HouseList/getStatisticData';
 
 import './style.less';
 
