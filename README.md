@@ -1,5 +1,6 @@
 # install
 npm install pumpkin-font-c --registry=http://10.10.126.140:4873
+npm install nangua-js-statistics --registry=http://10.10.126.140:4873
 npm install
 
 # 开发环境(客户端渲染)

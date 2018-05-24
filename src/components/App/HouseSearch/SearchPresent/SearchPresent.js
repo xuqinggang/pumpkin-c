@@ -30,6 +30,10 @@ export default class SearchPresent extends PureComponent<PropType> {
             <div
                 className={classnames('f-display-flex f-flex-align-center', classPrefix, className)}
                 onTouchTap={onNavigateTap}
+                data-event-track-click
+                data-event-track-param-element="HOME_LIST_SEARCH"
+                data-event-track-param-page="INDEX_HOUSE"
+                data-event-track-param-event="CLICK"
             >
                 <span className={`${classPrefix}-btn-search icon-search`} />
                 {

@@ -44,7 +44,16 @@ export default class HitSearch extends PureComponent<{}, StateType> {
         return (
             <div className={classPrefix}>
                 <h2 className={`f-display-inlineblock ${classPrefix}-title`}>热门搜索</h2>
-                <RecordList list={hitSearchDatatArr} />
+                <RecordList
+                    list={hitSearchDatatArr}
+                    type="热门搜索"
+                    track={{
+                        'data-event-track-click': true,
+                        'data-event-track-param-element': 'SEARCH_DEFAULT_POPULAR',
+                        'data-event-track-param-page': 'SEARCH',
+                        'data-event-track-param-event': 'CLICK',
+                    }}
+                />
             </div>
         );
     }

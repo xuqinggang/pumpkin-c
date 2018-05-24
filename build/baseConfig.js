@@ -6,14 +6,14 @@ const env = process.env.NODE_ENV || 'production';
 const config = {
     // 各环境公共的配置
     common: {
-        env: env,
+        env,
         distPath: './dist',
         rootDir: path.resolve(__dirname, '..'),
         includePaths: path.resolve(__dirname, '../src'),
     },
     dev: {
         port: 8888,
-        host: '10.0.117.121', // 10.0.120.35
+        host: '10.0.120.35', // 10.0.120.35
         proxy: [{
             context: ['/bj/nangua/api/v1', '/sh/nangua/api/v1', '/wh/nangua/api/v1'],
             target: 'http://10.10.120.180',

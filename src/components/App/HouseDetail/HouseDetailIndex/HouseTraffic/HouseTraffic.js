@@ -20,7 +20,15 @@ export default function HouseTraffic(props) {
         <div className={`${classPrefix} ${className}`}>
             <h1 className={`${classPrefix}-title s-housedetail-comptitle`}>周边及交通</h1>
             <div className={`${classPrefix}-img-wrap`}>
-                <a className="f-display-inlineblock" href="javascript:void(0)" onTouchTap={handleJumpPageTap}>
+                <a
+                    className="f-display-inlineblock"
+                    href="javascript:void(0)"
+                    onTouchTap={handleJumpPageTap}
+                    data-event-track-click
+                    data-event-track-param-element="DETAIL_TRAFFIC_MAP"
+                    data-event-track-param-page="HOUSE_DETAIL"
+                    data-event-track-param-event="CLICK"
+                >
                     <img src={curHousePtImg} className={`f-display-inlineblock ${classPrefix}-img`} alt="" />
                 </a>
             </div>

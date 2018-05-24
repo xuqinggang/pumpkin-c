@@ -47,7 +47,14 @@ export default class IndexBanner extends PureComponent {
 
         return (
             <div className={classnames(classPrefix)}>
-                <a className={`f-display-inlineblock ${classPrefix}-img-wrap`} href={url}>
+                <a
+                    className={`f-display-inlineblock ${classPrefix}-img-wrap`}
+                    href={url}
+                    data-event-track-click
+                    data-event-track-param-element="BANNER"
+                    data-event-track-param-page="INDEX_HOUSE"
+                    data-event-track-param-event="CLICK"
+                >
                     <img className={`f-display-inlineblock ${classPrefix}-img`} src={avatar} alt="" />
                 </a>
             </div>

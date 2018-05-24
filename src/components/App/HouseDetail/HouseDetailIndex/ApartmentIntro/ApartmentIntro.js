@@ -17,13 +17,30 @@ export default class ApartmentIntro extends PureComponent {
         return (
             <div className={`${classPrefix} ${className}`} onTouchTap={this.props.goApartment}>
                 <div className={`${classPrefix}-head`}>
-                {
-                    withoutImage ? null :
-                    <img src={image || defaultImg} alt="" className={`f-vertical-middle ${classPrefix}-img`} />
-                }
-                    <h1 className={`f-vertical-middle ${classPrefix}-title s-housedetail-comptitle`}>{name}</h1>
+                    {
+                        withoutImage ?
+                            null
+                            : <img
+                                src={image || defaultImg}
+                                alt=""
+                                className={`f-vertical-middle ${classPrefix}-img`}
+                                data-event-track-click
+                                data-event-track-param-element="DETAIL_ELEMENT_LOGO"
+                                data-event-track-param-page="HOUSE_DETAIL"
+                                data-event-track-param-event="CLICK"
+                            />
+                    }
+                    <h1
+                        className={`f-vertical-middle ${classPrefix}-title s-housedetail-comptitle`}
+                        data-event-track-click
+                        data-event-track-param-element="DETAIL_APARTMENT_NAME"
+                        data-event-track-param-page="HOUSE_DETAIL"
+                        data-event-track-param-event="CLICK"
+                    >
+                        {name}
+                    </h1>
                 </div>
-                <ExpandText intro={intro} />
+                <ExpandText intro={intro} type="aparment" />
             </div>
         );
     }

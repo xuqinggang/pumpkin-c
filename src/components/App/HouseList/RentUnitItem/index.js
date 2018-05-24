@@ -7,9 +7,12 @@ import { rentUnitShape } from 'baseData/propTypes';
 import { RentalTypeMapText, DirectTypeMapText } from 'baseData/MapData';
 import { ModListImgUrl } from 'baseData/modUrlForCropImage';
 import { getWithDefault } from 'lib/util';
-import './style.less';
 import { isRmHead, isNanguaApp } from 'lib/const';
 import { openSchema } from 'lib/webviewBridge';
+import nanguaPv from 'lib/nanguaPv';
+import { genFilterStatisticsParasm } from 'App/HouseList/getStatisticData';
+
+import './style.less';
 
 const isLikeNativeView = () => isRmHead() && isNanguaApp();
 const isApartmentHouseList = () => window.location.href.indexOf('/list/apartment') > -1;
@@ -44,6 +47,11 @@ class RentUnitItem extends PureComponent {
             history,
             rentUnitId,
         } = this.props;
+
+        // nanguaPv 统计
+        const paramsObj = genFilterStatisticsParasm({ rentUnitId });
+        nanguaPv.pv({ ...paramsObj, page: 'INDEX_HOUSE', element: 'HOUSE_CLICK_COUNT', event: 'CLICK' });
+
         goHouseDetail(history)(rentUnitId);
     }
 
@@ -72,6 +80,10 @@ class RentUnitItem extends PureComponent {
             <div
                 onTouchTap={this.handleTouchTap}
                 className={`${itemClassPrefix} g-grid-row f-flex-justify-start`}
+                data-event-track-click
+                data-event-track-param-element={`HOUSE${this.props.index}`}
+                data-event-track-param-page="INDEX_HOUSE"
+                data-event-track-param-event="CLICK"
             >
                 <div className={`${itemClassPrefix}-img-wrap`}>
                     <img

@@ -397,13 +397,14 @@ function genRoomSlider(houseDetailData) {
 
 
     // 顺序: 卧室 户型图 客厅 卫生间 厨房
-    stuffData(bedrooms, '卧');
+    stuffData(bedrooms, '卧', 'DETAIL_BEDROOM');
 
     // 户型图
     if (houseDetailData.houseTypeImg) {
         sliderImgArr.push(
             {
                 text: '户型图',
+                element: 'DETAIL_HOUSE_PLAN',
                 imgInfo: [
                     {
                         img: houseDetailData.houseTypeImg,
@@ -418,9 +419,9 @@ function genRoomSlider(houseDetailData) {
         activeIndex++;
     }
 
-    stuffData(livingRooms, '客厅');
-    stuffData(bathrooms, '卫生间');
-    stuffData(kitchens, '厨房');
+    stuffData(livingRooms, '客厅', 'DETAIL_LIVINGROOM');
+    stuffData(bathrooms, '卫生间', 'DETAIL_BATHROOM');
+    stuffData(kitchens, '厨房', 'DETAIL_KITCHEN');
 
     // more
     const otherImages = (Array.isArray(othersRooms) &&
@@ -493,7 +494,7 @@ function genRoomSlider(houseDetailData) {
     }
 
     // 填充数据
-    function stuffData(rooms, roomType) {
+    function stuffData(rooms, roomType, element) {
         const roomsLength = rooms && rooms.length;
         if (roomsLength) {
             rooms.forEach((room, index) => {
@@ -517,6 +518,7 @@ function genRoomSlider(houseDetailData) {
 
                 // 轮播图Item信息
                 const sliderImgItem = {
+                    element,
                     text,
                     // 累计该item前所有item的img和
                     aboveImgLength,
