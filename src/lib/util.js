@@ -1,3 +1,18 @@
+// 拼接数组, 解决数组变量为undefined情况
+export function joinArr(arr, separator = '') {
+    return arr
+        .reduce((rt, item) => (
+            item ? `${rt}${separator}${item}` : `${rt}`
+        ), '')
+        .slice(separator.length);
+}
+
+// 获去对象对应索引的键
+export function getObjectKeyByIndex(obj, index) {
+    const keys = Object.keys(obj);
+    return keys[index];
+}
+
 export function isIos() {
     const ua = window.navigator.userAgent;
     return /iPhone|iPad|iPod/i.test(ua);

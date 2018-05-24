@@ -13,15 +13,18 @@ type PropType = {
     list: Array<{
         text: string,
     }>,
-}
+};
 
 export default class RecordList extends PureComponent<PropType> {
     static defaultProps = {
         track: {},
+        type: '',
     };
     render() {
         const {
             list = [],
+            type,
+            track,
         } = this.props;
 
         return (
@@ -32,7 +35,8 @@ export default class RecordList extends PureComponent<PropType> {
                             className={`${classPrefix}-item`}
                             item={item}
                             key={index}
-                            track={this.props.track}
+                            type={type}
+                            track={track}
                         />
                     ))
                 }
@@ -75,10 +79,10 @@ class RecordItem extends PureComponent<ItemPropType> {
             case 'subways':
             case 'stations':
             case 'circles':
-                onPositionSearchItemTap(item);
+                onPositionSearchItemTap(item, this.props.type);
                 break;
             default:
-                onOtherSearchItemTap(item);
+                onOtherSearchItemTap(item, this.props.type);
         }
     }
 

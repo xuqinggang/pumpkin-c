@@ -12,8 +12,8 @@ import { historyRecordStorage } from 'application/App/storage';
 import { ajaxInitPositionData } from 'application/App/HouseList/ajaxInitPositionData';
 import { ajaxSearchHits } from './ajaxSearch';
 import { goHouseList } from 'application/App/routes/routes';
-import { setFilterStore, setSearchStore } from './transId';
-import { clearOtherFilter, clearPositionFilter, jumpHouseList } from 'application/App/HouseSearch/transId';
+import { setFilterStore, setSearchStore, clearOtherFilter, clearPositionFilter, jumpHouseList } from './transId';
+import nanguaPv from 'lib/nanguaPv';
 
 import { debounce } from 'lib/util';
 
@@ -57,6 +57,16 @@ export default class HouseSearch extends PureComponent<{}, StateType> {
             PopToolTip({text: '搜索关键字不能为空'});
             return;
         }
+
+        // nanguaPv 统计
+        nanguaPv.pv({
+            keywordSource: '直接搜索',
+            searchKeyword: this.state.keyword,
+            keywordType: '未知',
+            page: 'SEARCH',
+            element: 'SEARCH_COUNT',
+            event: 'CLICK',
+        });
 
         // 清空 store
         window.setStore('houseList', null);

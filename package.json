@@ -72,7 +72,7 @@
     "koa-mount": "^3.0.0",
     "koa-router": "^7.3.0",
     "koa-static": "^4.0.2",
-    "nangua-js-statistics": "^1.0.5",
+    "nangua-js-statistics": "^1.0.7",
     "photoswipe": "^4.1.2",
     "prop-types": "^15.6.0",
     "pumpkin-font-c": "^3.1.2",

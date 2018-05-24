@@ -12,6 +12,8 @@ import {
     setSearchStore,
 } from 'application/App/HouseSearch/transId';
 import { historyRecordStorage } from 'application/App/storage';
+import { TypeMapText } from 'application/App/HouseList/getStatisticData';
+import nanguaPv from 'lib/nanguaPv';
 
 const TypeMapParamId = {
     blocks: 'blockId',
@@ -37,13 +39,23 @@ function setStorage(data) {
 export default function HouseSearchConnectFunWrap() {
     return function HouseSearchConnectFunInner(WrapperComponent) {
         class HouseSearchConnect extends PureComponent {
-            onOtherSearchItemTap = (data) => {
+            onOtherSearchItemTap = (data, source) => {
                 const {
                     type,
                     text,
                     field,
                     fieldValue,
                 } = data;
+
+                // nanguaPv 统计
+                nanguaPv.pv({
+                    keywordSource: source,
+                    searchKeyword: text.replace(/<\/?em>/g, ''),
+                    keywordType: TypeMapText[type],
+                    page: 'SEARCH',
+                    element: 'SEARCH_COUNT',
+                    event: 'CLICK',
+                });
 
                 // 先清理
                 clearOtherFilter();
@@ -68,7 +80,7 @@ export default function HouseSearchConnectFunWrap() {
             }
 
             // districts circles subways stations
-            onPositionSearchItemTap = (data) => {
+            onPositionSearchItemTap = (data, source) => {
                 const {
                     type,
                     text,
@@ -78,7 +90,15 @@ export default function HouseSearchConnectFunWrap() {
                     fieldValue,
                 } = data;
 
-
+                // nanguaPv 统计
+                nanguaPv.pv({
+                    searchKeyword: text.replace(/<\/?em>/g, ''),
+                    keywordType: TypeMapText[type],
+                    page: 'SEARCH',
+                    element: 'SEARCH_COUNT',
+                    event: 'CLICK',
+                });
+                
                 // history record storage
                 setStorage(data);
 

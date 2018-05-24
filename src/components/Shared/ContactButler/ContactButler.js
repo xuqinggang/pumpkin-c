@@ -13,6 +13,7 @@ import {
     commentQueueStorage,
     lastUserIdStorage,
 } from 'application/App/storage';
+import nanguaPv from 'lib/nanguaPv';
 
 import './styles.less';
 
@@ -81,6 +82,9 @@ export default class ContactButler extends PureComponent {
             tel,
             rentUnitId,
         } = this.props.contactButlerData;
+
+        // nangua统计
+        nanguaPv.pv({ rentUnitId, page: 'HOUSE_DETAIL', element: 'CONTACT_KEEPER', event: 'CLICK' });
 
         ajaxDynamicTel({ rentUnitId, supervisorId: id })
             .then((data) => {

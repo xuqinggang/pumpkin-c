@@ -16,7 +16,7 @@ window.setStore = function (key, dataObj) {
     window.customStore[key] = Object.assign({}, keyCorrespondValueObj, dataObj);
 }
 
- window.getStore = function (key) {
+window.getStore = function (key) {
     try {
         let keyCorrespondValueObj = window.customStore[key];
         if (!keyCorrespondValueObj) {

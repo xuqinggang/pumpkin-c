@@ -52,6 +52,7 @@ export default class HistoryRecord extends PureComponent<{}> {
                         </div>
                         <RecordList
                             list={historyRecordArr}
+                            type="历史记录"
                             track={{
                                 'data-event-track-click': true,
                                 'data-event-track-param-element': 'SEARCH_DEFAULT_HISTORY',

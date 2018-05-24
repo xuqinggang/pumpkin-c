@@ -1,6 +1,7 @@
 import { hydrate } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import createHistory from 'history/createBrowserHistory';
+import nanguaPv from 'lib/nanguaPv';
 // import NanguaStatistics from 'nangua-js-statistics';
 
 // const nanguaStatistics = new NanguaStatistics();
@@ -17,6 +18,13 @@ import './store';
 import routes from './routes';
 
 const history = createHistory();
+
+nanguaPv.pvByInterval();
+nanguaPv.pvByRoute();
+history.listen(location => {
+    // nangauPv
+    nanguaPv.pvByRoute();
+});
 
 // 注册onTouchTap
 injectTapEventPlugin();

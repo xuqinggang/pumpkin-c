@@ -67,7 +67,7 @@ class SearchItem extends PureComponent {
            type,
         };
 
-        this.props.onOtherSearchItemTap(paramsObj);
+        this.props.onOtherSearchItemTap(paramsObj, '直接搜索');
     }
 
     handlePositionSearchItemTap = () => {
@@ -114,7 +114,7 @@ class SearchItem extends PureComponent {
             });
         }
 
-        this.props.onPositionSearchItemTap(paramsObj);
+        this.props.onPositionSearchItemTap(paramsObj, '直接搜索');
     }
 
     handleItemTap = () => {
