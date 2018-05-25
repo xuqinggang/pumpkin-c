@@ -10,9 +10,12 @@ global.window = {
         }]),
         addEventListener: () => {},
         createElement: () => ({
-            setAttribute: () => {}, 
+            setAttribute: () => {},
             style: {},
         }),
+        body: {
+            appendChild: () => {},
+        },
     },
 
     navigator: {
