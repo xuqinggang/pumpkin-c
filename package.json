@@ -87,6 +87,7 @@
     "react-router-dom": "^4.2.2",
     "react-swipe": "^5.1.0",
     "react-tap-event-plugin": "^3.0.2",
+    "react-tap-event-plugin-fix": "^3.0.3",
     "redux": "^3.7.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",

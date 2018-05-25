@@ -1,14 +1,7 @@
 import { hydrate } from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin-fix';
 import createHistory from 'history/createBrowserHistory';
 import nanguaPv from 'lib/nanguaPv';
-// import NanguaStatistics from 'nangua-js-statistics';
-
-// const nanguaStatistics = new NanguaStatistics();
-// nanguaStatistics.pv('//10.0.120.35:8888/bj/nangua/api/v1/data/statistics', {
-//     test: 123,
-// });
-// nanguaStatistics.listenControlEle('//10.0.120.35:8888/bj/nangua/api/v1/data/statistics');
 
 // 全局样式
 import 'styles/index.less';
@@ -21,7 +14,7 @@ const history = createHistory();
 
 nanguaPv.pvByInterval();
 nanguaPv.pvByRoute();
-history.listen(location => {
+history.listen(() => {
     // nangauPv
     nanguaPv.pvByRoute();
 });
