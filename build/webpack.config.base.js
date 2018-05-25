@@ -26,7 +26,7 @@ const webpackBaseConf = {
             'react-dom',
             'react-router',
             'prop-types',
-            'react-tap-event-plugin',
+            'react-tap-event-plugin-fix',
         ],
     },
 
